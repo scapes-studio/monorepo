@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: scapes-indexer-db
+    profiles: ["dev", "prod"]
+    environment:
+      POSTGRES_USER: ponder
+      POSTGRES_PASSWORD: ponder
+      POSTGRES_DB: ponder
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ponder"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  indexer:
+    build: .
+    container_name: scapes-indexer
+    profiles: ["prod"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://ponder:ponder@postgres:5432/ponder
+      DATABASE_SCHEMA: ${GIT_SHA:-local}
+      PONDER_RPC_URL_1: ${PONDER_RPC_URL_1}
+    ports:
+      - "42069:42069"
+
+volumes:
+  postgres_data:
