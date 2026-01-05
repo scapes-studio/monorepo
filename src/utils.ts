@@ -35,13 +35,13 @@ export async function saveAccounts(
  */
 export async function computeTransfer(
   {
-    tokenId,
+    scapeId,
     eventId,
     timestamp,
     from,
     to,
   }: {
-    tokenId: bigint;
+    scapeId: bigint;
     eventId: string;
     timestamp: bigint;
     from: `0x${string}`;
@@ -55,11 +55,11 @@ export async function computeTransfer(
   // Save accounts (excludes zero address)
   await saveAccounts(db, [from, to], timestamp);
 
-  // Update token ownership
+  // Update scape ownership
   await db
-    .insert(schema.token)
+    .insert(schema.scape)
     .values({
-      id: tokenId,
+      id: scapeId,
       owner: to,
     })
     .onConflictDoUpdate({ owner: to });
@@ -69,7 +69,7 @@ export async function computeTransfer(
     id: eventId,
     from,
     to,
-    token: tokenId,
+    scape: scapeId,
     timestamp: Number(timestamp),
   });
 

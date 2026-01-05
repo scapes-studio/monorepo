@@ -6,7 +6,7 @@ export const account = onchainTable("account", (t) => ({
   lastChange: t.bigint().notNull(),
 }));
 
-export const token = onchainTable("token", (t) => ({
+export const scape = onchainTable("scape", (t) => ({
   id: t.bigint().primaryKey(),
   owner: t.hex().notNull(),
 }));
@@ -16,5 +16,5 @@ export const transferEvent = onchainTable("transfer_event", (t) => ({
   timestamp: t.integer().notNull(),
   from: t.hex().notNull(),
   to: t.hex().notNull(),
-  token: t.bigint().notNull(),
+  scape: t.bigint().notNull(),
 }));
