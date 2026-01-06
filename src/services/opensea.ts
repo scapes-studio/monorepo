@@ -68,13 +68,15 @@ interface GetSalesResponse {
 
 export class OpenSeaService {
   private baseUrl = "https://api.opensea.io/api/v2";
-  private apiKey: string;
+  private apiKeyWarningShown = false;
 
-  constructor() {
-    this.apiKey = process.env.OPENSEA_API_KEY || "";
-    if (!this.apiKey) {
+  private get apiKey(): string {
+    const key = process.env.OPENSEA_API_KEY || "";
+    if (!key && !this.apiKeyWarningShown) {
       console.warn("Warning: OPENSEA_API_KEY not set in environment variables");
+      this.apiKeyWarningShown = true;
     }
+    return key;
   }
 
   /**

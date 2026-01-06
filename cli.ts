@@ -1,6 +1,8 @@
-import "dotenv/config";
+import { config } from "dotenv";
 import { Command } from "commander";
 import { loadCommands } from "./src/commands/index";
+
+config({ path: ".env.local" });
 
 const program = new Command()
   .name("scapes-cli")
