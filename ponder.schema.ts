@@ -18,3 +18,21 @@ export const transferEvent = onchainTable("transfer_event", (t) => ({
   to: t.hex().notNull(),
   scape: t.bigint().notNull(),
 }));
+
+export const offer = onchainTable("offer", (t) => ({
+  tokenId: t.bigint().primaryKey(),
+  price: t.bigint().notNull(),
+  specificBuyer: t.hex(),
+  isActive: t.boolean().notNull(),
+  createdAt: t.integer().notNull(),
+  updatedAt: t.integer().notNull(),
+}));
+
+export const sale = onchainTable("sale", (t) => ({
+  id: t.text().primaryKey(),
+  tokenId: t.bigint().notNull(),
+  seller: t.hex().notNull(),
+  buyer: t.hex().notNull(),
+  price: t.bigint().notNull(),
+  timestamp: t.integer().notNull(),
+}));
