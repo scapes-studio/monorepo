@@ -7,6 +7,7 @@ export default createConfig({
     ethereum: {
       id: 1,
       rpc: process.env.PONDER_RPC_URL_1,
+      ws: process.env.PONDER_RPC_URL_1_WS,
     },
   },
   contracts: {

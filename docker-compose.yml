@@ -28,6 +28,7 @@ services:
       DATABASE_URL: postgresql://ponder:ponder@postgres:5432/ponder
       DATABASE_SCHEMA: ${GIT_SHA:-local}
       PONDER_RPC_URL_1: ${PONDER_RPC_URL_1}
+      PONDER_RPC_URL_1_WS: ${PONDER_RPC_URL_1_WS}
     ports:
       - "42069:42069"
 
