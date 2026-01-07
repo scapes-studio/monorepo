@@ -5,12 +5,14 @@ WORKDIR /app
 FROM base AS deps
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY indexer/package.json ./indexer/
+COPY abis/package.json ./abis/
 RUN pnpm install --frozen-lockfile --filter @scapes-studio/indexer
 
 FROM base AS production
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/indexer/node_modules ./indexer/node_modules
 COPY indexer ./indexer
+COPY abis ./abis
 WORKDIR /app/indexer
 RUN pnpm codegen
 
