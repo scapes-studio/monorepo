@@ -19,6 +19,8 @@ proxy:
   app_port: 42069
   healthcheck:
     path: /health
+    interval: 3
+    timeout: 240
 
 registry:
   username: jwahdatehagh
