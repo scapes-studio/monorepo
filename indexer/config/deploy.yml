@@ -31,6 +31,8 @@ env:
     - PONDER_RPC_URL_1_WS
     - DATABASE_URL
     - OPENSEA_API_KEY
+    - DATABASE_SCHEMA
+    - PONDER_TELEMETRY_DISABLED
 
 accessories:
   db:
