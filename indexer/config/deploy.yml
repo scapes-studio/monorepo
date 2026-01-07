@@ -11,7 +11,7 @@ servers:
     hosts:
       - 46.62.228.203
     cmd:
-      sh -c "(env && cat config/crontab) | crontab - && crond -f"
+      supercronic config/crontab
 
 proxy:
   ssl: true
