@@ -10,7 +10,9 @@
     "serve": "ponder serve",
     "lint": "eslint .",
     "typecheck": "tsc",
-    "cli": "tsx cli.ts"
+    "cli": "tsx cli.ts",
+    "kamal:setup": "set -a && . ./.env.production && set +a && kamal setup",
+    "kamal:deploy": "set -a && . ./.env.production && set +a && kamal deploy"
   },
   "dependencies": {
     "@ponder/client": "^0.16.0",
