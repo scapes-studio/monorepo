@@ -1,0 +1,5 @@
+# Import sales every 10 minutes
+*/10 * * * * cd /app/indexer && pnpm cli import:sales >> /proc/1/fd/1 2>&1
+
+# Import listings every hour
+0 * * * * cd /app/indexer && pnpm cli import:listings >> /proc/1/fd/1 2>&1

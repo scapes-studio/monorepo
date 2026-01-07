@@ -7,6 +7,11 @@ servers:
   web:
     hosts:
       - 46.62.228.203
+  cron:
+    hosts:
+      - 46.62.228.203
+    cmd:
+      bash -c "(env && cat config/crontab) | crontab - && cron -f"
 
 proxy:
   ssl: true
