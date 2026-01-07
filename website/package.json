@@ -2,5 +2,20 @@
   "name": "@scapes-studio/website",
   "private": true,
   "version": "0.0.0",
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@1001-digital/layers.base": "latest",
+    "@1001-digital/layers.evm": "latest",
+    "nuxt": "^4.2.2",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  }
 }
