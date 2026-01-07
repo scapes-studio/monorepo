@@ -141,3 +141,8 @@ This creates views in the `scapes` schema that proxy to the current deployment's
   }
 }
 ```
+
+# Deploy
+
+First time
+`set -a && source .env.production && set +a && kamal setup`

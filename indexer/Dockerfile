@@ -3,12 +3,15 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
 FROM base AS deps
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY indexer/package.json ./indexer/
+RUN pnpm install --frozen-lockfile --filter @scapes-studio/indexer
 
 FROM base AS production
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY --from=deps /app/indexer/node_modules ./indexer/node_modules
+COPY indexer ./indexer
+WORKDIR /app/indexer
 RUN pnpm codegen
 
 EXPOSE 42069
