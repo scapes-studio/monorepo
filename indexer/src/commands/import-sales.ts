@@ -1,5 +1,4 @@
 import { Command } from "commander";
-import { runMigrations } from "../services/database";
 import {
   importSalesService,
   COLLECTIONS,
@@ -12,8 +11,6 @@ export const importSalesCommand = new Command("import:sales")
   .option("--all", "Import all collections")
   .option("--force", "Force full re-import (ignore last sync timestamp)")
   .action(async (options: { slug?: string; all?: boolean; force?: boolean }) => {
-    console.log("Running database migrations...");
-    await runMigrations();
 
     let totalImported = 0;
 

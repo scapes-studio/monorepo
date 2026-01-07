@@ -1,14 +1,10 @@
 import { Command } from "commander";
-import { runMigrations } from "../services/database";
 import { importListingsService } from "../services/import-listings";
 
 export const importListingsCommand = new Command("import:listings")
   .description("Import listings from OpenSea API (scapes collection only)")
   .option("--cleanup-only", "Only delete expired listings without importing")
   .action(async (options: { cleanupOnly?: boolean }) => {
-    console.log("Running database migrations...");
-    await runMigrations();
-
     if (options.cleanupOnly) {
       console.log("Cleaning up expired listings...");
       const deleted = await importListingsService.deleteExpiredListings();

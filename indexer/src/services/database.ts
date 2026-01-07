@@ -1,8 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
 import pg from "pg";
 import * as offchainSchema from "../offchain";
-import { combinedSchema } from "../schema";
+import { combinedSchema, initViewsSchema } from "../combined-schema";
 
 const { Pool } = pg;
 
@@ -53,22 +52,11 @@ export function getCombinedDb(): CombinedDb {
     return combinedDb;
   }
 
+  // Initialize views schema before using combined schema
+  initViewsSchema();
+
   const p = getPool();
   combinedDb = drizzle(p, { schema: combinedSchema });
 
   return combinedDb;
-}
-
-/**
- * Run Drizzle migrations for offchain tables.
- * Migrations are generated with: pnpm drizzle-kit generate
- */
-export async function runMigrations() {
-  const p = getPool();
-
-  // Ensure the offchain schema exists before running migrations
-  await p.query(`CREATE SCHEMA IF NOT EXISTS offchain`);
-
-  const db = drizzle(p);
-  await migrate(db, { migrationsFolder: "./drizzle" });
 }
