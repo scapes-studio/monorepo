@@ -20,7 +20,7 @@ proxy:
   healthcheck:
     path: /ready
     interval: 5
-    timeout: 240
+    timeout: 300
 
 registry:
   username: jwahdatehagh
