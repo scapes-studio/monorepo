@@ -18,8 +18,8 @@ proxy:
   host: indexer.scapes.xyz
   app_port: 42069
   healthcheck:
-    path: /health
-    interval: 3
+    path: /ready
+    interval: 5
     timeout: 240
 
 registry:
