@@ -11,7 +11,7 @@ servers:
     hosts:
       - 46.62.228.203
     cmd:
-      bash -c "(env && cat config/crontab) | crontab - && crond -f"
+      sh -c "(env && cat config/crontab) | crontab - && crond -f"
 
 proxy:
   ssl: true
