@@ -1,0 +1,49 @@
+# Scapes Indexer - Kamal Deployment Configuration
+service: scapes-indexer
+
+image: jwahdatehagh/scapes-indexer
+
+servers:
+  web:
+    hosts:
+      - 46.62.228.203
+
+proxy:
+  ssl: true
+  host: indexer.scapes.xyz
+  app_port: 42069
+  healthcheck:
+    path: /health
+
+registry:
+  username: jwahdatehagh
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+  context: .
+
+env:
+  secret:
+    - PONDER_RPC_URL_1
+    - PONDER_RPC_URL_1_WS
+    - DATABASE_URL
+    - OPENSEA_API_KEY
+
+accessories:
+  db:
+    image: postgres:17-alpine
+    host: 46.62.228.203
+    port: "127.0.0.1:5432:5432"
+    env:
+      clear:
+        POSTGRES_DB: ponder
+        POSTGRES_USER: ponder
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data
+
+ssh:
+  user: root

@@ -12,4 +12,4 @@ COPY . .
 RUN pnpm codegen
 
 EXPOSE 42069
-CMD ["pnpm", "start"]
+CMD ["pnpm", "start", "--views-schema=scapes"]
