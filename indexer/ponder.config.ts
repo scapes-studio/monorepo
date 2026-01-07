@@ -1,6 +1,5 @@
 import { createConfig } from "ponder";
-import { erc721ABI } from "./abis/erc721ABI";
-import { marketplaceABI } from "./abis/marketplaceABI";
+import { erc721ABI, marketplaceABI } from "@scapes-studio/abis";
 
 export default createConfig({
   chains: {
