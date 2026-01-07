@@ -1,5 +1,5 @@
 import { eq, sql } from "drizzle-orm";
-import { getDb } from "./database";
+import { getOffchainDb } from "./database";
 import { seaportSale, syncState, type VolumeStats } from "../offchain";
 import { openseaService } from "./opensea";
 
@@ -46,7 +46,7 @@ export class ImportSalesService {
     onProgress?: (count: number) => void;
   }): Promise<number> {
     const config = COLLECTIONS[slug];
-    const db = await getDb();
+    const db = getOffchainDb();
 
     const { sales, continuation: nextContinuation } = await openseaService.getSales({
       slug: config.slug,
@@ -114,7 +114,7 @@ export class ImportSalesService {
   ): Promise<number> {
     const { force = false, onProgress } = options;
     const config = COLLECTIONS[slug];
-    const db = await getDb();
+    const db = getOffchainDb();
 
     // Get last synced timestamp
     let startTimestamp: number | undefined;
@@ -212,7 +212,7 @@ export class ImportSalesService {
    * Calculate volume stats for a collection
    */
   async calculateStats(slug: CollectionSlug): Promise<VolumeStats> {
-    const db = await getDb();
+    const db = getOffchainDb();
 
     const now = Math.floor(Date.now() / 1000);
     const sixMonthsAgo = now - 180 * 24 * 60 * 60;
@@ -286,7 +286,7 @@ export class ImportSalesService {
    * Get combined stats for all collections
    */
   async getCombinedStats(): Promise<VolumeStats> {
-    const db = await getDb();
+    const db = getOffchainDb();
 
     const now = Math.floor(Date.now() / 1000);
     const sixMonthsAgo = now - 180 * 24 * 60 * 60;

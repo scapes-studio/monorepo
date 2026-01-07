@@ -11,6 +11,7 @@ ponder.on("PunkScapes:Transfer", async ({ event, context }) => {
       timestamp: event.block.timestamp,
       from: event.args.from,
       to: event.args.to,
+      txHash: event.transaction.hash,
     },
     context,
   );
@@ -24,6 +25,7 @@ ponder.on("Scapes:Transfer", async ({ event, context }) => {
       timestamp: event.block.timestamp,
       from: event.args.from,
       to: event.args.to,
+      txHash: event.transaction.hash,
     },
     context,
   );
@@ -83,6 +85,7 @@ ponder.on("Scapes:Sale", async ({ event, context }) => {
     buyer: event.args.to,
     price: event.args.value,
     timestamp,
+    txHash: event.transaction.hash,
   });
 
   // Mark offer as inactive (consumed by sale)

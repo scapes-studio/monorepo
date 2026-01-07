@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { getDb } from "./database";
+import { getOffchainDb, type OffchainDb } from "./database";
 import { seaportListing } from "../offchain";
 import { openseaService, type Listing } from "./opensea";
 
@@ -62,7 +62,7 @@ export class ImportListingsService {
 
     console.log(`Fetched ${allListings.length} active listings`);
 
-    const db = await getDb();
+    const db = getOffchainDb();
 
     if (allListings.length === 0) {
       // Clear all listings if none are active
@@ -109,7 +109,7 @@ export class ImportListingsService {
     total: number;
     priceRange: { minEth: number; maxEth: number; avgEth: number };
   }> {
-    const db = await getDb();
+    const db = getOffchainDb();
 
     const result = await db.execute(sql`
       SELECT
@@ -141,7 +141,7 @@ export class ImportListingsService {
    * Delete expired listings (cleanup utility)
    */
   async deleteExpiredListings(): Promise<number> {
-    const db = await getDb();
+    const db = getOffchainDb();
     const now = Math.floor(Date.now() / 1000);
 
     const result = await db.execute(sql`

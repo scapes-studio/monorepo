@@ -40,12 +40,14 @@ export async function computeTransfer(
     timestamp,
     from,
     to,
+    txHash,
   }: {
     scapeId: bigint;
     eventId: string;
     timestamp: bigint;
     from: `0x${string}`;
     to: `0x${string}`;
+    txHash: `0x${string}`;
   },
   { db }: Context,
 ) {
@@ -71,6 +73,7 @@ export async function computeTransfer(
     to,
     scape: scapeId,
     timestamp: Number(timestamp),
+    txHash,
   });
 
   // Update sender balance (decrease by 1, skip for mints)

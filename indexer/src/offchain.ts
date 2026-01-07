@@ -37,12 +37,12 @@ export const seaportSale = offchain.table(
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     slug: text().notNull(), // 'punkscapes' | 'scapes'
     contract: text().notNull(),
-    tokenId: text().notNull(),
-    txHash: text().notNull(),
-    orderHash: text(),
+    tokenId: text("token_id").notNull(),
+    txHash: text("tx_hash").notNull(),
+    orderHash: text("order_hash"),
     block: bigint({ mode: "bigint" }),
     timestamp: integer().notNull(),
-    logIndex: integer(),
+    logIndex: integer("log_index"),
     seller: text().notNull(),
     buyer: text().notNull(),
     price: json().$type<Price>().notNull(),
@@ -51,6 +51,7 @@ export const seaportSale = offchain.table(
     index("seaport_sale_slug_idx").on(t.slug),
     index("seaport_sale_timestamp_idx").on(t.timestamp),
     index("seaport_sale_token_idx").on(t.tokenId),
+    index("seaport_sale_tx_hash_idx").on(t.txHash),
     unique("seaport_sale_unique").on(t.slug, t.tokenId, t.txHash, t.logIndex, t.orderHash),
   ]
 );
@@ -85,7 +86,7 @@ export const seaportListing = offchain.table(
 export const syncState = offchain.table("sync_state", {
   slug: text().primaryKey(),
   contract: text().notNull(),
-  lastSyncedTimestamp: integer(),
+  lastSyncedTimestamp: integer("last_synced_timestamp"),
   stats: json().$type<VolumeStats>(),
-  updatedAt: timestamp().notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
 });

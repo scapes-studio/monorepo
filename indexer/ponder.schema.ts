@@ -17,6 +17,7 @@ export const transferEvent = onchainTable("transfer_event", (t) => ({
   from: t.hex().notNull(),
   to: t.hex().notNull(),
   scape: t.bigint().notNull(),
+  txHash: t.hex().notNull(),
 }));
 
 export const offer = onchainTable("offer", (t) => ({
@@ -35,4 +36,5 @@ export const sale = onchainTable("sale", (t) => ({
   buyer: t.hex().notNull(),
   price: t.bigint().notNull(),
   timestamp: t.integer().notNull(),
+  txHash: t.hex().notNull(),
 }));
