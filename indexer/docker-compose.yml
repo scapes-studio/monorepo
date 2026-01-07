@@ -18,7 +18,9 @@ services:
       retries: 5
 
   indexer:
-    build: .
+    build:
+      context: ..
+      dockerfile: Dockerfile.indexer
     container_name: scapes-indexer
     profiles: ["prod"]
     depends_on:

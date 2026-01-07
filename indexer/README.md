@@ -34,6 +34,8 @@ The database is exposed on port `5433` to avoid conflicts with local PostgreSQL 
 
 In production mode, both the database and indexer run in Docker. Environment variables are automatically loaded from `.env.local`.
 
+> **Note:** The Dockerfile is at the monorepo root (`../Dockerfile.indexer`) to access `pnpm-lock.yaml`. All commands are still run from this directory.
+
 ```bash
 # Build and start all services
 docker compose --profile prod up -d --build
