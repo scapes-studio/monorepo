@@ -340,36 +340,56 @@ app.get("/scapes/:tokenId/history", async (c) => {
       from: schema.transferEvent.from,
       to: schema.transferEvent.to,
       txHash: schema.transferEvent.txHash,
-      saleId: seaportSale.id,
-      salePrice: seaportSale.price,
-      seller: seaportSale.seller,
-      buyer: seaportSale.buyer,
-      slug: seaportSale.slug,
+      // Seaport (offchain) sale data
+      seaportSaleId: seaportSale.id,
+      seaportSalePrice: seaportSale.price,
+      seaportSeller: seaportSale.seller,
+      seaportBuyer: seaportSale.buyer,
+      seaportSlug: seaportSale.slug,
+      // Onchain sale data (Scapes:Sale events)
+      onchainSaleId: schema.sale.id,
+      onchainSalePrice: schema.sale.price,
+      onchainSeller: schema.sale.seller,
+      onchainBuyer: schema.sale.buyer,
     })
     .from(schema.transferEvent)
     .leftJoin(
       seaportSale,
       sql`${schema.transferEvent.txHash} = ${seaportSale.txHash} AND ${schema.transferEvent.scape}::text = ${seaportSale.tokenId}`
     )
+    .leftJoin(
+      schema.sale,
+      sql`${schema.transferEvent.txHash} = ${schema.sale.txHash} AND ${schema.transferEvent.scape} = ${schema.sale.tokenId}`
+    )
     .where(eq(schema.transferEvent.scape, BigInt(tokenId)))
     .orderBy(desc(schema.transferEvent.timestamp));
 
-  // Transform results
+  // Transform results - prefer seaport data if available, fall back to onchain sale
   const history = result.map((row) => ({
     id: row.transferId,
     timestamp: row.timestamp,
     from: row.from,
     to: row.to,
     txHash: row.txHash,
-    sale: row.saleId
+    sale: row.seaportSaleId
       ? {
-          id: row.saleId,
-          price: row.salePrice,
-          seller: row.seller,
-          buyer: row.buyer,
-          slug: row.slug,
+          id: row.seaportSaleId,
+          price: row.seaportSalePrice,
+          seller: row.seaportSeller,
+          buyer: row.seaportBuyer,
+          slug: row.seaportSlug,
+          source: "seaport" as const,
         }
-      : null,
+      : row.onchainSaleId
+        ? {
+            id: row.onchainSaleId,
+            price: { wei: row.onchainSalePrice!.toString() },
+            seller: row.onchainSeller,
+            buyer: row.onchainBuyer,
+            slug: "scapes",
+            source: "onchain" as const,
+          }
+        : null,
   }));
 
   return c.json({
