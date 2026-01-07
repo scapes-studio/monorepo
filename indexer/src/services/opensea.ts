@@ -66,6 +66,70 @@ interface GetSalesResponse {
   continuation?: string;
 }
 
+// OpenSea active listings API types (from /listings/collection/{slug}/all)
+interface OpenSeaListingOffer {
+  itemType: number;
+  token: string;
+  identifierOrCriteria: string;
+  startAmount: string;
+  endAmount: string;
+}
+
+interface OpenSeaListingParameters {
+  offerer: string;
+  offer: OpenSeaListingOffer[];
+  startTime: string;
+  endTime: string;
+}
+
+interface OpenSeaListingProtocolData {
+  parameters: OpenSeaListingParameters;
+}
+
+interface OpenSeaListingPrice {
+  current: {
+    currency: string;
+    decimals: number;
+    value: string;
+  };
+}
+
+interface OpenSeaActiveListing {
+  order_hash: string;
+  chain: string;
+  protocol_data: OpenSeaListingProtocolData;
+  protocol_address: string;
+  remaining_quantity: number;
+  price: OpenSeaListingPrice;
+  type: string;
+  status: string;
+}
+
+interface OpenSeaActiveListingsResponse {
+  listings: OpenSeaActiveListing[];
+  next?: string;
+}
+
+// Internal listing type
+export interface Listing {
+  tokenId: string;
+  contract: string;
+  orderHash: string;
+  protocolAddress: string;
+  timestamp: number;
+  startDate: number;
+  expirationDate: number;
+  maker: string;
+  taker: string | null;
+  isPrivateListing: boolean;
+  price: Price;
+}
+
+interface GetListingsResponse {
+  listings: Listing[];
+  continuation?: string;
+}
+
 export class OpenSeaService {
   private baseUrl = "https://api.opensea.io/api/v2";
   private apiKeyWarningShown = false;
@@ -201,6 +265,93 @@ export class OpenSeaService {
       };
     } catch (error) {
       console.error("Error fetching sales from OpenSea:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get active listings for a collection using OpenSea API
+   * Uses /listings/collection/{slug}/all endpoint which returns only active listings
+   */
+  async getListings({
+    slug,
+    continuation,
+    limit = 200,
+  }: {
+    slug: string;
+    continuation?: string;
+    limit?: number;
+  }): Promise<GetListingsResponse> {
+    const params = new URLSearchParams();
+
+    if (limit) {
+      params.append("limit", limit.toString());
+    }
+
+    if (continuation) {
+      params.append("next", continuation);
+    }
+
+    const queryString = params.toString();
+    const url = `${this.baseUrl}/listings/collection/${slug}/all${queryString ? `?${queryString}` : ""}`;
+
+    try {
+      const response = await fetch(url, {
+        headers: {
+          accept: "application/json",
+          "x-api-key": this.apiKey,
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`OpenSea API error (${response.status}): ${errorText}`);
+      }
+
+      const data = (await response.json()) as OpenSeaActiveListingsResponse;
+      const ethUsdPrice = await priceService.getEthUsdPrice();
+
+      const listings: Listing[] = data.listings
+        .filter((listing) => listing.protocol_data.parameters.offer.length > 0)
+        .map((listing) => {
+        const params = listing.protocol_data.parameters;
+        const offer = params.offer[0]!; // First offer item contains the NFT
+        const price = listing.price.current;
+
+        // Price is in wei for ETH
+        const weiAmount = price.value;
+        const nativeAmount = this.weiToEth(weiAmount, price.decimals);
+        const usdAmount = ethUsdPrice ? nativeAmount * ethUsdPrice : 0;
+
+        return {
+          tokenId: offer.identifierOrCriteria,
+          contract: offer.token,
+          orderHash: listing.order_hash,
+          protocolAddress: listing.protocol_address,
+          timestamp: Number(params.startTime), // Use startTime as timestamp
+          startDate: Number(params.startTime),
+          expirationDate: Number(params.endTime),
+          maker: params.offerer,
+          taker: null, // Active listings endpoint doesn't include taker
+          isPrivateListing: false, // Not available in this endpoint
+          price: {
+            wei: weiAmount,
+            eth: nativeAmount,
+            usd: usdAmount,
+            currency: {
+              symbol: price.currency,
+              amount: weiAmount,
+            },
+          },
+        };
+      });
+
+      return {
+        listings,
+        continuation: data.next,
+      };
+    } catch (error) {
+      console.error("Error fetching listings from OpenSea:", error);
       throw error;
     }
   }

@@ -1,4 +1,4 @@
-import { json, text, bigint, integer, pgSchema, index, unique, timestamp } from "drizzle-orm/pg-core";
+import { json, text, bigint, integer, pgSchema, index, unique, timestamp, boolean } from "drizzle-orm/pg-core";
 
 // Offchain PostgreSQL schema for Seaport/OpenSea sales
 export const offchain = pgSchema("offchain");
@@ -52,6 +52,32 @@ export const seaportSale = offchain.table(
     index("seaport_sale_timestamp_idx").on(t.timestamp),
     index("seaport_sale_token_idx").on(t.tokenId),
     unique("seaport_sale_unique").on(t.slug, t.tokenId, t.txHash, t.logIndex, t.orderHash),
+  ]
+);
+
+// Individual listing records from OpenSea/Seaport
+export const seaportListing = offchain.table(
+  "seaport_listing",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    slug: text().notNull(),
+    contract: text().notNull(),
+    tokenId: text("token_id").notNull(),
+    orderHash: text("order_hash").notNull(),
+    protocolAddress: text("protocol_address"),
+    timestamp: integer().notNull(), // event_timestamp
+    startDate: integer("start_date").notNull(),
+    expirationDate: integer("expiration_date").notNull(),
+    maker: text().notNull(), // seller/lister
+    taker: text(), // specific buyer if private listing
+    isPrivateListing: boolean("is_private_listing").notNull().default(false),
+    price: json().$type<Price>().notNull(),
+  },
+  (t) => [
+    index("seaport_listing_slug_idx").on(t.slug),
+    index("seaport_listing_token_idx").on(t.tokenId),
+    index("seaport_listing_expiration_idx").on(t.expirationDate),
+    unique("seaport_listing_unique").on(t.orderHash),
   ]
 );
 

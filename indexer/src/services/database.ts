@@ -74,5 +74,31 @@ export async function initOffchainTables() {
     )
   `);
 
+  // Create seaport_listing table
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS offchain.seaport_listing (
+      id SERIAL PRIMARY KEY,
+      slug TEXT NOT NULL,
+      contract TEXT NOT NULL,
+      token_id TEXT NOT NULL,
+      order_hash TEXT NOT NULL UNIQUE,
+      protocol_address TEXT,
+      timestamp INTEGER NOT NULL,
+      start_date INTEGER NOT NULL,
+      expiration_date INTEGER NOT NULL,
+      maker TEXT NOT NULL,
+      taker TEXT,
+      is_private_listing BOOLEAN NOT NULL DEFAULT FALSE,
+      price JSONB NOT NULL
+    )
+  `);
+
+  // Create indexes for listings
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS seaport_listing_slug_idx ON offchain.seaport_listing(slug);
+    CREATE INDEX IF NOT EXISTS seaport_listing_token_idx ON offchain.seaport_listing(token_id);
+    CREATE INDEX IF NOT EXISTS seaport_listing_expiration_idx ON offchain.seaport_listing(expiration_date);
+  `);
+
   await pool.end();
 }
