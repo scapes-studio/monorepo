@@ -17,6 +17,10 @@ export const COLLECTIONS = {
     // Sales AFTER this timestamp
     afterTimestamp: 1671580739,
   },
+  "twenty-seven-year-scapes": {
+    slug: "twenty-seven-year-scapes",
+    contract: "0x5D3d01a47a62BfF2eB86eBA75F3A23c38dC22fBA",
+  },
 } as const;
 
 export type CollectionSlug = keyof typeof COLLECTIONS;

@@ -1,13 +1,21 @@
-import { sql } from "drizzle-orm";
-import { getOffchainDb, type OffchainDb } from "./database";
+import { eq, sql } from "drizzle-orm";
+import { getOffchainDb } from "./database";
 import { seaportListing } from "../offchain";
 import { openseaService, type Listing } from "./opensea";
 
-// Only scapes collection for listings
-const LISTING_COLLECTION = {
-  slug: "scapes",
-  contract: "0xb7def63A9040ad5dC431afF79045617922f4023A",
+// Listing collections configuration
+export const LISTING_COLLECTIONS = {
+  scapes: {
+    slug: "scapes",
+    contract: "0xb7def63A9040ad5dC431afF79045617922f4023A",
+  },
+  "twenty-seven-year-scapes": {
+    slug: "twenty-seven-year-scapes",
+    contract: "0x5D3d01a47a62BfF2eB86eBA75F3A23c38dC22fBA",
+  },
 } as const;
+
+export type ListingCollectionSlug = keyof typeof LISTING_COLLECTIONS;
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -18,16 +26,19 @@ export class ImportListingsService {
    * Fetch all listings from OpenSea (paginated)
    */
   private async fetchAllListings({
+    slug,
     onProgress,
   }: {
+    slug: ListingCollectionSlug;
     onProgress?: (count: number) => void;
   }): Promise<Listing[]> {
+    const config = LISTING_COLLECTIONS[slug];
     const allListings: Listing[] = [];
     let continuation: string | undefined;
 
     do {
       const { listings, continuation: nextContinuation } = await openseaService.getListings({
-        slug: LISTING_COLLECTION.slug,
+        slug: config.slug,
         continuation,
       });
 
@@ -52,13 +63,17 @@ export class ImportListingsService {
    * 2. Replace all listings in database within a transaction
    */
   async importListings({
+    slug,
     onProgress,
   }: {
+    slug: ListingCollectionSlug;
     onProgress?: (count: number) => void;
-  } = {}): Promise<{ imported: number }> {
-    console.log("Fetching active listings from OpenSea...");
+  }): Promise<{ imported: number }> {
+    const config = LISTING_COLLECTIONS[slug];
 
-    const allListings = await this.fetchAllListings({ onProgress });
+    console.log(`Fetching active listings from OpenSea for ${slug}...`);
+
+    const allListings = await this.fetchAllListings({ slug, onProgress });
 
     console.log(`Fetched ${allListings.length} active listings`);
 
@@ -66,13 +81,13 @@ export class ImportListingsService {
 
     if (allListings.length === 0) {
       // Clear all listings if none are active
-      await db.delete(seaportListing);
+      await db.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
       return { imported: 0 };
     }
 
     // Transform listings for database insertion
     const values = allListings.map((listing) => ({
-      slug: LISTING_COLLECTION.slug,
+      slug: config.slug,
       contract: listing.contract.toLowerCase(),
       tokenId: listing.tokenId,
       orderHash: listing.orderHash,
@@ -88,8 +103,8 @@ export class ImportListingsService {
 
     // Full replacement within transaction
     await db.transaction(async (tx) => {
-      // Delete all existing listings
-      await tx.delete(seaportListing);
+      // Delete existing listings for this slug
+      await tx.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
 
       // Insert new listings in batches (Postgres has param limits)
       const BATCH_SIZE = 500;
@@ -105,7 +120,7 @@ export class ImportListingsService {
   /**
    * Get listing stats
    */
-  async getListingStats(): Promise<{
+  async getListingStats(slug?: ListingCollectionSlug): Promise<{
     total: number;
     priceRange: { minEth: number; maxEth: number; avgEth: number };
   }> {
@@ -118,6 +133,7 @@ export class ImportListingsService {
         MAX((price->>'eth')::numeric) as max_eth,
         AVG((price->>'eth')::numeric) as avg_eth
       FROM offchain.seaport_listing
+      ${slug ? sql`WHERE slug = ${slug}` : sql``}
     `);
 
     const stats = result.rows[0] as {

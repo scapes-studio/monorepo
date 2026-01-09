@@ -1,10 +1,19 @@
 import { Command } from "commander";
-import { importListingsService } from "../services/import-listings";
+import {
+  importListingsService,
+  LISTING_COLLECTIONS,
+  type ListingCollectionSlug,
+} from "../services/import-listings";
 
 export const importListingsCommand = new Command("import:listings")
-  .description("Import listings from OpenSea API (scapes collection only)")
+  .description("Import listings from OpenSea API")
   .option("--cleanup-only", "Only delete expired listings without importing")
-  .action(async (options: { cleanupOnly?: boolean }) => {
+  .option(
+    "--slug <slug>",
+    "Collection slug to import (scapes or twenty-seven-year-scapes)",
+    "scapes"
+  )
+  .action(async (options: { cleanupOnly?: boolean; slug?: string }) => {
     if (options.cleanupOnly) {
       console.log("Cleaning up expired listings...");
       const deleted = await importListingsService.deleteExpiredListings();
@@ -12,10 +21,19 @@ export const importListingsCommand = new Command("import:listings")
       process.exit(0);
     }
 
-    console.log("Importing scapes listings (full replacement)...\n");
+    const slug = (options.slug || "scapes") as ListingCollectionSlug;
+
+    if (!LISTING_COLLECTIONS[slug]) {
+      console.error(`Unknown collection: ${slug}`);
+      console.error(`Available collections: ${Object.keys(LISTING_COLLECTIONS).join(", ")}`);
+      process.exit(1);
+    }
+
+    console.log(`Importing ${slug} listings (full replacement)...\n`);
 
     let batchCount = 0;
     const { imported } = await importListingsService.importListings({
+      slug,
       onProgress: (count) => {
         batchCount += count;
         console.log(`  Fetched batch of ${count} listings (total: ${batchCount})`);
@@ -27,7 +45,7 @@ export const importListingsCommand = new Command("import:listings")
 
     // Display stats
     console.log("\nListing Stats:");
-    const stats = await importListingsService.getListingStats();
+    const stats = await importListingsService.getListingStats(slug);
     console.log(`  Total active listings: ${stats.total}`);
     console.log(
       `  Price range: ${stats.priceRange.minEth.toFixed(4)} - ${stats.priceRange.maxEth.toFixed(4)} ETH`

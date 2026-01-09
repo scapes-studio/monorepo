@@ -7,7 +7,10 @@ import {
 
 export const importSalesCommand = new Command("import:sales")
   .description("Import sales from OpenSea API")
-  .option("--slug <slug>", "Collection slug to import (punkscapes or scapes)")
+  .option(
+    "--slug <slug>",
+    "Collection slug to import (punkscapes, scapes, or twenty-seven-year-scapes)"
+  )
   .option("--all", "Import all collections")
   .option("--force", "Force full re-import (ignore last sync timestamp)")
   .action(async (options: { slug?: string; all?: boolean; force?: boolean }) => {
