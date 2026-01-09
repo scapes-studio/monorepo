@@ -23,5 +23,11 @@ export default createConfig({
       address: "0xb7def63A9040ad5dC431afF79045617922f4023A",
       startBlock: 16228031,
     },
+    TwentySevenYearScapes: {
+      chain: "ethereum",
+      abi: erc721ABI,
+      address: "0x5D3d01a47a62BfF2eB86eBA75F3A23c38dC22fBA",
+      startBlock: 14110418,
+    },
   },
 });
