@@ -114,7 +114,7 @@ This creates views in the `scapes` schema that proxy to the current deployment's
 
 ## Collections
 
-The onchain transfer APIs now expose both the combined PunkScapes + Scapes data (`collection=scapes`, the default) and the Twenty-Seven-Year Scapes airdrop (`collection=twenty-seven-year-scapes`). Use the `collection` query param on `/transfers` or call `/twenty-seven-year-scapes/:tokenId/history` for the dedicated history feed.
+The onchain transfer APIs now expose both the combined PunkScapes + Scapes data (`collection=scapes`, the default) and the Twenty-Seven-Year Scapes airdrop (`collection=twenty-seven-year-scapes`). Use the GraphQL or SQL-over-HTTP endpoints to filter transfers by collection, or call `/twenty-seven-year-scapes/:tokenId/history` for the dedicated history feed.
 
 ## Sample queries
 
