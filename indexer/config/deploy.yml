@@ -11,7 +11,7 @@ servers:
     hosts:
       - 46.62.228.203
     cmd:
-      supercronic config/crontab
+      /usr/local/bin/supercronic config/crontab
 
 proxy:
   ssl: true

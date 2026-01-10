@@ -1,6 +1,6 @@
 # Import sales every 10 minutes
-*/10 * * * * cd /app/indexer && pnpm cli import:sales --all >> /proc/1/fd/1 2>&1
+*/10 * * * * pnpm --dir /app/indexer cli import:sales --all
 
 # Import listings every hour
-0 * * * * cd /app/indexer && pnpm cli import:listings --slug scapes >> /proc/1/fd/1 2>&1
-5 * * * * cd /app/indexer && pnpm cli import:listings --slug twenty-seven-year-scapes >> /proc/1/fd/1 2>&1
+0 * * * * pnpm --dir /app/indexer cli import:listings --slug scapes
+5 * * * * pnpm --dir /app/indexer cli import:listings --slug twenty-seven-year-scapes
