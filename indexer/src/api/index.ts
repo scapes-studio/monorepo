@@ -408,55 +408,55 @@ function createHistoryHandler(collectionKey: CollectionKey) {
 
   return async (c: any) => {
     const tokenId = c.req.param("tokenId");
+    const tokenIdValue = BigInt(tokenId);
 
     const seaportJoinCondition = buildSeaportJoinCondition(
       transferTable,
       collection.seaportSlugs,
     );
 
-    const selectFields = {
+    const baseSelectFields = {
       transferId: transferTable.id,
       timestamp: transferTable.timestamp,
       from: transferTable.from,
       to: transferTable.to,
       txHash: transferTable.txHash,
-      // Seaport (offchain) sale data
       seaportSaleId: seaportSale.id,
       seaportSalePrice: seaportSale.price,
       seaportSeller: seaportSale.seller,
       seaportBuyer: seaportSale.buyer,
       seaportSlug: seaportSale.slug,
-      // Onchain sale data (Scapes:Sale events)
-      ...(collection.includeOnchainSales
-        ? {
+    } as const;
+
+    const result = collection.includeOnchainSales
+      ? await db
+          .select({
+            ...baseSelectFields,
             onchainSaleId: schema.sale.id,
             onchainSalePrice: schema.sale.price,
             onchainSeller: schema.sale.seller,
             onchainBuyer: schema.sale.buyer,
-          }
-        : {
+          })
+          .from(transferTable)
+          .leftJoin(seaportSale, seaportJoinCondition)
+          .leftJoin(
+            schema.sale,
+            sql`${transferTable.txHash} = ${schema.sale.txHash} AND ${transferTable.scape} = ${schema.sale.tokenId}`,
+          )
+          .where(eq(transferTable.scape, tokenIdValue))
+          .orderBy(desc(transferTable.timestamp))
+      : await db
+          .select({
+            ...baseSelectFields,
             onchainSaleId: sql`NULL`,
             onchainSalePrice: sql`NULL`,
             onchainSeller: sql`NULL`,
             onchainBuyer: sql`NULL`,
-          }),
-    } as const;
-
-    let query = db
-      .select(selectFields)
-      .from(transferTable)
-      .leftJoin(seaportSale, seaportJoinCondition);
-
-    if (collection.includeOnchainSales) {
-      query = query.leftJoin(
-        schema.sale,
-        sql`${transferTable.txHash} = ${schema.sale.txHash} AND ${transferTable.scape} = ${schema.sale.tokenId}`,
-      );
-    }
-
-    const result = await query
-      .where(eq(transferTable.scape, BigInt(tokenId)))
-      .orderBy(desc(transferTable.timestamp));
+          })
+          .from(transferTable)
+          .leftJoin(seaportSale, seaportJoinCondition)
+          .where(eq(transferTable.scape, tokenIdValue))
+          .orderBy(desc(transferTable.timestamp));
 
     // Transform results - prefer seaport data if available, fall back to onchain sale
     const history = result.map((row) => ({
