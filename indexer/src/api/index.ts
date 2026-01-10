@@ -7,6 +7,65 @@ import { seaportSale } from "../offchain";
 
 const app = new Hono();
 
+type CollectionKey = "scapes" | "twenty-seven-year-scapes";
+
+type CollectionConfig = {
+  key: CollectionKey;
+  transferEventTable:
+    | typeof schema.transferEvent
+    | typeof schema.twentySevenYearTransferEvent;
+  seaportSlugs: readonly string[];
+  includeOnchainSales: boolean;
+};
+
+const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
+  scapes: {
+    key: "scapes",
+    transferEventTable: schema.transferEvent,
+    seaportSlugs: ["scapes", "punkscapes"],
+    includeOnchainSales: true,
+  },
+  "twenty-seven-year-scapes": {
+    key: "twenty-seven-year-scapes",
+    transferEventTable: schema.twentySevenYearTransferEvent,
+    seaportSlugs: ["twenty-seven-year-scapes"],
+    includeOnchainSales: false,
+  },
+};
+
+const COLLECTION_KEYS = Object.keys(COLLECTIONS) as CollectionKey[];
+
+function getCollectionConfigFromParam(param?: string): CollectionConfig | null {
+  if (!param) {
+    return COLLECTIONS.scapes;
+  }
+  return COLLECTIONS[param as CollectionKey] ?? null;
+}
+
+function buildSeaportJoinCondition(
+  transferTable:
+    | typeof schema.transferEvent
+    | typeof schema.twentySevenYearTransferEvent,
+  seaportSlugs: readonly string[],
+) {
+  const clauses = [
+    sql`${transferTable.txHash} = ${seaportSale.txHash}`,
+    sql`${transferTable.scape}::text = ${seaportSale.tokenId}`,
+  ];
+
+  if (seaportSlugs.length === 1) {
+    clauses.push(sql`${seaportSale.slug} = ${seaportSlugs[0]}`);
+  } else if (seaportSlugs.length > 1) {
+    const slugList = sql.join(
+      seaportSlugs.map((slug) => sql`${slug}`),
+      sql`, `,
+    );
+    clauses.push(sql`${seaportSale.slug} IN (${slugList})`);
+  }
+
+  return sql.join(clauses, sql` AND `);
+}
+
 // Ponder built-in routes
 app.use("/sql/*", client({ db, schema }));
 app.use("/", graphql({ db, schema }));
@@ -223,6 +282,7 @@ app.get("/seaport/stats/volume/:slug", async (c) => {
  *   - from: filter by sender address
  *   - to: filter by recipient address
  *   - hasSale: "true" to only show transfers with sales
+ *   - collection: "scapes" (default) or "twenty-seven-year-scapes"
  */
 app.get("/transfers", async (c) => {
   const limitNum = Math.min(Number(c.req.query("limit")) || 20, 100);
@@ -233,59 +293,71 @@ app.get("/transfers", async (c) => {
   const fromAddr = c.req.query("from")?.toLowerCase();
   const toAddr = c.req.query("to")?.toLowerCase();
   const hasSale = c.req.query("hasSale") === "true";
+  const collectionParam = c.req.query("collection");
+
+  const collection = getCollectionConfigFromParam(collectionParam);
+  if (!collection) {
+    return c.json(
+      {
+        error: `Unsupported collection. Use one of: ${COLLECTION_KEYS.join(", ")}`,
+      },
+      400,
+    );
+  }
+
+  const transferTable = collection.transferEventTable;
 
   // Build WHERE conditions using Drizzle
   const conditions: any[] = [];
 
   if (tokenId) {
-    conditions.push(eq(schema.transferEvent.scape, BigInt(tokenId)));
+    conditions.push(eq(transferTable.scape, BigInt(tokenId)));
   }
   if (fromAddr) {
-    conditions.push(sql`LOWER(${schema.transferEvent.from}) = ${fromAddr}`);
+    conditions.push(sql`LOWER(${transferTable.from}) = ${fromAddr}`);
   }
   if (toAddr) {
-    conditions.push(sql`LOWER(${schema.transferEvent.to}) = ${toAddr}`);
+    conditions.push(sql`LOWER(${transferTable.to}) = ${toAddr}`);
   }
   if (hasSale) {
     conditions.push(sql`${seaportSale.id} IS NOT NULL`);
   }
 
+  const seaportJoinCondition = buildSeaportJoinCondition(
+    transferTable,
+    collection.seaportSlugs,
+  );
+
   // Query transfers with LEFT JOIN to seaport sales
   const baseQuery = db
     .select({
-      transferId: schema.transferEvent.id,
-      timestamp: schema.transferEvent.timestamp,
-      from: schema.transferEvent.from,
-      to: schema.transferEvent.to,
-      tokenId: schema.transferEvent.scape,
-      txHash: schema.transferEvent.txHash,
+      transferId: transferTable.id,
+      timestamp: transferTable.timestamp,
+      from: transferTable.from,
+      to: transferTable.to,
+      tokenId: transferTable.scape,
+      txHash: transferTable.txHash,
       saleId: seaportSale.id,
       salePrice: seaportSale.price,
       seller: seaportSale.seller,
       buyer: seaportSale.buyer,
       slug: seaportSale.slug,
     })
-    .from(schema.transferEvent)
-    .leftJoin(
-      seaportSale,
-      sql`${schema.transferEvent.txHash} = ${seaportSale.txHash} AND ${schema.transferEvent.scape}::text = ${seaportSale.tokenId}`
-    );
+    .from(transferTable)
+    .leftJoin(seaportSale, seaportJoinCondition);
 
   const whereCondition = conditions.length > 0 ? sql.join(conditions, sql` AND `) : undefined;
   const queryWithWhere = whereCondition ? baseQuery.where(whereCondition) : baseQuery;
 
   const dataQuery = queryWithWhere
-    .orderBy(desc(schema.transferEvent.timestamp))
+    .orderBy(desc(transferTable.timestamp))
     .limit(limitNum)
     .offset(offsetNum);
 
   const countBaseQuery = db
     .select({ count: count() })
-    .from(schema.transferEvent)
-    .leftJoin(
-      seaportSale,
-      sql`${schema.transferEvent.txHash} = ${seaportSale.txHash} AND ${schema.transferEvent.scape}::text = ${seaportSale.tokenId}`
-    );
+    .from(transferTable)
+    .leftJoin(seaportSale, seaportJoinCondition);
 
   const countQuery = whereCondition ? countBaseQuery.where(whereCondition) : countBaseQuery;
 
@@ -330,16 +402,24 @@ app.get("/transfers", async (c) => {
  * Get complete transfer history for a specific scape
  * Returns all transfers ordered by timestamp desc, with sale data where applicable
  */
-app.get("/scapes/:tokenId/history", async (c) => {
-  const tokenId = c.req.param("tokenId");
+function createHistoryHandler(collectionKey: CollectionKey) {
+  const collection = COLLECTIONS[collectionKey];
+  const transferTable = collection.transferEventTable;
 
-  const result = await db
-    .select({
-      transferId: schema.transferEvent.id,
-      timestamp: schema.transferEvent.timestamp,
-      from: schema.transferEvent.from,
-      to: schema.transferEvent.to,
-      txHash: schema.transferEvent.txHash,
+  return async (c: any) => {
+    const tokenId = c.req.param("tokenId");
+
+    const seaportJoinCondition = buildSeaportJoinCondition(
+      transferTable,
+      collection.seaportSlugs,
+    );
+
+    const selectFields = {
+      transferId: transferTable.id,
+      timestamp: transferTable.timestamp,
+      from: transferTable.from,
+      to: transferTable.to,
+      txHash: transferTable.txHash,
       // Seaport (offchain) sale data
       seaportSaleId: seaportSale.id,
       seaportSalePrice: seaportSale.price,
@@ -347,57 +427,79 @@ app.get("/scapes/:tokenId/history", async (c) => {
       seaportBuyer: seaportSale.buyer,
       seaportSlug: seaportSale.slug,
       // Onchain sale data (Scapes:Sale events)
-      onchainSaleId: schema.sale.id,
-      onchainSalePrice: schema.sale.price,
-      onchainSeller: schema.sale.seller,
-      onchainBuyer: schema.sale.buyer,
-    })
-    .from(schema.transferEvent)
-    .leftJoin(
-      seaportSale,
-      sql`${schema.transferEvent.txHash} = ${seaportSale.txHash} AND ${schema.transferEvent.scape}::text = ${seaportSale.tokenId}`
-    )
-    .leftJoin(
-      schema.sale,
-      sql`${schema.transferEvent.txHash} = ${schema.sale.txHash} AND ${schema.transferEvent.scape} = ${schema.sale.tokenId}`
-    )
-    .where(eq(schema.transferEvent.scape, BigInt(tokenId)))
-    .orderBy(desc(schema.transferEvent.timestamp));
-
-  // Transform results - prefer seaport data if available, fall back to onchain sale
-  const history = result.map((row) => ({
-    id: row.transferId,
-    timestamp: row.timestamp,
-    from: row.from,
-    to: row.to,
-    txHash: row.txHash,
-    sale: row.seaportSaleId
-      ? {
-          id: row.seaportSaleId,
-          price: row.seaportSalePrice,
-          seller: row.seaportSeller,
-          buyer: row.seaportBuyer,
-          slug: row.seaportSlug,
-          source: "seaport" as const,
-        }
-      : row.onchainSaleId
+      ...(collection.includeOnchainSales
         ? {
-            id: row.onchainSaleId,
-            price: { wei: row.onchainSalePrice!.toString() },
-            seller: row.onchainSeller,
-            buyer: row.onchainBuyer,
-            slug: "scapes",
-            source: "onchain" as const,
+            onchainSaleId: schema.sale.id,
+            onchainSalePrice: schema.sale.price,
+            onchainSeller: schema.sale.seller,
+            onchainBuyer: schema.sale.buyer,
           }
-        : null,
-  }));
+        : {
+            onchainSaleId: sql`NULL`,
+            onchainSalePrice: sql`NULL`,
+            onchainSeller: sql`NULL`,
+            onchainBuyer: sql`NULL`,
+          }),
+    } as const;
 
-  return c.json({
-    tokenId,
-    history,
-    totalTransfers: history.length,
-    totalSales: history.filter((h) => h.sale !== null).length,
-  });
-});
+    let query = db
+      .select(selectFields)
+      .from(transferTable)
+      .leftJoin(seaportSale, seaportJoinCondition);
+
+    if (collection.includeOnchainSales) {
+      query = query.leftJoin(
+        schema.sale,
+        sql`${transferTable.txHash} = ${schema.sale.txHash} AND ${transferTable.scape} = ${schema.sale.tokenId}`,
+      );
+    }
+
+    const result = await query
+      .where(eq(transferTable.scape, BigInt(tokenId)))
+      .orderBy(desc(transferTable.timestamp));
+
+    // Transform results - prefer seaport data if available, fall back to onchain sale
+    const history = result.map((row) => ({
+      id: row.transferId,
+      timestamp: row.timestamp,
+      from: row.from,
+      to: row.to,
+      txHash: row.txHash,
+      sale: row.seaportSaleId
+        ? {
+            id: row.seaportSaleId,
+            price: row.seaportSalePrice,
+            seller: row.seaportSeller,
+            buyer: row.seaportBuyer,
+            slug: row.seaportSlug,
+            source: "seaport" as const,
+          }
+        : collection.includeOnchainSales && row.onchainSaleId
+          ? {
+              id: row.onchainSaleId,
+              price: { wei: row.onchainSalePrice!.toString() },
+              seller: row.onchainSeller,
+              buyer: row.onchainBuyer,
+              slug: collection.key,
+              source: "onchain" as const,
+            }
+          : null,
+    }));
+
+    return c.json({
+      collection: collection.key,
+      tokenId,
+      history,
+      totalTransfers: history.length,
+      totalSales: history.filter((h) => h.sale !== null).length,
+    });
+  };
+}
+
+app.get("/scapes/:tokenId/history", createHistoryHandler("scapes"));
+app.get(
+  "/twenty-seven-year-scapes/:tokenId/history",
+  createHistoryHandler("twenty-seven-year-scapes"),
+);
 
 export default app;

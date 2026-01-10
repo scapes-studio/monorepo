@@ -20,6 +20,26 @@ export const transferEvent = onchainTable("transfer_event", (t) => ({
   txHash: t.hex().notNull(),
 }));
 
+export const twentySevenYearScape = onchainTable(
+  "twenty_seven_year_scape",
+  (t) => ({
+    id: t.bigint().primaryKey(),
+    owner: t.hex().notNull(),
+  }),
+);
+
+export const twentySevenYearTransferEvent = onchainTable(
+  "twenty_seven_year_transfer_event",
+  (t) => ({
+    id: t.text().primaryKey(),
+    timestamp: t.integer().notNull(),
+    from: t.hex().notNull(),
+    to: t.hex().notNull(),
+    scape: t.bigint().notNull(),
+    txHash: t.hex().notNull(),
+  }),
+);
+
 export const offer = onchainTable("offer", (t) => ({
   tokenId: t.bigint().primaryKey(),
   price: t.bigint().notNull(),

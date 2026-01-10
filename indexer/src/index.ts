@@ -1,7 +1,24 @@
 import { ponder } from "ponder:registry";
-import { offer, sale } from "ponder:schema";
+import {
+  offer,
+  sale,
+  scape,
+  transferEvent,
+  twentySevenYearScape,
+  twentySevenYearTransferEvent,
+} from "ponder:schema";
 import { computeTransfer } from "./utils";
 import { zeroAddress } from "viem";
+
+const baseTransferTables = {
+  scapeTable: scape,
+  transferEventTable: transferEvent,
+};
+
+const twentySevenYearTables = {
+  scapeTable: twentySevenYearScape,
+  transferEventTable: twentySevenYearTransferEvent,
+};
 
 ponder.on("PunkScapes:Transfer", async ({ event, context }) => {
   await computeTransfer(
@@ -14,6 +31,7 @@ ponder.on("PunkScapes:Transfer", async ({ event, context }) => {
       txHash: event.transaction.hash,
     },
     context,
+    baseTransferTables,
   );
 });
 
@@ -28,6 +46,22 @@ ponder.on("Scapes:Transfer", async ({ event, context }) => {
       txHash: event.transaction.hash,
     },
     context,
+    baseTransferTables,
+  );
+});
+
+ponder.on("TwentySevenYearScapes:Transfer", async ({ event, context }) => {
+  await computeTransfer(
+    {
+      scapeId: event.args.id,
+      eventId: event.id,
+      timestamp: event.block.timestamp,
+      from: event.args.from,
+      to: event.args.to,
+      txHash: event.transaction.hash,
+    },
+    context,
+    twentySevenYearTables,
   );
 });
 

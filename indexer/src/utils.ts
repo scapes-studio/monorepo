@@ -33,6 +33,11 @@ export async function saveAccounts(
  * Handles minting, burning, and regular transfers
  * Updates token ownership and account balances
  */
+type ScapeTable = typeof schema.scape | typeof schema.twentySevenYearScape;
+type TransferTable =
+  | typeof schema.transferEvent
+  | typeof schema.twentySevenYearTransferEvent;
+
 export async function computeTransfer(
   {
     scapeId,
@@ -50,6 +55,13 @@ export async function computeTransfer(
     txHash: `0x${string}`;
   },
   { db }: Context,
+  {
+    scapeTable,
+    transferEventTable,
+  }: {
+    scapeTable: ScapeTable;
+    transferEventTable: TransferTable;
+  },
 ) {
   const isMint = from === zeroAddress;
   const isBurn = to === zeroAddress;
@@ -59,7 +71,7 @@ export async function computeTransfer(
 
   // Update scape ownership
   await db
-    .insert(schema.scape)
+    .insert(scapeTable)
     .values({
       id: scapeId,
       owner: to,
@@ -67,7 +79,7 @@ export async function computeTransfer(
     .onConflictDoUpdate({ owner: to });
 
   // Store the transfer event
-  await db.insert(schema.transferEvent).values({
+  await db.insert(transferEventTable).values({
     id: eventId,
     from,
     to,
