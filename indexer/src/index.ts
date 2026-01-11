@@ -9,6 +9,18 @@ import {
 } from "ponder:schema";
 import { computeTransfer } from "./utils";
 import { zeroAddress } from "viem";
+import scapeAttributesData from "./static/scapes-attributes.json";
+import scapeRaritiesData from "./static/scape-rarities.json";
+
+type ScapeAttribute = {
+  trait_type: string;
+  value: string | number;
+  display_type?: string;
+};
+
+const scapeAttributes =
+  scapeAttributesData as Record<string, ScapeAttribute[]>;
+const scapeRarities = scapeRaritiesData as Record<string, number>;
 
 const baseTransferTables = {
   scapeTable: scape,
@@ -33,6 +45,25 @@ ponder.on("PunkScapes:Transfer", async ({ event, context }) => {
     context,
     baseTransferTables,
   );
+
+  if (event.args.from === zeroAddress) {
+    const scapeIdKey = event.args.id.toString();
+    const attributes = scapeAttributes[scapeIdKey] ?? null;
+    const rarity = scapeRarities[scapeIdKey] ?? null;
+
+    await context.db
+      .insert(scape)
+      .values({
+        id: event.args.id,
+        owner: event.args.to,
+        attributes,
+        rarity,
+      })
+      .onConflictDoUpdate({
+        attributes,
+        rarity,
+      });
+  }
 });
 
 ponder.on("Scapes:Transfer", async ({ event, context }) => {

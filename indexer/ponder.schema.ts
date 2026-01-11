@@ -9,6 +9,8 @@ export const account = onchainTable("account", (t) => ({
 export const scape = onchainTable("scape", (t) => ({
   id: t.bigint().primaryKey(),
   owner: t.hex().notNull(),
+  attributes: t.json(),
+  rarity: t.doublePrecision(),
 }));
 
 export const transferEvent = onchainTable("transfer_event", (t) => ({
