@@ -7,8 +7,8 @@
   </div>
 </template>
 
-<style scoped>
-main {
-  min-height: calc(100dvh - 4rem);
+<style>
+:root {
+  color-scheme: light;
 }
 </style>
