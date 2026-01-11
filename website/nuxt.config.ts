@@ -8,5 +8,8 @@ export default defineNuxtConfig({
   ],
   css: [
     '~/assets/styles/index.css',
-  ]
+  ],
+  devServer: {
+    port: 3311,
+  }
 })
