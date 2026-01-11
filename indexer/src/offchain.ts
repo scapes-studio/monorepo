@@ -3,6 +3,9 @@ import { json, text, bigint, integer, pgSchema, index, unique, timestamp, boolea
 // Offchain PostgreSQL schema for Seaport/OpenSea sales
 export const offchain = pgSchema("offchain");
 
+// ENS profiles schema
+export const ens = pgSchema("ens");
+
 // Price structure stored as JSONB
 export type Price = {
   wei: string;
@@ -27,6 +30,17 @@ export type VolumeStats = {
     sixMonth: number;
     month: number;
     day: number;
+  };
+};
+
+export type EnsProfileData = {
+  avatar: string;
+  description: string;
+  links: {
+    url: string;
+    email: string;
+    twitter: string;
+    github: string;
   };
 };
 
@@ -90,3 +104,14 @@ export const syncState = offchain.table("sync_state", {
   stats: json().$type<VolumeStats>(),
   updatedAt: timestamp("updated_at").notNull(),
 });
+
+export const ensProfile = ens.table(
+  "profiles",
+  {
+    address: text().primaryKey(),
+    ens: text(),
+    data: json().$type<EnsProfileData>(),
+    updatedAt: timestamp("updated_at").notNull(),
+  },
+  (t) => [unique("ens_profile_ens_unique").on(t.ens)],
+);

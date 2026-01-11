@@ -3,6 +3,7 @@ import schema from "ponder:schema";
 import { Hono } from "hono";
 import { client, graphql } from "ponder";
 import { count, desc, eq, sql } from "drizzle-orm";
+import { forceUpdateProfile, getProfile } from "./profiles";
 import { seaportSale } from "../offchain";
 
 const app = new Hono();
@@ -70,6 +71,9 @@ function buildSeaportJoinCondition(
 app.use("/sql/*", client({ db, schema }));
 app.use("/", graphql({ db, schema }));
 app.use("/graphql", graphql({ db, schema }));
+
+app.get("/profiles/:id", getProfile);
+app.post("/profiles/:id", forceUpdateProfile);
 
 // ============================================
 // Seaport Sales API Endpoints
