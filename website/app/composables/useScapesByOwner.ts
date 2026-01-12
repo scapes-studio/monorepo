@@ -7,7 +7,7 @@ export type ScapeRecord = {
   rarity: number | null;
 };
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 500;
 
 export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
   const client = usePonderClient();
