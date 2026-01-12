@@ -5,7 +5,9 @@ defineProps<{ scape: ScapeRecord }>();
 </script>
 
 <template>
-  <ScapesImage :id="scape.id" />
+  <NuxtLink class="scape-link" :to="`/scapes/${scape.id}`">
+    <ScapesImage :id="scape.id" />
+  </NuxtLink>
   <!-- <article class="scape-card"> -->
   <!--   <h1>#{{ scape.id }}</h1> -->
   <!-- </article> -->
@@ -14,5 +16,9 @@ defineProps<{ scape: ScapeRecord }>();
 <style scoped>
 img {
   border-radius: 3px;
+}
+
+.scape-link {
+  display: block;
 }
 </style>
