@@ -13,8 +13,8 @@ type CollectionKey = "scapes" | "twenty-seven-year-scapes";
 type CollectionConfig = {
   key: CollectionKey;
   transferEventTable:
-    | typeof schema.transferEvent
-    | typeof schema.twentySevenYearTransferEvent;
+  | typeof schema.transferEvent
+  | typeof schema.twentySevenYearTransferEvent;
   seaportSlugs: readonly string[];
   includeOnchainSales: boolean;
 };
@@ -33,15 +33,6 @@ const COLLECTIONS: Record<CollectionKey, CollectionConfig> = {
     includeOnchainSales: false,
   },
 };
-
-const COLLECTION_KEYS = Object.keys(COLLECTIONS) as CollectionKey[];
-
-function getCollectionConfigFromParam(param?: string): CollectionConfig | null {
-  if (!param) {
-    return COLLECTIONS.scapes;
-  }
-  return COLLECTIONS[param as CollectionKey] ?? null;
-}
 
 function buildSeaportJoinCondition(
   transferTable:
@@ -100,9 +91,9 @@ app.get("/seaport/sales", async (c) => {
 
   const [sales, countResult] = slug
     ? await Promise.all([
-        baseQuery.where(eq(seaportSale.slug, slug)),
-        countQuery.where(eq(seaportSale.slug, slug)),
-      ])
+      baseQuery.where(eq(seaportSale.slug, slug)),
+      countQuery.where(eq(seaportSale.slug, slug)),
+    ])
     : await Promise.all([baseQuery, countQuery]);
 
   const total = countResult[0]?.count ?? 0;
@@ -305,33 +296,33 @@ function createHistoryHandler(collectionKey: CollectionKey) {
 
     const result = collection.includeOnchainSales
       ? await db
-          .select({
-            ...baseSelectFields,
-            onchainSaleId: schema.sale.id,
-            onchainSalePrice: schema.sale.price,
-            onchainSeller: schema.sale.seller,
-            onchainBuyer: schema.sale.buyer,
-          })
-          .from(transferTable)
-          .leftJoin(seaportSale, seaportJoinCondition)
-          .leftJoin(
-            schema.sale,
-            sql`${transferTable.txHash} = ${schema.sale.txHash} AND ${transferTable.scape} = ${schema.sale.tokenId}`,
-          )
-          .where(eq(transferTable.scape, tokenIdValue))
-          .orderBy(desc(transferTable.timestamp))
+        .select({
+          ...baseSelectFields,
+          onchainSaleId: schema.sale.id,
+          onchainSalePrice: schema.sale.price,
+          onchainSeller: schema.sale.seller,
+          onchainBuyer: schema.sale.buyer,
+        })
+        .from(transferTable)
+        .leftJoin(seaportSale, seaportJoinCondition)
+        .leftJoin(
+          schema.sale,
+          sql`${transferTable.txHash} = ${schema.sale.txHash} AND ${transferTable.scape} = ${schema.sale.tokenId}`,
+        )
+        .where(eq(transferTable.scape, tokenIdValue))
+        .orderBy(desc(transferTable.timestamp))
       : await db
-          .select({
-            ...baseSelectFields,
-            onchainSaleId: sql`NULL`,
-            onchainSalePrice: sql`NULL`,
-            onchainSeller: sql`NULL`,
-            onchainBuyer: sql`NULL`,
-          })
-          .from(transferTable)
-          .leftJoin(seaportSale, seaportJoinCondition)
-          .where(eq(transferTable.scape, tokenIdValue))
-          .orderBy(desc(transferTable.timestamp));
+        .select({
+          ...baseSelectFields,
+          onchainSaleId: sql`NULL`,
+          onchainSalePrice: sql`NULL`,
+          onchainSeller: sql`NULL`,
+          onchainBuyer: sql`NULL`,
+        })
+        .from(transferTable)
+        .leftJoin(seaportSale, seaportJoinCondition)
+        .where(eq(transferTable.scape, tokenIdValue))
+        .orderBy(desc(transferTable.timestamp));
 
     // Transform results - prefer seaport data if available, fall back to onchain sale
     const history = result.map((row) => ({
@@ -342,22 +333,22 @@ function createHistoryHandler(collectionKey: CollectionKey) {
       txHash: row.txHash,
       sale: row.seaportSaleId
         ? {
-            id: row.seaportSaleId,
-            price: row.seaportSalePrice,
-            seller: row.seaportSeller,
-            buyer: row.seaportBuyer,
-            slug: row.seaportSlug,
-            source: "seaport" as const,
-          }
+          id: row.seaportSaleId,
+          price: row.seaportSalePrice,
+          seller: row.seaportSeller,
+          buyer: row.seaportBuyer,
+          slug: row.seaportSlug,
+          source: "seaport" as const,
+        }
         : collection.includeOnchainSales && row.onchainSaleId
           ? {
-              id: row.onchainSaleId,
-              price: { wei: row.onchainSalePrice!.toString() },
-              seller: row.onchainSeller,
-              buyer: row.onchainBuyer,
-              slug: collection.key,
-              source: "onchain" as const,
-            }
+            id: row.onchainSaleId,
+            price: { wei: row.onchainSalePrice!.toString() },
+            seller: row.onchainSeller,
+            buyer: row.onchainBuyer,
+            slug: collection.key,
+            source: "onchain" as const,
+          }
           : null,
     }));
 
