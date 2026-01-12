@@ -17,6 +17,11 @@ const route = useRoute()
             Home
           </NuxtLink>
         </li>
+        <li>
+          <NuxtLink to="/accounts" :class="{ active: route.path.startsWith('/accounts') }">
+            Owners
+          </NuxtLink>
+        </li>
       </slot>
     </ul>
 
