@@ -6,6 +6,11 @@ export default defineNuxtConfig({
     '@1001-digital/layers.base',
     '@1001-digital/layers.evm',
   ],
+  runtimeConfig: {
+    public: {
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://indexer.scapes.xyz',
+    },
+  },
   css: [
     '~/assets/styles/index.css',
   ],
