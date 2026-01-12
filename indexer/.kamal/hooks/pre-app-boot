@@ -2,4 +2,4 @@
 set -e
 
 echo "Running drizzle migrations..."
-kamal app exec --reuse --roles web "pnpm drizzle-kit migrate"
+kamal app exec --reuse --roles web --primary "pnpm drizzle-kit migrate"
