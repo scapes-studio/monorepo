@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+echo "Running drizzle migrations..."
+kamal app exec --reuse --role web "pnpm drizzle-kit migrate"
