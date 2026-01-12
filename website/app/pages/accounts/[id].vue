@@ -10,6 +10,7 @@ const resolvedAddress = computed(() => profile.value?.address ?? null);
 
 const {
   scapes,
+  total: scapesTotal,
   loading: scapesLoading,
   error: scapesError,
   hasMore,
@@ -17,6 +18,7 @@ const {
 } = useScapesByOwner(resolvedAddress);
 
 const displayAddress = computed(() => profile.value?.address ?? accountId.value ?? "");
+const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length);
 </script>
 
 <template>
@@ -35,7 +37,7 @@ const displayAddress = computed(() => profile.value?.address ?? accountId.value 
     <section class="account-page__scapes">
       <header class="account-page__section-title">
         <h2>Scapes</h2>
-        <span>{{ scapes.length }} owned</span>
+        <span>{{ scapesOwnedCount }} owned</span>
       </header>
 
       <div v-if="scapesError" class="account-page__status account-page__status--error">

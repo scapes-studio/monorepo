@@ -12,6 +12,7 @@ const PAGE_SIZE = 50;
 export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
   const client = usePonderClient();
   const scapes = ref<ScapeRecord[]>([]);
+  const total = ref<number | null>(null);
   const loading = ref(false);
   const error = ref<Error | null>(null);
   const hasMore = ref(true);
@@ -19,9 +20,31 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
 
   const reset = () => {
     scapes.value = [];
+    total.value = null;
     error.value = null;
     offset.value = 0;
     hasMore.value = true;
+  };
+
+  const loadTotal = async () => {
+    if (!owner.value) return;
+
+    try {
+      const normalizedOwner = owner.value.toLowerCase();
+      const result = await client.db.execute(sql`
+        SELECT COUNT(*)::int AS count
+        FROM scape
+        WHERE owner = ${normalizedOwner}
+      `);
+
+      const rows =
+        (result as { rows?: Array<{ count: number | string }> }).rows ??
+        (result as Array<{ count: number | string }>);
+      const countValue = rows[0]?.count ?? rows[0];
+      total.value = countValue === undefined ? 0 : Number(countValue);
+    } catch (err) {
+      error.value = err instanceof Error ? err : new Error("Failed to load scapes");
+    }
   };
 
   const loadMore = async () => {
@@ -65,6 +88,7 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
     (value) => {
       reset();
       if (value) {
+        void loadTotal();
         loadMore();
       }
     },
@@ -73,6 +97,7 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
 
   return {
     scapes,
+    total,
     loading,
     error,
     hasMore,
