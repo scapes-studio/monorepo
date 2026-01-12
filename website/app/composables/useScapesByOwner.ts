@@ -7,13 +7,18 @@ export type ScapeRecord = {
   rarity: number | null;
 };
 
+type ScapesPayload = {
+  total: number;
+  scapes: ScapeRecord[];
+};
+
 const PAGE_SIZE = 500;
 
 export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
   const client = usePonderClient();
   const scapes = ref<ScapeRecord[]>([]);
   const total = ref<number | null>(null);
-  const loading = ref(false);
+  const loadMoreLoading = ref(false);
   const error = ref<Error | null>(null);
   const hasMore = ref(true);
   const offset = ref(0);
@@ -24,32 +29,88 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
     error.value = null;
     offset.value = 0;
     hasMore.value = true;
+    loadMoreLoading.value = false;
   };
 
-  const loadTotal = async () => {
-    if (!owner.value) return;
+  const parseCount = (result: unknown) => {
+    const rows =
+      (result as { rows?: Array<{ count: number | string }> }).rows ??
+      (result as Array<{ count: number | string }>);
+    const countValue = rows[0]?.count ?? rows[0];
+    return countValue === undefined ? 0 : Number(countValue);
+  };
 
-    try {
-      const normalizedOwner = owner.value.toLowerCase();
-      const result = await client.db.execute(sql`
+  const fetchInitial = async (): Promise<ScapesPayload> => {
+    if (!owner.value) {
+      return { total: 0, scapes: [] };
+    }
+
+    const normalizedOwner = owner.value.toLowerCase();
+    const [countResult, scapesResult] = await Promise.all([
+      client.db.execute(sql`
         SELECT COUNT(*)::int AS count
         FROM scape
         WHERE owner = ${normalizedOwner}
-      `);
+      `),
+      client.db.execute(sql`
+        SELECT id, owner, attributes, rarity
+        FROM scape
+        WHERE owner = ${normalizedOwner}
+        ORDER BY id DESC
+        LIMIT ${PAGE_SIZE}
+        OFFSET 0
+      `),
+    ]);
 
-      const rows =
-        (result as { rows?: Array<{ count: number | string }> }).rows ??
-        (result as Array<{ count: number | string }>);
-      const countValue = rows[0]?.count ?? rows[0];
-      total.value = countValue === undefined ? 0 : Number(countValue);
-    } catch (err) {
-      error.value = err instanceof Error ? err : new Error("Failed to load scapes");
-    }
+    const rows = (scapesResult as { rows?: ScapeRecord[] }).rows ?? (scapesResult as ScapeRecord[]);
+    const mapped = rows.map((row) => ({
+      id: row.id.toString(),
+      owner: row.owner,
+      attributes: row.attributes ?? null,
+      rarity: row.rarity ?? null,
+    }));
+
+    return {
+      total: parseCount(countResult),
+      scapes: mapped,
+    };
   };
 
+  const asyncKey = computed(() => `scapes-by-owner-${owner.value?.toLowerCase() ?? "unknown"}`);
+  const { data, pending, error: asyncError } = useAsyncData(asyncKey, fetchInitial, {
+    watch: [owner],
+    server: true,
+  });
+
+  watch(
+    data,
+    (value) => {
+      if (!value) return;
+      scapes.value = value.scapes;
+      total.value = value.total;
+      offset.value = value.scapes.length;
+      hasMore.value = value.scapes.length >= PAGE_SIZE;
+    },
+    { immediate: true },
+  );
+
+  watch(
+    asyncError,
+    (value) => {
+      error.value = value ?? null;
+    },
+    { immediate: true },
+  );
+
+  watch(owner, (value) => {
+    if (!value) {
+      reset();
+    }
+  });
+
   const loadMore = async () => {
-    if (!owner.value || loading.value || !hasMore.value) return;
-    loading.value = true;
+    if (!owner.value || loadMoreLoading.value || pending.value || !hasMore.value) return;
+    loadMoreLoading.value = true;
     error.value = null;
 
     try {
@@ -79,21 +140,11 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
     } catch (err) {
       error.value = err instanceof Error ? err : new Error("Failed to load scapes");
     } finally {
-      loading.value = false;
+      loadMoreLoading.value = false;
     }
   };
 
-  watch(
-    owner,
-    (value) => {
-      reset();
-      if (value) {
-        void loadTotal();
-        loadMore();
-      }
-    },
-    { immediate: true },
-  );
+  const loading = computed(() => pending.value || loadMoreLoading.value);
 
   return {
     scapes,

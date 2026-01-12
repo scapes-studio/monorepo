@@ -3,7 +3,7 @@ const route = useRoute();
 
 const accountId = computed(() => route.params.id as string | undefined);
 
-const { profile, pending: profilePending, error: profileError } = useProfile(accountId);
+const { data: profile, pending: profilePending, error: profileError } = await useProfile(accountId);
 
 const profileData = computed(() => profile.value?.data ?? null);
 const resolvedAddress = computed(() => profile.value?.address ?? null);

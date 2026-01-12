@@ -21,7 +21,7 @@ export type ProfileResponse = {
 export const useProfile = (identifier: Ref<string | null | undefined>) => {
   const runtimeConfig = useRuntimeConfig();
 
-  const { data, pending, error, refresh } = useAsyncData(
+  return useAsyncData(
     async () => {
       if (!identifier.value) return null;
       const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
@@ -29,11 +29,4 @@ export const useProfile = (identifier: Ref<string | null | undefined>) => {
     },
     { watch: [identifier] },
   );
-
-  return {
-    profile: data,
-    pending,
-    error,
-    refresh,
-  };
 };
