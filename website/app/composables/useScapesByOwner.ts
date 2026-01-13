@@ -1,5 +1,3 @@
-import { desc, eq } from "@ponder/client";
-
 export type ScapeRecord = {
   id: bigint;
   owner: `0x${string}`;

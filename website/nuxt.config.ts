@@ -2,6 +2,14 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-07',
   devtools: { enabled: true },
+  imports: {
+    presets: [
+      {
+        from: '@ponder/client',
+        imports: ['createClient', 'asc', 'desc', 'eq', 'ne', 'sql', 'and', 'gt', 'lte'],
+      },
+    ],
+  },
   extends: [
     '@1001-digital/layers.base',
     '@1001-digital/layers.evm',

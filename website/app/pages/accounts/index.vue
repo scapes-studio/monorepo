@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { asc, desc, ne, sql } from "@ponder/client";
 
 const client = usePonderClient();
 const { public: { scapeCollectionAddress } } = useRuntimeConfig();

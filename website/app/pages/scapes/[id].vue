@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { and, eq, gt, lte, sql } from "@ponder/client";
-
 const route = useRoute();
 
 type SalePrice = {
