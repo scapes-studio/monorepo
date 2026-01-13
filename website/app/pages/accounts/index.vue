@@ -1,34 +1,51 @@
 <script setup lang="ts">
-import { sql } from "@ponder/client";
-
-type OwnerEntry = {
-  owner: string;
-  count: number;
-};
-
-type OwnerRow = {
-  owner: string;
-  count: number | string;
-};
+import { asc, desc, sql } from "@ponder/client";
 
 const client = usePonderClient();
 
-const { data, pending, error } = useAsyncData("scape-owners-leaderboard", async () => {
-  const result = await client.db.execute(sql`
-    SELECT owner, COUNT(*)::int AS count
-    FROM scape
-    GROUP BY owner
-    ORDER BY count DESC, owner ASC
-  `);
+const PAGE_SIZE = 50;
+const count = sql<number>`count(*)::int`;
+const owners = ref<Array<{ owner: string; count: number }>>([]);
+const offset = ref(0);
+const isLoadingMore = ref(false);
+const hasMore = ref(true);
 
-  const rows = (result as { rows?: OwnerRow[] }).rows ?? (result as OwnerRow[]);
-  return rows.map((row) => ({
-    owner: row.owner,
-    count: Number(row.count ?? 0),
-  }));
+const fetchOwners = async (startOffset: number) => client.db.select({
+  owner: schema.scape.owner,
+  count,
+})
+  .from(schema.scape)
+  .groupBy(schema.scape.owner)
+  .orderBy(
+    desc(count),
+    asc(schema.scape.owner),
+  )
+  .limit(PAGE_SIZE)
+  .offset(startOffset);
+
+const { data, pending, error } = await useAsyncData("scape-owners-leaderboard", () => fetchOwners(0));
+
+watchEffect(() => {
+  if (data.value) {
+    owners.value = data.value;
+    offset.value = data.value.length;
+    hasMore.value = data.value.length === PAGE_SIZE;
+  }
 });
 
-const owners = computed<OwnerEntry[]>(() => data.value ?? []);
+const loadMore = async () => {
+  if (isLoadingMore.value || !hasMore.value) return;
+  isLoadingMore.value = true;
+  try {
+    const nextOwners = await fetchOwners(offset.value);
+    owners.value = [...owners.value, ...nextOwners];
+    offset.value += nextOwners.length;
+    hasMore.value = nextOwners.length === PAGE_SIZE;
+  } finally {
+    isLoadingMore.value = false;
+  }
+};
+
 const totalOwners = computed(() => owners.value.length);
 const totalScapes = computed(() => owners.value.reduce((sum, entry) => sum + entry.count, 0));
 </script>
@@ -50,17 +67,24 @@ const totalScapes = computed(() => owners.value.reduce((sum, entry) => sum + ent
     <div v-else-if="error" class="accounts-page__status accounts-page__status--error">
       Unable to load scape owners right now.
     </div>
-    <div v-else-if="owners.length === 0" class="accounts-page__status">No owners found.</div>
+    <div v-else-if="owners?.length === 0" class="accounts-page__status">No owners found.</div>
 
-    <ol v-else class="accounts-page__list">
-      <li v-for="(entry, index) in owners" :key="entry.owner" class="accounts-page__row">
-        <span class="accounts-page__rank">{{ index + 1 }}</span>
-        <NuxtLink class="accounts-page__owner" :to="`/accounts/${entry.owner}`">
-          {{ entry.owner }}
-        </NuxtLink>
-        <span class="accounts-page__count">{{ entry.count }} scapes</span>
-      </li>
-    </ol>
+    <div v-else class="accounts-page__results">
+      <ol class="accounts-page__list">
+        <li v-for="(entry, index) in owners" :key="entry.owner" class="accounts-page__row">
+          <span class="accounts-page__rank">{{ index + 1 }}</span>
+          <NuxtLink class="accounts-page__owner" :to="`/accounts/${entry.owner}`">
+            {{ entry.owner }}
+          </NuxtLink>
+          <span class="accounts-page__count">{{ entry.count }} scapes</span>
+        </li>
+      </ol>
+      <button v-if="hasMore" class="accounts-page__load-more" type="button" :disabled="isLoadingMore" @click="loadMore">
+        <span v-if="isLoadingMore">Loading more…</span>
+        <span v-else>Load more</span>
+      </button>
+      <div v-else class="accounts-page__status">All owners loaded.</div>
+    </div>
   </section>
 </template>
 
@@ -106,6 +130,11 @@ const totalScapes = computed(() => owners.value.reduce((sum, entry) => sum + ent
   background: rgba(255, 0, 0, 0.08);
 }
 
+.accounts-page__results {
+  display: grid;
+  gap: var(--spacer);
+}
+
 .accounts-page__list {
   list-style: none;
   padding: 0;
@@ -122,6 +151,22 @@ const totalScapes = computed(() => owners.value.reduce((sum, entry) => sum + ent
   padding: var(--spacer);
   border-radius: 14px;
   border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.accounts-page__load-more {
+  justify-self: center;
+  padding: 0.65rem 1.5rem;
+  border-radius: 999px;
+  border: none;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.accounts-page__load-more:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .accounts-page__rank {
