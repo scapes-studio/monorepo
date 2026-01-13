@@ -4,7 +4,7 @@ const client = usePonderClient();
 const { public: { scapeCollectionAddress } } = useRuntimeConfig();
 const normalizedCollectionAddress = scapeCollectionAddress.toLowerCase() as `0x${string}`;
 
-const PAGE_SIZE = 100;
+const PAGE_SIZE = 20;
 const count = sql<number>`count(*)::int`;
 const owners = ref<Array<{ owner: string; count: number }>>([]);
 const offset = ref(0);
