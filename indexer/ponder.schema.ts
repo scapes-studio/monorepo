@@ -48,6 +48,7 @@ export const twentySevenYearTransferEvent = onchainTable(
 
 export const offer = onchainTable("offer", (t) => ({
   tokenId: t.bigint().primaryKey(),
+  lister: t.hex().notNull(),
   price: t.bigint().notNull(),
   specificBuyer: t.hex(),
   isActive: t.boolean().notNull(),

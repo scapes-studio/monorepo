@@ -94,6 +94,12 @@ const formattedTimestamp = computed(() => formatTimestamp(props.item.timestamp))
       </template>
 
       <template v-else-if="item.type === 'listing'">
+        <div class="activity-item__addresses">
+          <div>
+            <span class="activity-item__label">Listed by</span>
+            <AccountLink :address="item.lister" class="activity-item__link" />
+          </div>
+        </div>
         <span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>
       </template>
     </div>

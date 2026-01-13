@@ -32,6 +32,7 @@ export type SaleActivity = BaseActivity & {
 
 export type ListingActivity = BaseActivity & {
   type: "listing";
+  lister: `0x${string}`;
   price: { wei: string; eth: number };
   isActive: boolean;
 };

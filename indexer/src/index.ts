@@ -79,6 +79,7 @@ ponder.on("Scapes:OfferCreated", async ({ event, context }) => {
     .insert(offer)
     .values({
       tokenId: event.args.tokenId,
+      lister: event.transaction.from,
       price: event.args.value,
       specificBuyer,
       isActive: true,
@@ -87,6 +88,7 @@ ponder.on("Scapes:OfferCreated", async ({ event, context }) => {
       txHash: event.transaction.hash,
     })
     .onConflictDoUpdate({
+      lister: event.transaction.from,
       price: event.args.value,
       specificBuyer,
       isActive: true,
@@ -102,6 +104,7 @@ ponder.on("Scapes:OfferWithdrawn", async ({ event, context }) => {
     .insert(offer)
     .values({
       tokenId: event.args.tokenId,
+      lister: event.transaction.from,
       price: 0n,
       specificBuyer: null,
       isActive: false,
@@ -135,6 +138,7 @@ ponder.on("Scapes:Sale", async ({ event, context }) => {
     .insert(offer)
     .values({
       tokenId: event.args.tokenId,
+      lister: event.args.from,
       price: event.args.value,
       specificBuyer: null,
       isActive: false,

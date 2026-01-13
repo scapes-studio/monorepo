@@ -30,6 +30,7 @@ type SaleActivity = BaseActivity & {
 
 type ListingActivity = BaseActivity & {
   type: "listing";
+  lister: string;
   price: { wei: string; eth: number };
   isActive: boolean;
 };
@@ -156,7 +157,7 @@ export const getActivity = async (c: Context) => {
         'scapes' as collection,
         token_id::text,
         tx_hash,
-        NULL::text as from_addr,
+        lister as from_addr,
         NULL::text as to_addr,
         NULL::text as seller,
         NULL::text as buyer,
@@ -225,6 +226,7 @@ export const getActivity = async (c: Context) => {
           return {
             ...base,
             type: "listing" as const,
+            lister: row.from_addr!,
             price: {
               wei: row.price_wei!,
               eth: Number(row.price_wei!) / 1e18,
