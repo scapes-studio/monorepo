@@ -3,10 +3,7 @@ const props = defineProps<{
   address: string;
 }>();
 
-const { getAccountDisplay } = useENSResolution();
-
-// getAccountDisplay triggers resolution automatically as a side effect
-const account = computed(() => getAccountDisplay(props.address as `0x${string}`));
+const account = useAccountDisplay(() => props.address as `0x${string}`);
 </script>
 
 <template>

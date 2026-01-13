@@ -1,5 +1,59 @@
 import type { ProfileResponse } from "./useProfile";
 
+export type AccountDisplay = {
+  address: `0x${string}`;
+  ens: string | null;
+  displayName: string;
+  url: string;
+};
+
+// Utility to shorten address
+export const shortenAddress = (value: string, start = 6, end = 4): string => {
+  if (!value) return "";
+  if (value.length <= start + end) return value;
+  return `${value.slice(0, start)}…${value.slice(-end)}`;
+};
+
+/**
+ * SSR-compatible composable for resolving a single address to ENS.
+ * Uses useAsyncData to properly transfer data from server to client.
+ */
+export const useAccountDisplay = (address: MaybeRefOrGetter<`0x${string}` | string | undefined>) => {
+  const runtimeConfig = useRuntimeConfig();
+  const addressValue = computed(() => toValue(address));
+
+  const asyncKey = computed(() => `ens-${addressValue.value?.toLowerCase() ?? "unknown"}`);
+
+  const { data: profile } = useAsyncData(
+    asyncKey,
+    async () => {
+      if (!addressValue.value) return null;
+      const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
+      try {
+        return await $fetch<ProfileResponse>(`${baseUrl}/profiles/${addressValue.value}`);
+      } catch {
+        return null;
+      }
+    },
+  );
+
+  const account = computed((): AccountDisplay => {
+    const addr = addressValue.value;
+    if (!addr) {
+      return { address: "0x" as `0x${string}`, ens: null, displayName: "", url: "/people" };
+    }
+
+    const ens = profile.value?.ens ?? null;
+    const displayName = ens || shortenAddress(addr);
+    const url = `/people/${ens || addr}`;
+
+    return { address: addr as `0x${string}`, ens, displayName, url };
+  });
+
+  return account;
+};
+
+// Keep legacy composable for backwards compatibility (client-side only usage)
 type ENSCacheState = "pending" | "resolved";
 
 type ENSCacheEntry = {
@@ -12,20 +66,6 @@ const ensCache: Record<string, ENSCacheEntry | undefined> = reactive({});
 
 // Track pending requests to avoid duplicate fetches
 const pendingRequests = new Map<string, Promise<void>>();
-
-export type AccountDisplay = {
-  address: `0x${string}`;
-  ens: string | null;
-  displayName: string;
-  url: string;
-};
-
-// Utility to shorten address
-const shortenAddress = (value: string, start = 6, end = 4): string => {
-  if (!value) return "";
-  if (value.length <= start + end) return value;
-  return `${value.slice(0, start)}…${value.slice(-end)}`;
-};
 
 export const useENSResolution = () => {
   const runtimeConfig = useRuntimeConfig();
