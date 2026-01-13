@@ -45,7 +45,7 @@ export function getPool(): pg.Pool {
 /**
  * Get database connection with combined schema for cross-schema queries.
  * This includes both Ponder onchain tables (via views schema) and offchain tables.
- * Requires --views-schema=scapes when running Ponder.
+ * Requires --views-schema=scapes when running Ponder for stable view names.
  */
 export function getCombinedDb(): CombinedDb {
   if (combinedDb) {

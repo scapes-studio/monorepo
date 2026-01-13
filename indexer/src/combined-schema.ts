@@ -5,7 +5,7 @@ import * as offchainSchema from "./offchain";
 
 // Views schema name for external queries (CLI commands, external clients)
 // NOTE: setDatabaseSchema is called lazily to avoid mutating schema during Ponder runtime
-const VIEWS_SCHEMA = process.env.PONDER_VIEWS_SCHEMA ?? "scapes";
+const VIEWS_SCHEMA = process.env.PONDER_VIEWS_SCHEMA;
 
 let schemaInitialized = false;
 
@@ -14,7 +14,7 @@ let schemaInitialized = false;
  * Must be called before using combinedSchema for production queries.
  */
 export function initViewsSchema() {
-  if (!schemaInitialized) {
+  if (!schemaInitialized && VIEWS_SCHEMA) {
     setDatabaseSchema(ponderSchema, VIEWS_SCHEMA);
     schemaInitialized = true;
   }

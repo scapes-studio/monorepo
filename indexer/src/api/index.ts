@@ -3,10 +3,13 @@ import schema from "ponder:schema";
 import { Hono } from "hono";
 import { client, graphql } from "ponder";
 import { count, desc, eq, sql } from "drizzle-orm";
+import { combinedSchema } from "../combined-schema";
+import { getCombinedDb } from "../services/database";
 import { forceUpdateProfile, getProfile } from "./profiles";
 import { seaportSale } from "../offchain";
 
 const app = new Hono();
+const combinedDb = getCombinedDb();
 
 type CollectionKey = "scapes" | "twenty-seven-year-scapes";
 
@@ -59,9 +62,9 @@ function buildSeaportJoinCondition(
 }
 
 // Ponder built-in routes
-app.use("/sql/*", client({ db, schema }));
-app.use("/", graphql({ db, schema }));
-app.use("/graphql", graphql({ db, schema }));
+app.use("/sql/*", client({ db: combinedDb, schema: combinedSchema }));
+app.use("/", graphql({ db: combinedDb, schema: combinedSchema }));
+app.use("/graphql", graphql({ db: combinedDb, schema: combinedSchema }));
 
 app.get("/profiles/:id", getProfile);
 app.post("/profiles/:id", forceUpdateProfile);
