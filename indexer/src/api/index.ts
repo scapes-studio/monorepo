@@ -1,7 +1,7 @@
 import { db } from "ponder:api";
 import { Hono } from "hono";
 import { client, graphql } from "ponder";
-import * as ponderSchema from "../../ponder.schema";
+import { schema } from "../../combined.schema";
 import { getProfile, forceUpdateProfile } from "./profiles";
 import { getSales, getSalesBySlug } from "./sales";
 import { getVolumeStats, getVolumeStatsBySlug } from "./stats";
@@ -11,9 +11,9 @@ import { getActivity } from "./activity";
 
 const app = new Hono();
 
-// Built-in routes - ponder schema only (offchain data via custom routes below)
-app.use("/sql/*", client({ db, schema: ponderSchema }));
-app.use("/graphql", graphql({ db, schema: ponderSchema }));
+// Built-in routes - combined schema for full access
+app.use("/sql/*", client({ db, schema }));
+app.use("/graphql", graphql({ db, schema }));
 
 app.get("/", (c) => c.text("Scapes Indexer"));
 

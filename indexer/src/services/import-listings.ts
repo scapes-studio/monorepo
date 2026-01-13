@@ -87,15 +87,15 @@ export class ImportListingsService {
     // Transform listings for database insertion
     const values = allListings.map((listing) => ({
       slug: config.slug,
-      contract: listing.contract.toLowerCase() as `0x${string}`,
-      tokenId: BigInt(listing.tokenId),
-      orderHash: listing.orderHash as `0x${string}`,
-      protocolAddress: listing.protocolAddress as `0x${string}`,
+      contract: listing.contract.toLowerCase(),
+      tokenId: String(listing.tokenId),
+      orderHash: listing.orderHash,
+      protocolAddress: listing.protocolAddress,
       timestamp: listing.timestamp,
       startDate: listing.startDate,
       expirationDate: listing.expirationDate,
-      maker: listing.maker.toLowerCase() as `0x${string}`,
-      taker: (listing.taker?.toLowerCase() || null) as `0x${string}` | null,
+      maker: listing.maker.toLowerCase(),
+      taker: listing.taker?.toLowerCase() || null,
       isPrivateListing: listing.isPrivateListing,
       price: listing.price,
     }));

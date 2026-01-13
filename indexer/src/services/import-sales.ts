@@ -68,15 +68,15 @@ export class ImportSalesService {
         // Composite ID: slug-tokenId-txHash-logIndex
         id: `${config.slug}-${sale.tokenId}-${sale.txHash}-${sale.logIndex ?? 0}`,
         slug: config.slug,
-        contract: sale.contract.toLowerCase() as `0x${string}`,
-        tokenId: BigInt(sale.tokenId),
-        txHash: sale.txHash as `0x${string}`,
-        orderHash: sale.orderHash as `0x${string}` | undefined,
-        block: null as bigint | null,
+        contract: sale.contract.toLowerCase(),
+        tokenId: String(sale.tokenId),
+        txHash: sale.txHash,
+        orderHash: sale.orderHash,
+        block: null as string | null,
         timestamp: sale.timestamp,
         logIndex: sale.logIndex,
-        seller: sale.seller.toLowerCase() as `0x${string}`,
-        buyer: sale.buyer.toLowerCase() as `0x${string}`,
+        seller: sale.seller.toLowerCase(),
+        buyer: sale.buyer.toLowerCase(),
         price: sale.price,
       }));
 
@@ -170,7 +170,7 @@ export class ImportSalesService {
       .insert(syncState)
       .values({
         slug,
-        contract: config.contract as `0x${string}`,
+        contract: config.contract.toLowerCase(),
         lastSyncedTimestamp: nowTimestamp,
         stats,
         updatedAt: nowTimestamp,
