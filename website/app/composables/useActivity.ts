@@ -17,19 +17,16 @@ const buildTypesParam = (filters: ActivityFilters): string => {
 };
 
 export const useActivity = (filters: Ref<ActivityFilters>) => {
-  const activity = ref<ActivityItem[]>([]);
-  const total = ref<number | null>(null);
+  // Track additional items loaded via loadMore (separate from initial data)
+  const additionalActivity = ref<ActivityItem[]>([]);
   const loadMoreLoading = ref(false);
-  const error = ref<Error | null>(null);
-  const hasMore = ref(true);
-  const offset = ref(0);
+  const loadMoreError = ref<Error | null>(null);
+  const loadMoreHasMore = ref<boolean | null>(null);
 
   const reset = () => {
-    activity.value = [];
-    total.value = null;
-    error.value = null;
-    offset.value = 0;
-    hasMore.value = true;
+    additionalActivity.value = [];
+    loadMoreError.value = null;
+    loadMoreHasMore.value = null;
     loadMoreLoading.value = false;
   };
 
@@ -57,47 +54,48 @@ export const useActivity = (filters: Ref<ActivityFilters>) => {
     server: true,
   });
 
-  watch(
-    data,
-    (value) => {
-      if (!value) return;
-      activity.value = value.data;
-      total.value = value.meta.total;
-      offset.value = value.data.length;
-      hasMore.value = value.meta.hasMore;
-    },
-    { immediate: true },
-  );
-
-  watch(
-    asyncError,
-    (value) => {
-      error.value = value ?? null;
-    },
-    { immediate: true },
-  );
-
+  // Reset additional state when filters change
   watch(filters, () => {
     reset();
   }, { deep: true });
 
+  // Use computed for values derived from data to avoid hydration mismatch
+  // Computed is lazy and reads data.value at render time when it's populated
+  const activity = computed(() => {
+    const initial = data.value?.data ?? [];
+    return [...initial, ...additionalActivity.value];
+  });
+
+  const total = computed(() => data.value?.meta.total ?? null);
+
+  const hasMore = computed(() => {
+    // If we've done a loadMore, use that state
+    if (loadMoreHasMore.value !== null) {
+      return loadMoreHasMore.value;
+    }
+    // Otherwise, derive from initial data
+    return data.value?.meta.hasMore ?? true;
+  });
+
+  const error = computed(() => loadMoreError.value ?? asyncError.value ?? null);
+
   const loadMore = async () => {
     if (loadMoreLoading.value || pending.value || !hasMore.value) return;
     loadMoreLoading.value = true;
-    error.value = null;
+    loadMoreError.value = null;
 
     try {
       const typesParam = buildTypesParam(filters.value);
       const $api = useNuxtApp().$api as typeof $fetch;
+      const currentOffset = (data.value?.data.length ?? 0) + additionalActivity.value.length;
       const response = await $api<ActivityResponse>(
-        `/activity?types=${typesParam}&limit=${PAGE_SIZE}&offset=${offset.value}`,
+        `/activity?types=${typesParam}&limit=${PAGE_SIZE}&offset=${currentOffset}`,
       );
 
-      activity.value.push(...response.data);
-      offset.value += response.data.length;
-      hasMore.value = response.meta.hasMore;
+      additionalActivity.value.push(...response.data);
+      loadMoreHasMore.value = response.meta.hasMore;
     } catch (err) {
-      error.value = err instanceof Error ? err : new Error("Failed to load activity");
+      loadMoreError.value = err instanceof Error ? err : new Error("Failed to load activity");
     } finally {
       loadMoreLoading.value = false;
     }

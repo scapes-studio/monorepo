@@ -27,19 +27,17 @@ export const useListedScapes = (
   includeSeaport: Ref<boolean> = ref(false),
 ) => {
   const client = usePonderClient();
-  const scapes = ref<ListedScape[]>([]);
-  const total = ref<number | null>(null);
+
+  // Track additional items loaded via loadMore (separate from initial data)
+  const additionalScapes = ref<ListedScape[]>([]);
   const loadMoreLoading = ref(false);
-  const error = ref<Error | null>(null);
-  const hasMore = ref(true);
-  const offset = ref(0);
+  const loadMoreError = ref<Error | null>(null);
+  const loadMoreHasMore = ref<boolean | null>(null);
 
   const reset = () => {
-    scapes.value = [];
-    total.value = null;
-    error.value = null;
-    offset.value = 0;
-    hasMore.value = true;
+    additionalScapes.value = [];
+    loadMoreError.value = null;
+    loadMoreHasMore.value = null;
     loadMoreLoading.value = false;
   };
 
@@ -203,48 +201,50 @@ export const useListedScapes = (
     server: true,
   });
 
-  watch(
-    data,
-    (value) => {
-      if (!value) return;
-      scapes.value = value.scapes;
-      total.value = value.total;
-      offset.value = value.scapes.length;
-      hasMore.value = value.scapes.length >= PAGE_SIZE;
-    },
-    { immediate: true },
-  );
-
-  watch(
-    asyncError,
-    (value) => {
-      error.value = value ?? null;
-    },
-    { immediate: true },
-  );
-
+  // Reset additional state when filters change
   watch([sortBy, includeSeaport], () => {
     reset();
   });
 
+  // Use computed for values derived from data to avoid hydration mismatch
+  // Computed is lazy and reads data.value at render time when it's populated
+  const scapes = computed(() => {
+    const initial = data.value?.scapes ?? [];
+    return [...initial, ...additionalScapes.value];
+  });
+
+  const total = computed(() => data.value?.total ?? null);
+
+  const hasMore = computed(() => {
+    // If we've done a loadMore, use that state
+    if (loadMoreHasMore.value !== null) {
+      return loadMoreHasMore.value;
+    }
+    // Otherwise, derive from initial data
+    const initialCount = data.value?.scapes.length ?? 0;
+    return initialCount >= PAGE_SIZE;
+  });
+
+  const error = computed(() => loadMoreError.value ?? asyncError.value ?? null);
+
   const loadMore = async () => {
     if (loadMoreLoading.value || pending.value || !hasMore.value) return;
     loadMoreLoading.value = true;
-    error.value = null;
+    loadMoreError.value = null;
 
     try {
       const options: FetchOptions = {
         sortBy: sortBy.value,
         includeSeaport: includeSeaport.value,
       };
-      const result = await fetchScapes(offset.value, options);
-      scapes.value.push(...result);
-      offset.value += result.length;
+      const currentOffset = (data.value?.scapes.length ?? 0) + additionalScapes.value.length;
+      const result = await fetchScapes(currentOffset, options);
+      additionalScapes.value.push(...result);
       if (result.length < PAGE_SIZE) {
-        hasMore.value = false;
+        loadMoreHasMore.value = false;
       }
     } catch (err) {
-      error.value = err instanceof Error ? err : new Error("Failed to load listings");
+      loadMoreError.value = err instanceof Error ? err : new Error("Failed to load listings");
     } finally {
       loadMoreLoading.value = false;
     }
