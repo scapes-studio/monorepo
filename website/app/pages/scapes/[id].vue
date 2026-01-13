@@ -130,6 +130,32 @@ const {
   { watch: [scapeId] },
 );
 
+const {
+  data: scapeData,
+  pending: scapePending,
+} = await useAsyncData(
+  "scape-owner",
+  async () => {
+    if (!scapeId.value) {
+      return null;
+    }
+
+    const tokenIdValue = BigInt(scapeId.value);
+
+    const result = await client.db
+      .select({ owner: schema.scape.owner })
+      .from(schema.scape)
+      .where(eq(schema.scape.id, tokenIdValue))
+      .limit(1);
+
+    const row = result[0];
+    return row ?? null;
+  },
+  { watch: [scapeId] },
+);
+
+const owner = computed(() => scapeData.value?.owner ?? null);
+
 const history = computed(() => data.value?.history ?? []);
 const totalTransfers = computed(() => data.value?.totalTransfers ?? 0);
 const totalSales = computed(() => data.value?.totalSales ?? 0);
@@ -175,6 +201,15 @@ const seaportListingPrice = computed(() => {
         <div class="scape-detail__stats">
           <span>{{ totalTransfers }} transfers</span>
           <span>{{ totalSales }} sales</span>
+        </div>
+        <div class="scape-detail__owner">
+          <span v-if="scapePending">Loading owner…</span>
+          <template v-else-if="owner">
+            Owned by
+            <NuxtLink :to="`/accounts/${owner}`" class="scape-detail__owner-link">
+              {{ owner }}
+            </NuxtLink>
+          </template>
         </div>
         <div class="scape-detail__listings">
           <span v-if="listingsPending">Checking listings…</span>
@@ -226,6 +261,22 @@ const seaportListingPrice = computed(() => {
   display: flex;
   gap: var(--spacer);
   font-weight: 600;
+}
+
+.scape-detail__owner {
+  margin-top: 0.5rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.scape-detail__owner-link {
+  font-weight: 600;
+  color: inherit;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.scape-detail__owner-link:hover {
+  text-decoration: underline;
 }
 
 .scape-detail__listings {
