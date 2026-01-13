@@ -35,9 +35,7 @@ const typeLabel = (type: string) => {
     case "sale":
       return "Sale";
     case "listing":
-      return "Listed";
-    case "offer":
-      return "Offer";
+      return "Listing";
     default:
       return type;
   }
@@ -105,20 +103,7 @@ const formattedTimestamp = computed(() => formatTimestamp(props.item.timestamp))
       </template>
 
       <template v-else-if="item.type === 'listing'">
-        <div class="activity-item__addresses">
-          <div>
-            <span class="activity-item__label">By</span>
-            <NuxtLink :to="accountUrl(item.maker)" class="activity-item__link">
-              {{ shortenHex(item.maker) }}
-            </NuxtLink>
-          </div>
-        </div>
         <span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>
-      </template>
-
-      <template v-else-if="item.type === 'offer'">
-        <span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>
-        <span v-if="!item.isActive" class="activity-item__inactive">Inactive</span>
       </template>
     </div>
 
@@ -211,11 +196,6 @@ const formattedTimestamp = computed(() => formatTimestamp(props.item.timestamp))
 
 .activity-item__source {
   color: var(--muted);
-  font-size: var(--font-sm);
-}
-
-.activity-item__inactive {
-  color: var(--error);
   font-size: var(--font-sm);
 }
 

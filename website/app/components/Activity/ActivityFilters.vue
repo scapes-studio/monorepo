@@ -18,10 +18,6 @@ const filters = defineModel<ActivityFilters>({ required: true });
       <input v-model="filters.listings" type="checkbox" />
       Listings
     </label>
-    <label class="activity-filters__toggle">
-      <input v-model="filters.offers" type="checkbox" />
-      Offers
-    </label>
   </div>
 </template>
 

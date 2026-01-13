@@ -3,7 +3,7 @@ import { type Context } from "hono";
 import { sql } from "drizzle-orm";
 
 export type Collection = "scapes" | "twenty-seven-year-scapes";
-export type ActivityType = "transfer" | "sale" | "listing" | "offer";
+export type ActivityType = "transfer" | "sale" | "listing";
 
 type BaseActivity = {
   id: string;
@@ -30,22 +30,11 @@ type SaleActivity = BaseActivity & {
 
 type ListingActivity = BaseActivity & {
   type: "listing";
-  maker: string;
-  price: { wei: string; eth: number };
-  expirationDate: number;
-};
-
-type OfferActivity = BaseActivity & {
-  type: "offer";
   price: { wei: string; eth: number };
   isActive: boolean;
 };
 
-export type ActivityItem =
-  | TransferActivity
-  | SaleActivity
-  | ListingActivity
-  | OfferActivity;
+export type ActivityItem = TransferActivity | SaleActivity | ListingActivity;
 
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 100;
@@ -62,9 +51,7 @@ type ActivityRow = {
   to_addr: string | null;
   seller: string | null;
   buyer: string | null;
-  maker: string | null;
   price_wei: string | null;
-  expiration_date: number | null;
   is_active: boolean | null;
   source: string | null;
 };
@@ -74,14 +61,13 @@ type ActivityRow = {
  * Fetch unified activity feed across all collections and event types
  */
 export const getActivity = async (c: Context) => {
-  const typesParam = c.req.query("types") || "transfer,sale,listing,offer";
+  const typesParam = c.req.query("types") || "transfer,sale,listing";
   const types = typesParam.split(",") as ActivityType[];
   const limit = Math.min(
     Math.max(Number(c.req.query("limit")) || DEFAULT_LIMIT, 1),
     MAX_LIMIT,
   );
   const offset = Math.max(Number(c.req.query("offset")) || 0, 0);
-  const now = Math.floor(Date.now() / 1000);
 
   // Single UNION ALL query across all activity sources
   const unionQuery = sql`
@@ -98,9 +84,7 @@ export const getActivity = async (c: Context) => {
         "to" as to_addr,
         NULL::text as seller,
         NULL::text as buyer,
-        NULL::text as maker,
         NULL::text as price_wei,
-        NULL::int as expiration_date,
         NULL::boolean as is_active,
         NULL::text as source
       FROM transfer_event
@@ -119,9 +103,7 @@ export const getActivity = async (c: Context) => {
         "to" as to_addr,
         NULL::text as seller,
         NULL::text as buyer,
-        NULL::text as maker,
         NULL::text as price_wei,
-        NULL::int as expiration_date,
         NULL::boolean as is_active,
         NULL::text as source
       FROM twenty_seven_year_transfer_event
@@ -140,9 +122,7 @@ export const getActivity = async (c: Context) => {
         NULL::text as to_addr,
         seller,
         buyer,
-        NULL::text as maker,
         price::text as price_wei,
-        NULL::int as expiration_date,
         NULL::boolean as is_active,
         'onchain' as source
       FROM sale
@@ -161,41 +141,17 @@ export const getActivity = async (c: Context) => {
         NULL::text as to_addr,
         seller,
         buyer,
-        NULL::text as maker,
         price->>'wei' as price_wei,
-        NULL::int as expiration_date,
         NULL::boolean as is_active,
         'seaport' as source
       FROM offchain.seaport_sale
 
       UNION ALL
 
-      -- Seaport listings (active only)
+      -- Onchain listings (active only)
       SELECT
-        'listing-' || order_hash as id,
+        'listing-' || token_id::text as id,
         'listing' as type,
-        timestamp,
-        slug as collection,
-        token_id::text,
-        NULL::text as tx_hash,
-        NULL::text as from_addr,
-        NULL::text as to_addr,
-        NULL::text as seller,
-        NULL::text as buyer,
-        maker,
-        price->>'wei' as price_wei,
-        expiration_date,
-        NULL::boolean as is_active,
-        'seaport' as source
-      FROM offchain.seaport_listing
-      WHERE expiration_date > ${now}
-
-      UNION ALL
-
-      -- Onchain offers (active only)
-      SELECT
-        'offer-' || token_id::text as id,
-        'offer' as type,
         updated_at as timestamp,
         'scapes' as collection,
         token_id::text,
@@ -204,9 +160,7 @@ export const getActivity = async (c: Context) => {
         NULL::text as to_addr,
         NULL::text as seller,
         NULL::text as buyer,
-        NULL::text as maker,
         price::text as price_wei,
-        NULL::int as expiration_date,
         is_active,
         'onchain' as source
       FROM offer
@@ -271,17 +225,6 @@ export const getActivity = async (c: Context) => {
           return {
             ...base,
             type: "listing" as const,
-            maker: row.maker!,
-            price: {
-              wei: row.price_wei!,
-              eth: Number(row.price_wei!) / 1e18,
-            },
-            expirationDate: row.expiration_date!,
-          };
-        case "offer":
-          return {
-            ...base,
-            type: "offer" as const,
             price: {
               wei: row.price_wei!,
               eth: Number(row.price_wei!) / 1e18,

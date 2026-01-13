@@ -1,11 +1,10 @@
 export type Collection = "scapes" | "punkscapes" | "twenty-seven-year-scapes";
-export type ActivityType = "transfer" | "sale" | "listing" | "offer";
+export type ActivityType = "transfer" | "sale" | "listing";
 
 export type ActivityFilters = {
   transfers: boolean;
   sales: boolean;
   listings: boolean;
-  offers: boolean;
 };
 
 type BaseActivity = {
@@ -33,22 +32,11 @@ export type SaleActivity = BaseActivity & {
 
 export type ListingActivity = BaseActivity & {
   type: "listing";
-  maker: `0x${string}`;
-  price: { wei: string; eth: number };
-  expirationDate: number;
-};
-
-export type OfferActivity = BaseActivity & {
-  type: "offer";
   price: { wei: string; eth: number };
   isActive: boolean;
 };
 
-export type ActivityItem =
-  | TransferActivity
-  | SaleActivity
-  | ListingActivity
-  | OfferActivity;
+export type ActivityItem = TransferActivity | SaleActivity | ListingActivity;
 
 export type ActivityResponse = {
   data: ActivityItem[];

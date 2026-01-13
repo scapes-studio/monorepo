@@ -5,7 +5,6 @@ const filters = ref<ActivityFilters>({
   transfers: true,
   sales: true,
   listings: true,
-  offers: true,
 });
 
 const { activity, total, loading, error, hasMore, loadMore } = useActivity(filters);

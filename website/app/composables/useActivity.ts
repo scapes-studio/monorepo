@@ -12,7 +12,6 @@ const buildTypesParam = (filters: ActivityFilters): string => {
   if (filters.transfers) types.push("transfer");
   if (filters.sales) types.push("sale");
   if (filters.listings) types.push("listing");
-  if (filters.offers) types.push("offer");
   return types.join(",");
 };
 
@@ -46,7 +45,7 @@ export const useActivity = (filters: Ref<ActivityFilters>) => {
 
   const asyncKey = computed(() => {
     const f = filters.value;
-    return `activity-${f.transfers}-${f.sales}-${f.listings}-${f.offers}`;
+    return `activity-${f.transfers}-${f.sales}-${f.listings}`;
   });
 
   const { data, pending, error: asyncError } = useAsyncData(asyncKey, fetchInitial, {
