@@ -4,10 +4,9 @@ let ponderClient: ReturnType<typeof createClient> | null = null;
 
 export const usePonderClient = () => {
   const runtimeConfig = useRuntimeConfig();
-  const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
 
   if (!ponderClient) {
-    ponderClient = createClient(`${baseUrl}/sql`);
+    ponderClient = createClient(`${runtimeConfig.public.apiUrl}/sql`, { schema });
   }
 
   return ponderClient;
