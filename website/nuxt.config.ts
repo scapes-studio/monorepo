@@ -27,5 +27,10 @@ export default defineNuxtConfig({
   ],
   devServer: {
     port: 3311,
-  }
+  },
+  nitro: {
+    externals: {
+      external: ['@scapes-studio/scape-renderer', 'sharp'],
+    },
+  },
 })
