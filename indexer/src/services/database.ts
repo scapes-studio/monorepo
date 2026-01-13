@@ -1,13 +1,17 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import * as ponderSchema from "../../ponder.schema";
+import { schema } from "../../combined.schema";
+import * as offchainSchema from "../../offchain.schema";
 
 const { Pool } = pg;
 
-export type PonderDb = NodePgDatabase<typeof ponderSchema>;
+export type CombinedDb = NodePgDatabase<typeof schema>;
+export type OffchainDb = NodePgDatabase<typeof offchainSchema>;
 
-let viewsDb: PonderDb | null = null;
+let viewsDb: CombinedDb | null = null;
+let offchainDb: OffchainDb | null = null;
 let pool: pg.Pool | null = null;
+let offchainPool: pg.Pool | null = null;
 
 /**
  * Get the underlying pg Pool for raw queries.
@@ -25,19 +29,47 @@ export function getPool(): pg.Pool {
 }
 
 /**
+ * Get pg Pool for the offchain schema.
+ */
+export function getOffchainPool(): pg.Pool {
+  if (!offchainPool) {
+    offchainPool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      options: `-c search_path=offchain`,
+    });
+  }
+  return offchainPool;
+}
+
+/**
  * Get database connection targeting the views schema.
- * Used by external services (import-sales, import-listings, etc.) and API handlers to write data.
+ * Used by API handlers to query combined onchain + offchain data.
  * Requires PONDER_VIEWS_SCHEMA env var (e.g., "scapes").
  */
-export function getViewsDb(): PonderDb {
+export function getViewsDb(): CombinedDb {
   if (viewsDb) {
     return viewsDb;
   }
 
   const p = getPool();
-  viewsDb = drizzle(p, { schema: ponderSchema });
+  viewsDb = drizzle(p, { schema });
 
   return viewsDb;
+}
+
+/**
+ * Get database connection for the offchain schema.
+ * Used by import services to write offchain data (seaport sales, listings, etc.).
+ */
+export function getOffchainDb(): OffchainDb {
+  if (offchainDb) {
+    return offchainDb;
+  }
+
+  const p = getOffchainPool();
+  offchainDb = drizzle(p, { schema: offchainSchema });
+
+  return offchainDb;
 }
 
 /**
@@ -46,9 +78,12 @@ export function getViewsDb(): PonderDb {
  * that reference tables which may not exist for external writes.
  *
  * Uses session_replication_role = replica to disable triggers.
+ *
+ * Note: This is only needed for writes to tables in Ponder's views schema.
+ * Offchain tables don't have Ponder triggers, so use getOffchainDb() directly.
  */
 export async function withTriggersDisabled<T>(
-  operation: (db: PonderDb) => Promise<T>,
+  operation: (db: CombinedDb) => Promise<T>,
 ): Promise<T> {
   const p = getPool();
   const client = await p.connect();
@@ -58,7 +93,7 @@ export async function withTriggersDisabled<T>(
     await client.query("SET session_replication_role = replica");
 
     // Create a drizzle instance with this specific client
-    const db = drizzle(client, { schema: ponderSchema });
+    const db = drizzle(client, { schema });
 
     // Execute the operation
     const result = await operation(db);

@@ -1,9 +1,7 @@
 import { db } from "ponder:api";
 import { type Context } from "hono";
 import { count, desc, eq } from "drizzle-orm";
-import * as ponderSchema from "../../ponder.schema";
-
-const { seaportSale } = ponderSchema;
+import { seaportSale } from "../../offchain.schema";
 
 /**
  * GET /seaport/sales

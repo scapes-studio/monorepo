@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "typecheck": "tsc",
     "cli": "tsx cli.ts",
+    "drizzle-kit": "drizzle-kit",
     "kamal:setup": "set -a && . ./.env.production && set +a && kamal setup",
     "kamal:deploy": "set -a && . ./.env.production && set +a && kamal deploy"
   },

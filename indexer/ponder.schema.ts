@@ -1,5 +1,4 @@
 import { onchainTable, relations } from "ponder";
-import type { EnsProfileData, Price, VolumeStats } from "./ponder.types";
 
 // ============================================
 // Onchain Tables
@@ -67,65 +66,10 @@ export const sale = onchainTable("sale", (t) => ({
 }));
 
 // ============================================
-// Offchain Tables (written by external services via views)
-// ============================================
-
-// Individual sales records from OpenSea/Seaport
-// Primary key is a composite of fields that uniquely identify a sale
-export const seaportSale = onchainTable("seaport_sale", (t) => ({
-  id: t.text().primaryKey(), // Composite: `${slug}-${tokenId}-${txHash}-${logIndex}`
-  slug: t.text().notNull(),
-  contract: t.hex().notNull(),
-  tokenId: t.bigint("token_id").notNull(),
-  txHash: t.hex("tx_hash").notNull(),
-  orderHash: t.hex("order_hash"),
-  block: t.bigint(),
-  timestamp: t.integer().notNull(),
-  logIndex: t.integer("log_index"),
-  seller: t.hex().notNull(),
-  buyer: t.hex().notNull(),
-  price: t.json().$type<Price>().notNull(),
-}));
-
-// Individual listing records from OpenSea/Seaport
-// orderHash uniquely identifies a listing
-export const seaportListing = onchainTable("seaport_listing", (t) => ({
-  orderHash: t.hex("order_hash").primaryKey(),
-  slug: t.text().notNull(),
-  contract: t.hex().notNull(),
-  tokenId: t.bigint("token_id").notNull(),
-  protocolAddress: t.hex("protocol_address"),
-  timestamp: t.integer().notNull(),
-  startDate: t.integer("start_date").notNull(),
-  expirationDate: t.integer("expiration_date").notNull(),
-  maker: t.hex().notNull(),
-  taker: t.hex(),
-  isPrivateListing: t.boolean("is_private_listing").notNull().default(false),
-  price: t.json().$type<Price>().notNull(),
-}));
-
-// Sync state for tracking last synced timestamp per collection
-export const syncState = onchainTable("sync_state", (t) => ({
-  slug: t.text().primaryKey(),
-  contract: t.hex().notNull(),
-  lastSyncedTimestamp: t.integer("last_synced_timestamp"),
-  stats: t.json().$type<VolumeStats>(),
-  updatedAt: t.integer("updated_at").notNull(),
-}));
-
-// ENS profile cache
-export const ensProfile = onchainTable("ens_profile", (t) => ({
-  address: t.hex().primaryKey(),
-  ens: t.text(),
-  data: t.json().$type<EnsProfileData>(),
-  updatedAt: t.integer("updated_at").notNull(),
-}));
-
-// ============================================
 // Relations
 // ============================================
 
-export const accountRelations = relations(account, ({ many, one }) => ({
+export const accountRelations = relations(account, ({ many }) => ({
   scapes: many(scape),
   twentySevenYearScapes: many(twentySevenYearScape),
   transfersFrom: many(transferEvent, { relationName: "fromAccount" }),
@@ -138,14 +82,6 @@ export const accountRelations = relations(account, ({ many, one }) => ({
   }),
   salesAsSeller: many(sale, { relationName: "sellerAccount" }),
   salesAsBuyer: many(sale, { relationName: "buyerAccount" }),
-  seaportSalesAsSeller: many(seaportSale, { relationName: "sellerAccount" }),
-  seaportSalesAsBuyer: many(seaportSale, { relationName: "buyerAccount" }),
-  seaportListingsAsMaker: many(seaportListing, { relationName: "makerAccount" }),
-  seaportListingsAsTaker: many(seaportListing, { relationName: "takerAccount" }),
-  ensProfile: one(ensProfile, {
-    fields: [account.address],
-    references: [ensProfile.address],
-  }),
 }));
 
 export const scapeRelations = relations(scape, ({ one, many }) => ({
@@ -225,42 +161,5 @@ export const saleRelations = relations(sale, ({ one }) => ({
     fields: [sale.buyer],
     references: [account.address],
     relationName: "buyerAccount",
-  }),
-}));
-
-export const seaportSaleRelations = relations(seaportSale, ({ one }) => ({
-  sellerAccount: one(account, {
-    fields: [seaportSale.seller],
-    references: [account.address],
-    relationName: "sellerAccount",
-  }),
-  buyerAccount: one(account, {
-    fields: [seaportSale.buyer],
-    references: [account.address],
-    relationName: "buyerAccount",
-  }),
-}));
-
-export const seaportListingRelations = relations(seaportListing, ({ one }) => ({
-  scape: one(scape, {
-    fields: [seaportListing.tokenId],
-    references: [scape.id],
-  }),
-  makerAccount: one(account, {
-    fields: [seaportListing.maker],
-    references: [account.address],
-    relationName: "makerAccount",
-  }),
-  takerAccount: one(account, {
-    fields: [seaportListing.taker],
-    references: [account.address],
-    relationName: "takerAccount",
-  }),
-}));
-
-export const ensProfileRelations = relations(ensProfile, ({ one }) => ({
-  account: one(account, {
-    fields: [ensProfile.address],
-    references: [account.address],
   }),
 }));

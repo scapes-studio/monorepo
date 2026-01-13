@@ -2,9 +2,7 @@ import { db } from "ponder:api";
 import schema from "ponder:schema";
 import { type Context } from "hono";
 import { desc, eq, sql } from "drizzle-orm";
-import * as ponderSchema from "../../ponder.schema";
-
-const { seaportSale } = ponderSchema;
+import { seaportSale } from "../../offchain.schema";
 
 type CollectionKey = "scapes" | "twenty-seven-year-scapes";
 

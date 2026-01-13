@@ -3,6 +3,7 @@ import schema from "ponder:schema";
 import { type Context } from "hono";
 import { desc, gt, or } from "drizzle-orm";
 import type { Price } from "../../ponder.types";
+import * as offchain from "../../offchain.schema";
 
 export type Collection = "scapes" | "punkscapes" | "twenty-seven-year-scapes";
 export type ActivityType = "transfer" | "sale" | "listing" | "offer";
@@ -117,8 +118,8 @@ export const getActivity = async (c: Context) => {
     const [seaportSales, onchainSales] = await Promise.all([
       db
         .select()
-        .from(schema.seaportSale)
-        .orderBy(desc(schema.seaportSale.timestamp))
+        .from(offchain.seaportSale)
+        .orderBy(desc(offchain.seaportSale.timestamp))
         .limit(fetchLimit),
       db
         .select()
@@ -167,9 +168,9 @@ export const getActivity = async (c: Context) => {
     const now = Math.floor(Date.now() / 1000);
     const listings = await db
       .select()
-      .from(schema.seaportListing)
-      .where(gt(schema.seaportListing.expirationDate, now))
-      .orderBy(desc(schema.seaportListing.timestamp))
+      .from(offchain.seaportListing)
+      .where(gt(offchain.seaportListing.expirationDate, now))
+      .orderBy(desc(offchain.seaportListing.timestamp))
       .limit(fetchLimit);
 
     for (const l of listings) {

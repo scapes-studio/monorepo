@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
-import { getViewsDb, withTriggersDisabled } from "./database";
-import { seaportSale, syncState } from "../../ponder.schema";
+import { getOffchainDb } from "./database";
+import { seaportSale, syncState } from "../../offchain.schema";
 import type { VolumeStats } from "../../ponder.types";
 import { openseaService } from "./opensea";
 
@@ -51,7 +51,7 @@ export class ImportSalesService {
     onProgress?: (count: number) => void;
   }): Promise<number> {
     const config = COLLECTIONS[slug];
-    const db = getViewsDb();
+    const db = getOffchainDb();
 
     const { sales, continuation: nextContinuation } = await openseaService.getSales({
       slug: config.slug,
@@ -80,13 +80,11 @@ export class ImportSalesService {
         price: sale.price,
       }));
 
-      // Insert with conflict handling (triggers disabled to avoid live_query_tables issue)
-      await withTriggersDisabled(async (db) => {
-        await db
-          .insert(seaportSale)
-          .values(values)
-          .onConflictDoNothing();
-      });
+      // Insert with conflict handling - no triggers to disable for offchain tables
+      await db
+        .insert(seaportSale)
+        .values(values)
+        .onConflictDoNothing();
 
       importedCount = sales.length;
 
@@ -123,7 +121,7 @@ export class ImportSalesService {
   ): Promise<number> {
     const { force = false, onProgress } = options;
     const config = COLLECTIONS[slug];
-    const db = getViewsDb();
+    const db = getOffchainDb();
 
     // Get last synced timestamp
     let startTimestamp: number | undefined;
@@ -164,29 +162,27 @@ export class ImportSalesService {
       onProgress,
     });
 
-    // Update sync state
+    // Update sync state - no triggers to disable for offchain tables
     const nowTimestamp = Math.floor(Date.now() / 1000);
     const stats = await this.calculateStats(slug);
 
-    await withTriggersDisabled(async (db) => {
-      await db
-        .insert(syncState)
-        .values({
-          slug,
-          contract: config.contract,
+    await db
+      .insert(syncState)
+      .values({
+        slug,
+        contract: config.contract as `0x${string}`,
+        lastSyncedTimestamp: nowTimestamp,
+        stats,
+        updatedAt: nowTimestamp,
+      })
+      .onConflictDoUpdate({
+        target: syncState.slug,
+        set: {
           lastSyncedTimestamp: nowTimestamp,
           stats,
           updatedAt: nowTimestamp,
-        })
-        .onConflictDoUpdate({
-          target: syncState.slug,
-          set: {
-            lastSyncedTimestamp: nowTimestamp,
-            stats,
-            updatedAt: nowTimestamp,
-          },
-        });
-    });
+        },
+      });
 
     return importedCount;
   }
@@ -223,7 +219,7 @@ export class ImportSalesService {
    * Calculate volume stats for a collection
    */
   async calculateStats(slug: CollectionSlug): Promise<VolumeStats> {
-    const db = getViewsDb();
+    const db = getOffchainDb();
 
     const now = Math.floor(Date.now() / 1000);
     const sixMonthsAgo = now - 180 * 24 * 60 * 60;
@@ -297,7 +293,7 @@ export class ImportSalesService {
    * Get combined stats for all collections
    */
   async getCombinedStats(): Promise<VolumeStats> {
-    const db = getViewsDb();
+    const db = getOffchainDb();
 
     const now = Math.floor(Date.now() / 1000);
     const sixMonthsAgo = now - 180 * 24 * 60 * 60;

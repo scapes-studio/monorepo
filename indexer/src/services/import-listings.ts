@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
-import { getViewsDb, withTriggersDisabled } from "./database";
-import { seaportListing } from "../../ponder.schema";
+import { getOffchainDb } from "./database";
+import { seaportListing } from "../../offchain.schema";
 import { openseaService, type Listing } from "./opensea";
 
 // Listing collections configuration
@@ -70,6 +70,7 @@ export class ImportListingsService {
     onProgress?: (count: number) => void;
   }): Promise<{ imported: number }> {
     const config = LISTING_COLLECTIONS[slug];
+    const db = getOffchainDb();
 
     console.log(`Fetching active listings from OpenSea for ${slug}...`);
 
@@ -78,10 +79,8 @@ export class ImportListingsService {
     console.log(`Fetched ${allListings.length} active listings`);
 
     if (allListings.length === 0) {
-      // Clear all listings if none are active
-      await withTriggersDisabled(async (db) => {
-        await db.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
-      });
+      // Clear all listings if none are active - no triggers to disable for offchain tables
+      await db.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
       return { imported: 0 };
     }
 
@@ -101,18 +100,16 @@ export class ImportListingsService {
       price: listing.price,
     }));
 
-    // Full replacement with triggers disabled
-    await withTriggersDisabled(async (db) => {
-      // Delete existing listings for this slug
-      await db.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
+    // Full replacement - no triggers to disable for offchain tables
+    // Delete existing listings for this slug
+    await db.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
 
-      // Insert new listings in batches (Postgres has param limits)
-      const BATCH_SIZE = 500;
-      for (let i = 0; i < values.length; i += BATCH_SIZE) {
-        const batch = values.slice(i, i + BATCH_SIZE);
-        await db.insert(seaportListing).values(batch);
-      }
-    });
+    // Insert new listings in batches (Postgres has param limits)
+    const BATCH_SIZE = 500;
+    for (let i = 0; i < values.length; i += BATCH_SIZE) {
+      const batch = values.slice(i, i + BATCH_SIZE);
+      await db.insert(seaportListing).values(batch);
+    }
 
     return { imported: allListings.length };
   }
@@ -124,7 +121,7 @@ export class ImportListingsService {
     total: number;
     priceRange: { minEth: number; maxEth: number; avgEth: number };
   }> {
-    const db = getViewsDb();
+    const db = getOffchainDb();
 
     const result = await db.execute(sql`
       SELECT
@@ -158,16 +155,15 @@ export class ImportListingsService {
    */
   async deleteExpiredListings(): Promise<number> {
     const now = Math.floor(Date.now() / 1000);
+    const db = getOffchainDb();
 
-    return await withTriggersDisabled(async (db) => {
-      const result = await db.execute(sql`
-        DELETE FROM ${seaportListing}
-        WHERE expiration_date <= ${now}
-        RETURNING order_hash
-      `);
+    const result = await db.execute(sql`
+      DELETE FROM ${seaportListing}
+      WHERE expiration_date <= ${now}
+      RETURNING order_hash
+    `);
 
-      return result.rowCount || 0;
-    });
+    return result.rowCount || 0;
   }
 }
 
