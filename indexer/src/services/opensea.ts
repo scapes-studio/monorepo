@@ -1,5 +1,5 @@
 import { priceService } from "./price";
-import type { Price } from "../offchain";
+import type { Price } from "../../offchain.schema";
 
 // Known stablecoin addresses (mainnet) - treated as 1:1 USD
 const STABLECOINS: Record<string, { symbol: string; decimals: number }> = {

@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 import { getOffchainDb } from "./database";
-import { seaportListing } from "../offchain";
+import { seaportListing } from "../../offchain.schema";
 import { openseaService, type Listing } from "./opensea";
 
 // Listing collections configuration

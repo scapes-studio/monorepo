@@ -1,7 +1,7 @@
 import { setDatabaseSchema } from "@ponder/client";
 import { relations } from "drizzle-orm";
-import * as ponderSchema from "../ponder.schema";
-import * as offchainSchema from "./offchain";
+import * as ponderSchema from "./ponder.schema";
+import * as offchainSchema from "./offchain.schema";
 
 // Views schema name for external queries (CLI commands, external clients)
 // NOTE: setDatabaseSchema is called lazily to avoid mutating schema during Ponder runtime

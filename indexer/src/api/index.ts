@@ -3,10 +3,10 @@ import schema from "ponder:schema";
 import { Hono } from "hono";
 import { client, graphql } from "ponder";
 import { count, desc, eq, sql } from "drizzle-orm";
-import { combinedSchema } from "../combined-schema";
+import { combinedSchema } from "../../combined.schema";
 import { getCombinedDb } from "../services/database";
 import { forceUpdateProfile, getProfile } from "./profiles";
-import { seaportSale } from "../offchain";
+import { seaportSale } from "../../offchain.schema";
 
 const app = new Hono();
 const combinedDb = getCombinedDb();

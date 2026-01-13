@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import * as offchainSchema from "../offchain";
-import { combinedSchema, initViewsSchema } from "../combined-schema";
+import * as offchainSchema from "../../offchain.schema";
+import { combinedSchema, initViewsSchema } from "../../combined.schema";
 
 const { Pool } = pg;
 

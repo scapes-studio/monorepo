@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 import { getOffchainDb } from "./database";
-import { seaportSale, syncState, type VolumeStats } from "../offchain";
+import { seaportSale, syncState, type VolumeStats } from "../../offchain.schema";
 import { openseaService } from "./opensea";
 
 // Collection configurations

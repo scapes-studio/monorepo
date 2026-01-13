@@ -3,7 +3,7 @@ import { type Context } from "hono";
 import { publicClients } from "ponder:api";
 import { isAddress } from "viem";
 import { normalize } from "viem/ens";
-import { ensProfile } from "../offchain";
+import { ensProfile } from "../../offchain.schema";
 import { getOffchainDb } from "../services/database";
 
 const ONE_MONTH_MS = 30 * 24 * 60 * 60 * 1000;
