@@ -1,0 +1,35 @@
+# Scapes Website - Kamal Deployment Configuration
+service: scapes-website
+
+image: jwahdatehagh/scapes-website
+
+servers:
+  web:
+    hosts:
+      - 46.62.228.203
+
+proxy:
+  ssl: true
+  host: 2026.scapes.xyz
+  app_port: 3000
+  healthcheck:
+    path: /
+    interval: 5
+    timeout: 30
+
+registry:
+  username: jwahdatehagh
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+  context: ..
+  dockerfile: ../Dockerfile.website
+
+env:
+  clear:
+    NUXT_PUBLIC_API_URL: https://indexer.scapes.xyz
+
+ssh:
+  user: root
