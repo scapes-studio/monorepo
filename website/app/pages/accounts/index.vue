@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { asc, desc, sql } from "@ponder/client";
+import { asc, desc, ne, sql } from "@ponder/client";
 
 const client = usePonderClient();
+const { public: { scapeCollectionAddress } } = useRuntimeConfig();
 
 const PAGE_SIZE = 50;
 const count = sql<number>`count(*)::int`;
@@ -15,6 +16,7 @@ const fetchOwners = async (startOffset: number) => client.db.select({
   count,
 })
   .from(schema.scape)
+  .where(ne(schema.scape.owner, scapeCollectionAddress))
   .groupBy(schema.scape.owner)
   .orderBy(
     desc(count),

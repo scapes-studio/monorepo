@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://indexer.scapes.xyz',
+      scapeCollectionAddress: '0xb7def63a9040ad5dc431aff79045617922f4023a',
     },
   },
   css: [
