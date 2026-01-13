@@ -1,6 +1,40 @@
 import { type Context } from "ponder:registry";
 import schema from "ponder:schema";
 import { zeroAddress } from "viem";
+import scapeAttributesData from "./static/scapes-attributes.json";
+import scapeRaritiesData from "./static/scape-rarities.json";
+
+type ScapeAttribute = {
+  trait_type: string;
+  value: string | number;
+  display_type?: string;
+};
+
+const scapeAttributes = scapeAttributesData as Record<string, ScapeAttribute[]>;
+const scapeRarities = scapeRaritiesData as Record<string, number>;
+
+export async function importScapeMetadata(
+  db: Context["db"],
+  scapeId: bigint,
+  owner: `0x${string}`,
+) {
+  const scapeIdKey = scapeId.toString();
+  const attributes = scapeAttributes[scapeIdKey] ?? null;
+  const rarity = scapeRarities[scapeIdKey] ?? null;
+
+  await db
+    .insert(schema.scape)
+    .values({
+      id: scapeId,
+      owner,
+      attributes,
+      rarity,
+    })
+    .onConflictDoUpdate({
+      attributes,
+      rarity,
+    });
+}
 
 /**
  * Helper to save account addresses with balance tracking
