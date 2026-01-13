@@ -27,9 +27,9 @@ app.post("/profiles/:id", forceUpdateProfile);
 app.get("/seaport/sales", getSales);
 app.get("/seaport/sales/:slug", getSalesBySlug);
 
-// Seaport listings routes
-app.get("/seaport/listings", getListings);
-app.get("/seaport/listings/:tokenId", getListingByTokenId);
+// Unified listings routes (onchain + seaport)
+app.get("/listings", getListings);
+app.get("/listings/:tokenId", getListingByTokenId);
 
 // Stats routes
 app.get("/seaport/stats/volume", getVolumeStats);
