@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { sql } from "@ponder/client";
+import { and, eq, gt, lte, sql } from "@ponder/client";
 
 const route = useRoute();
 
@@ -39,10 +39,6 @@ type ScapeHistoryResponse = {
   totalSales: number;
 };
 
-type ListingStatusRow = {
-  listed: number;
-};
-
 type ListingStatus = {
   listed: boolean;
 };
@@ -68,17 +64,13 @@ const {
 
     const tokenIdValue = BigInt(scapeId.value);
 
-    const result = await client.db.execute(sql`
-      SELECT 1 AS listed
-      FROM offer
-      WHERE "token_id" = ${tokenIdValue}
-        AND "is_active" = true
-      LIMIT 1
-    `);
+    const result = await client.db
+      .select({ listed: sql<number>`1` })
+      .from(schema.offer)
+      .where(and(eq(schema.offer.tokenId, tokenIdValue), eq(schema.offer.isActive, true)))
+      .limit(1);
 
-    const rows = (result as { rows?: ListingStatusRow[] }).rows ?? (result as ListingStatusRow[]);
-
-    return { listed: rows.length > 0 };
+    return { listed: result.length > 0 };
   },
   { watch: [scapeId] },
 );
@@ -96,19 +88,20 @@ const {
 
     const now = Math.floor(Date.now() / 1000);
 
-    const result = await client.db.execute(sql`
-      SELECT 1 AS listed
-      FROM seaport_listing
-      WHERE slug = 'scapes'
-        AND token_id = '${scapeId.value}'
-        AND start_date <= ${now}
-        AND expiration_date > ${now}
-      LIMIT 1
-    `);
+    const result = await client.db
+      .select({ listed: sql<number>`1` })
+      .from(schema.seaportListing)
+      .where(
+        and(
+          eq(schema.seaportListing.slug, "scapes"),
+          eq(schema.seaportListing.tokenId, scapeId.value),
+          lte(schema.seaportListing.startDate, now),
+          gt(schema.seaportListing.expirationDate, now),
+        ),
+      )
+      .limit(1);
 
-    const rows = (result as { rows?: ListingStatusRow[] }).rows ?? (result as ListingStatusRow[]);
-
-    return { listed: rows.length > 0 };
+    return { listed: result.length > 0 };
   },
   { watch: [scapeId] },
 );
