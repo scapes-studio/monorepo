@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { ScapeRecord } from "~/composables/useScapesByOwner";
+import type { ListingSource } from "~/composables/useListedScapes";
 
 type ScapeWithPrice = ScapeRecord & {
   price?: bigint | null;
+  source?: ListingSource;
 };
 
 defineProps<{ scapes: ScapeWithPrice[] }>();
@@ -15,6 +17,7 @@ defineProps<{ scapes: ScapeWithPrice[] }>();
       :key="`${scape.id}`"
       :scape="scape"
       :price="scape.price ?? null"
+      :is-seaport="scape.source === 'seaport'"
     />
   </div>
 </template>

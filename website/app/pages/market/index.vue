@@ -8,8 +8,12 @@ const sortOptions = [
 ] as const;
 
 const selectedSort = ref<SortOption>("price-asc");
+const includeSeaport = ref(true);
 
-const { scapes, total, loading, error, hasMore, loadMore } = useListedScapes(selectedSort);
+const { scapes, total, loading, error, hasMore, loadMore } = useListedScapes(
+  selectedSort,
+  includeSeaport,
+);
 </script>
 
 <template>
@@ -23,6 +27,13 @@ const { scapes, total, loading, error, hasMore, loadMore } = useListedScapes(sel
         <span v-if="total !== null" class="market-page__count">
           {{ total }} listed
         </span>
+        <label class="market-page__toggle">
+          <input
+            v-model="includeSeaport"
+            type="checkbox"
+          />
+          Include OpenSea
+        </label>
         <select
           v-model="selectedSort"
           class="market-page__sort"
@@ -99,6 +110,18 @@ const { scapes, total, loading, error, hasMore, loadMore } = useListedScapes(sel
 
 .market-page__count {
   font-weight: var(--font-weight-bold);
+}
+
+.market-page__toggle {
+  display: flex;
+  gap: var(--spacer-xs);
+  align-items: center;
+  font-size: var(--font-sm);
+  cursor: pointer;
+}
+
+.market-page__toggle input {
+  cursor: pointer;
 }
 
 .market-page__sort {

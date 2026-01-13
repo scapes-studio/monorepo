@@ -242,6 +242,10 @@ export const seaportSaleRelations = relations(seaportSale, ({ one }) => ({
 }));
 
 export const seaportListingRelations = relations(seaportListing, ({ one }) => ({
+  scape: one(scape, {
+    fields: [seaportListing.tokenId],
+    references: [scape.id],
+  }),
   makerAccount: one(account, {
     fields: [seaportListing.maker],
     references: [account.address],
