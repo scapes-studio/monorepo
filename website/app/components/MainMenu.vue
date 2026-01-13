@@ -32,6 +32,11 @@ const route = useRoute()
             Market
           </NuxtLink>
         </li>
+        <li>
+          <NuxtLink to="/activity" :class="{ active: route.path.startsWith('/activity') }">
+            Activity
+          </NuxtLink>
+        </li>
       </slot>
     </ul>
 

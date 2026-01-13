@@ -7,6 +7,7 @@ import { getSales, getSalesBySlug } from "./sales";
 import { getVolumeStats, getVolumeStatsBySlug } from "./stats";
 import { getScapeHistory, getTwentySevenYearScapeHistory } from "./history";
 import { getAttributeCounts } from "./attributes";
+import { getActivity } from "./activity";
 
 const app = new Hono();
 
@@ -34,5 +35,8 @@ app.get("/scapes/attributes", getAttributeCounts);
 // History routes
 app.get("/scapes/:tokenId/history", getScapeHistory);
 app.get("/twenty-seven-year-scapes/:tokenId/history", getTwentySevenYearScapeHistory);
+
+// Activity feed route
+app.get("/activity", getActivity);
 
 export default app;
