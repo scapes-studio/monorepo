@@ -71,7 +71,7 @@ importers:
         version: 0.0.2(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@20.19.27)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@1001-digital/layers.evm':
         specifier: latest
-        version: 0.0.1(c96a216c16db651e7fbee7993ee6aad9)
+        version: 0.0.2(c96a216c16db651e7fbee7993ee6aad9)
       '@ponder/client':
         specifier: ^0.16.1
         version: 0.16.1(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)(typescript@5.9.3)
@@ -93,8 +93,8 @@ packages:
   '@1001-digital/layers.base@0.0.2':
     resolution: {integrity: sha512-okrLb5HIYyX47agygCxdwRc0njhkr4NNGe5CkYJXsFpA0YrJuXvZAAYTjVtx8wi+970idsknmHrmcVQCOad2Dw==}
 
-  '@1001-digital/layers.evm@0.0.1':
-    resolution: {integrity: sha512-bq9GACGHf5wJ2pBC46/uN4p8leXFmDdQwrTQhWTTqQFJGooeHq1tY7WF5b+JKiOq5fga794tykkLzo+ePKAL0Q==}
+  '@1001-digital/layers.evm@0.0.2':
+    resolution: {integrity: sha512-D5SFHhH1azmpGY/MGq+KnTOhSjbNrd2YtM49I3jzAcHJlQGBPp/9W9+BDwJFtgPdE0mf7txS1NsEGEeVj+OKsg==}
 
   '@adraffy/ens-normalize@1.11.1':
     resolution: {integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==}
@@ -5767,7 +5767,7 @@ snapshots:
       - vite
       - vue
 
-  '@1001-digital/layers.evm@0.0.1(c96a216c16db651e7fbee7993ee6aad9)':
+  '@1001-digital/layers.evm@0.0.2(c96a216c16db651e7fbee7993ee6aad9)':
     dependencies:
       '@1001-digital/layers.base': 0.0.2(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@20.19.27)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@metamask/sdk': 0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
