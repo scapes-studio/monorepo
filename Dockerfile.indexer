@@ -20,4 +20,4 @@ WORKDIR /app/indexer
 RUN pnpm codegen
 
 EXPOSE 42069
-CMD ["pnpm", "start", "--views-schema=scapes"]
+CMD pnpm start --schema=${DATABASE_SCHEMA:-ponder} --views-schema=${PONDER_VIEWS_SCHEMA:-scapes}
