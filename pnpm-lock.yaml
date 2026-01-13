@@ -68,25 +68,40 @@ importers:
     dependencies:
       '@1001-digital/layers.base':
         specifier: latest
-        version: 0.0.2(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+        version: 0.0.2(magicast@0.5.1)(typescript@4.9.5)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))
       '@1001-digital/layers.evm':
         specifier: latest
-        version: 0.0.3(84a5429e8bdf3a89ebc5125c056000ec)
+        version: 0.0.3(07b3b10906b3cc9d81d42c2869960086)
       '@ponder/client':
         specifier: ^0.16.1
-        version: 0.16.1(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)(typescript@5.9.3)
+        version: 0.16.1(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)(typescript@4.9.5)
+      '@scapes-studio/abis':
+        specifier: workspace:^
+        version: link:../abis
       '@scapes-studio/indexer':
         specifier: workspace:^
         version: link:../indexer
+      '@scapes-studio/scape-renderer':
+        specifier: ^1.0.6
+        version: 1.0.6
+      '@wagmi/core':
+        specifier: ^2.16.4
+        version: 2.22.1(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(typescript@4.9.5)(viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4))
+      '@wagmi/vue':
+        specifier: ^0.4.3
+        version: 0.4.8(6b00735311bbfe43cba7563f613e2e7a)
       nuxt:
         specifier: ^4.2.2
-        version: 4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@25.0.7)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
+        version: 4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@18.19.130)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
+      viem:
+        specifier: ~2.42.1
+        version: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       vue:
         specifier: ^3.5.13
-        version: 3.5.26(typescript@5.9.3)
+        version: 3.5.26(typescript@4.9.5)
       vue-router:
         specifier: ^4.5.0
-        version: 4.6.4(vue@3.5.26(typescript@5.9.3))
+        version: 4.6.4(vue@3.5.26(typescript@4.9.5))
 
 packages:
 
@@ -255,6 +270,10 @@ packages:
     resolution: {integrity: sha512-wf/lwQvWAA0goIghcb91dQYpkLBcyhOhQNqG/VgWhnKzgt+UOMvra7EX/2fv70arm5RW+PUHoQHHDa6/p77Eqg==}
     peerDependencies:
       commander: ~12.1.0
+
+  '@cspotcode/source-map-support@0.8.1':
+    resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
+    engines: {node: '>=12'}
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
@@ -1064,6 +1083,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@jridgewell/trace-mapping@0.3.9':
+    resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
   '@kwsites/file-exists@1.1.1':
     resolution: {integrity: sha512-m9/5YGR18lIwxSFDwfE3oA7bWuq9kdau6ugN4H2rJeyhFQZcG9AgSHkQtSD15a8WvTgfz9aikZMrKPHvbpqFiw==}
@@ -1912,6 +1934,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@scapes-studio/scape-renderer@1.0.6':
+    resolution: {integrity: sha512-JwuiIYJTux7jCz2pvss/mzuNwRixK+3H1lnpibhIhxOyrcWm0FarJHxoyuMvIFUM6hGDYD9uJhzxdcfj9G8I0w==}
+
   '@scure/base@1.1.9':
     resolution: {integrity: sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg==}
 
@@ -1971,6 +1996,18 @@ packages:
     peerDependencies:
       vue: ^2.7.0 || ^3.0.0
 
+  '@tsconfig/node10@1.0.12':
+    resolution: {integrity: sha512-UCYBaeFvM11aU2y3YPZ//O5Rhj+xKyzy7mvcIoAjASbigy8mHMryP5cK7dgjlz2hWxh1g5pLw084E0a/wlUSFQ==}
+
+  '@tsconfig/node12@1.0.11':
+    resolution: {integrity: sha512-cqefuRsh12pWyGsIoBKJA9luFu3mRxCA+ORZvA4ktLSzIuCUtWVxGIuXigEwO5/ywWFMZ2QEGKWvkZG1zDMTag==}
+
+  '@tsconfig/node14@1.0.3':
+    resolution: {integrity: sha512-ysT8mhdixWK6Hw3i1V2AeRqZ5WfXg1G43mqoYlM2nc6388Fq5jcXyr5mRsqViLx/GJYdoL0bfXD8nmF+Zn/Iow==}
+
+  '@tsconfig/node16@1.0.4':
+    resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
+
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
 
@@ -1985,6 +2022,9 @@ packages:
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
+
+  '@types/node@18.19.130':
+    resolution: {integrity: sha512-GRaXQx6jGfL8sKfaIDD6OupbIHBr9jv7Jnaml9tB7l4v068PAOXqfcujMMo5PhbIs6ggR1XODELqahT2R8v0fg==}
 
   '@types/node@20.19.27':
     resolution: {integrity: sha512-N2clP5pJhB2YnZJ3PIHFk5RkygRX5WO/5f0WC08tp0wd+sv0rsJk3MqWn3CbNmT2J505a5336jaQj4ph1AdMug==}
@@ -2222,6 +2262,18 @@ packages:
       typescript:
         optional: true
 
+  '@wagmi/core@2.22.1':
+    resolution: {integrity: sha512-cG/xwQWsBEcKgRTkQVhH29cbpbs/TdcUJVFXCyri3ZknxhMyGv0YEjTcrNpRgt2SaswL1KrvslSNYKKo+5YEAg==}
+    peerDependencies:
+      '@tanstack/query-core': '>=5.0.0'
+      typescript: '>=5.0.4'
+      viem: 2.x
+    peerDependenciesMeta:
+      '@tanstack/query-core':
+        optional: true
+      typescript:
+        optional: true
+
   '@wagmi/core@3.1.0':
     resolution: {integrity: sha512-+lp2NO3pTP7Rk2y7ZsVZTOAo03ohtdg7epmAtlSMw+MGi83Ylss+6sNMfVetKTyhAh7QofcHxlHP1VgKCev8MA==}
     peerDependencies:
@@ -2435,6 +2487,10 @@ packages:
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
 
+  acorn-walk@8.3.4:
+    resolution: {integrity: sha512-ueEepnujpqee2o5aIYnvHU6C0A42MNdsIDeqy5BydrkuC5R1ZuUFnm27EeFJGoEHJQgn3uleRvmTXaJgfXbt4g==}
+    engines: {node: '>=0.4.0'}
+
   acorn@8.15.0:
     resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
@@ -2496,6 +2552,9 @@ packages:
   archiver@7.0.1:
     resolution: {integrity: sha512-ZcbTaIqJOfCc03QwD468Unz/5Ir8ATtvAHsK+FdXbDIbGfihqh9mrvdcYunQzqn4HrvWWaFyaxJhGZagaJJpPQ==}
     engines: {node: '>= 14'}
+
+  arg@4.1.3:
+    resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -2581,6 +2640,9 @@ packages:
   birpc@2.9.0:
     resolution: {integrity: sha512-KrayHS5pBi69Xi9JmvoqrIgYGDkD6mcSe/i6YKi3w5kekCLzrX4+nawcXqrj2tIp50Kw/mT/s3p+GVK0A0sKxw==}
 
+  bl@4.1.0:
+    resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
+
   blakejs@1.2.1:
     resolution: {integrity: sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==}
 
@@ -2614,6 +2676,9 @@ packages:
 
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
+
+  buffer@5.7.1:
+    resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
 
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
@@ -2676,6 +2741,9 @@ packages:
     resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
     engines: {node: '>= 20.19.0'}
 
+  chownr@1.1.4:
+    resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
+
   chownr@3.0.0:
     resolution: {integrity: sha512-+IxzY9BZOQd/XuYPRmrvEVjF/nqj5kgT4kEq7VofrDoM1MxoRjEWkrCC3EtLi59TVawxTAn+orJwFQcrqEN1+g==}
     engines: {node: '>=18'}
@@ -2704,6 +2772,13 @@ packages:
 
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+
+  color-string@1.9.1:
+    resolution: {integrity: sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==}
+
+  color@4.2.3:
+    resolution: {integrity: sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==}
+    engines: {node: '>=12.5.0'}
 
   colord@2.9.3:
     resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
@@ -2777,6 +2852,9 @@ packages:
   crc32-stream@6.0.0:
     resolution: {integrity: sha512-piICUB6ei4IlTv1+653yq5+KoqfBYmj9bw6LqXoOneTMDXk5nM1qt12mFW1caG3LlJXEKW1Bp0WggEmIfQB34g==}
     engines: {node: '>= 14'}
+
+  create-require@1.1.1:
+    resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
 
   croner@9.1.0:
     resolution: {integrity: sha512-p9nwwR4qyT5W996vBZhdvBCnMhicY5ytZkR4D1Xj0wuTDEiMnjwR57Q3RXYY/s0EpX6Ay3vgIcfaR+ewGHsi+g==}
@@ -2913,6 +2991,14 @@ packages:
     resolution: {integrity: sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==}
     engines: {node: '>=0.10'}
 
+  decompress-response@6.0.0:
+    resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}
+    engines: {node: '>=10'}
+
+  deep-extend@0.6.0:
+    resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
+    engines: {node: '>=4.0.0'}
+
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
@@ -2976,6 +3062,10 @@ packages:
 
   devalue@5.6.1:
     resolution: {integrity: sha512-jDwizj+IlEZBunHcOuuFVBnIMPAEHvTsJj0BcIp94xYguLRVBcXO853px/MyIJvbVzWdsGvrRweIUWJw8hBP7A==}
+
+  diff@4.0.2:
+    resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
+    engines: {node: '>=0.3.1'}
 
   diff@8.0.2:
     resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
@@ -3330,6 +3420,10 @@ packages:
     resolution: {integrity: sha512-VyhnebXciFV2DESc+p6B+y0LjSm0krU4OgJN44qFAhBY0TJ+1V61tYD2+wHusZ6F9n5K+vl8k0sTy7PEfV4qpg==}
     engines: {node: '>=16.17'}
 
+  expand-template@2.0.3:
+    resolution: {integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==}
+    engines: {node: '>=6'}
+
   exsolve@1.0.8:
     resolution: {integrity: sha512-LmDxfWXwcTArk8fUEnOfSZpHOJ6zOMUJKOtFLFqJLoKJetuQG874Uc7/Kki7zFLzYybmZhp1M7+98pfMqeX8yA==}
 
@@ -3427,6 +3521,9 @@ packages:
     resolution: {integrity: sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==}
     engines: {node: '>= 0.8'}
 
+  fs-constants@1.0.0:
+    resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
+
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
@@ -3485,6 +3582,9 @@ packages:
 
   git-url-parse@16.1.0:
     resolution: {integrity: sha512-cPLz4HuK86wClEW7iDdeAKcCVlWXmrLpb2L+G9goW0Z1dtpNS6BXXSOckUTlJT/LDQViE1QZKstNORzHsLnobw==}
+
+  github-from-package@0.0.0:
+    resolution: {integrity: sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -3648,6 +3748,9 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
+  ini@1.3.8:
+    resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
+
   ini@4.1.1:
     resolution: {integrity: sha512-QQnnxNyfvmHFIsj7gkPcYymR8Jdw/o7mp5ZFihxn6h8Ci6fh3Dx4E1gPjpQEpIuPo9XVNY/ZUwh4BPMjGyL01g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -3662,6 +3765,9 @@ packages:
   is-arguments@1.2.0:
     resolution: {integrity: sha512-7bVbi0huj/wrIAOzb8U1aszg9kdi3KN/CyU19CTI7tAoZYEZoL9yCDXpbXN+uPsuWnP02cyug1gleqq+TU+YCA==}
     engines: {node: '>= 0.4'}
+
+  is-arrayish@0.3.4:
+    resolution: {integrity: sha512-m6UrgzFVUYawGBh1dUsWR5M2Clqic9RVXC/9f8ceNlv2IcO9j9J/z8UoCLPqtsPBFNzEpfR3xftohbfqDx8EQA==}
 
   is-callable@1.2.7:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
@@ -3921,6 +4027,9 @@ packages:
   magicast@0.5.1:
     resolution: {integrity: sha512-xrHS24IxaLrvuo613F719wvOIv9xPHFWQHuvGUBmPnCA/3MQxKI3b+r7n1jAoDHmsbC5bRhTZYR77invLAxVnw==}
 
+  make-error@1.3.6:
+    resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
+
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
@@ -3971,6 +4080,10 @@ packages:
     resolution: {integrity: sha512-vqiC06CuhBTUdZH+RYl8sFrL096vA45Ok5ISO6sE/Mr1jRbGH4Csnhi8f3wKVl7x8mO4Au7Ir9D3Oyv1VYMFJw==}
     engines: {node: '>=12'}
 
+  mimic-response@3.1.0:
+    resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
+    engines: {node: '>=10'}
+
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
@@ -3985,6 +4098,9 @@ packages:
   minimatch@9.0.5:
     resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
     engines: {node: '>=16 || 14 >=14.17'}
+
+  minimist@1.2.8:
+    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
 
   minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
@@ -4004,6 +4120,9 @@ packages:
 
   mitt@3.0.1:
     resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+
+  mkdirp-classic@0.5.3:
+    resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
 
   mlly@1.8.0:
     resolution: {integrity: sha512-l8D9ODSRWLe2KHJSifWGwBqpTZXIXTeo8mlKjY+E2HAakaTeNpqAyBZ8GSqLzHgw4XmHmC8whvpjJNMbFZN7/g==}
@@ -4044,6 +4163,9 @@ packages:
   nanotar@0.2.0:
     resolution: {integrity: sha512-9ca1h0Xjvo9bEkE4UOxgAzLV0jHKe6LMaxo37ND2DAhhAtd0j8pR1Wxz+/goMrZO8AEZTWCmyaOsFI/W5AdpCQ==}
 
+  napi-build-utils@2.0.0:
+    resolution: {integrity: sha512-GEbrYkbfF7MoNaoh2iGG84Mnf/WZfB0GdGEsM8wz7Expx/LlWf5U8t9nvJKXSp3qr5IsEbK04cBGhol/KwOsWA==}
+
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
@@ -4056,6 +4178,13 @@ packages:
     peerDependenciesMeta:
       xml2js:
         optional: true
+
+  node-abi@3.85.0:
+    resolution: {integrity: sha512-zsFhmbkAzwhTft6nd3VxcG0cvJsT70rL+BIGHWVq5fi6MwGrHwzqKaxXE+Hl2GmnGItnDKPPkO5/LQqjVkIdFg==}
+    engines: {node: '>=10'}
+
+  node-addon-api@5.1.0:
+    resolution: {integrity: sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==}
 
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
@@ -4622,6 +4751,11 @@ packages:
     resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
     engines: {node: '>=0.10.0'}
 
+  prebuild-install@7.1.3:
+    resolution: {integrity: sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -4699,6 +4833,10 @@ packages:
 
   rc9@2.1.2:
     resolution: {integrity: sha512-btXCnMmRIBINM2LDZoEmOogIZU7Qe7zn4BpomSKZ/ykbLObuBdvG+mFq11DL6fjH1DRwHhrlgtYWG96bJiC7Cg==}
+
+  rc@1.2.8:
+    resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
+    hasBin: true
 
   readable-stream@2.3.8:
     resolution: {integrity: sha512-8p0AUk4XODgIewSi0l8Epjs+EVnWiK7NoDIEGU0HhE7+ZyY8D1IMY7odu5lRrFXGg71L15KG8QrPmum45RTtdA==}
@@ -4886,6 +5024,10 @@ packages:
   setprototypeof@1.2.0:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
 
+  sharp@0.31.3:
+    resolution: {integrity: sha512-XcR4+FCLBFKw1bdB+GEhnUNXNXvnt0tDo4WsBsraKymuo/IAuPuCBVAL2wIkUw2r/dwFW5Q5+g66Kwl2dgDFVg==}
+    engines: {node: '>=14.15.0'}
+
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
     engines: {node: '>=8'}
@@ -4905,8 +5047,17 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
+  simple-concat@1.0.1:
+    resolution: {integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==}
+
+  simple-get@4.0.1:
+    resolution: {integrity: sha512-brv7p5WgH0jmQJr1ZDDfKDOSeWWg+OVypG99A/5vYGPqJ6pxiaHLy8nxtFjBA7oMa01ebA9gfh1uMCFqOuXxvA==}
+
   simple-git@3.30.0:
     resolution: {integrity: sha512-q6lxyDsCmEal/MEGhP1aVyQ3oxnagGlBDOVSIB4XUVLl1iZh0Pah6ebC9V4xBap/RfgP2WlI8EKs0WS0rMEJHg==}
+
+  simple-swizzle@0.2.4:
+    resolution: {integrity: sha512-nAu1WFPQSMNr2Zn9PGSZK9AGn4t/y97lEm+MXTtUDwfP0ksAIX4nO+6ruD9Jwut4C49SB1Ws+fbXsm/yScWOHw==}
 
   sirv@3.0.2:
     resolution: {integrity: sha512-2wcC/oGxHis/BoHkkPwldgiPSYcpZK3JU28WoMVv55yHJgcZ8rlXvuG9iZggz+sU1d4bRgIGASwyWqjxu3FM0g==}
@@ -5026,6 +5177,10 @@ packages:
     resolution: {integrity: sha512-dOESqjYr96iWYylGObzd39EuNTa5VJxyvVAEm5Jnh7KGo75V43Hk1odPQkNDyXNmUR6k+gEiDVXnjB8HJ3crXw==}
     engines: {node: '>=12'}
 
+  strip-json-comments@2.0.1:
+    resolution: {integrity: sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==}
+    engines: {node: '>=0.10.0'}
+
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
@@ -5076,6 +5231,13 @@ packages:
   tagged-tag@1.0.0:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
+
+  tar-fs@2.1.4:
+    resolution: {integrity: sha512-mDAjwmZdh7LTT6pNleZ05Yt65HC3E+NiQzl672vQG38jIrehtJk/J3mNwIg+vShQPcLF/LV7CMnDW6vjj6sfYQ==}
+
+  tar-stream@2.2.0:
+    resolution: {integrity: sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==}
+    engines: {node: '>=6'}
 
   tar-stream@3.1.7:
     resolution: {integrity: sha512-qJj60CXt7IU1Ffyc3NJMjh6EkuCFej46zUqJ4J7pqYlThyd9bO0XBTmcOIhSzZJVWfsLks0+nle/j538YAW9RQ==}
@@ -5140,6 +5302,20 @@ packages:
     peerDependencies:
       typescript: '>=4.2.0'
 
+  ts-node@10.9.2:
+    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+
   tsconfck@3.1.6:
     resolution: {integrity: sha512-ks6Vjr/jEw0P1gmOVwutM3B7fWxoWBL2KRDb1JfqGVawBmO5UsvmWOQFGHBPl5yxYz4eERr19E6L7NMv+Fej4w==}
     engines: {node: ^18 || >=20}
@@ -5160,6 +5336,9 @@ packages:
     resolution: {integrity: sha512-5C1sg4USs1lfG0GFb2RLXsdpXqBSEhAaA/0kPL01wxzpMqLILNxIxIOKiILz+cdg/pLnOUxFYOR5yhHU666wbw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  tunnel-agent@0.6.0:
+    resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -5188,6 +5367,11 @@ packages:
   type-level-regexp@0.1.17:
     resolution: {integrity: sha512-wTk4DH3cxwk196uGLK/E9pE45aLfeKJacKmcEgEOA/q5dnPGNxXt0cfYdFxb57L+sEpf1oJH4Dnx/pnRcku9jg==}
 
+  typescript@4.9.5:
+    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
@@ -5211,6 +5395,9 @@ packages:
 
   unctx@2.5.0:
     resolution: {integrity: sha512-p+Rz9x0R7X+CYDkT+Xg8/GhpcShTlU8n+cf9OtOEf7zEQsNcCZO1dPKNRDqvUTaq+P32PMMkxWHwfrxkqfqAYg==}
+
+  undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
@@ -5358,6 +5545,9 @@ packages:
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
+
+  v8-compile-cache-lib@3.0.1:
+    resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
   valtio@2.1.5:
     resolution: {integrity: sha512-vsh1Ixu5mT0pJFZm+Jspvhga5GzHUTYv0/+Th203pLfh3/wbHwxhu/Z2OkZDXIgHfjnjBns7SN9HNcbDvPmaGw==}
@@ -5726,6 +5916,10 @@ packages:
     resolution: {integrity: sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==}
     engines: {node: '>=12'}
 
+  yn@3.1.1:
+    resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
+    engines: {node: '>=6'}
+
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
@@ -5763,11 +5957,11 @@ packages:
 
 snapshots:
 
-  '@1001-digital/layers.base@0.0.2(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@1001-digital/layers.base@0.0.2(magicast@0.5.1)(typescript@4.9.5)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))':
     dependencies:
-      '@nuxt/icon': 1.15.0(magicast@0.5.1)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      '@nuxt/icon': 1.15.0(magicast@0.5.1)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))
       modern-normalize: 3.0.1
-      reka-ui: 2.7.0(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3))
+      reka-ui: 2.7.0(typescript@4.9.5)(vue@3.5.26(typescript@4.9.5))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - magicast
@@ -5776,16 +5970,16 @@ snapshots:
       - vite
       - vue
 
-  '@1001-digital/layers.evm@0.0.3(84a5429e8bdf3a89ebc5125c056000ec)':
+  '@1001-digital/layers.evm@0.0.3(07b3b10906b3cc9d81d42c2869960086)':
     dependencies:
-      '@1001-digital/layers.base': 0.0.2(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      '@1001-digital/layers.base': 0.0.2(magicast@0.5.1)(typescript@4.9.5)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))
       '@metamask/sdk': 0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      '@tanstack/vue-query': 5.92.5(vue@3.5.26(typescript@5.9.3))
+      '@tanstack/vue-query': 5.92.5(vue@3.5.26(typescript@4.9.5))
       '@types/qrcode': 1.5.6
-      '@wagmi/vue': 0.4.8(c88853ed5830310fe9030c552e3498c5)
-      '@walletconnect/ethereum-provider': 2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@wagmi/vue': 0.4.8(6b00735311bbfe43cba7563f613e2e7a)
+      '@walletconnect/ethereum-provider': 2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       qrcode: 1.5.4
-      viem: 2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      viem: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -6032,6 +6226,10 @@ snapshots:
   '@commander-js/extra-typings@12.1.0(commander@12.1.0)':
     dependencies:
       commander: 12.1.0
+
+  '@cspotcode/source-map-support@0.8.1':
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.9
 
   '@drizzle-team/brocli@0.10.2': {}
 
@@ -6469,11 +6667,11 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@floating-ui/vue@1.1.9(vue@3.5.26(typescript@5.9.3))':
+  '@floating-ui/vue@1.1.9(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@floating-ui/dom': 1.7.4
       '@floating-ui/utils': 0.2.10
-      vue-demi: 0.14.10(vue@3.5.26(typescript@5.9.3))
+      vue-demi: 0.14.10(vue@3.5.26(typescript@4.9.5))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -6572,10 +6770,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@iconify/vue@5.0.0(vue@3.5.26(typescript@5.9.3))':
+  '@iconify/vue@5.0.0(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@iconify/types': 2.0.0
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
 
   '@internationalized/date@3.10.1':
     dependencies:
@@ -6620,6 +6818,11 @@ snapshots:
   '@jridgewell/sourcemap-codec@1.5.5': {}
 
   '@jridgewell/trace-mapping@0.3.31':
+    dependencies:
+      '@jridgewell/resolve-uri': 3.1.2
+      '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@jridgewell/trace-mapping@0.3.9':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -6876,19 +7079,19 @@ snapshots:
 
   '@nuxt/devalue@2.0.2': {}
 
-  '@nuxt/devtools-kit@2.7.0(magicast@0.5.1)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))':
+  '@nuxt/devtools-kit@2.7.0(magicast@0.5.1)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       '@nuxt/kit': 3.20.2(magicast@0.5.1)
       execa: 8.0.1
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/devtools-kit@3.1.1(magicast@0.5.1)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))':
+  '@nuxt/devtools-kit@3.1.1(magicast@0.5.1)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       '@nuxt/kit': 4.2.2(magicast@0.5.1)
       execa: 8.0.1
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - magicast
 
@@ -6903,12 +7106,12 @@ snapshots:
       prompts: 2.4.2
       semver: 7.7.3
 
-  '@nuxt/devtools@3.1.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@nuxt/devtools@3.1.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))':
     dependencies:
-      '@nuxt/devtools-kit': 3.1.1(magicast@0.5.1)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      '@nuxt/devtools-kit': 3.1.1(magicast@0.5.1)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
       '@nuxt/devtools-wizard': 3.1.1
       '@nuxt/kit': 4.2.2(magicast@0.5.1)
-      '@vue/devtools-core': 8.0.5(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      '@vue/devtools-core': 8.0.5(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))
       '@vue/devtools-kit': 8.0.5
       birpc: 2.9.0
       consola: 3.4.2
@@ -6933,9 +7136,9 @@ snapshots:
       sirv: 3.0.2
       structured-clone-es: 1.0.0
       tinyglobby: 0.2.15
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-      vite-plugin-inspect: 11.3.3(@nuxt/kit@4.2.2(magicast@0.5.1))(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
-      vite-plugin-vue-tracer: 1.2.0(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite-plugin-inspect: 11.3.3(@nuxt/kit@4.2.2(magicast@0.5.1))(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      vite-plugin-vue-tracer: 1.2.0(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))
       which: 5.0.0
       ws: 8.19.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
@@ -6944,13 +7147,13 @@ snapshots:
       - utf-8-validate
       - vue
 
-  '@nuxt/icon@1.15.0(magicast@0.5.1)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@nuxt/icon@1.15.0(magicast@0.5.1)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@iconify/collections': 1.0.636
       '@iconify/types': 2.0.0
       '@iconify/utils': 2.3.0
-      '@iconify/vue': 5.0.0(vue@3.5.26(typescript@5.9.3))
-      '@nuxt/devtools-kit': 2.7.0(magicast@0.5.1)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      '@iconify/vue': 5.0.0(vue@3.5.26(typescript@4.9.5))
+      '@nuxt/devtools-kit': 2.7.0(magicast@0.5.1)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
       '@nuxt/kit': 3.20.2(magicast@0.5.1)
       consola: 3.4.2
       local-pkg: 1.1.2
@@ -7017,11 +7220,11 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/nitro-server@4.2.2(c6e2cd94d01a996bb16170311b31489c)':
+  '@nuxt/nitro-server@4.2.2(b3c925c7ffffaf1fea98a4de3b8d3b24)':
     dependencies:
       '@nuxt/devalue': 2.0.2
       '@nuxt/kit': 4.2.2(magicast@0.5.1)
-      '@unhead/vue': 2.1.1(vue@3.5.26(typescript@5.9.3))
+      '@unhead/vue': 2.1.1(vue@3.5.26(typescript@4.9.5))
       '@vue/shared': 3.5.26
       consola: 3.4.2
       defu: 6.1.4
@@ -7035,7 +7238,7 @@ snapshots:
       klona: 2.0.6
       mocked-exports: 0.1.1
       nitropack: 2.12.9(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)
-      nuxt: 4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@25.0.7)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
+      nuxt: 4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@18.19.130)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
       pathe: 2.0.3
       pkg-types: 2.3.0
       radix3: 1.1.2
@@ -7043,7 +7246,7 @@ snapshots:
       ufo: 1.6.2
       unctx: 2.5.0
       unstorage: 1.17.3(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(idb-keyval@6.2.2)(ioredis@5.9.0)
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
       vue-bundle-renderer: 2.2.0
       vue-devtools-stub: 0.1.0
     transitivePeerDependencies:
@@ -7106,12 +7309,12 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/vite-builder@4.2.2(@types/node@25.0.7)(magicast@0.5.1)(nuxt@4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@25.0.7)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2))(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3))(yaml@2.8.2)':
+  '@nuxt/vite-builder@4.2.2(@types/node@18.19.130)(magicast@0.5.1)(nuxt@4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@18.19.130)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2))(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@4.9.5)(vue@3.5.26(typescript@4.9.5))(yaml@2.8.2)':
     dependencies:
       '@nuxt/kit': 4.2.2(magicast@0.5.1)
       '@rollup/plugin-replace': 6.0.3(rollup@4.55.1)
-      '@vitejs/plugin-vue': 6.0.3(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
-      '@vitejs/plugin-vue-jsx': 5.1.3(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      '@vitejs/plugin-vue': 6.0.3(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))
+      '@vitejs/plugin-vue-jsx': 5.1.3(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))
       autoprefixer: 10.4.23(postcss@8.5.6)
       consola: 3.4.2
       cssnano: 7.1.2(postcss@8.5.6)
@@ -7126,7 +7329,7 @@ snapshots:
       magic-string: 0.30.21
       mlly: 1.8.0
       mocked-exports: 0.1.1
-      nuxt: 4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@25.0.7)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
+      nuxt: 4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@18.19.130)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
       pathe: 2.0.3
       pkg-types: 2.3.0
       postcss: 8.5.6
@@ -7135,10 +7338,10 @@ snapshots:
       std-env: 3.10.0
       ufo: 1.6.2
       unenv: 2.0.0-rc.24
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-      vite-node: 5.2.0(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-      vite-plugin-checker: 0.12.0(optionator@0.9.4)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
-      vue: 3.5.26(typescript@5.9.3)
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite-node: 5.2.0(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite-plugin-checker: 0.12.0(optionator@0.9.4)(typescript@4.9.5)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      vue: 3.5.26(typescript@4.9.5)
       vue-bundle-renderer: 2.2.0
     transitivePeerDependencies:
       - '@biomejs/biome'
@@ -7423,13 +7626,13 @@ snapshots:
       - sql.js
       - sqlite3
 
-  '@ponder/client@0.16.1(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)(typescript@5.9.3)':
+  '@ponder/client@0.16.1(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)(typescript@4.9.5)':
     dependencies:
       drizzle-orm: 0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)
       eventsource: 3.0.7
       superjson: 2.2.6
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@cloudflare/workers-types'
@@ -7478,24 +7681,24 @@ snapshots:
 
   '@poppinss/exception@1.2.3': {}
 
-  '@reown/appkit-common@1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@reown/appkit-common@1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
       big.js: 6.2.2
       dayjs: 1.11.13
-      viem: 2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      viem: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
     transitivePeerDependencies:
       - bufferutil
       - typescript
       - utf-8-validate
       - zod
 
-  '@reown/appkit-controllers@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@reown/appkit-controllers@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
-      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
-      '@walletconnect/universal-provider': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)
+      '@walletconnect/universal-provider': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       valtio: 2.1.5(@types/react@19.2.7)
-      viem: 2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      viem: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -7524,12 +7727,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-pay@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@reown/appkit-pay@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
-      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-ui': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-utils': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)
+      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-ui': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-utils': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)
       lit: 3.3.0
       valtio: 2.1.5(@types/react@19.2.7)
     transitivePeerDependencies:
@@ -7564,13 +7767,13 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@reown/appkit-scaffold-ui@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)':
+  '@reown/appkit-scaffold-ui@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)':
     dependencies:
-      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-ui': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-utils': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)
-      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
+      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-ui': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-utils': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)
+      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)
       lit: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -7601,12 +7804,12 @@ snapshots:
       - valtio
       - zod
 
-  '@reown/appkit-ui@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@reown/appkit-ui@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
       '@phosphor-icons/webcomponents': 2.1.5
-      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
+      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)
       lit: 3.3.0
       qrcode: 1.5.3
     transitivePeerDependencies:
@@ -7637,17 +7840,17 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-utils@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)':
+  '@reown/appkit-utils@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)':
     dependencies:
-      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@reown/appkit-polyfills': 1.8.1
-      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
+      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)
       '@wallet-standard/wallet': 1.1.0
       '@walletconnect/logger': 2.1.2
-      '@walletconnect/universal-provider': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/universal-provider': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       valtio: 2.1.5(@types/react@19.2.7)
-      viem: 2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      viem: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -7676,9 +7879,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-wallet@1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)':
+  '@reown/appkit-wallet@1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)':
     dependencies:
-      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@reown/appkit-polyfills': 1.8.1
       '@walletconnect/logger': 2.1.2
       zod: 3.22.4
@@ -7687,21 +7890,21 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@reown/appkit@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@reown/appkit@1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
-      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-pay': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-common': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-controllers': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-pay': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@reown/appkit-polyfills': 1.8.1
-      '@reown/appkit-scaffold-ui': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)
-      '@reown/appkit-ui': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@reown/appkit-utils': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)
-      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
-      '@walletconnect/universal-provider': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-scaffold-ui': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)
+      '@reown/appkit-ui': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit-utils': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(valtio@2.1.5(@types/react@19.2.7))(zod@3.22.4)
+      '@reown/appkit-wallet': 1.8.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)
+      '@walletconnect/universal-provider': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       bs58: 6.0.0
       semver: 7.7.2
       valtio: 2.1.5(@types/react@19.2.7)
-      viem: 2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      viem: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
     optionalDependencies:
       '@lit/react': 1.0.8(@types/react@19.2.7)
     transitivePeerDependencies:
@@ -7876,6 +8079,18 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.55.1':
     optional: true
 
+  '@scapes-studio/scape-renderer@1.0.6':
+    dependencies:
+      '@types/node': 18.19.130
+      minimist: 1.2.8
+      sharp: 0.31.3
+      ts-node: 10.9.2(@types/node@18.19.130)(typescript@4.9.5)
+      typescript: 4.9.5
+      yaml: 2.8.2
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+
   '@scure/base@1.1.9': {}
 
   '@scure/base@1.2.6': {}
@@ -7888,7 +8103,7 @@ snapshots:
 
   '@scure/bip32@1.7.0':
     dependencies:
-      '@noble/curves': 1.9.1
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
 
@@ -7922,18 +8137,26 @@ snapshots:
 
   '@tanstack/virtual-core@3.13.17': {}
 
-  '@tanstack/vue-query@5.92.5(vue@3.5.26(typescript@5.9.3))':
+  '@tanstack/vue-query@5.92.5(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@tanstack/match-sorter-utils': 8.19.4
       '@tanstack/query-core': 5.90.16
       '@vue/devtools-api': 6.6.4
-      vue: 3.5.26(typescript@5.9.3)
-      vue-demi: 0.14.10(vue@3.5.26(typescript@5.9.3))
+      vue: 3.5.26(typescript@4.9.5)
+      vue-demi: 0.14.10(vue@3.5.26(typescript@4.9.5))
 
-  '@tanstack/vue-virtual@3.13.17(vue@3.5.26(typescript@5.9.3))':
+  '@tanstack/vue-virtual@3.13.17(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@tanstack/virtual-core': 3.13.17
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
+
+  '@tsconfig/node10@1.0.12': {}
+
+  '@tsconfig/node12@1.0.11': {}
+
+  '@tsconfig/node14@1.0.3': {}
+
+  '@tsconfig/node16@1.0.4': {}
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
@@ -7949,6 +8172,10 @@ snapshots:
   '@types/json-schema@7.0.15': {}
 
   '@types/ms@2.1.0': {}
+
+  '@types/node@18.19.130':
+    dependencies:
+      undici-types: 5.26.5
 
   '@types/node@20.19.27':
     dependencies:
@@ -8073,11 +8300,11 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@unhead/vue@2.1.1(vue@3.5.26(typescript@5.9.3))':
+  '@unhead/vue@2.1.1(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       hookable: 5.5.3
       unhead: 2.1.1
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
 
   '@vercel/nft@0.30.4(rollup@4.55.1)':
     dependencies:
@@ -8098,23 +8325,23 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vitejs/plugin-vue-jsx@5.1.3(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@vitejs/plugin-vue-jsx@5.1.3(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@babel/core': 7.28.5
       '@babel/plugin-syntax-typescript': 7.27.1(@babel/core@7.28.5)
       '@babel/plugin-transform-typescript': 7.28.5(@babel/core@7.28.5)
       '@rolldown/pluginutils': 1.0.0-beta.59
       '@vue/babel-plugin-jsx': 2.0.1(@babel/core@7.28.5)
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-      vue: 3.5.26(typescript@5.9.3)
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vue: 3.5.26(typescript@4.9.5)
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-vue@6.0.3(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@vitejs/plugin-vue@6.0.3(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.53
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-      vue: 3.5.26(typescript@5.9.3)
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vue: 3.5.26(typescript@4.9.5)
 
   '@volar/language-core@2.4.27':
     dependencies:
@@ -8122,7 +8349,7 @@ snapshots:
 
   '@volar/source-map@2.4.27': {}
 
-  '@vue-macros/common@3.1.2(vue@3.5.26(typescript@5.9.3))':
+  '@vue-macros/common@3.1.2(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@vue/compiler-sfc': 3.5.26
       ast-kit: 2.2.0
@@ -8130,7 +8357,7 @@ snapshots:
       magic-string-ast: 1.0.3
       unplugin-utils: 0.3.1
     optionalDependencies:
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
 
   '@vue/babel-helper-vue-transform-on@2.0.1': {}
 
@@ -8193,15 +8420,15 @@ snapshots:
 
   '@vue/devtools-api@6.6.4': {}
 
-  '@vue/devtools-core@8.0.5(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@vue/devtools-core@8.0.5(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@vue/devtools-kit': 8.0.5
       '@vue/devtools-shared': 8.0.5
       mitt: 3.0.1
       nanoid: 5.1.6
       pathe: 2.0.3
-      vite-hot-client: 2.1.0(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
-      vue: 3.5.26(typescript@5.9.3)
+      vite-hot-client: 2.1.0(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      vue: 3.5.26(typescript@4.9.5)
     transitivePeerDependencies:
       - vite
 
@@ -8245,66 +8472,81 @@ snapshots:
       '@vue/shared': 3.5.26
       csstype: 3.2.3
 
-  '@vue/server-renderer@3.5.26(vue@3.5.26(typescript@5.9.3))':
+  '@vue/server-renderer@3.5.26(vue@3.5.26(typescript@4.9.5))':
     dependencies:
       '@vue/compiler-ssr': 3.5.26
       '@vue/shared': 3.5.26
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
 
   '@vue/shared@3.5.26': {}
 
-  '@vueuse/core@12.8.2(typescript@5.9.3)':
+  '@vueuse/core@12.8.2(typescript@4.9.5)':
     dependencies:
       '@types/web-bluetooth': 0.0.21
       '@vueuse/metadata': 12.8.2
-      '@vueuse/shared': 12.8.2(typescript@5.9.3)
-      vue: 3.5.26(typescript@5.9.3)
+      '@vueuse/shared': 12.8.2(typescript@4.9.5)
+      vue: 3.5.26(typescript@4.9.5)
     transitivePeerDependencies:
       - typescript
 
   '@vueuse/metadata@12.8.2': {}
 
-  '@vueuse/shared@12.8.2(typescript@5.9.3)':
+  '@vueuse/shared@12.8.2(typescript@4.9.5)':
     dependencies:
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
     transitivePeerDependencies:
       - typescript
 
-  '@wagmi/connectors@7.0.7(@metamask/sdk@0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10))(@wagmi/core@3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@5.9.3)(zod@3.22.4))(typescript@5.9.3)(viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)))(@walletconnect/ethereum-provider@2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4))(typescript@5.9.3)(viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4))':
+  '@wagmi/connectors@7.0.7(@metamask/sdk@0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10))(@wagmi/core@3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@4.9.5)(zod@3.22.4))(typescript@4.9.5)(viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)))(@walletconnect/ethereum-provider@2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4))(typescript@4.9.5)(viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4))':
     dependencies:
-      '@wagmi/core': 3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@5.9.3)(zod@3.22.4))(typescript@5.9.3)(viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4))
-      viem: 2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@wagmi/core': 3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@4.9.5)(zod@3.22.4))(typescript@4.9.5)(viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4))
+      viem: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
     optionalDependencies:
       '@metamask/sdk': 0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      '@walletconnect/ethereum-provider': 2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      typescript: 5.9.3
+      '@walletconnect/ethereum-provider': 2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      typescript: 4.9.5
 
-  '@wagmi/core@3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@5.9.3)(zod@3.22.4))(typescript@5.9.3)(viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4))':
+  '@wagmi/core@2.22.1(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(typescript@4.9.5)(viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4))':
     dependencies:
       eventemitter3: 5.0.1
-      mipd: 0.0.7(typescript@5.9.3)
-      viem: 2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      mipd: 0.0.7(typescript@4.9.5)
+      viem: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       zustand: 5.0.0(@types/react@19.2.7)
     optionalDependencies:
       '@tanstack/query-core': 5.90.16
-      ox: 0.11.1(typescript@5.9.3)(zod@3.22.4)
-      typescript: 5.9.3
+      typescript: 4.9.5
     transitivePeerDependencies:
       - '@types/react'
       - immer
       - react
       - use-sync-external-store
 
-  '@wagmi/vue@0.4.8(c88853ed5830310fe9030c552e3498c5)':
+  '@wagmi/core@3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@4.9.5)(zod@3.22.4))(typescript@4.9.5)(viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4))':
     dependencies:
-      '@tanstack/vue-query': 5.92.5(vue@3.5.26(typescript@5.9.3))
-      '@wagmi/connectors': 7.0.7(@metamask/sdk@0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10))(@wagmi/core@3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@5.9.3)(zod@3.22.4))(typescript@5.9.3)(viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)))(@walletconnect/ethereum-provider@2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4))(typescript@5.9.3)(viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4))
-      '@wagmi/core': 3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@5.9.3)(zod@3.22.4))(typescript@5.9.3)(viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4))
-      viem: 2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      vue: 3.5.26(typescript@5.9.3)
+      eventemitter3: 5.0.1
+      mipd: 0.0.7(typescript@4.9.5)
+      viem: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      zustand: 5.0.0(@types/react@19.2.7)
     optionalDependencies:
-      nuxt: 4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@25.0.7)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
-      typescript: 5.9.3
+      '@tanstack/query-core': 5.90.16
+      ox: 0.11.1(typescript@4.9.5)(zod@3.22.4)
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+      - react
+      - use-sync-external-store
+
+  '@wagmi/vue@0.4.8(6b00735311bbfe43cba7563f613e2e7a)':
+    dependencies:
+      '@tanstack/vue-query': 5.92.5(vue@3.5.26(typescript@4.9.5))
+      '@wagmi/connectors': 7.0.7(@metamask/sdk@0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10))(@wagmi/core@3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@4.9.5)(zod@3.22.4))(typescript@4.9.5)(viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)))(@walletconnect/ethereum-provider@2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4))(typescript@4.9.5)(viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4))
+      '@wagmi/core': 3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@4.9.5)(zod@3.22.4))(typescript@4.9.5)(viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4))
+      viem: 2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      vue: 3.5.26(typescript@4.9.5)
+    optionalDependencies:
+      nuxt: 4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@18.19.130)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
+      typescript: 4.9.5
     transitivePeerDependencies:
       - '@base-org/account'
       - '@coinbase/wallet-sdk'
@@ -8327,7 +8569,7 @@ snapshots:
     dependencies:
       '@wallet-standard/base': 1.1.0
 
-  '@walletconnect/core@2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@walletconnect/core@2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-provider': 1.0.14
@@ -8341,7 +8583,7 @@ snapshots:
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
       '@walletconnect/types': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
-      '@walletconnect/utils': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(zod@3.22.4)
+      '@walletconnect/utils': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(zod@3.22.4)
       '@walletconnect/window-getters': 1.0.1
       es-toolkit: 1.39.3
       events: 3.3.0
@@ -8371,7 +8613,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@walletconnect/core@2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@walletconnect/core@2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-provider': 1.0.14
@@ -8385,7 +8627,7 @@ snapshots:
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
       '@walletconnect/types': 2.21.7(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
-      '@walletconnect/utils': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/utils': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@walletconnect/window-getters': 1.0.1
       es-toolkit: 1.39.3
       events: 3.3.0
@@ -8419,18 +8661,18 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/ethereum-provider@2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@walletconnect/ethereum-provider@2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
-      '@reown/appkit': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@reown/appkit': 1.8.1(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@walletconnect/jsonrpc-http-connection': 1.0.8
       '@walletconnect/jsonrpc-provider': 1.0.14
       '@walletconnect/jsonrpc-types': 1.0.4
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/keyvaluestorage': 1.1.1(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
-      '@walletconnect/sign-client': 2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/sign-client': 2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@walletconnect/types': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
-      '@walletconnect/universal-provider': 2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
-      '@walletconnect/utils': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(zod@3.22.4)
+      '@walletconnect/universal-provider': 2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/utils': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(zod@3.22.4)
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -8553,16 +8795,16 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/sign-client@2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@walletconnect/sign-client@2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
-      '@walletconnect/core': 2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/core': 2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/logger': 2.1.2
       '@walletconnect/time': 1.0.2
       '@walletconnect/types': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
-      '@walletconnect/utils': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(zod@3.22.4)
+      '@walletconnect/utils': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(zod@3.22.4)
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -8589,16 +8831,16 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@walletconnect/sign-client@2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@walletconnect/sign-client@2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
-      '@walletconnect/core': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/core': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/logger': 2.1.2
       '@walletconnect/time': 1.0.2
       '@walletconnect/types': 2.21.7(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
-      '@walletconnect/utils': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/utils': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -8687,7 +8929,7 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@walletconnect/universal-provider@2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@walletconnect/universal-provider@2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
       '@walletconnect/events': 1.0.1
       '@walletconnect/jsonrpc-http-connection': 1.0.8
@@ -8696,9 +8938,9 @@ snapshots:
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/keyvaluestorage': 1.1.1(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
       '@walletconnect/logger': 2.1.2
-      '@walletconnect/sign-client': 2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/sign-client': 2.21.10(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@walletconnect/types': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
-      '@walletconnect/utils': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(zod@3.22.4)
+      '@walletconnect/utils': 2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(zod@3.22.4)
       es-toolkit: 1.39.3
       events: 3.3.0
     transitivePeerDependencies:
@@ -8727,7 +8969,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@walletconnect/universal-provider@2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@walletconnect/universal-provider@2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
       '@walletconnect/events': 1.0.1
       '@walletconnect/jsonrpc-http-connection': 1.0.8
@@ -8736,9 +8978,9 @@ snapshots:
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/keyvaluestorage': 1.1.1(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
       '@walletconnect/logger': 2.1.2
-      '@walletconnect/sign-client': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/sign-client': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@walletconnect/types': 2.21.7(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)
-      '@walletconnect/utils': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      '@walletconnect/utils': 2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
       es-toolkit: 1.39.3
       events: 3.3.0
     transitivePeerDependencies:
@@ -8767,7 +9009,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@walletconnect/utils@2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(zod@3.22.4)':
+  '@walletconnect/utils@2.21.10(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(zod@3.22.4)':
     dependencies:
       '@msgpack/msgpack': 3.1.2
       '@noble/ciphers': 1.3.0
@@ -8786,7 +9028,7 @@ snapshots:
       blakejs: 1.2.1
       bs58: 6.0.0
       detect-browser: 5.3.0
-      ox: 0.9.3(typescript@5.9.3)(zod@3.22.4)
+      ox: 0.9.3(typescript@4.9.5)(zod@3.22.4)
       uint8arrays: 3.1.1
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -8811,7 +9053,7 @@ snapshots:
       - uploadthing
       - zod
 
-  '@walletconnect/utils@2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
+  '@walletconnect/utils@2.21.7(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
       '@msgpack/msgpack': 3.1.2
       '@noble/ciphers': 1.3.0
@@ -8832,7 +9074,7 @@ snapshots:
       detect-browser: 5.3.0
       query-string: 7.1.3
       uint8arrays: 3.1.1
-      viem: 2.31.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)
+      viem: 2.31.0(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -8907,14 +9149,19 @@ snapshots:
       typescript: 5.9.3
       zod: 3.22.4
 
-  abitype@1.0.8(typescript@5.9.3)(zod@3.22.4):
+  abitype@1.0.8(typescript@4.9.5)(zod@3.22.4):
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
       zod: 3.22.4
 
-  abitype@1.1.0(typescript@5.9.3)(zod@3.22.4):
+  abitype@1.1.0(typescript@4.9.5)(zod@3.22.4):
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
+      zod: 3.22.4
+
+  abitype@1.2.3(typescript@4.9.5)(zod@3.22.4):
+    optionalDependencies:
+      typescript: 4.9.5
       zod: 3.22.4
 
   abitype@1.2.3(typescript@5.9.3)(zod@3.22.4):
@@ -8931,6 +9178,10 @@ snapshots:
       acorn: 8.15.0
 
   acorn-jsx@5.3.2(acorn@8.15.0):
+    dependencies:
+      acorn: 8.15.0
+
+  acorn-walk@8.3.4:
     dependencies:
       acorn: 8.15.0
 
@@ -9002,6 +9253,8 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
 
+  arg@4.1.3: {}
+
   argparse@2.0.1: {}
 
   aria-hidden@1.2.6:
@@ -9066,6 +9319,12 @@ snapshots:
 
   birpc@2.9.0: {}
 
+  bl@4.1.0:
+    dependencies:
+      buffer: 5.7.1
+      inherits: 2.0.4
+      readable-stream: 3.6.2
+
   blakejs@1.2.1: {}
 
   boolbase@1.0.0: {}
@@ -9100,6 +9359,11 @@ snapshots:
   buffer-crc32@1.0.0: {}
 
   buffer-from@1.1.2: {}
+
+  buffer@5.7.1:
+    dependencies:
+      base64-js: 1.5.1
+      ieee754: 1.2.1
 
   buffer@6.0.3:
     dependencies:
@@ -9176,6 +9440,8 @@ snapshots:
     dependencies:
       readdirp: 5.0.0
 
+  chownr@1.1.4: {}
+
   chownr@3.0.0: {}
 
   citty@0.1.6:
@@ -9207,6 +9473,16 @@ snapshots:
       color-name: 1.1.4
 
   color-name@1.1.4: {}
+
+  color-string@1.9.1:
+    dependencies:
+      color-name: 1.1.4
+      simple-swizzle: 0.2.4
+
+  color@4.2.3:
+    dependencies:
+      color-convert: 2.0.1
+      color-string: 1.9.1
 
   colord@2.9.3: {}
 
@@ -9272,6 +9548,8 @@ snapshots:
     dependencies:
       crc-32: 1.2.2
       readable-stream: 4.7.0
+
+  create-require@1.1.1: {}
 
   croner@9.1.0: {}
 
@@ -9406,6 +9684,12 @@ snapshots:
 
   decode-uri-component@0.2.2: {}
 
+  decompress-response@6.0.0:
+    dependencies:
+      mimic-response: 3.1.0
+
+  deep-extend@0.6.0: {}
+
   deep-is@0.1.4: {}
 
   deepmerge@4.3.1: {}
@@ -9448,6 +9732,8 @@ snapshots:
       execa: 5.1.1
 
   devalue@5.6.1: {}
+
+  diff@4.0.2: {}
 
   diff@8.0.2: {}
 
@@ -9847,6 +10133,8 @@ snapshots:
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
 
+  expand-template@2.0.3: {}
+
   exsolve@1.0.8: {}
 
   extension-port-stream@3.0.0:
@@ -9931,6 +10219,8 @@ snapshots:
 
   fresh@2.0.0: {}
 
+  fs-constants@1.0.0: {}
+
   fs.realpath@1.0.0: {}
 
   fsevents@2.3.3:
@@ -9991,6 +10281,8 @@ snapshots:
   git-url-parse@16.1.0:
     dependencies:
       git-up: 8.1.1
+
+  github-from-package@0.0.0: {}
 
   glob-parent@5.1.2:
     dependencies:
@@ -10176,6 +10468,8 @@ snapshots:
 
   inherits@2.0.4: {}
 
+  ini@1.3.8: {}
+
   ini@4.1.1: {}
 
   ioredis@5.9.0:
@@ -10198,6 +10492,8 @@ snapshots:
     dependencies:
       call-bound: 1.0.4
       has-tostringtag: 1.0.2
+
+  is-arrayish@0.3.4: {}
 
   is-callable@1.2.7: {}
 
@@ -10450,6 +10746,8 @@ snapshots:
       '@babel/types': 7.28.5
       source-map-js: 1.2.1
 
+  make-error@1.3.6: {}
+
   math-intrinsics@1.1.0: {}
 
   mdn-data@2.0.28: {}
@@ -10481,6 +10779,8 @@ snapshots:
 
   mimic-fn@4.0.0: {}
 
+  mimic-response@3.1.0: {}
+
   minimatch@3.1.2:
     dependencies:
       brace-expansion: 1.1.12
@@ -10497,17 +10797,21 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.2
 
+  minimist@1.2.8: {}
+
   minipass@7.1.2: {}
 
   minizlib@3.1.0:
     dependencies:
       minipass: 7.1.2
 
-  mipd@0.0.7(typescript@5.9.3):
+  mipd@0.0.7(typescript@4.9.5):
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
 
   mitt@3.0.1: {}
+
+  mkdirp-classic@0.5.3: {}
 
   mlly@1.8.0:
     dependencies:
@@ -10535,6 +10839,8 @@ snapshots:
   nanoid@5.1.6: {}
 
   nanotar@0.2.0: {}
+
+  napi-build-utils@2.0.0: {}
 
   natural-compare@1.4.0: {}
 
@@ -10640,6 +10946,12 @@ snapshots:
       - supports-color
       - uploadthing
 
+  node-abi@3.85.0:
+    dependencies:
+      semver: 7.7.3
+
+  node-addon-api@5.1.0: {}
+
   node-addon-api@7.1.1: {}
 
   node-fetch-native@1.6.7: {}
@@ -10679,17 +10991,17 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxt@4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@25.0.7)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2):
+  nuxt@4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@18.19.130)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2):
     dependencies:
       '@dxup/nuxt': 0.2.2(magicast@0.5.1)
       '@nuxt/cli': 3.32.0(cac@6.7.14)(commander@13.1.0)(magicast@0.5.1)
-      '@nuxt/devtools': 3.1.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      '@nuxt/devtools': 3.1.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5))
       '@nuxt/kit': 4.2.2(magicast@0.5.1)
-      '@nuxt/nitro-server': 4.2.2(c6e2cd94d01a996bb16170311b31489c)
+      '@nuxt/nitro-server': 4.2.2(b3c925c7ffffaf1fea98a4de3b8d3b24)
       '@nuxt/schema': 4.2.2
       '@nuxt/telemetry': 2.6.6(magicast@0.5.1)
-      '@nuxt/vite-builder': 4.2.2(@types/node@25.0.7)(magicast@0.5.1)(nuxt@4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@25.0.7)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2))(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3))(yaml@2.8.2)
-      '@unhead/vue': 2.1.1(vue@3.5.26(typescript@5.9.3))
+      '@nuxt/vite-builder': 4.2.2(@types/node@18.19.130)(magicast@0.5.1)(nuxt@4.2.2(@electric-sql/pglite@0.2.13)(@parcel/watcher@2.5.1)(@types/node@18.19.130)(@vue/compiler-sfc@3.5.26)(bufferutil@4.1.0)(cac@6.7.14)(commander@13.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3))(idb-keyval@6.2.2)(ioredis@5.9.0)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2))(optionator@0.9.4)(rollup@4.55.1)(terser@5.44.1)(tsx@4.21.0)(typescript@4.9.5)(vue@3.5.26(typescript@4.9.5))(yaml@2.8.2)
+      '@unhead/vue': 2.1.1(vue@3.5.26(typescript@4.9.5))
       '@vue/shared': 3.5.26
       c12: 3.3.3(magicast@0.5.1)
       chokidar: 5.0.0
@@ -10734,13 +11046,13 @@ snapshots:
       unctx: 2.5.0
       unimport: 5.6.0
       unplugin: 2.3.11
-      unplugin-vue-router: 0.19.2(@vue/compiler-sfc@3.5.26)(vue-router@4.6.4(vue@3.5.26(typescript@5.9.3)))(vue@3.5.26(typescript@5.9.3))
+      unplugin-vue-router: 0.19.2(@vue/compiler-sfc@3.5.26)(vue-router@4.6.4(vue@3.5.26(typescript@4.9.5)))(vue@3.5.26(typescript@4.9.5))
       untyped: 2.0.0
-      vue: 3.5.26(typescript@5.9.3)
-      vue-router: 4.6.4(vue@3.5.26(typescript@5.9.3))
+      vue: 3.5.26(typescript@4.9.5)
+      vue-router: 4.6.4(vue@3.5.26(typescript@4.9.5))
     optionalDependencies:
       '@parcel/watcher': 2.5.1
-      '@types/node': 25.0.7
+      '@types/node': 18.19.130
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -10878,6 +11190,22 @@ snapshots:
       type-check: 0.4.0
       word-wrap: 1.2.5
 
+  ox@0.11.1(typescript@4.9.5)(zod@3.22.4):
+    dependencies:
+      '@adraffy/ens-normalize': 1.11.1
+      '@noble/ciphers': 1.3.0
+      '@noble/curves': 1.9.1
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      abitype: 1.2.3(typescript@4.9.5)(zod@3.22.4)
+      eventemitter3: 5.0.1
+    optionalDependencies:
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - zod
+    optional: true
+
   ox@0.11.1(typescript@5.9.3)(zod@3.22.4):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
@@ -10893,22 +11221,22 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  ox@0.7.1(typescript@5.9.3)(zod@3.22.4):
+  ox@0.7.1(typescript@4.9.5)(zod@3.22.4):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/ciphers': 1.3.0
-      '@noble/curves': 1.9.2
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.9.3)(zod@3.22.4)
+      abitype: 1.2.3(typescript@4.9.5)(zod@3.22.4)
       eventemitter3: 5.0.1
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
     transitivePeerDependencies:
       - zod
 
-  ox@0.9.3(typescript@5.9.3)(zod@3.22.4):
+  ox@0.9.3(typescript@4.9.5)(zod@3.22.4):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/ciphers': 1.3.0
@@ -10916,14 +11244,14 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.9.3)(zod@3.22.4)
+      abitype: 1.2.3(typescript@4.9.5)(zod@3.22.4)
       eventemitter3: 5.0.1
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
     transitivePeerDependencies:
       - zod
 
-  ox@0.9.6(typescript@5.9.3)(zod@3.22.4):
+  ox@0.9.6(typescript@4.9.5)(zod@3.22.4):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/ciphers': 1.3.0
@@ -10931,10 +11259,10 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.9.3)(zod@3.22.4)
+      abitype: 1.2.3(typescript@4.9.5)(zod@3.22.4)
       eventemitter3: 5.0.1
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
     transitivePeerDependencies:
       - zod
 
@@ -11434,6 +11762,21 @@ snapshots:
     dependencies:
       xtend: 4.0.2
 
+  prebuild-install@7.1.3:
+    dependencies:
+      detect-libc: 2.1.2
+      expand-template: 2.0.3
+      github-from-package: 0.0.0
+      minimist: 1.2.8
+      mkdirp-classic: 0.5.3
+      napi-build-utils: 2.0.0
+      node-abi: 3.85.0
+      pump: 3.0.3
+      rc: 1.2.8
+      simple-get: 4.0.1
+      tar-fs: 2.1.4
+      tunnel-agent: 0.6.0
+
   prelude-ls@1.2.1: {}
 
   pretty-bytes@7.1.0: {}
@@ -11506,6 +11849,13 @@ snapshots:
       defu: 6.1.4
       destr: 2.0.5
 
+  rc@1.2.8:
+    dependencies:
+      deep-extend: 0.6.0
+      ini: 1.3.8
+      minimist: 1.2.8
+      strip-json-comments: 2.0.1
+
   readable-stream@2.3.8:
     dependencies:
       core-util-is: 1.0.3
@@ -11550,19 +11900,19 @@ snapshots:
 
   regexp-tree@0.1.27: {}
 
-  reka-ui@2.7.0(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3)):
+  reka-ui@2.7.0(typescript@4.9.5)(vue@3.5.26(typescript@4.9.5)):
     dependencies:
       '@floating-ui/dom': 1.7.4
-      '@floating-ui/vue': 1.1.9(vue@3.5.26(typescript@5.9.3))
+      '@floating-ui/vue': 1.1.9(vue@3.5.26(typescript@4.9.5))
       '@internationalized/date': 3.10.1
       '@internationalized/number': 3.6.5
-      '@tanstack/vue-virtual': 3.13.17(vue@3.5.26(typescript@5.9.3))
-      '@vueuse/core': 12.8.2(typescript@5.9.3)
-      '@vueuse/shared': 12.8.2(typescript@5.9.3)
+      '@tanstack/vue-virtual': 3.13.17(vue@3.5.26(typescript@4.9.5))
+      '@vueuse/core': 12.8.2(typescript@4.9.5)
+      '@vueuse/shared': 12.8.2(typescript@4.9.5)
       aria-hidden: 1.2.6
       defu: 6.1.4
       ohash: 2.0.11
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -11721,6 +12071,17 @@ snapshots:
 
   setprototypeof@1.2.0: {}
 
+  sharp@0.31.3:
+    dependencies:
+      color: 4.2.3
+      detect-libc: 2.1.2
+      node-addon-api: 5.1.0
+      prebuild-install: 7.1.3
+      semver: 7.7.3
+      simple-get: 4.0.1
+      tar-fs: 2.1.4
+      tunnel-agent: 0.6.0
+
   shebang-command@2.0.0:
     dependencies:
       shebang-regex: 3.0.0
@@ -11733,6 +12094,14 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
+  simple-concat@1.0.1: {}
+
+  simple-get@4.0.1:
+    dependencies:
+      decompress-response: 6.0.0
+      once: 1.4.0
+      simple-concat: 1.0.1
+
   simple-git@3.30.0:
     dependencies:
       '@kwsites/file-exists': 1.1.1
@@ -11740,6 +12109,10 @@ snapshots:
       debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
+
+  simple-swizzle@0.2.4:
+    dependencies:
+      is-arrayish: 0.3.4
 
   sirv@3.0.2:
     dependencies:
@@ -11855,6 +12228,8 @@ snapshots:
 
   strip-final-newline@3.0.0: {}
 
+  strip-json-comments@2.0.1: {}
+
   strip-json-comments@3.1.1: {}
 
   strip-literal@3.1.0:
@@ -11900,6 +12275,21 @@ snapshots:
   system-architecture@0.1.0: {}
 
   tagged-tag@1.0.0: {}
+
+  tar-fs@2.1.4:
+    dependencies:
+      chownr: 1.1.4
+      mkdirp-classic: 0.5.3
+      pump: 3.0.3
+      tar-stream: 2.2.0
+
+  tar-stream@2.2.0:
+    dependencies:
+      bl: 4.1.0
+      end-of-stream: 1.4.5
+      fs-constants: 1.0.0
+      inherits: 2.0.4
+      readable-stream: 3.6.2
 
   tar-stream@3.1.7:
     dependencies:
@@ -11970,6 +12360,24 @@ snapshots:
     dependencies:
       typescript: 5.9.3
 
+  ts-node@10.9.2(@types/node@18.19.130)(typescript@4.9.5):
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.12
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 18.19.130
+      acorn: 8.15.0
+      acorn-walk: 8.3.4
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 4.9.5
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+
   tsconfck@3.1.6(typescript@5.9.3):
     optionalDependencies:
       typescript: 5.9.3
@@ -11984,6 +12392,10 @@ snapshots:
       get-tsconfig: 4.13.0
     optionalDependencies:
       fsevents: 2.3.3
+
+  tunnel-agent@0.6.0:
+    dependencies:
+      safe-buffer: 5.2.1
 
   type-check@0.4.0:
     dependencies:
@@ -12002,6 +12414,8 @@ snapshots:
       tagged-tag: 1.0.0
 
   type-level-regexp@0.1.17: {}
+
+  typescript@4.9.5: {}
 
   typescript@5.9.3: {}
 
@@ -12023,6 +12437,8 @@ snapshots:
       estree-walker: 3.0.3
       magic-string: 0.30.21
       unplugin: 2.3.11
+
+  undici-types@5.26.5: {}
 
   undici-types@6.21.0: {}
 
@@ -12065,10 +12481,10 @@ snapshots:
       pathe: 2.0.3
       picomatch: 4.0.3
 
-  unplugin-vue-router@0.19.2(@vue/compiler-sfc@3.5.26)(vue-router@4.6.4(vue@3.5.26(typescript@5.9.3)))(vue@3.5.26(typescript@5.9.3)):
+  unplugin-vue-router@0.19.2(@vue/compiler-sfc@3.5.26)(vue-router@4.6.4(vue@3.5.26(typescript@4.9.5)))(vue@3.5.26(typescript@4.9.5)):
     dependencies:
       '@babel/generator': 7.28.5
-      '@vue-macros/common': 3.1.2(vue@3.5.26(typescript@5.9.3))
+      '@vue-macros/common': 3.1.2(vue@3.5.26(typescript@4.9.5))
       '@vue/compiler-sfc': 3.5.26
       '@vue/language-core': 3.2.2
       ast-walker-scope: 0.8.3
@@ -12086,7 +12502,7 @@ snapshots:
       unplugin-utils: 0.3.1
       yaml: 2.8.2
     optionalDependencies:
-      vue-router: 4.6.4(vue@3.5.26(typescript@5.9.3))
+      vue-router: 4.6.4(vue@3.5.26(typescript@4.9.5))
     transitivePeerDependencies:
       - vue
 
@@ -12167,41 +12583,43 @@ snapshots:
 
   uuid@9.0.1: {}
 
+  v8-compile-cache-lib@3.0.1: {}
+
   valtio@2.1.5(@types/react@19.2.7):
     dependencies:
       proxy-compare: 3.0.1
     optionalDependencies:
       '@types/react': 19.2.7
 
-  viem@2.31.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4):
+  viem@2.31.0(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.0.8(typescript@5.9.3)(zod@3.22.4)
+      abitype: 1.0.8(typescript@4.9.5)(zod@3.22.4)
       isows: 1.0.7(ws@8.18.2(bufferutil@4.1.0)(utf-8-validate@5.0.10))
-      ox: 0.7.1(typescript@5.9.3)(zod@3.22.4)
+      ox: 0.7.1(typescript@4.9.5)(zod@3.22.4)
       ws: 8.18.2(bufferutil@4.1.0)(utf-8-validate@5.0.10)
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
       - zod
 
-  viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4):
+  viem@2.42.1(bufferutil@4.1.0)(typescript@4.9.5)(utf-8-validate@5.0.10)(zod@3.22.4):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.1.0(typescript@5.9.3)(zod@3.22.4)
+      abitype: 1.1.0(typescript@4.9.5)(zod@3.22.4)
       isows: 1.0.7(ws@8.18.3(bufferutil@4.1.0)(utf-8-validate@5.0.10))
-      ox: 0.9.6(typescript@5.9.3)(zod@3.22.4)
+      ox: 0.9.6(typescript@4.9.5)(zod@3.22.4)
       ws: 8.18.3(bufferutil@4.1.0)(utf-8-validate@5.0.10)
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -12224,15 +12642,15 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite-dev-rpc@1.1.0(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)):
+  vite-dev-rpc@1.1.0(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)):
     dependencies:
       birpc: 2.9.0
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-      vite-hot-client: 2.1.0(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite-hot-client: 2.1.0(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
 
-  vite-hot-client@2.1.0(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)):
+  vite-hot-client@2.1.0(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)):
     dependencies:
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
 
   vite-node@1.0.2(@types/node@20.19.27)(terser@5.44.1):
     dependencies:
@@ -12252,13 +12670,13 @@ snapshots:
       - supports-color
       - terser
 
-  vite-node@5.2.0(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2):
+  vite-node@5.2.0(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2):
     dependencies:
       cac: 6.7.14
       es-module-lexer: 1.7.0
       obug: 2.1.1
       pathe: 2.0.3
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -12272,7 +12690,7 @@ snapshots:
       - tsx
       - yaml
 
-  vite-plugin-checker@0.12.0(optionator@0.9.4)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)):
+  vite-plugin-checker@0.12.0(optionator@0.9.4)(typescript@4.9.5)(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)):
     dependencies:
       '@babel/code-frame': 7.27.1
       chokidar: 4.0.3
@@ -12281,13 +12699,13 @@ snapshots:
       picomatch: 4.0.3
       tiny-invariant: 1.3.3
       tinyglobby: 0.2.15
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
       vscode-uri: 3.1.0
     optionalDependencies:
       optionator: 0.9.4
-      typescript: 5.9.3
+      typescript: 4.9.5
 
-  vite-plugin-inspect@11.3.3(@nuxt/kit@4.2.2(magicast@0.5.1))(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)):
+  vite-plugin-inspect@11.3.3(@nuxt/kit@4.2.2(magicast@0.5.1))(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)):
     dependencies:
       ansis: 4.2.0
       debug: 4.4.3
@@ -12297,22 +12715,22 @@ snapshots:
       perfect-debounce: 2.0.0
       sirv: 3.0.2
       unplugin-utils: 0.3.1
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-      vite-dev-rpc: 1.1.0(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vite-dev-rpc: 1.1.0(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
     optionalDependencies:
       '@nuxt/kit': 4.2.2(magicast@0.5.1)
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-vue-tracer@1.2.0(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3)):
+  vite-plugin-vue-tracer@1.2.0(vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@4.9.5)):
     dependencies:
       estree-walker: 3.0.3
       exsolve: 1.0.8
       magic-string: 0.30.21
       pathe: 2.0.3
       source-map-js: 1.2.1
-      vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-      vue: 3.5.26(typescript@5.9.3)
+      vite: 7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+      vue: 3.5.26(typescript@4.9.5)
 
   vite-tsconfig-paths@4.3.1(typescript@5.9.3)(vite@5.4.21(@types/node@20.19.27)(terser@5.44.1)):
     dependencies:
@@ -12335,7 +12753,7 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.44.1
 
-  vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2):
+  vite@7.3.1(@types/node@18.19.130)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2):
     dependencies:
       esbuild: 0.27.2
       fdir: 6.5.0(picomatch@4.0.3)
@@ -12344,7 +12762,7 @@ snapshots:
       rollup: 4.55.1
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 25.0.7
+      '@types/node': 18.19.130
       fsevents: 2.3.3
       jiti: 2.6.1
       terser: 5.44.1
@@ -12357,26 +12775,26 @@ snapshots:
     dependencies:
       ufo: 1.6.2
 
-  vue-demi@0.14.10(vue@3.5.26(typescript@5.9.3)):
+  vue-demi@0.14.10(vue@3.5.26(typescript@4.9.5)):
     dependencies:
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
 
   vue-devtools-stub@0.1.0: {}
 
-  vue-router@4.6.4(vue@3.5.26(typescript@5.9.3)):
+  vue-router@4.6.4(vue@3.5.26(typescript@4.9.5)):
     dependencies:
       '@vue/devtools-api': 6.6.4
-      vue: 3.5.26(typescript@5.9.3)
+      vue: 3.5.26(typescript@4.9.5)
 
-  vue@3.5.26(typescript@5.9.3):
+  vue@3.5.26(typescript@4.9.5):
     dependencies:
       '@vue/compiler-dom': 3.5.26
       '@vue/compiler-sfc': 3.5.26
       '@vue/runtime-dom': 3.5.26
-      '@vue/server-renderer': 3.5.26(vue@3.5.26(typescript@5.9.3))
+      '@vue/server-renderer': 3.5.26(vue@3.5.26(typescript@4.9.5))
       '@vue/shared': 3.5.26
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 4.9.5
 
   webextension-polyfill@0.10.0: {}
 
@@ -12501,6 +12919,8 @@ snapshots:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 21.1.1
+
+  yn@3.1.1: {}
 
   yocto-queue@0.1.0: {}
 

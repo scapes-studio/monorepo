@@ -38,6 +38,11 @@ const { getAccountDisplay } = useENSResolution()
             Activity
           </NuxtLink>
         </li>
+        <li>
+          <NuxtLink to="/merge" :class="{ active: route.path.startsWith('/merge') }">
+            Merge
+          </NuxtLink>
+        </li>
       </slot>
     </ul>
 

@@ -16,9 +16,14 @@
   "dependencies": {
     "@1001-digital/layers.base": "latest",
     "@1001-digital/layers.evm": "latest",
+    "@scapes-studio/abis": "workspace:^",
     "@scapes-studio/indexer": "workspace:^",
+    "@scapes-studio/scape-renderer": "^1.0.6",
     "@ponder/client": "^0.16.1",
+    "@wagmi/core": "^2.16.4",
+    "@wagmi/vue": "^0.4.3",
     "nuxt": "^4.2.2",
+    "viem": "~2.42.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   }

@@ -10,6 +10,7 @@ import { getScapeHistory, getTwentySevenYearScapeHistory } from "./history";
 import { getAttributeCounts } from "./attributes";
 import { getActivity } from "./activity";
 import { getListings, getListingByTokenId } from "./listings";
+import { getScapeImage } from "./images";
 
 const app = new Hono();
 
@@ -37,6 +38,9 @@ app.get("/seaport/stats/volume/:slug", getVolumeStatsBySlug);
 
 // Attribute counts route (must be before :tokenId routes)
 app.get("/scapes/attributes", getAttributeCounts);
+
+// Image route (for merge previews)
+app.get("/scapes/:tokenId/image", getScapeImage);
 
 // History routes
 app.get("/scapes/:tokenId/history", getScapeHistory);
