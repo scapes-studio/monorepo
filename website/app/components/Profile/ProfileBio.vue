@@ -13,8 +13,8 @@ defineProps<{ description: string | null | undefined }>();
 <style scoped>
 .profile-bio {
   padding: var(--spacer);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
+  border: var(--border);
+  border-radius: var(--spacer);
 }
 
 .profile-bio h2 {
@@ -22,6 +22,6 @@ defineProps<{ description: string | null | undefined }>();
 }
 
 .profile-bio__empty {
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--muted);
 }
 </style>

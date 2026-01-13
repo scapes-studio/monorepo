@@ -33,19 +33,19 @@ const hasAttributes = computed(() => attributeList.value.length > 0);
 <style scoped>
 .attributes {
   padding: var(--spacer);
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: 0.5rem;
+  background: var(--gray-z-1);
+  border-radius: var(--size-2);
 }
 
 .attributes__title {
   margin: 0 0 var(--spacer);
-  font-size: 1.125rem;
+  font-size: var(--font-lg);
 }
 
 .attributes__list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: var(--size-3);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -54,21 +54,21 @@ const hasAttributes = computed(() => attributeList.value.length > 0);
 .attributes__item {
   display: flex;
   flex-direction: column;
-  padding: 0.75rem;
-  background: white;
-  border-radius: 0.375rem;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: var(--size-3);
+  background: var(--background);
+  border-radius: var(--size-1);
+  border: var(--border);
 }
 
 .attributes__trait {
-  font-size: 0.75rem;
-  color: rgba(0, 0, 0, 0.5);
+  font-size: var(--font-xs);
+  color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--letter-spacing);
 }
 
 .attributes__value {
-  font-weight: 600;
-  margin-top: 0.25rem;
+  font-weight: var(--font-weight-bold);
+  margin-top: var(--spacer-xs);
 }
 </style>

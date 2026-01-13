@@ -116,10 +116,10 @@ const price = computed(() => salePrice(props.entry));
 <style scoped>
 .scape-detail__history-item {
   padding: var(--spacer);
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--spacer);
+  border: var(--border);
   display: grid;
-  gap: 0.75rem;
+  gap: var(--size-3);
 }
 
 .scape-detail__history-header {
@@ -130,43 +130,43 @@ const price = computed(() => salePrice(props.entry));
 }
 
 .scape-detail__history-type {
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacer-sm);
 }
 
 .scape-detail__history-time {
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 0.9rem;
+  color: var(--muted);
+  font-size: var(--font-sm);
 }
 
 .scape-detail__history-addresses {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   gap: var(--spacer);
 }
 
 .scape-detail__history-label {
   display: block;
-  font-size: 0.75rem;
+  font-size: var(--font-xs);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: rgba(0, 0, 0, 0.5);
-  margin-bottom: 0.25rem;
+  letter-spacing: var(--letter-spacing);
+  color: var(--muted);
+  margin-bottom: var(--spacer-xs);
 }
 
 .scape-detail__history-meta {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacer);
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
 }
 
 .scape-detail__history-link {
   color: inherit;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
 }
 
 .scape-detail__history-link:hover {
@@ -174,7 +174,7 @@ const price = computed(() => salePrice(props.entry));
 }
 
 .scape-detail__history-source {
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 500;
+  color: var(--muted);
+  font-weight: var(--font-weight-bold);
 }
 </style>

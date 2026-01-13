@@ -26,16 +26,16 @@ const displayName = computed(() => props.ens || props.address);
   gap: var(--spacer);
   align-items: center;
   padding: var(--spacer);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
+  border: var(--border);
+  border-radius: var(--spacer);
 }
 
 .profile-header__avatar {
-  width: 80px;
-  height: 80px;
+  width: var(--size-9);
+  height: var(--size-9);
   border-radius: 50%;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--gray-z-1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,18 +49,18 @@ const displayName = computed(() => props.ens || props.address);
 }
 
 .profile-header__avatar-fallback {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: var(--font-xl);
+  font-weight: var(--font-weight-bold);
 }
 
 .profile-header__meta h1 {
-  margin: 0 0 0.25rem;
+  margin: 0 0 var(--spacer-xs);
 }
 
 .profile-header__address {
   margin: 0;
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.6);
+  font-size: var(--font-sm);
+  color: var(--muted);
   word-break: break-all;
 }
 </style>

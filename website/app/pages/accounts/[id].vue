@@ -61,7 +61,7 @@ const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length
 
 <style scoped>
 .account-page {
-  max-width: 72rem;
+  max-width: var(--content-width-wide);
   margin: 0 auto;
   padding: var(--spacer-lg) var(--spacer);
   display: grid;
@@ -90,20 +90,20 @@ const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length
 
 .account-page__status {
   padding: var(--spacer);
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.04);
+  border-radius: var(--size-3);
+  background: var(--gray-z-1);
 }
 
 .account-page__status--error {
-  background: rgba(255, 0, 0, 0.08);
+  background: oklch(from var(--error) l c h / 0.1);
 }
 
 .account-page__load-more {
   justify-self: center;
-  padding: 0.6rem 1.4rem;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background: white;
+  padding: var(--spacer-sm) var(--spacer-md);
+  border-radius: var(--size-10);
+  border: var(--border);
+  background: var(--background);
   cursor: pointer;
 }
 

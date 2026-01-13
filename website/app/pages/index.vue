@@ -3,14 +3,14 @@
 
 <template>
   <div class="home">
-    <h1>Welcome to Scapes</h1>
-    <p>Connect your wallet to get started.</p>
+    <h1>Welcome Home</h1>
+    <p>Composable places stored on the Ethereum Blockchain.</p>
   </div>
 </template>
 
 <style scoped>
 .home {
-  max-width: 50rem;
+  max-width: var(--content-width);
   margin: 0 auto;
   padding: var(--spacer-lg);
   text-align: center;

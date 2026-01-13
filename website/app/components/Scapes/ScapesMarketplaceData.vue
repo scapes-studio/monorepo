@@ -138,25 +138,25 @@ const seaportListingPrice = computed(() => {
 .marketplace-data {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  font-weight: 600;
+  gap: var(--spacer-sm);
+  font-weight: var(--font-weight-bold);
 }
 
 .marketplace-data__badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.65rem;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.08);
-  font-size: 0.85rem;
+  padding: var(--spacer-xs) var(--spacer-sm);
+  border-radius: var(--size-10);
+  background: var(--gray-z-2);
+  font-size: var(--font-sm);
 }
 
 .marketplace-data__badge--seaport {
-  background: rgba(0, 122, 255, 0.14);
+  background: oklch(60% 0.15 250 / 0.14);
 }
 
 .marketplace-data__badge--muted {
-  background: rgba(0, 0, 0, 0.04);
-  color: rgba(0, 0, 0, 0.6);
+  background: var(--gray-z-1);
+  color: var(--muted);
 }
 </style>

@@ -108,7 +108,7 @@ const totalSales = computed(() => data.value?.totalSales ?? 0);
 
 <style scoped>
 .scape-detail {
-  max-width: 72rem;
+  max-width: var(--content-width-wide);
   margin: 0 auto;
   padding: var(--spacer-lg) var(--spacer);
   display: grid;
@@ -117,32 +117,32 @@ const totalSales = computed(() => data.value?.totalSales ?? 0);
 
 .scape-detail__header {
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-columns: var(--size-10) minmax(0, 1fr);
   gap: var(--spacer-lg);
   align-items: center;
 }
 
 .scape-detail__image {
-  width: 180px;
+  width: var(--size-10);
 }
 
 .scape-detail__meta h1 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--spacer-sm);
 }
 
 .scape-detail__stats {
   display: flex;
   gap: var(--spacer);
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
 }
 
 .scape-detail__owner {
-  margin-top: 0.5rem;
-  color: rgba(0, 0, 0, 0.6);
+  margin-top: var(--spacer-sm);
+  color: var(--muted);
 }
 
 .scape-detail__owner-link {
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
   color: inherit;
   text-decoration: none;
   word-break: break-all;
@@ -153,16 +153,16 @@ const totalSales = computed(() => data.value?.totalSales ?? 0);
 }
 
 .scape-detail__listings {
-  margin-top: 0.75rem;
+  margin-top: var(--size-3);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .scape-detail__header {
     grid-template-columns: 1fr;
   }
 
   .scape-detail__image {
-    width: 140px;
+    width: var(--size-9);
   }
 }
 </style>

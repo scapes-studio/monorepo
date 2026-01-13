@@ -43,12 +43,12 @@ const props = withDefaults(
 
 .scape-detail__status {
   padding: var(--spacer);
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.04);
+  border-radius: var(--size-3);
+  background: var(--gray-z-1);
 }
 
 .scape-detail__status--error {
-  background: rgba(255, 0, 0, 0.08);
+  background: oklch(from var(--error) l c h / 0.1);
 }
 
 .scape-detail__history-list {

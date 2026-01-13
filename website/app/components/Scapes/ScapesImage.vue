@@ -19,7 +19,7 @@ const imageUrl = computed(() => `https://cdn.scapes.xyz/scapes/sm/${props.id}.pn
 .scape-image {
   width: 100%;
   display: block;
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--gray-z-1);
   image-rendering: pixelated;
 }
 </style>

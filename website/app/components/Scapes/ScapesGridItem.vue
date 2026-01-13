@@ -15,7 +15,7 @@ defineProps<{ scape: ScapeRecord }>();
 
 <style scoped>
 img {
-  border-radius: 3px;
+  border-radius: var(--spacer-xs);
 }
 
 .scape-link {

@@ -110,7 +110,7 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
 
 <style scoped>
 .accounts-page {
-  max-width: 72rem;
+  max-width: var(--content-width-wide);
   margin: 0 auto;
   padding: var(--spacer-lg) var(--spacer);
   display: grid;
@@ -126,28 +126,28 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
 }
 
 .accounts-page__header h1 {
-  margin: 0 0 0.35rem;
+  margin: 0 0 var(--spacer-xs);
 }
 
 .accounts-page__subtitle {
   margin: 0;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--muted);
 }
 
 .accounts-page__stats {
   display: flex;
   gap: var(--spacer);
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
 }
 
 .accounts-page__status {
   padding: var(--spacer);
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.04);
+  border-radius: var(--size-3);
+  background: var(--gray-z-1);
 }
 
 .accounts-page__status--error {
-  background: rgba(255, 0, 0, 0.08);
+  background: oklch(from var(--error) l c h / 0.1);
 }
 
 .accounts-page__results {
@@ -160,27 +160,27 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 0.75rem;
+  gap: var(--size-3);
 }
 
 .accounts-page__row {
   display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  grid-template-columns: var(--spacer-lg) minmax(0, 1fr) auto;
   gap: var(--spacer);
   align-items: center;
   padding: var(--spacer);
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--spacer);
+  border: var(--border);
 }
 
 .accounts-page__load-more {
   justify-self: center;
-  padding: 0.65rem 1.5rem;
-  border-radius: 999px;
+  padding: var(--spacer-sm) var(--spacer-md);
+  border-radius: var(--size-10);
   border: none;
-  background: #111;
-  color: #fff;
-  font-weight: 600;
+  background: var(--color);
+  color: var(--background);
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
 }
 
@@ -190,12 +190,12 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
 }
 
 .accounts-page__rank {
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.6);
+  font-weight: var(--font-weight-bold);
+  color: var(--muted);
 }
 
 .accounts-page__owner {
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
   color: inherit;
   text-decoration: none;
   word-break: break-all;
@@ -206,6 +206,6 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
 }
 
 .accounts-page__count {
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
 }
 </style>

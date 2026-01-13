@@ -45,8 +45,8 @@ function buildUrl(key: keyof Links, value: string): string {
 <style scoped>
 .profile-links {
   padding: var(--spacer);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
+  border: var(--border);
+  border-radius: var(--spacer);
 }
 
 .profile-links h2 {
@@ -58,15 +58,15 @@ function buildUrl(key: keyof Links, value: string): string {
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 0.5rem;
+  gap: var(--spacer-sm);
 }
 
 .profile-links__label {
-  font-weight: 600;
-  margin-right: 0.5rem;
+  font-weight: var(--font-weight-bold);
+  margin-right: var(--spacer-sm);
 }
 
 .profile-links__empty {
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--muted);
 }
 </style>

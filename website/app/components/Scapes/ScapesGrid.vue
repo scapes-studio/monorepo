@@ -13,7 +13,7 @@ defineProps<{ scapes: ScapeRecord[] }>();
 <style scoped>
 .scapes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
   gap: var(--spacer-sm);
 }
 </style>
