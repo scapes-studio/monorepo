@@ -40,7 +40,7 @@ function buildSeaportJoinCondition(
 ) {
   const clauses = [
     sql`${transferTable.txHash} = ${seaportSale.txHash}`,
-    sql`${transferTable.scape}::text = ${seaportSale.tokenId}`,
+    sql`${transferTable.scape} = ${seaportSale.tokenId}`,
   ];
 
   if (seaportSlugs.length === 1) {
