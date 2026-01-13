@@ -1,7 +1,5 @@
 export type ScapeRecord = {
   id: bigint;
-  owner: `0x${string}`;
-  attributes: Record<string, unknown> | null;
   rarity: number | null;
 };
 
@@ -30,12 +28,10 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
     loadMoreLoading.value = false;
   };
 
-  const fetchScapes = async (normalizedOwner: `0x${string}`, startOffset: number) =>
-    client.db
+  const fetchScapes = async (normalizedOwner: `0x${string}`, startOffset: number) => {
+    return await client.db
       .select({
         id: schema.scape.id,
-        owner: schema.scape.owner,
-        attributes: schema.scape.attributes,
         rarity: schema.scape.rarity,
       })
       .from(schema.scape)
@@ -43,6 +39,7 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
       .orderBy(desc(schema.scape.id))
       .limit(PAGE_SIZE)
       .offset(startOffset);
+  };
 
   const fetchInitial = async (): Promise<ScapesPayload> => {
     if (!owner.value) {
@@ -57,7 +54,7 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
 
     return {
       total: countResult ?? 0,
-      scapes: scapesResult as ScapeRecord[],
+      scapes: scapesResult,
     };
   };
 
@@ -99,7 +96,7 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
     error.value = null;
 
     try {
-      const normalizedOwner = owner.value.toLowerCase();
+      const normalizedOwner = owner.value.toLowerCase() as `0x${string}`;
       const result = await fetchScapes(normalizedOwner, offset.value);
       scapes.value.push(...result);
       offset.value += result.length;

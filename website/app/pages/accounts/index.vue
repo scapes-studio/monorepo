@@ -2,6 +2,7 @@
 
 const client = usePonderClient();
 const { public: { scapeCollectionAddress } } = useRuntimeConfig();
+const normalizedCollectionAddress = scapeCollectionAddress.toLowerCase() as `0x${string}`;
 
 definePageMeta({
   path: "/people",
@@ -14,7 +15,7 @@ const offset = ref(0);
 const isLoadingMore = ref(false);
 const hasMore = ref(true);
 
-const excludeScapeCollection = ne(schema.scape.owner, scapeCollectionAddress)
+const excludeScapeCollection = ne(schema.scape.owner, normalizedCollectionAddress)
 
 const fetchOwners = async (startOffset: number) => client.db.select({
   owner: schema.scape.owner,
