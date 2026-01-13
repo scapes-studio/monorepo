@@ -53,6 +53,7 @@ export const offer = onchainTable("offer", (t) => ({
   isActive: t.boolean().notNull(),
   createdAt: t.integer().notNull(),
   updatedAt: t.integer().notNull(),
+  txHash: t.hex().notNull(),
 }));
 
 export const sale = onchainTable("sale", (t) => ({

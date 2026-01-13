@@ -155,7 +155,7 @@ export const getActivity = async (c: Context) => {
         updated_at as timestamp,
         'scapes' as collection,
         token_id::text,
-        NULL::text as tx_hash,
+        tx_hash,
         NULL::text as from_addr,
         NULL::text as to_addr,
         NULL::text as seller,

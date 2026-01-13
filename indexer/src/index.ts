@@ -84,12 +84,14 @@ ponder.on("Scapes:OfferCreated", async ({ event, context }) => {
       isActive: true,
       createdAt: timestamp,
       updatedAt: timestamp,
+      txHash: event.transaction.hash,
     })
     .onConflictDoUpdate({
       price: event.args.value,
       specificBuyer,
       isActive: true,
       updatedAt: timestamp,
+      txHash: event.transaction.hash,
     });
 });
 
@@ -105,10 +107,12 @@ ponder.on("Scapes:OfferWithdrawn", async ({ event, context }) => {
       isActive: false,
       createdAt: timestamp,
       updatedAt: timestamp,
+      txHash: event.transaction.hash,
     })
     .onConflictDoUpdate({
       isActive: false,
       updatedAt: timestamp,
+      txHash: event.transaction.hash,
     });
 });
 
@@ -136,9 +140,11 @@ ponder.on("Scapes:Sale", async ({ event, context }) => {
       isActive: false,
       createdAt: timestamp,
       updatedAt: timestamp,
+      txHash: event.transaction.hash,
     })
     .onConflictDoUpdate({
       isActive: false,
       updatedAt: timestamp,
+      txHash: event.transaction.hash,
     });
 });
