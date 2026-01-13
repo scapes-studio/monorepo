@@ -1,14 +1,13 @@
+import { db, publicClients } from "ponder:api";
 import { eq, or } from "drizzle-orm";
 import { type Context } from "hono";
-import { publicClients } from "ponder:api";
 import { isAddress } from "viem";
 import { normalize } from "viem/ens";
 import { ensProfile } from "../../ponder.schema";
-import { getViewsDb, withTriggersDisabled } from "../services/database";
+import { withTriggersDisabled } from "../services/database";
 
 const ONE_MONTH_MS = 30 * 24 * 60 * 60 * 1000;
 const client = publicClients["ethereum"]!;
-const db = getViewsDb();
 
 type ProfileResult = {
   address: `0x${string}` | null;
@@ -108,12 +107,18 @@ function isFresh(timestamp: number | null): boolean {
 const fetchProfile = async (identifier: string) => {
   const normalizedIdentifier = isAddress(identifier) ? identifier.toLowerCase() : identifier;
 
-  return await db.query.ensProfile.findFirst({
-    where: or(
-      eq(ensProfile.address, normalizedIdentifier),
-      eq(ensProfile.ens, normalizedIdentifier),
-    ),
-  });
+  const result = await db
+    .select()
+    .from(ensProfile)
+    .where(
+      or(
+        eq(ensProfile.address, normalizedIdentifier),
+        eq(ensProfile.ens, normalizedIdentifier),
+      ),
+    )
+    .limit(1);
+
+  return result[0] ?? null;
 };
 
 const updateProfile = async (address: `0x${string}`, providedEns: string | null = null) => {
