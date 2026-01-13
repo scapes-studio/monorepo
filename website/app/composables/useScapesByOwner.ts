@@ -1,4 +1,4 @@
-import { sql } from "@ponder/client";
+import { desc, eq } from "@ponder/client";
 
 export type ScapeRecord = {
   id: string;
@@ -32,13 +32,19 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
     loadMoreLoading.value = false;
   };
 
-  const parseCount = (result: unknown) => {
-    const rows =
-      (result as { rows?: Array<{ count: number | string }> }).rows ??
-      (result as Array<{ count: number | string }>);
-    const countValue = rows[0]?.count ?? rows[0];
-    return countValue === undefined ? 0 : Number(countValue);
-  };
+  const fetchScapes = async (normalizedOwner: string, startOffset: number) =>
+    client.db
+      .select({
+        id: schema.scape.id,
+        owner: schema.scape.owner,
+        attributes: schema.scape.attributes,
+        rarity: schema.scape.rarity,
+      })
+      .from(schema.scape)
+      .where(eq(schema.scape.owner, normalizedOwner))
+      .orderBy(desc(schema.scape.id))
+      .limit(PAGE_SIZE)
+      .offset(startOffset);
 
   const fetchInitial = async (): Promise<ScapesPayload> => {
     if (!owner.value) {
@@ -47,32 +53,13 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
 
     const normalizedOwner = owner.value.toLowerCase();
     const [countResult, scapesResult] = await Promise.all([
-      client.db.execute(sql`
-        SELECT COUNT(*)::int AS count
-        FROM scape
-        WHERE owner = ${normalizedOwner}
-      `),
-      client.db.execute(sql`
-        SELECT id, owner, attributes, rarity
-        FROM scape
-        WHERE owner = ${normalizedOwner}
-        ORDER BY id DESC
-        LIMIT ${PAGE_SIZE}
-        OFFSET 0
-      `),
+      client.db.$count(schema.scape, eq(schema.scape.owner, normalizedOwner)),
+      fetchScapes(normalizedOwner, 0),
     ]);
 
-    const rows = (scapesResult as { rows?: ScapeRecord[] }).rows ?? (scapesResult as ScapeRecord[]);
-    const mapped = rows.map((row) => ({
-      id: row.id.toString(),
-      owner: row.owner,
-      attributes: row.attributes ?? null,
-      rarity: row.rarity ?? null,
-    }));
-
     return {
-      total: parseCount(countResult),
-      scapes: mapped,
+      total: countResult ?? 0,
+      scapes: scapesResult,
     };
   };
 
@@ -115,26 +102,10 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
 
     try {
       const normalizedOwner = owner.value.toLowerCase();
-      const result = await client.db.execute(sql`
-        SELECT id, owner, attributes, rarity
-        FROM scape
-        WHERE owner = ${normalizedOwner}
-        ORDER BY id DESC
-        LIMIT ${PAGE_SIZE}
-        OFFSET ${offset.value}
-      `);
-
-      const rows = (result as { rows?: ScapeRecord[] }).rows ?? (result as ScapeRecord[]);
-      const mapped = rows.map((row) => ({
-        id: row.id.toString(),
-        owner: row.owner,
-        attributes: row.attributes ?? null,
-        rarity: row.rarity ?? null,
-      }));
-
-      scapes.value.push(...mapped);
-      offset.value += rows.length;
-      if (rows.length < PAGE_SIZE) {
+      const result = await fetchScapes(normalizedOwner, offset.value);
+      scapes.value.push(...result);
+      offset.value += result.length;
+      if (result.length < PAGE_SIZE) {
         hasMore.value = false;
       }
     } catch (err) {
