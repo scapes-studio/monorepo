@@ -28,7 +28,9 @@ const route = useRoute()
     <div class="main-menu__actions">
       <EvmConnect>
         <template #connected="{ address }">
-          <EvmAccount :address="address" />
+          <NuxtLink :to="`/accounts/${address}`">
+            <EvmAccount :address="address" />
+          </NuxtLink>
         </template>
       </EvmConnect>
     </div>
