@@ -73,6 +73,13 @@ const attributes = computed(() => scapeData.value?.attributes ?? null);
 const history = computed(() => data.value?.history ?? []);
 const totalTransfers = computed(() => data.value?.totalTransfers ?? 0);
 const totalSales = computed(() => data.value?.totalSales ?? 0);
+
+const {
+  listing,
+  isPending: listingPending,
+  hasError: listingError,
+  refresh: refreshListing,
+} = useScapeListing(scapeId);
 </script>
 
 <template>
@@ -94,7 +101,10 @@ const totalSales = computed(() => data.value?.totalSales ?? 0);
             <AccountLink :address="owner" class="scape-detail__owner-link" />
           </template>
         </div>
-        <ScapesMarketplaceData :scape-id="scapeId" class="scape-detail__listings" />
+        <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
+          class="scape-detail__listings" />
+        <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
+          @listing-change="refreshListing" />
       </div>
     </header>
 
@@ -152,6 +162,10 @@ const totalSales = computed(() => data.value?.totalSales ?? 0);
 
 .scape-detail__listings {
   margin-top: var(--size-3);
+}
+
+.scape-detail__actions {
+  margin-top: var(--spacer);
 }
 
 @media (max-width: 40rem) {

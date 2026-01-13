@@ -1,39 +1,14 @@
 <script setup lang="ts">
-type ListingSource = "onchain" | "seaport";
-
-type ListingResponse = {
-  data: {
-    price: string;
-    source: ListingSource;
-  } | null;
-};
+import type { ListingData } from "~/composables/useScapeListing";
 
 const props = defineProps<{
-  scapeId: string;
+  listing: ListingData;
+  isPending?: boolean;
+  hasError?: boolean;
 }>();
 
-const runtimeConfig = useRuntimeConfig();
-
-const listingKey = computed(() => `scape-listing-${props.scapeId}`);
-const {
-  data: listing,
-  status,
-  error,
-} = await useAsyncData<ListingResponse>(
-  listingKey,
-  async () => {
-    const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
-    return await $fetch<ListingResponse>(`${baseUrl}/listings/${props.scapeId}`);
-  },
-  {
-    watch: [() => props.scapeId],
-  },
-);
-
-const isPending = computed(() => status.value === "pending");
-const hasError = computed(() => Boolean(error.value));
-const isListed = computed(() => listing.value?.data !== null);
-const source = computed(() => listing.value?.data?.source ?? null);
+const isListed = computed(() => props.listing !== null);
+const source = computed(() => props.listing?.source ?? null);
 
 const formatEth = (wei: string) => {
   const eth = Number(wei) / 1e18;
@@ -41,7 +16,7 @@ const formatEth = (wei: string) => {
 };
 
 const formattedPrice = computed(() => {
-  const price = listing.value?.data?.price;
+  const price = props.listing?.price;
   if (!price) return null;
   return formatEth(price);
 });
