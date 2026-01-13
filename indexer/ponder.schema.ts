@@ -1,5 +1,9 @@
-import { onchainTable } from "ponder";
+import { onchainTable, relations } from "ponder";
 import type { EnsProfileData, Price, VolumeStats } from "./ponder.types";
+
+// ============================================
+// Onchain Tables
+// ============================================
 
 export const account = onchainTable("account", (t) => ({
   address: t.hex().primaryKey(),
@@ -115,4 +119,144 @@ export const ensProfile = onchainTable("ens_profile", (t) => ({
   ens: t.text(),
   data: t.json().$type<EnsProfileData>(),
   updatedAt: t.integer("updated_at").notNull(),
+}));
+
+// ============================================
+// Relations
+// ============================================
+
+export const accountRelations = relations(account, ({ many, one }) => ({
+  scapes: many(scape),
+  twentySevenYearScapes: many(twentySevenYearScape),
+  transfersFrom: many(transferEvent, { relationName: "fromAccount" }),
+  transfersTo: many(transferEvent, { relationName: "toAccount" }),
+  twentySevenYearTransfersFrom: many(twentySevenYearTransferEvent, {
+    relationName: "fromAccount",
+  }),
+  twentySevenYearTransfersTo: many(twentySevenYearTransferEvent, {
+    relationName: "toAccount",
+  }),
+  salesAsSeller: many(sale, { relationName: "sellerAccount" }),
+  salesAsBuyer: many(sale, { relationName: "buyerAccount" }),
+  seaportSalesAsSeller: many(seaportSale, { relationName: "sellerAccount" }),
+  seaportSalesAsBuyer: many(seaportSale, { relationName: "buyerAccount" }),
+  seaportListingsAsMaker: many(seaportListing, { relationName: "makerAccount" }),
+  seaportListingsAsTaker: many(seaportListing, { relationName: "takerAccount" }),
+  ensProfile: one(ensProfile, {
+    fields: [account.address],
+    references: [ensProfile.address],
+  }),
+}));
+
+export const scapeRelations = relations(scape, ({ one, many }) => ({
+  ownerAccount: one(account, {
+    fields: [scape.owner],
+    references: [account.address],
+  }),
+  transfers: many(transferEvent),
+  offer: one(offer, { fields: [scape.id], references: [offer.tokenId] }),
+  sales: many(sale),
+}));
+
+export const transferEventRelations = relations(transferEvent, ({ one }) => ({
+  scapeEntity: one(scape, {
+    fields: [transferEvent.scape],
+    references: [scape.id],
+  }),
+  fromAccount: one(account, {
+    fields: [transferEvent.from],
+    references: [account.address],
+    relationName: "fromAccount",
+  }),
+  toAccount: one(account, {
+    fields: [transferEvent.to],
+    references: [account.address],
+    relationName: "toAccount",
+  }),
+}));
+
+export const twentySevenYearScapeRelations = relations(
+  twentySevenYearScape,
+  ({ one, many }) => ({
+    ownerAccount: one(account, {
+      fields: [twentySevenYearScape.owner],
+      references: [account.address],
+    }),
+    transfers: many(twentySevenYearTransferEvent),
+  }),
+);
+
+export const twentySevenYearTransferEventRelations = relations(
+  twentySevenYearTransferEvent,
+  ({ one }) => ({
+    scapeEntity: one(twentySevenYearScape, {
+      fields: [twentySevenYearTransferEvent.scape],
+      references: [twentySevenYearScape.id],
+    }),
+    fromAccount: one(account, {
+      fields: [twentySevenYearTransferEvent.from],
+      references: [account.address],
+      relationName: "fromAccount",
+    }),
+    toAccount: one(account, {
+      fields: [twentySevenYearTransferEvent.to],
+      references: [account.address],
+      relationName: "toAccount",
+    }),
+  }),
+);
+
+export const offerRelations = relations(offer, ({ one }) => ({
+  scape: one(scape, { fields: [offer.tokenId], references: [scape.id] }),
+  specificBuyerAccount: one(account, {
+    fields: [offer.specificBuyer],
+    references: [account.address],
+  }),
+}));
+
+export const saleRelations = relations(sale, ({ one }) => ({
+  scape: one(scape, { fields: [sale.tokenId], references: [scape.id] }),
+  sellerAccount: one(account, {
+    fields: [sale.seller],
+    references: [account.address],
+    relationName: "sellerAccount",
+  }),
+  buyerAccount: one(account, {
+    fields: [sale.buyer],
+    references: [account.address],
+    relationName: "buyerAccount",
+  }),
+}));
+
+export const seaportSaleRelations = relations(seaportSale, ({ one }) => ({
+  sellerAccount: one(account, {
+    fields: [seaportSale.seller],
+    references: [account.address],
+    relationName: "sellerAccount",
+  }),
+  buyerAccount: one(account, {
+    fields: [seaportSale.buyer],
+    references: [account.address],
+    relationName: "buyerAccount",
+  }),
+}));
+
+export const seaportListingRelations = relations(seaportListing, ({ one }) => ({
+  makerAccount: one(account, {
+    fields: [seaportListing.maker],
+    references: [account.address],
+    relationName: "makerAccount",
+  }),
+  takerAccount: one(account, {
+    fields: [seaportListing.taker],
+    references: [account.address],
+    relationName: "takerAccount",
+  }),
+}));
+
+export const ensProfileRelations = relations(ensProfile, ({ one }) => ({
+  account: one(account, {
+    fields: [ensProfile.address],
+    references: [account.address],
+  }),
 }));
