@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const route = useRoute()
+const { getAccountDisplay } = useENSResolution()
 </script>
 
 <template>
@@ -43,7 +44,7 @@ const route = useRoute()
     <div class="main-menu__actions">
       <EvmConnect>
         <template #connected="{ address }">
-          <NuxtLink :to="`/people/${address}`">
+          <NuxtLink :to="getAccountDisplay(address).url">
             <EvmAccount :address="address" />
           </NuxtLink>
         </template>

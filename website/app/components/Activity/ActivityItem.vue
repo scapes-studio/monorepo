@@ -41,7 +41,6 @@ const typeLabel = (type: string) => {
   }
 };
 
-const accountUrl = (address: string) => `/people/${address}`;
 const scapeUrl = (tokenId: string, collection: string) => {
   if (collection === "twenty-seven-year-scapes") {
     return `/twenty-seven-year-scapes/${tokenId}`;
@@ -70,15 +69,11 @@ const formattedTimestamp = computed(() => formatTimestamp(props.item.timestamp))
         <div class="activity-item__addresses">
           <div>
             <span class="activity-item__label">From</span>
-            <NuxtLink :to="accountUrl(item.from)" class="activity-item__link">
-              {{ shortenHex(item.from) }}
-            </NuxtLink>
+            <AccountLink :address="item.from" class="activity-item__link" />
           </div>
           <div>
             <span class="activity-item__label">To</span>
-            <NuxtLink :to="accountUrl(item.to)" class="activity-item__link">
-              {{ shortenHex(item.to) }}
-            </NuxtLink>
+            <AccountLink :address="item.to" class="activity-item__link" />
           </div>
         </div>
       </template>
@@ -87,15 +82,11 @@ const formattedTimestamp = computed(() => formatTimestamp(props.item.timestamp))
         <div class="activity-item__addresses">
           <div>
             <span class="activity-item__label">Seller</span>
-            <NuxtLink :to="accountUrl(item.seller)" class="activity-item__link">
-              {{ shortenHex(item.seller) }}
-            </NuxtLink>
+            <AccountLink :address="item.seller" class="activity-item__link" />
           </div>
           <div>
             <span class="activity-item__label">Buyer</span>
-            <NuxtLink :to="accountUrl(item.buyer)" class="activity-item__link">
-              {{ shortenHex(item.buyer) }}
-            </NuxtLink>
+            <AccountLink :address="item.buyer" class="activity-item__link" />
           </div>
         </div>
         <span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>
