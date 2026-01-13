@@ -15,7 +15,7 @@
     "@1001-digital/layers.base": "latest",
     "@1001-digital/layers.evm": "latest",
     "@scapes-studio/indexer": "workspace:^",
-    "@ponder/client": "^0.12.0",
+    "@ponder/client": "^0.16.1",
     "nuxt": "^4.2.2",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
