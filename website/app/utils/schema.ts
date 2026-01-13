@@ -1,1 +1,1 @@
-export { combinedSchema as schema } from "@scapes-studio/indexer/src/combined-schema";
+export { combinedSchema as schema } from "@scapes-studio/indexer/combined.schema";
