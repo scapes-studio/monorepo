@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gt, isNull } from "@ponder/client";
+import { and, asc, desc, eq, gt, isNull, sql } from "@ponder/client";
 import type { ScapeRecord } from "~/composables/useScapesByOwner";
 
 export type ListingSource = "onchain" | "seaport";
@@ -83,7 +83,7 @@ export const useListedScapes = (
         price: schema.seaportListing.price,
       })
       .from(schema.seaportListing)
-      .innerJoin(schema.scape, eq(schema.seaportListing.tokenId, schema.scape.id))
+      .innerJoin(schema.scape, sql`${schema.seaportListing.tokenId} = ${schema.scape.id}`)
       .where(activeSeaportConditions(now))
       .orderBy(asc(schema.seaportListing.timestamp))
       .limit(limit)

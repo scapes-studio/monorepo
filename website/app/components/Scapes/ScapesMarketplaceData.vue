@@ -65,7 +65,6 @@ const {
   seaportListingKey,
   async () => {
     const now = Math.floor(Date.now() / 1000);
-    const tokenIdValue = BigInt(props.scapeId);
 
     const result = await client.db
       .select({ price: schema.seaportListing.price })
@@ -73,7 +72,7 @@ const {
       .where(
         and(
           eq(schema.seaportListing.slug, "scapes"),
-          eq(schema.seaportListing.tokenId, tokenIdValue),
+          eq(schema.seaportListing.tokenId, props.scapeId),
           lte(schema.seaportListing.startDate, now),
           gt(schema.seaportListing.expirationDate, now),
         ),

@@ -1,11 +1,6 @@
-import { setDatabaseSchema } from "@ponder/client";
 import { relations } from "drizzle-orm";
 import * as ponderSchema from "./ponder.schema";
 import * as offchainSchema from "./offchain.schema";
-
-// Set Ponder schema location for views pattern
-const viewsSchema = process.env.PONDER_VIEWS_SCHEMA || "public";
-setDatabaseSchema(ponderSchema, viewsSchema);
 
 // Cross-schema relations for seaportSale
 export const seaportSaleRelations = relations(
