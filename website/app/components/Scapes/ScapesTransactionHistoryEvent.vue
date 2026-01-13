@@ -44,7 +44,7 @@ const shortenHex = (value: string, start = 6, end = 4) => {
   return `${value.slice(0, start)}…${value.slice(-end)}`;
 };
 
-const addressUrl = (address: string) => `https://etherscan.io/address/${address}`;
+const accountUrl = (address: string) => `/accounts/${address}`;
 const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
 
 const salePrice = (entry: ScapeHistoryEntry) => {
@@ -91,15 +91,15 @@ const price = computed(() => salePrice(props.entry));
     <div v-if="!migration" class="scape-detail__history-addresses">
       <div v-if="!mint">
         <span class="scape-detail__history-label">From</span>
-        <a :href="addressUrl(entry.from)" class="scape-detail__history-link" target="_blank" rel="noopener noreferrer">
+        <NuxtLink :to="accountUrl(entry.from)" class="scape-detail__history-link">
           {{ shortenHex(entry.from) }}
-        </a>
+        </NuxtLink>
       </div>
       <div>
         <span class="scape-detail__history-label">To</span>
-        <a :href="addressUrl(entry.to)" class="scape-detail__history-link" target="_blank" rel="noopener noreferrer">
+        <NuxtLink :to="accountUrl(entry.to)" class="scape-detail__history-link">
           {{ shortenHex(entry.to) }}
-        </a>
+        </NuxtLink>
       </div>
     </div>
 
