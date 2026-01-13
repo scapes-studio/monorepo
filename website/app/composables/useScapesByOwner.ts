@@ -1,8 +1,8 @@
 import { desc, eq } from "@ponder/client";
 
 export type ScapeRecord = {
-  id: string;
-  owner: string;
+  id: bigint;
+  owner: `0x${string}`;
   attributes: Record<string, unknown> | null;
   rarity: number | null;
 };
@@ -32,7 +32,7 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
     loadMoreLoading.value = false;
   };
 
-  const fetchScapes = async (normalizedOwner: string, startOffset: number) =>
+  const fetchScapes = async (normalizedOwner: `0x${string}`, startOffset: number) =>
     client.db
       .select({
         id: schema.scape.id,
@@ -51,7 +51,7 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
       return { total: 0, scapes: [] };
     }
 
-    const normalizedOwner = owner.value.toLowerCase();
+    const normalizedOwner = owner.value.toLowerCase() as `0x${string}`;
     const [countResult, scapesResult] = await Promise.all([
       client.db.$count(schema.scape, eq(schema.scape.owner, normalizedOwner)),
       fetchScapes(normalizedOwner, 0),
@@ -59,7 +59,7 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
 
     return {
       total: countResult ?? 0,
-      scapes: scapesResult,
+      scapes: scapesResult as ScapeRecord[],
     };
   };
 
