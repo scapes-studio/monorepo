@@ -1,11 +1,41 @@
 <script setup lang="ts">
 import type { ActivityFilters } from "~/types/activity";
 
-const filters = ref<ActivityFilters>({
-  transfers: true,
-  sales: true,
-  listings: true,
+const route = useRoute();
+const router = useRouter();
+
+const parseFilterParam = (value: unknown): boolean => {
+  if (value === "false" || value === "0") return false;
+  return true;
+};
+
+const getInitialFilters = (): ActivityFilters => ({
+  transfers: parseFilterParam(route.query.transfers),
+  sales: parseFilterParam(route.query.sales),
+  listings: parseFilterParam(route.query.listings),
 });
+
+const filters = ref<ActivityFilters>(getInitialFilters());
+
+watch(
+  filters,
+  (newFilters) => {
+    const allDisabled = !newFilters.transfers && !newFilters.sales && !newFilters.listings;
+    if (allDisabled) {
+      nextTick(() => {
+        filters.value = { transfers: true, sales: true, listings: true };
+      });
+      return;
+    }
+
+    const query: Record<string, string> = {};
+    if (!newFilters.transfers) query.transfers = "false";
+    if (!newFilters.sales) query.sales = "false";
+    if (!newFilters.listings) query.listings = "false";
+    router.replace({ query });
+  },
+  { deep: true }
+);
 
 const { activity, total, loading, error, hasMore, loadMore } = useActivity(filters);
 </script>
