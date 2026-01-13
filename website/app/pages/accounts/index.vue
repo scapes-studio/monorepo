@@ -3,6 +3,10 @@
 const client = usePonderClient();
 const { public: { scapeCollectionAddress } } = useRuntimeConfig();
 
+definePageMeta({
+  path: "/people",
+});
+
 const PAGE_SIZE = 100;
 const count = sql<number>`count(*)::int`;
 const owners = ref<Array<{ owner: string; count: number }>>([]);
@@ -93,7 +97,7 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
       <ol class="accounts-page__list">
         <li v-for="(entry, index) in owners" :key="entry.owner" class="accounts-page__row">
           <span class="accounts-page__rank">{{ index + 1 }}</span>
-          <NuxtLink class="accounts-page__owner" :to="`/accounts/${entry.owner}`">
+          <NuxtLink class="accounts-page__owner" :to="`/people/${entry.owner}`">
             {{ entry.owner }}
           </NuxtLink>
           <span class="accounts-page__count">{{ entry.count }} scapes</span>

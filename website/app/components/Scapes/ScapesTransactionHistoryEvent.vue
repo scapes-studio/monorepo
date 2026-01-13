@@ -44,7 +44,7 @@ const shortenHex = (value: string, start = 6, end = 4) => {
   return `${value.slice(0, start)}…${value.slice(-end)}`;
 };
 
-const accountUrl = (address: string) => `/accounts/${address}`;
+const accountUrl = (address: string) => `/people/${address}`;
 const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
 
 const salePrice = (entry: ScapeHistoryEntry) => {

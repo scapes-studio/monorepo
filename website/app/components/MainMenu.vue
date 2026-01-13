@@ -18,7 +18,7 @@ const route = useRoute()
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/accounts" :class="{ active: route.path.startsWith('/accounts') }">
+          <NuxtLink to="/people" :class="{ active: route.path.startsWith('/people') }">
             Owners
           </NuxtLink>
         </li>
@@ -28,7 +28,7 @@ const route = useRoute()
     <div class="main-menu__actions">
       <EvmConnect>
         <template #connected="{ address }">
-          <NuxtLink :to="`/accounts/${address}`">
+          <NuxtLink :to="`/people/${address}`">
             <EvmAccount :address="address" />
           </NuxtLink>
         </template>

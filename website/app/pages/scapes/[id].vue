@@ -91,7 +91,7 @@ const totalSales = computed(() => data.value?.totalSales ?? 0);
           <span v-if="scapePending">Loading owner…</span>
           <template v-else-if="owner">
             Owned by
-            <NuxtLink :to="`/accounts/${owner}`" class="scape-detail__owner-link">
+            <NuxtLink :to="`/people/${owner}`" class="scape-detail__owner-link">
               {{ owner }}
             </NuxtLink>
           </template>
