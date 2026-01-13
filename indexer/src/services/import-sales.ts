@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
-import { getOffchainDb } from "./database";
-import { seaportSale, syncState, type VolumeStats } from "../../offchain.schema";
+import { getViewsDb, withTriggersDisabled } from "./database";
+import { seaportSale, syncState, type VolumeStats } from "../../ponder.schema";
 import { openseaService } from "./opensea";
 
 // Collection configurations
@@ -50,7 +50,7 @@ export class ImportSalesService {
     onProgress?: (count: number) => void;
   }): Promise<number> {
     const config = COLLECTIONS[slug];
-    const db = getOffchainDb();
+    const db = getViewsDb();
 
     const { sales, continuation: nextContinuation } = await openseaService.getSales({
       slug: config.slug,
@@ -64,6 +64,8 @@ export class ImportSalesService {
     if (sales.length > 0) {
       // Transform sales for database insertion
       const values = sales.map((sale) => ({
+        // Composite ID: slug-tokenId-txHash-logIndex
+        id: `${config.slug}-${sale.tokenId}-${sale.txHash}-${sale.logIndex ?? 0}`,
         slug: config.slug,
         contract: sale.contract.toLowerCase(),
         tokenId: sale.tokenId,
@@ -77,11 +79,13 @@ export class ImportSalesService {
         price: sale.price,
       }));
 
-      // Insert with conflict handling
-      await db
-        .insert(seaportSale)
-        .values(values)
-        .onConflictDoNothing();
+      // Insert with conflict handling (triggers disabled to avoid live_query_tables issue)
+      await withTriggersDisabled(async (db) => {
+        await db
+          .insert(seaportSale)
+          .values(values)
+          .onConflictDoNothing();
+      });
 
       importedCount = sales.length;
 
@@ -118,7 +122,7 @@ export class ImportSalesService {
   ): Promise<number> {
     const { force = false, onProgress } = options;
     const config = COLLECTIONS[slug];
-    const db = getOffchainDb();
+    const db = getViewsDb();
 
     // Get last synced timestamp
     let startTimestamp: number | undefined;
@@ -160,26 +164,28 @@ export class ImportSalesService {
     });
 
     // Update sync state
-    const now = new Date();
+    const nowTimestamp = Math.floor(Date.now() / 1000);
     const stats = await this.calculateStats(slug);
 
-    await db
-      .insert(syncState)
-      .values({
-        slug,
-        contract: config.contract,
-        lastSyncedTimestamp: Math.floor(now.getTime() / 1000),
-        stats,
-        updatedAt: now,
-      })
-      .onConflictDoUpdate({
-        target: syncState.slug,
-        set: {
-          lastSyncedTimestamp: Math.floor(now.getTime() / 1000),
+    await withTriggersDisabled(async (db) => {
+      await db
+        .insert(syncState)
+        .values({
+          slug,
+          contract: config.contract,
+          lastSyncedTimestamp: nowTimestamp,
           stats,
-          updatedAt: now,
-        },
-      });
+          updatedAt: nowTimestamp,
+        })
+        .onConflictDoUpdate({
+          target: syncState.slug,
+          set: {
+            lastSyncedTimestamp: nowTimestamp,
+            stats,
+            updatedAt: nowTimestamp,
+          },
+        });
+    });
 
     return importedCount;
   }
@@ -216,7 +222,7 @@ export class ImportSalesService {
    * Calculate volume stats for a collection
    */
   async calculateStats(slug: CollectionSlug): Promise<VolumeStats> {
-    const db = getOffchainDb();
+    const db = getViewsDb();
 
     const now = Math.floor(Date.now() / 1000);
     const sixMonthsAgo = now - 180 * 24 * 60 * 60;
@@ -252,7 +258,7 @@ export class ImportSalesService {
         ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${thirtyDaysAgo} THEN (price->>'usd')::numeric ELSE 0 END), 0)::numeric, 2)::text as month_usd_volume,
         ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${oneDayAgo} THEN (price->>'eth')::numeric ELSE 0 END), 0)::numeric, 4)::text as day_eth_volume,
         ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${oneDayAgo} THEN (price->>'usd')::numeric ELSE 0 END), 0)::numeric, 2)::text as day_usd_volume
-      FROM offchain.seaport_sale
+      FROM ${seaportSale}
       WHERE slug = ${slug}
     `);
 
@@ -290,7 +296,7 @@ export class ImportSalesService {
    * Get combined stats for all collections
    */
   async getCombinedStats(): Promise<VolumeStats> {
-    const db = getOffchainDb();
+    const db = getViewsDb();
 
     const now = Math.floor(Date.now() / 1000);
     const sixMonthsAgo = now - 180 * 24 * 60 * 60;
@@ -326,7 +332,7 @@ export class ImportSalesService {
         ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${thirtyDaysAgo} THEN (price->>'usd')::numeric ELSE 0 END), 0)::numeric, 2)::text as month_usd_volume,
         ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${oneDayAgo} THEN (price->>'eth')::numeric ELSE 0 END), 0)::numeric, 4)::text as day_eth_volume,
         ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${oneDayAgo} THEN (price->>'usd')::numeric ELSE 0 END), 0)::numeric, 2)::text as day_usd_volume
-      FROM offchain.seaport_sale
+      FROM ${seaportSale}
     `);
 
     const stats = result.rows[0] as StatsResult;

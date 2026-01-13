@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
-import { getOffchainDb } from "./database";
-import { seaportListing } from "../../offchain.schema";
+import { getViewsDb, withTriggersDisabled } from "./database";
+import { seaportListing } from "../../ponder.schema";
 import { openseaService, type Listing } from "./opensea";
 
 // Listing collections configuration
@@ -77,11 +77,11 @@ export class ImportListingsService {
 
     console.log(`Fetched ${allListings.length} active listings`);
 
-    const db = getOffchainDb();
-
     if (allListings.length === 0) {
       // Clear all listings if none are active
-      await db.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
+      await withTriggersDisabled(async (db) => {
+        await db.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
+      });
       return { imported: 0 };
     }
 
@@ -101,16 +101,16 @@ export class ImportListingsService {
       price: listing.price,
     }));
 
-    // Full replacement within transaction
-    await db.transaction(async (tx) => {
+    // Full replacement with triggers disabled
+    await withTriggersDisabled(async (db) => {
       // Delete existing listings for this slug
-      await tx.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
+      await db.delete(seaportListing).where(eq(seaportListing.slug, config.slug));
 
       // Insert new listings in batches (Postgres has param limits)
       const BATCH_SIZE = 500;
       for (let i = 0; i < values.length; i += BATCH_SIZE) {
         const batch = values.slice(i, i + BATCH_SIZE);
-        await tx.insert(seaportListing).values(batch);
+        await db.insert(seaportListing).values(batch);
       }
     });
 
@@ -124,7 +124,7 @@ export class ImportListingsService {
     total: number;
     priceRange: { minEth: number; maxEth: number; avgEth: number };
   }> {
-    const db = getOffchainDb();
+    const db = getViewsDb();
 
     const result = await db.execute(sql`
       SELECT
@@ -132,7 +132,7 @@ export class ImportListingsService {
         MIN((price->>'eth')::numeric) as min_eth,
         MAX((price->>'eth')::numeric) as max_eth,
         AVG((price->>'eth')::numeric) as avg_eth
-      FROM offchain.seaport_listing
+      FROM ${seaportListing}
       ${slug ? sql`WHERE slug = ${slug}` : sql``}
     `);
 
@@ -157,16 +157,17 @@ export class ImportListingsService {
    * Delete expired listings (cleanup utility)
    */
   async deleteExpiredListings(): Promise<number> {
-    const db = getOffchainDb();
     const now = Math.floor(Date.now() / 1000);
 
-    const result = await db.execute(sql`
-      DELETE FROM offchain.seaport_listing
-      WHERE expiration_date <= ${now}
-      RETURNING id
-    `);
+    return await withTriggersDisabled(async (db) => {
+      const result = await db.execute(sql`
+        DELETE FROM ${seaportListing}
+        WHERE expiration_date <= ${now}
+        RETURNING order_hash
+      `);
 
-    return result.rowCount || 0;
+      return result.rowCount || 0;
+    });
   }
 }
 

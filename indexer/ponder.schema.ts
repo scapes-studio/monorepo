@@ -1,5 +1,47 @@
 import { onchainTable } from "ponder";
 
+// ============================================
+// Type Definitions
+// ============================================
+
+// Price structure stored as JSON
+export type Price = {
+  wei: string;
+  eth: number;
+  usd: number;
+  currency?: {
+    symbol: string;
+    amount: string;
+  };
+};
+
+// Volume stats structure
+export type VolumeStats = {
+  volume: {
+    total: { eth: string; usd: string };
+    sixMonth: { eth: string; usd: string };
+    month: { eth: string; usd: string };
+    day: { eth: string; usd: string };
+  };
+  count: {
+    total: number;
+    sixMonth: number;
+    month: number;
+    day: number;
+  };
+};
+
+export type EnsProfileData = {
+  avatar: string;
+  description: string;
+  links: {
+    url: string;
+    email: string;
+    twitter: string;
+    github: string;
+  };
+};
+
 export const account = onchainTable("account", (t) => ({
   address: t.hex().primaryKey(),
   balance: t.bigint().notNull(),
@@ -59,4 +101,59 @@ export const sale = onchainTable("sale", (t) => ({
   price: t.bigint().notNull(),
   timestamp: t.integer().notNull(),
   txHash: t.hex().notNull(),
+}));
+
+// ============================================
+// Offchain Tables (written by external services via views)
+// ============================================
+
+// Individual sales records from OpenSea/Seaport
+// Primary key is a composite of fields that uniquely identify a sale
+export const seaportSale = onchainTable("seaport_sale", (t) => ({
+  id: t.text().primaryKey(), // Composite: `${slug}-${tokenId}-${txHash}-${logIndex}`
+  slug: t.text().notNull(),
+  contract: t.text().notNull(),
+  tokenId: t.text("token_id").notNull(),
+  txHash: t.text("tx_hash").notNull(),
+  orderHash: t.text("order_hash"),
+  block: t.bigint(),
+  timestamp: t.integer().notNull(),
+  logIndex: t.integer("log_index"),
+  seller: t.text().notNull(),
+  buyer: t.text().notNull(),
+  price: t.json().$type<Price>().notNull(),
+}));
+
+// Individual listing records from OpenSea/Seaport
+// orderHash uniquely identifies a listing
+export const seaportListing = onchainTable("seaport_listing", (t) => ({
+  orderHash: t.text("order_hash").primaryKey(),
+  slug: t.text().notNull(),
+  contract: t.text().notNull(),
+  tokenId: t.text("token_id").notNull(),
+  protocolAddress: t.text("protocol_address"),
+  timestamp: t.integer().notNull(),
+  startDate: t.integer("start_date").notNull(),
+  expirationDate: t.integer("expiration_date").notNull(),
+  maker: t.text().notNull(),
+  taker: t.text(),
+  isPrivateListing: t.boolean("is_private_listing").notNull().default(false),
+  price: t.json().$type<Price>().notNull(),
+}));
+
+// Sync state for tracking last synced timestamp per collection
+export const syncState = onchainTable("sync_state", (t) => ({
+  slug: t.text().primaryKey(),
+  contract: t.text().notNull(),
+  lastSyncedTimestamp: t.integer("last_synced_timestamp"),
+  stats: t.json().$type<VolumeStats>(),
+  updatedAt: t.integer("updated_at").notNull(),
+}));
+
+// ENS profile cache
+export const ensProfile = onchainTable("ens_profile", (t) => ({
+  address: t.text().primaryKey(),
+  ens: t.text(),
+  data: t.json().$type<EnsProfileData>(),
+  updatedAt: t.integer("updated_at").notNull(),
 }));

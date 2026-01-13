@@ -3,12 +3,12 @@ import { type Context } from "hono";
 import { publicClients } from "ponder:api";
 import { isAddress } from "viem";
 import { normalize } from "viem/ens";
-import { ensProfile } from "../../offchain.schema";
-import { getOffchainDb } from "../services/database";
+import { ensProfile } from "../../ponder.schema";
+import { getViewsDb, withTriggersDisabled } from "../services/database";
 
 const ONE_MONTH_MS = 30 * 24 * 60 * 60 * 1000;
 const client = publicClients["ethereum"]!;
-const db = getOffchainDb();
+const db = getViewsDb();
 
 type ProfileResult = {
   address: `0x${string}` | null;
@@ -100,10 +100,9 @@ async function resolveProfile(identifier: string): Promise<ProfileResult> {
   }
 }
 
-function isFresh(timestamp: Date | string | null): boolean {
+function isFresh(timestamp: number | null): boolean {
   if (!timestamp) return false;
-  const date = timestamp instanceof Date ? timestamp : new Date(timestamp);
-  return Date.now() - date.getTime() < ONE_MONTH_MS;
+  return Date.now() - timestamp * 1000 < ONE_MONTH_MS;
 }
 
 const fetchProfile = async (identifier: string) => {
@@ -158,17 +157,19 @@ const updateProfile = async (address: `0x${string}`, providedEns: string | null 
   const insertData = {
     ens,
     data,
-    updatedAt: new Date(),
+    updatedAt: Math.floor(Date.now() / 1000),
   };
 
-  await db
-    .insert(ensProfile)
-    .values({
-      address: normalizedAddress,
-      ...insertData,
-    })
-    .onConflictDoUpdate({
-      target: ensProfile.address,
-      set: insertData,
-    });
+  await withTriggersDisabled(async (db) => {
+    await db
+      .insert(ensProfile)
+      .values({
+        address: normalizedAddress,
+        ...insertData,
+      })
+      .onConflictDoUpdate({
+        target: ensProfile.address,
+        set: insertData,
+      });
+  });
 };

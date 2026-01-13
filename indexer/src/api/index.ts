@@ -3,13 +3,14 @@ import schema from "ponder:schema";
 import { Hono } from "hono";
 import { client, graphql } from "ponder";
 import { count, desc, eq, sql } from "drizzle-orm";
-import { combinedSchema } from "../../combined.schema";
-import { getCombinedDb } from "../services/database";
+import * as ponderSchema from "../../ponder.schema";
+import { getViewsDb } from "../services/database";
 import { forceUpdateProfile, getProfile } from "./profiles";
-import { seaportSale } from "../../offchain.schema";
+
+const { seaportSale } = ponderSchema;
 
 const app = new Hono();
-const combinedDb = getCombinedDb();
+const viewsDb = getViewsDb();
 
 type CollectionKey = "scapes" | "twenty-seven-year-scapes";
 
@@ -62,9 +63,9 @@ function buildSeaportJoinCondition(
 }
 
 // Ponder built-in routes
-app.use("/sql/*", client({ db: combinedDb, schema: combinedSchema }));
-app.use("/", graphql({ db: combinedDb, schema: combinedSchema }));
-app.use("/graphql", graphql({ db: combinedDb, schema: combinedSchema }));
+app.use("/sql/*", client({ db: viewsDb, schema: ponderSchema }));
+app.use("/", graphql({ db: viewsDb, schema: ponderSchema }));
+app.use("/graphql", graphql({ db: viewsDb, schema: ponderSchema }));
 
 app.get("/profiles/:id", getProfile);
 app.post("/profiles/:id", forceUpdateProfile);
@@ -178,7 +179,7 @@ app.get("/seaport/stats/volume", async (c) => {
       ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${thirtyDaysAgo} THEN (price->>'usd')::numeric ELSE 0 END), 0)::numeric, 2)::text as month_usd,
       ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${oneDayAgo} THEN (price->>'eth')::numeric ELSE 0 END), 0)::numeric, 4)::text as day_eth,
       ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${oneDayAgo} THEN (price->>'usd')::numeric ELSE 0 END), 0)::numeric, 2)::text as day_usd
-    FROM offchain.seaport_sale
+    FROM ${seaportSale}
   `);
 
   const stats = (result as any).rows[0] as any;
@@ -234,7 +235,7 @@ app.get("/seaport/stats/volume/:slug", async (c) => {
       ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${thirtyDaysAgo} THEN (price->>'usd')::numeric ELSE 0 END), 0)::numeric, 2)::text as month_usd,
       ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${oneDayAgo} THEN (price->>'eth')::numeric ELSE 0 END), 0)::numeric, 4)::text as day_eth,
       ROUND(COALESCE(SUM(CASE WHEN timestamp >= ${oneDayAgo} THEN (price->>'usd')::numeric ELSE 0 END), 0)::numeric, 2)::text as day_usd
-    FROM offchain.seaport_sale
+    FROM ${seaportSale}
     WHERE slug = ${slug}
   `);
 

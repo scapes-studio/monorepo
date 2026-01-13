@@ -98,7 +98,7 @@ const {
 
     const result = await client.db.execute(sql`
       SELECT 1 AS listed
-      FROM offchain.seaport_listing
+      FROM seaport_listing
       WHERE slug = 'scapes'
         AND token_id = '${scapeId.value}'
         AND start_date <= ${now}
