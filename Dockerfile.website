@@ -9,7 +9,7 @@ COPY website/package.json ./website/
 COPY indexer/package.json ./indexer/
 COPY abis/package.json ./abis/
 
-RUN pnpm install --frozen-lockfile --filter @scapes-studio/website
+RUN pnpm install --frozen-lockfile --filter @scapes-studio/website...
 
 COPY website ./website
 COPY indexer ./indexer
