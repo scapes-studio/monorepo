@@ -4,19 +4,21 @@ import { asc, desc, ne, sql } from "@ponder/client";
 const client = usePonderClient();
 const { public: { scapeCollectionAddress } } = useRuntimeConfig();
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 100;
 const count = sql<number>`count(*)::int`;
 const owners = ref<Array<{ owner: string; count: number }>>([]);
 const offset = ref(0);
 const isLoadingMore = ref(false);
 const hasMore = ref(true);
 
+const excludeScapeCollection = ne(schema.scape.owner, scapeCollectionAddress)
+
 const fetchOwners = async (startOffset: number) => client.db.select({
   owner: schema.scape.owner,
   count,
 })
   .from(schema.scape)
-  .where(ne(schema.scape.owner, scapeCollectionAddress))
+  .where(excludeScapeCollection)
   .groupBy(schema.scape.owner)
   .orderBy(
     desc(count),
@@ -25,13 +27,30 @@ const fetchOwners = async (startOffset: number) => client.db.select({
   .limit(PAGE_SIZE)
   .offset(startOffset);
 
-const { data, pending, error } = await useAsyncData("scape-owners-leaderboard", () => fetchOwners(0));
+const { data: ownersData, pending, error } = await useAsyncData("scape-owners-leaderboard", () => fetchOwners(0));
+const { data: totalsData } = await useAsyncData("scape-owners-totals", async () => {
+  const [ownersCount, scapesCount] = await Promise.all([
+    client.db
+      .select({ total: sql<number>`count(distinct ${schema.scape.owner})::int` })
+      .from(schema.scape)
+      .where(excludeScapeCollection),
+    client.db
+      .select({ total: sql<number>`count(*)::int` })
+      .from(schema.scape)
+      .where(excludeScapeCollection),
+  ]);
+
+  return {
+    owners: ownersCount[0]?.total ?? 0,
+    scapes: scapesCount[0]?.total ?? 0,
+  };
+});
 
 watchEffect(() => {
-  if (data.value) {
-    owners.value = data.value;
-    offset.value = data.value.length;
-    hasMore.value = data.value.length === PAGE_SIZE;
+  if (ownersData.value) {
+    owners.value = ownersData.value;
+    offset.value = ownersData.value.length;
+    hasMore.value = ownersData.value.length === PAGE_SIZE;
   }
 });
 
@@ -48,8 +67,8 @@ const loadMore = async () => {
   }
 };
 
-const totalOwners = computed(() => owners.value.length);
-const totalScapes = computed(() => owners.value.reduce((sum, entry) => sum + entry.count, 0));
+const totalOwners = computed(() => totalsData.value?.owners ?? 0);
+const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
 </script>
 
 <template>
