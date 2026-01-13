@@ -105,15 +105,19 @@ function isFresh(timestamp: number | null): boolean {
 }
 
 const fetchProfile = async (identifier: string) => {
-  const normalizedIdentifier = isAddress(identifier) ? identifier.toLowerCase() : identifier;
+  const normalizedIdentifier = isAddress(identifier)
+    ? identifier.toLowerCase() as `0x${string}`
+    : identifier;
 
   const result = await db
     .select()
     .from(ensProfile)
     .where(
       or(
-        eq(ensProfile.address, normalizedIdentifier),
-        eq(ensProfile.ens, normalizedIdentifier),
+        isAddress(identifier)
+          ? eq(ensProfile.address, normalizedIdentifier as `0x${string}`)
+          : undefined,
+        eq(ensProfile.ens, identifier.toLowerCase()),
       ),
     )
     .limit(1);

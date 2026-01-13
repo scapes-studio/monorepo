@@ -71,31 +71,31 @@ export const sale = onchainTable("sale", (t) => ({
 export const seaportSale = onchainTable("seaport_sale", (t) => ({
   id: t.text().primaryKey(), // Composite: `${slug}-${tokenId}-${txHash}-${logIndex}`
   slug: t.text().notNull(),
-  contract: t.text().notNull(),
-  tokenId: t.text("token_id").notNull(),
-  txHash: t.text("tx_hash").notNull(),
-  orderHash: t.text("order_hash"),
+  contract: t.hex().notNull(),
+  tokenId: t.bigint("token_id").notNull(),
+  txHash: t.hex("tx_hash").notNull(),
+  orderHash: t.hex("order_hash"),
   block: t.bigint(),
   timestamp: t.integer().notNull(),
   logIndex: t.integer("log_index"),
-  seller: t.text().notNull(),
-  buyer: t.text().notNull(),
+  seller: t.hex().notNull(),
+  buyer: t.hex().notNull(),
   price: t.json().$type<Price>().notNull(),
 }));
 
 // Individual listing records from OpenSea/Seaport
 // orderHash uniquely identifies a listing
 export const seaportListing = onchainTable("seaport_listing", (t) => ({
-  orderHash: t.text("order_hash").primaryKey(),
+  orderHash: t.hex("order_hash").primaryKey(),
   slug: t.text().notNull(),
-  contract: t.text().notNull(),
-  tokenId: t.text("token_id").notNull(),
-  protocolAddress: t.text("protocol_address"),
+  contract: t.hex().notNull(),
+  tokenId: t.bigint("token_id").notNull(),
+  protocolAddress: t.hex("protocol_address"),
   timestamp: t.integer().notNull(),
   startDate: t.integer("start_date").notNull(),
   expirationDate: t.integer("expiration_date").notNull(),
-  maker: t.text().notNull(),
-  taker: t.text(),
+  maker: t.hex().notNull(),
+  taker: t.hex(),
   isPrivateListing: t.boolean("is_private_listing").notNull().default(false),
   price: t.json().$type<Price>().notNull(),
 }));
@@ -103,7 +103,7 @@ export const seaportListing = onchainTable("seaport_listing", (t) => ({
 // Sync state for tracking last synced timestamp per collection
 export const syncState = onchainTable("sync_state", (t) => ({
   slug: t.text().primaryKey(),
-  contract: t.text().notNull(),
+  contract: t.hex().notNull(),
   lastSyncedTimestamp: t.integer("last_synced_timestamp"),
   stats: t.json().$type<VolumeStats>(),
   updatedAt: t.integer("updated_at").notNull(),
@@ -111,7 +111,7 @@ export const syncState = onchainTable("sync_state", (t) => ({
 
 // ENS profile cache
 export const ensProfile = onchainTable("ens_profile", (t) => ({
-  address: t.text().primaryKey(),
+  address: t.hex().primaryKey(),
   ens: t.text(),
   data: t.json().$type<EnsProfileData>(),
   updatedAt: t.integer("updated_at").notNull(),
