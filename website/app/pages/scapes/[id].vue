@@ -37,8 +37,24 @@ type ScapeHistoryResponse = {
   totalSales: number;
 };
 
-type ListingStatus = {
+type ListingPrice = {
+  wei: string;
+  eth: number;
+  usd: number;
+  currency?: {
+    symbol: string;
+    amount: string;
+  };
+};
+
+type InternalOfferData = {
   listed: boolean;
+  price: bigint | null;
+};
+
+type SeaportListingData = {
+  listed: boolean;
+  price: ListingPrice | null;
 };
 
 const scapeId = computed(() => route.params.id as string | undefined);
@@ -53,22 +69,27 @@ const {
   data: internalOffer,
   pending: internalOfferPending,
   error: internalOfferError,
-} = await useAsyncData<ListingStatus>(
+} = await useAsyncData<InternalOfferData>(
   "scape-internal-offer",
   async () => {
     if (!scapeId.value) {
-      return { listed: false };
+      return { listed: false, price: null };
     }
 
     const tokenIdValue = BigInt(scapeId.value);
 
     const result = await client.db
-      .select({ listed: sql<number>`1` })
+      .select({ price: schema.offer.price })
       .from(schema.offer)
       .where(and(eq(schema.offer.tokenId, tokenIdValue), eq(schema.offer.isActive, true)))
       .limit(1);
 
-    return { listed: result.length > 0 };
+    const row = result[0];
+    if (!row) {
+      return { listed: false, price: null };
+    }
+
+    return { listed: true, price: row.price };
   },
   { watch: [scapeId] },
 );
@@ -77,17 +98,17 @@ const {
   data: seaportListing,
   pending: seaportListingPending,
   error: seaportListingError,
-} = await useAsyncData<ListingStatus>(
+} = await useAsyncData<SeaportListingData>(
   "scape-seaport-listing",
   async () => {
     if (!scapeId.value) {
-      return { listed: false };
+      return { listed: false, price: null };
     }
 
     const now = Math.floor(Date.now() / 1000);
 
     const result = await client.db
-      .select({ listed: sql<number>`1` })
+      .select({ price: schema.seaportListing.price })
       .from(schema.seaportListing)
       .where(
         and(
@@ -99,7 +120,12 @@ const {
       )
       .limit(1);
 
-    return { listed: result.length > 0 };
+    const row = result[0];
+    if (!row) {
+      return { listed: false, price: null };
+    }
+
+    return { listed: true, price: row.price };
   },
   { watch: [scapeId] },
 );
@@ -119,6 +145,23 @@ const listingsError = computed(
 const isNotListed = computed(
   () => !listingsPending.value && !listingsError.value && !isInternallyListed.value && !isSeaportListed.value,
 );
+
+const formatEth = (wei: bigint) => {
+  const eth = Number(wei) / 1e18;
+  return eth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+};
+
+const internalOfferPrice = computed(() => {
+  const price = internalOffer.value?.price;
+  if (!price) return null;
+  return formatEth(price);
+});
+
+const seaportListingPrice = computed(() => {
+  const price = seaportListing.value?.price;
+  if (!price) return null;
+  return price.eth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+});
 </script>
 
 <template>
@@ -138,10 +181,10 @@ const isNotListed = computed(
           <span v-else-if="listingsError">Listing status unavailable</span>
           <template v-else>
             <span v-if="isInternallyListed" class="scape-detail__badge">
-              Listed on internal marketplace
+              Internal marketplace: {{ internalOfferPrice }} ETH
             </span>
             <span v-if="isSeaportListed" class="scape-detail__badge scape-detail__badge--seaport">
-              Listed on Seaport
+              Seaport: {{ seaportListingPrice }} ETH
             </span>
             <span v-if="isNotListed" class="scape-detail__badge scape-detail__badge--muted">
               Not listed
