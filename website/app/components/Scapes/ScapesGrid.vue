@@ -6,7 +6,7 @@ defineProps<{ scapes: ScapeRecord[] }>();
 
 <template>
   <div class="scapes-grid">
-    <ScapesGridItem v-for="scape in scapes" :key="scape.id" :scape="scape" />
+    <ScapesGridItem v-for="scape in scapes" :key="`${scape.id}`" :scape="scape" />
   </div>
 </template>
 
