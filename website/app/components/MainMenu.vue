@@ -18,6 +18,11 @@ const route = useRoute()
           </NuxtLink>
         </li>
         <li>
+          <NuxtLink to="/scapes" :class="{ active: route.path.startsWith('/scapes') }">
+            Scapes
+          </NuxtLink>
+        </li>
+        <li>
           <NuxtLink to="/people" :class="{ active: route.path.startsWith('/people') }">
             Owners
           </NuxtLink>
