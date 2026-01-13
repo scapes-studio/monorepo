@@ -1,6 +1,6 @@
 import { and, asc, desc, eq, isNull, sql } from "@ponder/client"
 import type { TraitCounts } from "~/data/traits"
-import { SCAPE_TRAIT_COUNTS } from "~/data/traits"
+import { SCAPE_TRAIT_COUNTS, TRAITS } from "~/data/traits"
 import type { ScapeRecord } from "~/composables/useScapesByOwner"
 import type { ListingSource } from "~/composables/useListedScapes"
 
@@ -78,6 +78,70 @@ export const useScapesGallery = (
     hasMore.value = true
     loadMoreLoading.value = false
   }
+
+  // Fetch dynamic trait counts from API
+  type AttributeCountRow = { category: string; value: string; count: string }
+  const runtimeConfig = useRuntimeConfig()
+
+  const fetchTraitCounts = async (currentTraits: string[]): Promise<TraitCounts> => {
+    // If no filters, return static counts
+    if (currentTraits.length === 0) {
+      return { ...SCAPE_TRAIT_COUNTS }
+    }
+
+    // Build API URL with traits query param
+    const traitsParam = currentTraits.join(",")
+    const url = `${runtimeConfig.public.apiUrl}/scapes/attributes?traits=${encodeURIComponent(traitsParam)}`
+
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error("Failed to fetch attribute counts")
+    }
+
+    const rows: AttributeCountRow[] = await response.json()
+
+    // Initialize counts structure with zeros
+    const counts: TraitCounts = {} as TraitCounts
+    for (const group of TRAITS) {
+      counts[group.name] = { count: 0, values: {} }
+      for (const value of group.values) {
+        counts[group.name].values[value] = 0
+      }
+    }
+
+    // Populate counts from API response
+    for (const row of rows) {
+      const category = row.category as keyof TraitCounts
+      if (counts[category]) {
+        const count = parseInt(row.count, 10)
+        counts[category].values[row.value] = count
+        counts[category].count += count
+      }
+    }
+
+    return counts
+  }
+
+  // Debounced trait counts refresh
+  let countsDebounceTimer: ReturnType<typeof setTimeout> | null = null
+  const refreshTraitCounts = () => {
+    if (countsDebounceTimer) {
+      clearTimeout(countsDebounceTimer)
+    }
+    countsDebounceTimer = setTimeout(async () => {
+      countsLoading.value = true
+      try {
+        traitCounts.value = await fetchTraitCounts(selectedTraits.value)
+      } catch {
+        // Keep existing counts on error
+      } finally {
+        countsLoading.value = false
+      }
+    }, 300)
+  }
+
+  // Watch selectedTraits and refresh counts
+  watch(selectedTraits, refreshTraitCounts, { deep: true })
 
   const activeOfferConditions = and(
     eq(schema.offer.isActive, true),

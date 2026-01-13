@@ -6,6 +6,7 @@ import { getProfile, forceUpdateProfile } from "./profiles";
 import { getSales, getSalesBySlug } from "./sales";
 import { getVolumeStats, getVolumeStatsBySlug } from "./stats";
 import { getScapeHistory, getTwentySevenYearScapeHistory } from "./history";
+import { getAttributeCounts } from "./attributes";
 
 const app = new Hono();
 
@@ -26,6 +27,9 @@ app.get("/seaport/sales/:slug", getSalesBySlug);
 // Stats routes
 app.get("/seaport/stats/volume", getVolumeStats);
 app.get("/seaport/stats/volume/:slug", getVolumeStatsBySlug);
+
+// Attribute counts route (must be before :tokenId routes)
+app.get("/scapes/attributes", getAttributeCounts);
 
 // History routes
 app.get("/scapes/:tokenId/history", getScapeHistory);
