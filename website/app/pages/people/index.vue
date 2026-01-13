@@ -4,10 +4,6 @@ const client = usePonderClient();
 const { public: { scapeCollectionAddress } } = useRuntimeConfig();
 const normalizedCollectionAddress = scapeCollectionAddress.toLowerCase() as `0x${string}`;
 
-definePageMeta({
-  path: "/people",
-});
-
 const PAGE_SIZE = 100;
 const count = sql<number>`count(*)::int`;
 const owners = ref<Array<{ owner: string; count: number }>>([]);

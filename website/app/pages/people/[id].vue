@@ -1,10 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
 
-definePageMeta({
-  path: "/people/:id",
-});
-
 const accountId = computed(() => route.params.id as string | undefined);
 
 const { data: profile, pending: profilePending, error: profileError } = await useProfile(accountId);
