@@ -1,16 +1,37 @@
 <script setup lang="ts">
-type ScapeHistoryEntry = {
-  id: string | number;
+type SalePrice = {
+  wei?: string;
+  eth?: number;
+  usd?: number;
+  currency?: {
+    symbol?: string;
+    amount?: string;
+  };
 };
 
-const props = withDefaults(
-  defineProps<{ history?: ScapeHistoryEntry[]; pending?: boolean; error?: unknown }>(),
-  {
-    history: () => [],
-    pending: false,
-    error: null,
-  },
-);
+type SaleDetails = {
+  id: string | number;
+  price?: SalePrice;
+  seller?: string;
+  buyer?: string;
+  slug?: string;
+  source?: string;
+};
+
+type ScapeHistoryEntry = {
+  id: string;
+  timestamp: number;
+  from: string;
+  to: string;
+  txHash: string;
+  sale: SaleDetails | null;
+};
+
+const props = defineProps<{ history?: ScapeHistoryEntry[]; pending?: boolean; error?: unknown | null }>();
+
+const history = computed(() => props.history ?? []);
+const pending = computed(() => props.pending ?? false);
+const error = computed(() => props.error ?? null);
 </script>
 
 <template>

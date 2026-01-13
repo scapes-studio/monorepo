@@ -50,7 +50,10 @@ const {
 
     return { listed: true, price: row.price };
   },
-  { watch: () => props.scapeId },
+  {
+    watch: [() => props.scapeId],
+    default: () => ({ listed: false, price: null }),
+  },
 );
 
 const seaportListingKey = computed(() => `scape-seaport-listing-${props.scapeId}`);
@@ -62,6 +65,7 @@ const {
   seaportListingKey,
   async () => {
     const now = Math.floor(Date.now() / 1000);
+    const tokenIdValue = BigInt(props.scapeId);
 
     const result = await client.db
       .select({ price: schema.seaportListing.price })
@@ -69,7 +73,7 @@ const {
       .where(
         and(
           eq(schema.seaportListing.slug, "scapes"),
-          eq(schema.seaportListing.tokenId, props.scapeId),
+          eq(schema.seaportListing.tokenId, tokenIdValue),
           lte(schema.seaportListing.startDate, now),
           gt(schema.seaportListing.expirationDate, now),
         ),
@@ -83,7 +87,10 @@ const {
 
     return { listed: true, price: row.price };
   },
-  { watch: () => props.scapeId },
+  {
+    watch: [() => props.scapeId],
+    default: () => ({ listed: false, price: null }),
+  },
 );
 
 const isInternallyListed = computed(() => internalOffer.value?.listed ?? false);

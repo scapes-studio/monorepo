@@ -22,6 +22,11 @@ const route = useRoute()
             Owners
           </NuxtLink>
         </li>
+        <li>
+          <NuxtLink to="/market" :class="{ active: route.path.startsWith('/market') }">
+            Market
+          </NuxtLink>
+        </li>
       </slot>
     </ul>
 

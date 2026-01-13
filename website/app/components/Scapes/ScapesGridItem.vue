@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import type { ScapeRecord } from "~/composables/useScapesByOwner";
 
-defineProps<{ scape: ScapeRecord }>();
+const props = defineProps<{
+  scape: ScapeRecord;
+  price?: bigint | null;
+}>();
+
+const formattedPrice = computed(() => {
+  if (!props.price) return null;
+  return formatETH(Number(props.price) / 1e18);
+});
 </script>
 
 <template>
   <NuxtLink class="scape-link" :to="`/scapes/${scape.id}`">
     <ScapesImage :id="scape.id" />
+    <div v-if="formattedPrice" class="scape-link__price">
+      {{ formattedPrice }} ETH
+    </div>
   </NuxtLink>
-  <!-- <article class="scape-card"> -->
-  <!--   <h1>#{{ scape.id }}</h1> -->
-  <!-- </article> -->
 </template>
 
 <style scoped>
@@ -20,5 +28,14 @@ img {
 
 .scape-link {
   display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.scape-link__price {
+  margin-top: var(--spacer-xs);
+  font-size: var(--font-sm);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
 }
 </style>
