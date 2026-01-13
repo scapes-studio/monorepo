@@ -6,9 +6,22 @@ defineProps<{ links: Links | null | undefined }>();
 const labelMap: Record<keyof Links, string> = {
   url: "Website",
   email: "Email",
-  twitter: "Twitter",
+  twitter: "𝕏",
   github: "GitHub",
 };
+
+const urlPrefixMap: Partial<Record<keyof Links, string>> = {
+  email: "mailto:",
+  twitter: "https://x.com/",
+  github: "https://github.com/",
+};
+
+function buildUrl(key: keyof Links, value: string): string {
+  const prefix = urlPrefixMap[key];
+  if (!prefix) return value;
+  const cleanValue = key === "twitter" ? value.replace(/^@/, "") : value;
+  return prefix + cleanValue;
+}
 </script>
 
 <template>
@@ -18,17 +31,9 @@ const labelMap: Record<keyof Links, string> = {
       <li v-for="(value, key) in links" :key="key">
         <template v-if="value">
           <span class="profile-links__label">{{ labelMap[key] }}</span>
-          <a
-            v-if="key === 'email'"
-            :href="`mailto:${value}`"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <NuxtLink :to="buildUrl(key, value)" rel="noopener noreferrer">
             {{ value }}
-          </a>
-          <a v-else :href="value" target="_blank" rel="noopener noreferrer">
-            {{ value }}
-          </a>
+          </NuxtLink>
         </template>
         <span v-else class="profile-links__empty">{{ labelMap[key] }}: none</span>
       </li>
