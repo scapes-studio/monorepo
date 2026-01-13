@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, isNull, sql } from "@ponder/client"
+import { and, asc, desc, eq, isNull, ne, sql } from "@ponder/client"
 import type { TraitCounts } from "~/data/traits"
 import { SCAPE_TRAIT_COUNTS, TRAITS } from "~/data/traits"
 import type { ScapeRecord } from "~/composables/useScapesByOwner"
@@ -61,6 +61,11 @@ export const useScapesGallery = (
   showPrices: Ref<boolean> = ref(false),
 ) => {
   const client = usePonderClient()
+  const { public: { scapeCollectionAddress } } = useRuntimeConfig()
+  const normalizedCollectionAddress = scapeCollectionAddress.toLowerCase() as `0x${string}`
+
+  // Exclude scapes owned by contract (merged scapes)
+  const excludeMergedScapes = ne(schema.scape.owner, normalizedCollectionAddress)
 
   // Track additional items loaded via loadMore (separate from initial data)
   const additionalScapes = ref<GalleryScape[]>([])
@@ -154,6 +159,9 @@ export const useScapesGallery = (
     sort: GallerySortOption,
   ) => {
     const isPriceSorted = sort.startsWith("price")
+    const baseConditions = traitConditions
+      ? and(excludeMergedScapes, traitConditions)
+      : excludeMergedScapes
 
     if (isPriceSorted) {
       // For price sorting, inner join to only show listed scapes
@@ -165,7 +173,7 @@ export const useScapesGallery = (
         })
         .from(schema.scape)
         .innerJoin(schema.offer, eq(schema.offer.tokenId, schema.scape.id))
-        .where(traitConditions ? and(traitConditions, activeOfferConditions) : activeOfferConditions)
+        .where(and(baseConditions, activeOfferConditions))
         .orderBy(...getSortOrder(sort))
         .limit(PAGE_SIZE)
         .offset(startOffset)
@@ -185,7 +193,7 @@ export const useScapesGallery = (
         schema.offer,
         and(eq(schema.offer.tokenId, schema.scape.id), activeOfferConditions),
       )
-      .where(traitConditions)
+      .where(baseConditions)
       .orderBy(...getSortOrder(sort))
       .limit(PAGE_SIZE)
       .offset(startOffset)
@@ -201,51 +209,51 @@ export const useScapesGallery = (
     startOffset: number,
     sort: GallerySortOption,
   ) => {
+    const baseConditions = traitConditions
+      ? and(excludeMergedScapes, traitConditions)
+      : excludeMergedScapes
+
     return await client.db
       .select({
         id: schema.scape.id,
         rarity: schema.scape.rarity,
       })
       .from(schema.scape)
-      .where(traitConditions)
+      .where(baseConditions)
       .orderBy(...getSortOrder(sort))
       .limit(PAGE_SIZE)
       .offset(startOffset)
   }
 
   const fetchCount = async (traitConditions: ReturnType<typeof buildTraitConditions>) => {
-    return await client.db.$count(schema.scape, traitConditions)
+    const baseConditions = traitConditions
+      ? and(excludeMergedScapes, traitConditions)
+      : excludeMergedScapes
+
+    return await client.db.$count(schema.scape, baseConditions)
+  }
+
+  const fetchListedCount = async (traitConditions: ReturnType<typeof buildTraitConditions>) => {
+    const baseConditions = traitConditions
+      ? and(excludeMergedScapes, traitConditions, activeOfferConditions)
+      : and(excludeMergedScapes, activeOfferConditions)
+
+    const result = await client.db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(schema.scape)
+      .innerJoin(schema.offer, eq(schema.offer.tokenId, schema.scape.id))
+      .where(baseConditions)
+
+    return result[0]?.count ?? 0
   }
 
   const fetchInitial = async (): Promise<GalleryPayload> => {
     const traitConditions = buildTraitConditions(selectedTraits.value)
     const isPriceSorted = sortBy.value.startsWith("price")
 
-    // If sorting by price, we need to count only listed scapes
-    let countConditions = traitConditions
-    if (isPriceSorted) {
-      const listedScapesQuery = client.db
-        .select({ id: schema.offer.tokenId })
-        .from(schema.offer)
-        .where(activeOfferConditions)
-
-      // For price sort, count listed scapes only
-      countConditions = traitConditions
-        ? and(traitConditions, sql`${schema.scape.id} IN ${listedScapesQuery}`)
-        : sql`${schema.scape.id} IN ${listedScapesQuery}`
-    }
-
     const [countResult, scapesResult] = await Promise.all([
       isPriceSorted
-        ? client.db.$count(
-            schema.scape,
-            countConditions
-              ? and(
-                  countConditions,
-                  sql`${schema.scape.id} IN (SELECT token_id FROM offer WHERE is_active = true AND specific_buyer IS NULL)`,
-                )
-              : sql`${schema.scape.id} IN (SELECT token_id FROM offer WHERE is_active = true AND specific_buyer IS NULL)`,
-          )
+        ? fetchListedCount(traitConditions)
         : fetchCount(traitConditions),
       showPrices.value || isPriceSorted
         ? fetchScapesWithPrices(traitConditions, 0, sortBy.value)

@@ -7,8 +7,8 @@ const router = useRouter()
 const sortOptions = [
   { value: "id-asc", label: "ID (Low to High)" },
   { value: "id-desc", label: "ID (High to Low)" },
-  { value: "rarity-asc", label: "Rarest First" },
-  { value: "rarity-desc", label: "Most Common First" },
+  { value: "rarity-desc", label: "Rarest First" },
+  { value: "rarity-asc", label: "Most Common First" },
   { value: "price-asc", label: "Price (Low to High)" },
   { value: "price-desc", label: "Price (High to Low)" },
 ] as const
@@ -80,19 +80,12 @@ useSeoMeta({
       </div>
     </header>
 
-    <GalleryFilterTags
-      v-if="selectedTraits.length > 0"
-      :selected-traits="selectedTraits"
-      @update="updateSelectedTraits"
-    />
+    <GalleryFilterTags v-if="selectedTraits.length > 0" :selected-traits="selectedTraits"
+      @update="updateSelectedTraits" />
 
     <div class="gallery__layout">
-      <GalleryScapeGallerySidebar
-        :selected-traits="selectedTraits"
-        :trait-counts="traitCounts"
-        :counts-loading="countsLoading"
-        @update-traits="updateSelectedTraits"
-      />
+      <GalleryScapeGallerySidebar :selected-traits="selectedTraits" :trait-counts="traitCounts"
+        :counts-loading="countsLoading" @update-traits="updateSelectedTraits" />
 
       <main class="gallery__main">
         <div v-if="loading && scapes.length === 0" class="gallery__status">
@@ -108,13 +101,7 @@ useSeoMeta({
         <template v-else>
           <ScapesGrid :scapes="scapes" />
 
-          <button
-            v-if="hasMore"
-            type="button"
-            class="gallery__load-more"
-            :disabled="loading"
-            @click="loadMore"
-          >
+          <button v-if="hasMore" type="button" class="gallery__load-more" :disabled="loading" @click="loadMore">
             {{ loading ? "Loading..." : "Load more" }}
           </button>
         </template>

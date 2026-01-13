@@ -2,18 +2,20 @@ import { db } from "ponder:api";
 import { Hono } from "hono";
 import { client, graphql } from "ponder";
 import * as ponderSchema from "../../ponder.schema";
+import { schema as combinedSchema } from "../../combined.schema";
 import { getProfile, forceUpdateProfile } from "./profiles";
 import { getSales, getSalesBySlug } from "./sales";
 import { getVolumeStats, getVolumeStatsBySlug } from "./stats";
 import { getScapeHistory, getTwentySevenYearScapeHistory } from "./history";
 import { getAttributeCounts } from "./attributes";
 import { getActivity } from "./activity";
+import { getListings, getListingByTokenId } from "./listings";
 
 const app = new Hono();
 
-// Built-in routes - ponder schema only (offchain data via custom routes)
-app.use("/sql/*", client({ db, schema: ponderSchema }));
-app.use("/graphql", graphql({ db, schema: ponderSchema }));
+// Built-in routes - combined schema for full access
+app.use("/sql/*", client({ db, schema: combinedSchema }));
+app.use("/graphql", graphql({ db, schema: combinedSchema }));
 
 app.get("/", (c) => c.text("Scapes Indexer"));
 
@@ -24,6 +26,10 @@ app.post("/profiles/:id", forceUpdateProfile);
 // Seaport sales routes
 app.get("/seaport/sales", getSales);
 app.get("/seaport/sales/:slug", getSalesBySlug);
+
+// Seaport listings routes
+app.get("/seaport/listings", getListings);
+app.get("/seaport/listings/:tokenId", getListingByTokenId);
 
 // Stats routes
 app.get("/seaport/stats/volume", getVolumeStats);
