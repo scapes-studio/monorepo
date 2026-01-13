@@ -1,5 +1,12 @@
 <script setup lang="ts">
-const props = defineProps<{ id: string | number }>();
+import type { PropType } from "vue";
+
+const props = defineProps({
+  id: {
+    type: [String, Number, BigInt] as PropType<string | number | bigint>,
+    required: true,
+  },
+});
 
 const imageUrl = computed(() => `https://cdn.scapes.xyz/scapes/sm/${props.id}.png`);
 </script>
