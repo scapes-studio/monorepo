@@ -97,6 +97,7 @@
 - Use `async/await` instead of raw Promises.
 - Prefer early returns and guard clauses for clarity.
 - Avoid one-letter variable names (except short scopes like indices).
+- Prefer shared utilities (e.g. `formatETH` from the evm layer) over custom implementations.
 
 ## TypeScript conventions
 - Use `import type` or `import { type Foo }` for type-only imports.
