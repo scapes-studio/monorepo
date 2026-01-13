@@ -21,12 +21,14 @@ export type ProfileResponse = {
 export const useProfile = (identifier: Ref<string | null | undefined>) => {
   const runtimeConfig = useRuntimeConfig();
 
+  const asyncKey = computed(() => `profile-${identifier.value?.toLowerCase() ?? "unknown"}`);
+
   return useAsyncData(
+    asyncKey,
     async () => {
       if (!identifier.value) return null;
       const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
       return await $fetch<ProfileResponse>(`${baseUrl}/profiles/${identifier.value}`);
     },
-    { watch: [identifier] },
   );
 };
