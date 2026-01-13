@@ -1,5 +1,5 @@
 import { priceService } from "./price";
-import type { Price } from "../../ponder.schema";
+import type { Price } from "../../ponder.types";
 
 // Known stablecoin addresses (mainnet) - treated as 1:1 USD
 const STABLECOINS: Record<string, { symbol: string; decimals: number }> = {

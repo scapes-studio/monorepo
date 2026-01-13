@@ -1,6 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 import { getViewsDb, withTriggersDisabled } from "./database";
-import { seaportSale, syncState, type VolumeStats } from "../../ponder.schema";
+import { seaportSale, syncState } from "../../ponder.schema";
+import type { VolumeStats } from "../../ponder.types";
 import { openseaService } from "./opensea";
 
 // Collection configurations
