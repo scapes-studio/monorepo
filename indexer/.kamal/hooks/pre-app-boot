@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Running Drizzle migrations..."
+kamal app exec -p --version="$KAMAL_VERSION" -- pnpm drizzle-kit migrate
