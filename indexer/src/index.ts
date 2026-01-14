@@ -1,5 +1,7 @@
 import { ponder } from "ponder:registry";
 import {
+  gallery27Auction,
+  gallery27Bid,
   offer,
   sale,
   scape,
@@ -7,7 +9,7 @@ import {
   twentySevenYearScape,
   twentySevenYearTransferEvent,
 } from "ponder:schema";
-import { computeTransfer, importScapeMetadata } from "./utils";
+import { computeTransfer, importScapeMetadata, saveAccounts } from "./utils";
 import { zeroAddress } from "viem";
 
 const baseTransferTables = {
@@ -152,3 +154,109 @@ ponder.on("Scapes:Sale", async ({ event, context }) => {
       txHash: event.transaction.hash,
     });
 });
+
+// Gallery27 event handlers
+
+type Gallery27Contract = "Gallery27V1" | "Gallery27";
+
+function createGallery27BidHandler(contract: Gallery27Contract) {
+  return async ({
+    event,
+    context,
+  }: {
+    event: {
+      id: string;
+      args: {
+        punkScapeId: bigint;
+        bid: bigint;
+        from: `0x${string}`;
+        message: string;
+      };
+      block: { timestamp: bigint; number: bigint };
+      transaction: { hash: `0x${string}` };
+    };
+    context: { db: Parameters<typeof saveAccounts>[0] };
+  }) => {
+    const timestamp = Number(event.block.timestamp);
+
+    // Save bidder account
+    await saveAccounts(context.db, [event.args.from], event.block.timestamp);
+
+    // Insert bid record
+    await context.db.insert(gallery27Bid).values({
+      id: event.id,
+      punkScapeId: event.args.punkScapeId,
+      contract,
+      bidder: event.args.from,
+      amount: event.args.bid,
+      message: event.args.message,
+      timestamp,
+      blockNumber: event.block.number,
+      txHash: event.transaction.hash,
+    });
+
+    // Upsert auction state
+    await context.db
+      .insert(gallery27Auction)
+      .values({
+        punkScapeId: event.args.punkScapeId,
+        contract,
+        latestBidder: event.args.from,
+        latestBid: event.args.bid,
+        endTimestamp: null,
+        bidCount: 1,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      })
+      .onConflictDoUpdate((row) => ({
+        latestBidder: event.args.from,
+        latestBid: event.args.bid,
+        bidCount: row.bidCount + 1,
+        updatedAt: timestamp,
+      }));
+  };
+}
+
+function createGallery27AuctionExtendedHandler(contract: Gallery27Contract) {
+  return async ({
+    event,
+    context,
+  }: {
+    event: {
+      args: { punkScapeId: bigint; endTimestamp: bigint };
+      block: { timestamp: bigint };
+    };
+    context: { db: Parameters<typeof saveAccounts>[0] };
+  }) => {
+    const timestamp = Number(event.block.timestamp);
+
+    await context.db
+      .insert(gallery27Auction)
+      .values({
+        punkScapeId: event.args.punkScapeId,
+        contract,
+        latestBidder: null,
+        latestBid: null,
+        endTimestamp: Number(event.args.endTimestamp),
+        bidCount: 0,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      })
+      .onConflictDoUpdate({
+        endTimestamp: Number(event.args.endTimestamp),
+        updatedAt: timestamp,
+      });
+  };
+}
+
+ponder.on("Gallery27V1:Bid", createGallery27BidHandler("Gallery27V1"));
+ponder.on("Gallery27:Bid", createGallery27BidHandler("Gallery27"));
+
+ponder.on(
+  "Gallery27V1:AuctionExtended",
+  createGallery27AuctionExtendedHandler("Gallery27V1"),
+);
+ponder.on(
+  "Gallery27:AuctionExtended",
+  createGallery27AuctionExtendedHandler("Gallery27"),
+);

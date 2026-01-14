@@ -1,5 +1,5 @@
 import { createConfig } from "ponder";
-import { erc721ABI, marketplaceABI } from "@scapes-studio/abis";
+import { erc721ABI, marketplaceABI, gallery27ABI } from "@scapes-studio/abis";
 
 export default createConfig({
   chains: {
@@ -28,6 +28,19 @@ export default createConfig({
       abi: erc721ABI,
       address: "0x5D3d01a47a62BfF2eB86eBA75F3A23c38dC22fBA",
       startBlock: 14110418,
+    },
+    Gallery27V1: {
+      chain: "ethereum",
+      abi: gallery27ABI,
+      address: "0x6f051b2B1765eDB6A892be7736C04AaB0468AF27",
+      startBlock: 14110418,
+      endBlock: 18000000,
+    },
+    Gallery27: {
+      chain: "ethereum",
+      abi: gallery27ABI,
+      address: "0x25eF4D7F1D2706808D67a7Ecf577062B055aFD4E",
+      startBlock: 16230271,
     },
   },
 });

@@ -67,6 +67,29 @@ export const sale = onchainTable("sale", (t) => ({
   txHash: t.hex().notNull(),
 }));
 
+export const gallery27Auction = onchainTable("gallery27_auction", (t) => ({
+  punkScapeId: t.bigint().primaryKey(),
+  contract: t.text().notNull(),
+  latestBidder: t.hex(),
+  latestBid: t.bigint(),
+  endTimestamp: t.integer(),
+  bidCount: t.integer().notNull(),
+  createdAt: t.integer().notNull(),
+  updatedAt: t.integer().notNull(),
+}));
+
+export const gallery27Bid = onchainTable("gallery27_bid", (t) => ({
+  id: t.text().primaryKey(),
+  punkScapeId: t.bigint().notNull(),
+  contract: t.text().notNull(),
+  bidder: t.hex().notNull(),
+  amount: t.bigint().notNull(),
+  message: t.text().notNull(),
+  timestamp: t.integer().notNull(),
+  blockNumber: t.bigint().notNull(),
+  txHash: t.hex().notNull(),
+}));
+
 // ============================================
 // Relations
 // ============================================
@@ -84,6 +107,8 @@ export const accountRelations = relations(account, ({ many }) => ({
   }),
   salesAsSeller: many(sale, { relationName: "sellerAccount" }),
   salesAsBuyer: many(sale, { relationName: "buyerAccount" }),
+  gallery27Bids: many(gallery27Bid),
+  gallery27AuctionsAsLeader: many(gallery27Auction),
 }));
 
 export const scapeRelations = relations(scape, ({ one, many }) => ({
@@ -163,5 +188,31 @@ export const saleRelations = relations(sale, ({ one }) => ({
     fields: [sale.buyer],
     references: [account.address],
     relationName: "buyerAccount",
+  }),
+}));
+
+export const gallery27AuctionRelations = relations(
+  gallery27Auction,
+  ({ one, many }) => ({
+    scape: one(scape, {
+      fields: [gallery27Auction.punkScapeId],
+      references: [scape.id],
+    }),
+    latestBidderAccount: one(account, {
+      fields: [gallery27Auction.latestBidder],
+      references: [account.address],
+    }),
+    bids: many(gallery27Bid),
+  }),
+);
+
+export const gallery27BidRelations = relations(gallery27Bid, ({ one }) => ({
+  auction: one(gallery27Auction, {
+    fields: [gallery27Bid.punkScapeId],
+    references: [gallery27Auction.punkScapeId],
+  }),
+  bidderAccount: one(account, {
+    fields: [gallery27Bid.bidder],
+    references: [account.address],
   }),
 }));
