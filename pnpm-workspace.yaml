@@ -3,3 +3,8 @@ packages:
   - api
   - website
   - abis
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@reown/appkit'
+  - vue-demi
