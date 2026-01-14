@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 
 const getS3Client = (): S3Client => {
   const endpoint = process.env.S3_ENDPOINT;
@@ -62,6 +62,28 @@ export class S3Service {
     );
 
     return this.getPublicUrl(path);
+  }
+
+  async downloadFile(path: string): Promise<Buffer> {
+    if (!this.bucket) {
+      throw new Error("S3_BUCKET is required");
+    }
+
+    const client = this.getClient();
+
+    const response = await client.send(
+      new GetObjectCommand({
+        Bucket: this.bucket,
+        Key: path,
+      }),
+    );
+
+    if (!response.Body) {
+      throw new Error(`No body in response for ${path}`);
+    }
+
+    const bytes = await response.Body.transformToByteArray();
+    return Buffer.from(bytes);
   }
 
   getPublicUrl(path: string): string {

@@ -3,6 +3,7 @@ import sharp from "sharp";
 import { eq, isNull, or, sql, and, gt, notInArray } from "drizzle-orm";
 import { s3Service } from "./s3";
 import { imageService } from "./image";
+import { canvasSVG } from "../utils/ses";
 import { getOffchainDb, getViewsDb } from "./database";
 import { mergeImage } from "../../offchain.schema";
 
@@ -180,6 +181,9 @@ export class MergeImagesService {
         })
         .where(eq(mergeImage.tokenId, tokenId));
 
+      // 7. Generate and upload SES image
+      await this.generateSES(tokenId);
+
       return { tokenId, success: true };
     } catch (error) {
       const errorMessage =
@@ -196,6 +200,30 @@ export class MergeImagesService {
 
       return { tokenId, success: false, error: errorMessage };
     }
+  }
+
+  /**
+   * Generate SES (Scape Entertainment System) image for a merge.
+   * Composites the disk images of component scapes into a fan pattern.
+   */
+  private async generateSES(tokenId: number): Promise<void> {
+    // Get component scape IDs from merge config
+    const merge = Merge.fromId(tokenId.toString());
+    const componentIds: bigint[] = merge.mergeConfig[0].map(
+      (part: [bigint, boolean, boolean]) => part[0],
+    );
+
+    // Download SES disk images for each component
+    const diskImages = await Promise.all(
+      componentIds.map((id) => s3Service.downloadFile(`scapes/ses-disks/${id}.png`)),
+    );
+
+    // Generate composite SVG and convert to PNG
+    const svg = canvasSVG(diskImages);
+    const sesPng = await sharp(Buffer.from(svg)).png().toBuffer();
+
+    // Upload to S3
+    await s3Service.uploadFile(`scapes/ses/${tokenId}.png`, sesPng, "image/png");
   }
 
   /**
