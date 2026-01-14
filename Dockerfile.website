@@ -24,10 +24,15 @@ WORKDIR /app
 
 # Copy output and externalized node_modules
 COPY --from=build /app/website/.output/ ./
+
+# Copy scape-renderer and all sharp dependencies for Alpine
 COPY --from=build /app/node_modules/.pnpm/@scapes-studio+scape-renderer*/node_modules/@scapes-studio/scape-renderer ./server/node_modules/@scapes-studio/scape-renderer
-COPY --from=build /app/node_modules/.pnpm/sharp@*/node_modules/sharp ./server/node_modules/sharp
-COPY --from=build /app/node_modules/.pnpm/@img+sharp-linuxmusl-x64*/node_modules/@img/sharp-linuxmusl-x64 ./server/node_modules/@img/sharp-linuxmusl-x64
+COPY --from=build /app/node_modules/.pnpm/sharp@0.34*/node_modules/sharp ./server/node_modules/sharp
+COPY --from=build /app/node_modules/.pnpm/@img+sharp-linuxmusl-x64@0.34*/node_modules/@img/sharp-linuxmusl-x64 ./server/node_modules/@img/sharp-linuxmusl-x64
 COPY --from=build /app/node_modules/.pnpm/@img+sharp-libvips-linuxmusl-x64*/node_modules/@img/sharp-libvips-linuxmusl-x64 ./server/node_modules/@img/sharp-libvips-linuxmusl-x64
+COPY --from=build /app/node_modules/.pnpm/detect-libc*/node_modules/detect-libc ./server/node_modules/detect-libc
+COPY --from=build /app/node_modules/.pnpm/semver@7*/node_modules/semver ./server/node_modules/semver
+COPY --from=build /app/node_modules/.pnpm/@img+colour*/node_modules/@img/colour ./server/node_modules/@img/colour
 
 ENV HOST=0.0.0.0
 
