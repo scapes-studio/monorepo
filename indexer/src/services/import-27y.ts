@@ -1,5 +1,5 @@
 import pg from "pg";
-import { getOffchainDb } from "./database";
+import { getOffchainDb, getOffchainPool } from "./database";
 import {
   twentySevenYearScapeDetail,
   twentySevenYearRequest,
@@ -202,6 +202,15 @@ export class Import27yService {
         totalInserted += batch.length;
         options.onProgress?.(batch.length);
       }
+
+      // Reset the serial sequence to avoid conflicts with future inserts
+      const offchainPool = getOffchainPool();
+      await offchainPool.query(`
+        SELECT setval(
+          'twenty_seven_year_request_id_seq',
+          (SELECT COALESCE(MAX(id), 0) FROM twenty_seven_year_request)
+        )
+      `);
 
       return totalInserted;
     } finally {
