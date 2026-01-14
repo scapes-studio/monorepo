@@ -7,18 +7,17 @@ const { data: profile, pending: profilePending, error: profileError } = await us
 
 const profileData = computed(() => profile.value?.data ?? null);
 const resolvedAddress = computed(() => profile.value?.address ?? null);
-
-const {
-  scapes,
-  total: scapesTotal,
-  loading: scapesLoading,
-  error: scapesError,
-  hasMore,
-  loadMore,
-} = useScapesByOwner(resolvedAddress);
-
 const displayAddress = computed(() => profile.value?.address ?? accountId.value ?? "");
-const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length);
+
+// Provide profile data to child pages
+provide("profile", { profile, resolvedAddress, displayAddress });
+
+// Determine current tab
+const currentTab = computed(() => {
+  const path = route.path;
+  if (path.endsWith("/twenty-seven-year-scapes")) return "27y";
+  return "scapes";
+});
 </script>
 
 <template>
@@ -28,34 +27,32 @@ const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length
       Unable to load profile. Please check the address or ENS name.
     </div>
 
-    <div v-else class="account-page__profile">
-      <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null" />
-      <ProfileBio :description="profileData?.description ?? null" />
-      <ProfileLinks :links="profileData?.links ?? null" />
-    </div>
-
-    <section class="account-page__scapes">
-      <header class="account-page__section-title">
-        <h2>Scapes</h2>
-        <span>{{ scapesOwnedCount }} owned</span>
-      </header>
-
-      <div v-if="scapesError" class="account-page__status account-page__status--error">
-        Failed to load scapes.
-      </div>
-      <div v-else-if="scapesLoading && scapes.length === 0" class="account-page__status">
-        Loading scapes…
-      </div>
-      <div v-else-if="scapes.length === 0" class="account-page__status">
-        No scapes found for this account.
+    <template v-else>
+      <div class="account-page__profile">
+        <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null" />
+        <ProfileBio :description="profileData?.description ?? null" />
+        <ProfileLinks :links="profileData?.links ?? null" />
       </div>
 
-      <ScapesGrid v-else :scapes="scapes" />
+      <nav class="account-page__tabs">
+        <NuxtLink
+          :to="`/people/${accountId}`"
+          class="account-page__tab"
+          :class="{ 'account-page__tab--active': currentTab === 'scapes' }"
+        >
+          Scapes
+        </NuxtLink>
+        <NuxtLink
+          :to="`/people/${accountId}/twenty-seven-year-scapes`"
+          class="account-page__tab"
+          :class="{ 'account-page__tab--active': currentTab === '27y' }"
+        >
+          Twenty Seven Year Scapes
+        </NuxtLink>
+      </nav>
 
-      <button v-if="hasMore" class="account-page__load-more" type="button" :disabled="scapesLoading" @click="loadMore">
-        {{ scapesLoading ? "Loading…" : "Load more" }}
-      </button>
-    </section>
+      <NuxtPage />
+    </template>
   </section>
 </template>
 
@@ -73,19 +70,23 @@ const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length
   gap: var(--spacer);
 }
 
-.account-page__scapes {
-  display: grid;
-  gap: var(--spacer);
-}
-
-.account-page__section-title {
+.account-page__tabs {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  gap: var(--spacer);
+  border-bottom: var(--border);
 }
 
-.account-page__section-title h2 {
-  margin: 0;
+.account-page__tab {
+  padding: var(--spacer-sm) var(--spacer);
+  text-decoration: none;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.account-page__tab--active {
+  color: inherit;
+  border-bottom-color: currentColor;
 }
 
 .account-page__status {
@@ -96,19 +97,5 @@ const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length
 
 .account-page__status--error {
   background: oklch(from var(--error) l c h / 0.1);
-}
-
-.account-page__load-more {
-  justify-self: center;
-  padding: var(--spacer-sm) var(--spacer-md);
-  border-radius: var(--size-10);
-  border: var(--border);
-  background: var(--background);
-  cursor: pointer;
-}
-
-.account-page__load-more:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
 }
 </style>

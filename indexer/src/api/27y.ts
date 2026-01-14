@@ -1,7 +1,9 @@
 import type { Context } from "hono";
-import { eq, sql, lt, and, gte } from "drizzle-orm";
+import { eq, sql, lt, and, gte, desc } from "drizzle-orm";
+import { db } from "ponder:api";
+import schema from "ponder:schema";
 import { getOffchainDb } from "../services/database";
-import { twentySevenYearScapeDetail, twentySevenYearRequest } from "../../offchain.schema";
+import { twentySevenYearScapeDetail, twentySevenYearRequest, ensProfile } from "../../offchain.schema";
 import { aiImageService } from "../services/ai-image";
 import { s3Service } from "../services/s3";
 
@@ -261,4 +263,201 @@ export async function post27yRegenerateImage(c: Context) {
       400,
     );
   }
+}
+
+/**
+ * GET /27y/:tokenId/auction
+ * Get auction state from onchain data
+ */
+export async function get27yAuction(c: Context) {
+  const tokenIdParam = c.req.param("tokenId");
+  const tokenId = parseInt(tokenIdParam, 10);
+
+  if (isNaN(tokenId) || tokenId < 1 || tokenId > 10000) {
+    return c.json({ error: "Invalid tokenId" }, 400);
+  }
+
+  // Get offchain scape detail to find punkScapeId
+  const offchainDb = getOffchainDb();
+  const scapeDetail = await offchainDb.query.twentySevenYearScapeDetail.findFirst({
+    where: eq(twentySevenYearScapeDetail.tokenId, tokenId),
+  });
+
+  if (!scapeDetail) {
+    return c.json({ error: "Scape not found" }, 404);
+  }
+
+  const punkScapeId = scapeDetail.scapeId ?? tokenId;
+
+  // Query onchain auction data
+  const auction = await db.query.gallery27Auction.findFirst({
+    where: eq(schema.gallery27Auction.punkScapeId, BigInt(punkScapeId)),
+  });
+
+  if (!auction) {
+    // No auction exists yet - return default state
+    return c.json({
+      tokenId,
+      punkScapeId,
+      latestBidder: null,
+      latestBid: null,
+      endTimestamp: scapeDetail.auctionEndsAt ?? null,
+      bidCount: 0,
+      settled: scapeDetail.completedAt !== null,
+    });
+  }
+
+  return c.json({
+    tokenId,
+    punkScapeId,
+    latestBidder: auction.latestBidder,
+    latestBid: auction.latestBid?.toString() ?? null,
+    endTimestamp: auction.endTimestamp,
+    bidCount: auction.bidCount,
+    settled: scapeDetail.completedAt !== null,
+  });
+}
+
+/**
+ * GET /27y/:tokenId/bids
+ * Get bid history with AI images
+ */
+export async function get27yBids(c: Context) {
+  const tokenIdParam = c.req.param("tokenId");
+  const tokenId = parseInt(tokenIdParam, 10);
+
+  if (isNaN(tokenId) || tokenId < 1 || tokenId > 10000) {
+    return c.json({ error: "Invalid tokenId" }, 400);
+  }
+
+  // Get offchain scape detail to find punkScapeId and initial render
+  const offchainDb = getOffchainDb();
+  const scapeDetail = await offchainDb.query.twentySevenYearScapeDetail.findFirst({
+    where: eq(twentySevenYearScapeDetail.tokenId, tokenId),
+  });
+
+  if (!scapeDetail) {
+    return c.json({ error: "Scape not found" }, 404);
+  }
+
+  const punkScapeId = scapeDetail.scapeId ?? tokenId;
+
+  // Query onchain bids
+  const onchainBids = await db
+    .select()
+    .from(schema.gallery27Bid)
+    .where(eq(schema.gallery27Bid.punkScapeId, BigInt(punkScapeId)))
+    .orderBy(desc(schema.gallery27Bid.timestamp));
+
+  // Get ENS profiles for all bidders
+  const bidderAddresses = [...new Set(onchainBids.map(b => b.bidder.toLowerCase()))];
+  const ensProfiles = bidderAddresses.length > 0
+    ? await offchainDb
+        .select()
+        .from(ensProfile)
+        .where(sql`LOWER(${ensProfile.address}) IN (${sql.join(bidderAddresses.map(a => sql`${a}`), sql`, `)})`)
+    : [];
+
+  const ensMap = new Map(ensProfiles.map(p => [p.address.toLowerCase(), p.ens]));
+
+  // Get offchain requests to match with bids (for AI images)
+  const requests = await offchainDb
+    .select()
+    .from(twentySevenYearRequest)
+    .where(eq(twentySevenYearRequest.tokenId, tokenId));
+
+  // Build bid list with images
+  const bids = onchainBids.map(bid => {
+    // Find matching request by address and message
+    const matchingRequest = requests.find(
+      r => r.from?.toLowerCase() === bid.bidder.toLowerCase() && r.description === bid.message
+    );
+
+    return {
+      id: bid.id,
+      bidder: bid.bidder,
+      bidderEns: ensMap.get(bid.bidder.toLowerCase()) ?? null,
+      amount: bid.amount.toString(),
+      message: bid.message,
+      timestamp: bid.timestamp,
+      txHash: bid.txHash,
+      image: matchingRequest?.imagePath
+        ? {
+            id: matchingRequest.id,
+            path: matchingRequest.imagePath,
+            steps: matchingRequest.imageSteps ?? null,
+          }
+        : null,
+    };
+  });
+
+  // Get initial render if set
+  let initialRender = null;
+  if (scapeDetail.initialRenderId) {
+    const initialRequest = await offchainDb.query.twentySevenYearRequest.findFirst({
+      where: eq(twentySevenYearRequest.id, scapeDetail.initialRenderId),
+    });
+    if (initialRequest?.imagePath) {
+      initialRender = {
+        id: initialRequest.id,
+        path: initialRequest.imagePath,
+        steps: initialRequest.imageSteps ?? null,
+      };
+    }
+  }
+
+  return c.json({
+    bids,
+    initialRender,
+  });
+}
+
+/**
+ * GET /profiles/:address/27y-scapes
+ * Get 27Y scapes owned by address
+ */
+export async function get27yScapesByOwner(c: Context) {
+  const address = c.req.param("address");
+
+  if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
+    return c.json({ error: "Invalid address" }, 400);
+  }
+
+  const normalizedAddress = address.toLowerCase() as `0x${string}`;
+
+  // Query onchain ownership
+  const onchainScapes = await db
+    .select()
+    .from(schema.twentySevenYearScape)
+    .where(eq(schema.twentySevenYearScape.owner, normalizedAddress));
+
+  if (onchainScapes.length === 0) {
+    return c.json({ scapes: [] });
+  }
+
+  // Get offchain details for owned scapes
+  const tokenIds = onchainScapes.map(s => Number(s.id));
+  const offchainDb = getOffchainDb();
+
+  const details = await offchainDb
+    .select()
+    .from(twentySevenYearScapeDetail)
+    .where(sql`${twentySevenYearScapeDetail.tokenId} IN (${sql.join(tokenIds.map(id => sql`${id}`), sql`, `)})`);
+
+  const detailsMap = new Map(details.map(d => [d.tokenId, d]));
+
+  const scapes = onchainScapes.map(scape => {
+    const detail = detailsMap.get(Number(scape.id));
+    return {
+      tokenId: Number(scape.id),
+      scapeId: detail?.scapeId ?? null,
+      date: detail?.date ?? null,
+      description: detail?.description ?? null,
+      imagePath: detail?.imagePath ?? null,
+      step: detail?.step ?? null,
+      owner: scape.owner,
+    };
+  });
+
+  return c.json({ scapes });
 }

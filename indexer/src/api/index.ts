@@ -20,6 +20,9 @@ import {
   post27yPregenerate,
   post27yChooseInitialImage,
   post27yRegenerateImage,
+  get27yAuction,
+  get27yBids,
+  get27yScapesByOwner,
 } from "./27y";
 import { getSESMetadata } from "./ses";
 import { handleLeonardoWebhook } from "./webhooks";
@@ -75,6 +78,13 @@ app.get("/27y/:tokenId/pregenerations", get27yPregenerations);
 app.post("/27y/:tokenId/pregenerate", post27yPregenerate);
 app.post("/27y/:tokenId/pregenerations/choose", post27yChooseInitialImage);
 app.post("/27y/images/:taskId/regenerate", post27yRegenerateImage);
+
+// TwentySevenYear auction and bids routes
+app.get("/27y/:tokenId/auction", get27yAuction);
+app.get("/27y/:tokenId/bids", get27yBids);
+
+// Profile 27Y scapes route
+app.get("/profiles/:address/27y-scapes", get27yScapesByOwner);
 
 // Webhooks
 app.post("/webhooks/leonardo", handleLeonardoWebhook);
