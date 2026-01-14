@@ -78,6 +78,15 @@ export const twentySevenYearScapeDetail = offchainSchema.table("twenty_seven_yea
   updatedAt: bigint("updated_at", { mode: "number" }),
 });
 
+// Merge image processing status
+export const mergeImage = offchainSchema.table("merge_image", {
+  tokenId: integer("token_id").primaryKey(),
+  status: text("status").notNull().default("pending"), // pending | processed | failed
+  errorMessage: text("error_message"),
+  processedAt: integer("processed_at"),
+  createdAt: integer("created_at").notNull(),
+});
+
 // TwentySevenYear rendering requests (bids and pre-generations)
 export const twentySevenYearRequest = offchainSchema.table("twenty_seven_year_request", {
   id: serial("id").primaryKey(),

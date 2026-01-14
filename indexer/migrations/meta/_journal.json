@@ -15,6 +15,13 @@
       "when": 1768391197110,
       "tag": "0001_fair_goblin_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768399965342,
+      "tag": "0002_thankful_gamora",
+      "breakpoints": true
     }
   ]
 }
