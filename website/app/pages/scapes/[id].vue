@@ -80,6 +80,8 @@ const {
   hasError: listingError,
   refresh: refreshListing,
 } = useScapeListing(scapeId);
+
+const sesModalOpen = ref(false);
 </script>
 
 <template>
@@ -105,12 +107,19 @@ const {
           class="scape-detail__listings" />
         <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
           @listing-change="refreshListing" />
+        <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true">
+          Play SES
+        </button>
       </div>
     </header>
 
     <ScapesAttributes :attributes="attributes" />
 
     <ScapesTransactionHistory :history="history" :pending="pending" :error="error" />
+
+    <ClientOnly>
+      <ScapesSESModal v-model:open="sesModalOpen" :token-id="scapeId" />
+    </ClientOnly>
   </section>
 </template>
 
@@ -166,6 +175,21 @@ const {
 
 .scape-detail__actions {
   margin-top: var(--spacer);
+}
+
+.scape-detail__ses-button {
+  margin-top: var(--spacer);
+  padding: var(--spacer-sm) var(--spacer);
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-bold);
+  transition: opacity 0.2s;
+}
+
+.scape-detail__ses-button:hover {
+  opacity: 0.9;
 }
 
 @media (max-width: 40rem) {
