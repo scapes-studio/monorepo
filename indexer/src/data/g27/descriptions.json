@@ -1,0 +1,444 @@
+{
+    "Atmosphere": {
+        "Dark Night": [
+            "dark night sky"
+        ],
+        "Jungle": [
+            "green misty sky"
+        ],
+        "Blue": [
+            "blue sky"
+        ],
+        "Dusk": [
+            "dusk sky in the evening"
+        ],
+        "Dust": [
+            "brown dusty sky"
+        ],
+        "Red Light": [
+            "brown red sky"
+        ],
+        "Morning": [
+            "colorful morning sky during sunrise"
+        ],
+        "Dawn": [
+            "sky during dawn"
+        ],
+        "Bright": [
+            "white sky"
+        ],
+        "Soul": [
+            "bright teal sky"
+        ]
+    },
+    "Sky": {
+        "Simmering Light": [
+            "orange particles"
+        ],
+        "Red Stripes": [
+            "red lights"
+        ],
+        "Dark Stripes": [
+            "dark stripes"
+        ],
+        "Falling Stars": [
+            "a lot of diagonal falling stars"
+        ],
+        "Meteors": [
+            "horizontal falling stars in the distance"
+        ],
+        "Orange Trails": [
+            "orange particles"
+        ],
+        "Ether": [
+            "puple lights"
+        ],
+        "Soul Light": [
+            "teal lights and horizontal teal falling stars in distance"
+        ]
+    },
+    "Celestial": {
+        "Happy Clouds": [
+            "cumulus clouds"
+        ],
+        "Big Shades": [
+            "big purple-blue sun"
+        ],
+        "Prism Sun": [
+            "colurful sun"
+        ],
+        "Sunset": [
+            "giant sun"
+        ],
+        "Jupiter": [
+            "Jupiter"
+        ],
+        "Jupiter and his Moon": [
+            "Jupiter and his moon"
+        ],
+        "Synthwave Prism Sun": [
+            "synthwave sun"
+        ],
+        "Blue Planet": [
+            "planet earth"
+        ],
+        "Evening Clouds": [
+            "altocumulus clouds during sunset"
+        ],
+        "Earths": [
+            "planet earth with moon"
+        ],
+        "Soul Planet": [
+            "big teal colored gas planet"
+        ],
+        "Soul Meteors": [
+            "meteor storm with teal and red colored fireball meteors "
+        ]
+    },
+    "Planet": {
+        "Crater Mars": [
+            "Mars landscape with a big crater"
+        ],
+        "Mountain Moon": [
+            "mountainous moon landscape"
+        ],
+        "Crater Moon": [
+            "moon landscape with a big crater"
+        ],
+        "Glacier Earth": [
+            "glacier landscape"
+        ],
+        "Mountain Mars": [
+            "mountainous Mars landscape"
+        ],
+        "Forest Earth": [
+            "a forest landscape with mountains rising behind it"
+        ],
+        "Hills Earth": [
+            "green hilly landscape",
+            "scottish hills"
+        ],
+        "Blocks Earth": [
+            "landscape made of grass coverd dirt blocks similar to Minecraft"
+        ],
+        "Volcano Earth": [
+            "volcanic landscape with two active volcanos"
+        ],
+        "Mountain Europa": [
+            "pointed ice covered mountains on the moon Europa"
+        ],
+        "Glacier Europa": [
+            "pointy Franz Josef glacier landscape"
+        ],
+        "Mountain Earth": [
+            "alpine landscape with green covered hill in front of snow covered mountains"
+        ],
+        "Desert Earth": [
+            "hilly desert landscape"
+        ],
+        "Hills Mars": [
+            "hilly landscape on Mars"
+        ]
+    },
+    "Landscape": {
+        "Meadow Lowland": [
+            "green meadow"
+        ],
+        "Sand Lowland": [
+            "sand covered ground"
+        ],
+        "Sand Valley": [
+            "sand covered valley"
+        ],
+        "Shrubs Lowland": [
+            "green steppe"
+        ],
+        "Meadow Hill": [
+            "green hills"
+        ],
+        "Shrubs Valley": [
+            "steppe valley"
+        ],
+        "Meadow Valley": [
+            "green valley"
+        ],
+        "Meadow Island": [
+            "on a green covered island"
+        ],
+        "Shrubs Hill": [
+            "rolling steppe landscape"
+        ],
+        "Gravel Valley": [
+            "gravel covered valley"
+        ],
+        "Gravel Lowland": [
+            "gravel covered ground"
+        ],
+        "Gravel Hill": [
+            "gravel hills"
+        ],
+        "Meadow Beach": [
+            "grassy beach"
+        ],
+        "Sand Island": [
+            "on a sand island"
+        ],
+        "Gravel Beach": [
+            "gravel beach"
+        ],
+        "Shrubs Beach": [
+            "steppe beach"
+        ],
+        "Sand Hill": [
+            "sand hills"
+        ],
+        "Sand Beach": [
+            "sand beach"
+        ],
+        "Gravel Island": [
+            "on a gravel island"
+        ],
+        "Shrubs Island": [
+            "on a steppe island"
+        ]
+    },
+    "Trees": {
+        "Red Oak": [
+            "single old oak tree with red leaves"
+        ],
+        "Oasis": [
+            "a two tropical palm trees"
+        ],
+        "Small Forest": [
+            "a group of three firs"
+        ],
+        "Broadleaf Spring": [
+            "green beech tree"
+        ],
+        "Palm": [
+            "a tropical palm tree"
+        ],
+        "Old Tree": [
+            "a giant old tree"
+        ],
+        "Burned Tree": [
+            "a burned tree"
+        ],
+        "Broadleaf Autumn": [
+            "autumn colored beech tree"
+        ],
+        "Gold Block Tree": [
+            "a blocky tree with autumn colors"
+        ],
+        "Tree of Life": [
+            "purple tree of live from avatar"
+        ],
+        "Fruit Block Tree": [
+            "a blocky apple tree with red apples"
+        ],
+        "Block Tree": [
+            "a green blocky tree"
+        ]
+    },
+    "Rocketry": {
+        "BFR Fleet": [
+            "a group of three BFR SpaceX rockets standing on the ground"
+        ],
+        "Spacelab": [
+            "a flying satellite with solar panels"
+        ],
+        "Shuttle Fire": [
+            "a space shuttle right after launch exhausting fire"
+        ],
+        "UFO Beam": [
+            "an flying UFO with a green colored tractor  beam"
+        ],
+        "Saturn V Lift Off": [
+            "a Saturn V rocket during lift off"
+        ],
+        "Shuttle": [
+            "a flying space shuttle"
+        ],
+        "BFR": [
+            "a BFR SpaceX rocket standing on the ground"
+        ],
+        "Saturn V": [
+            "a Saturn V rocket standing on the ground"
+        ],
+        "UFO": [
+            "a flying UFO"
+        ]
+    },
+    "City": {
+        "Daytime Skyscrapers": [
+            "city skyscrapers"
+        ],
+        "Sleeping Skyscrapers": [
+            "dark city skyscrapers during the night"
+        ],
+        "Lighted Skyscrapers": [
+            "lighted city skyscrapers during the night"
+        ],
+        "Old Town": [
+            "old buildings from Beddgelert using grey bricks"
+        ]
+    },
+    "Buildings": {
+        "Chinese Gate": [
+            "Chinese gate"
+        ],
+        "Mini House": [
+            "tiny red house"
+        ],
+        "Windmill": [
+            "old windmill"
+        ],
+        "Old House": [
+            "half timbered house"
+        ],
+        "Burj": [
+            "Burj Al Arab"
+        ],
+        "Temple": [
+            "chinese temple with red roof"
+        ],
+        "Tiny House": [
+            "small house with red roof"
+        ],
+        "Mansion Lvl 2": [
+            "mansion with planted roof"
+        ],
+        "Mansion Lvl 4": [
+            "modern mansion"
+        ],
+        "Lighthouse": [
+            "white and red striped lighthouse"
+        ],
+        "Mansion Lvl 3": [
+            "modern mansion"
+        ],
+        "Mansion Lvl 5 Lights On": [
+            "big modern mansion with ligths shining through the windows"
+        ],
+        "Pyramid": [
+            "aztec pyramid"
+        ],
+        "Colosseum": [
+            "Colosseum"
+        ],
+        "Hut": [
+            "odl A-frame tent next to campfire"
+        ],
+        "Mansion Lvl 5": [
+            "big modern mansion with lights off"
+        ],
+        "Big Ben": [
+            "Big Ben"
+        ],
+        "Mansion Lvl 1 Lights On": [
+            "small mansion with lights shining through the windows"
+        ],
+        "Mansion Lvl 1": [
+            "small mansion"
+        ]
+    },
+    "Fluid": {
+        "Ocean": [
+            "ocean with waves"
+        ],
+        "Golden Sea": [
+            "golden sea",
+            "lava lake"
+        ],
+        "Toxic River": [
+            "bright green toxic river",
+            "bright green toxic sea"
+        ],
+        "Lake": [
+            "big lake"
+        ]
+    },
+    "Animals": {
+        "Unicorn": [
+            "a white unicorn with pink mane and tail"
+        ],
+        "Fox": [
+            "a sitting fox"
+        ]
+    },
+    "Monuments": {
+        "Ethereum": [
+            "large Ethereum crystal"
+        ],
+        "Skull": [
+            "big human skull"
+        ],
+        "Bitcoin": [
+            "big Bitcoin coin"
+        ],
+        "Statue of Liberty": [
+            "the Statue of Liberty"
+        ],
+        "Bitcoin and Ethereum": [
+            "Ethereum crystal next to a Bitcoin coin"
+        ],
+        "Pillars": [
+            "two ancient pillars, one is tipped over"
+        ]
+    },
+    "Cars": {
+        "Delivery Van": [
+            "left facing yellow delivery van"
+        ],
+        "Cyber Truck.flipped": [
+            "right facing Cybertruck"
+        ],
+        "Delivery Van.flipped": [
+            "right facing yellow delivery van"
+        ],
+        "Pickup.flipped": [
+            "right facing black pickup truck"
+        ],
+        "Cyber Truck": [
+            "left facing Cybertruck"
+        ],
+        "Police Car": [
+            "right facing American police car"
+        ],
+        "Sedan": [
+            "left facing blue 1980 Sedan"
+        ],
+        "Sportscar": [
+            "right facing red sports car"
+        ],
+        "Pickup": [
+            "left facing black pickup truck"
+        ],
+        "Sedan.flipped": [
+            "right facing blue 1980 Sedan"
+        ],
+        "Sportscar Spoiler": [
+            "right facing red sports car with a spoiler"
+        ],
+        "Sherp": [
+            "left facing SHERP UTV with oversized, low-pressure tires and cube-like body"
+        ],
+        "Track Sherp": [
+            "left facing tracked SHERP UTV with tracked treads and cube-like body"
+        ],
+        "Police Car Front": [
+            "a front facing American police car"
+        ]
+    },
+    "Portals": {
+        "Square Portal": [
+            "a square portal standing on the ground emmitting a shining aura"
+        ],
+        "Round Portal": [
+            "a round white shimmering portal"
+        ],
+        "Beams": [
+            "four white light beams coming from the sky hitting the ground"
+        ]
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "ARTISTS": {
+        "Ross Tran": "Ether",
+        "Alena Aenami": "Rapscallion",
+        "Albert Bierstadt and Ross Tran": "Perspective",
+        "Simon Stålenhag painting": "Vibration",
+        "Gustave Dore and Leonid Afremov": "Karma",
+        "Thomas Kinkade and Alena Aenami": "Ambience",
+        "Ivan Aivazovsky": "Conviction",
+        "Thomas Cole": "Wonder",
+        "Pieter Claesz": "Polemic",
+        "John Constable": "Purist",
+        "Pablo Picasso and Alena Aenami": "Sagacity",
+        "Lee b on artstation": "Freedom",
+        "H.R. Giger landscape painting": "Isolation"
+    },
+    "STYLES": {
+        "beautiful painting": "Affinity",
+        "watercolor": "Affinity",
+        "acrylic artwork": "Affinity",
+        "constructivism": "Quantum",
+        "pixel art": "Quantum",
+        "low poly art": "Quantum",
+        "minimalist art painting": "Quantum",
+        "concept art": "Quantum",
+        "speedpainting": "Quantum",
+        "colorful painting": "Continuum",
+        "psychedelic": "Continuum",
+        "reimagined by industrial light and magic": "Continuum",
+        "mixed media": "Continuum",
+        "fauvism": "Continuum",
+        "detailed": "Distinction",
+        "steampunk": "Distinction",
+        "ukiyo-e": "Distinction",
+        "4k resolution painting": "Abundance",
+        "8k resolution painting": "Abundance",
+        "oil on canvas": "Resplendent",
+        "dutch golden age": "Resplendent",
+        "17th century painting": "Resplendent",
+        "Flamish Baroque": "Resplendent",
+        "rokoko": "Resplendent",
+        "god rays": "Virtue",
+        "volumetric lighting painting": "Hope",
+        "terragen painting": "Hope",
+        "matte painting": "Harmony"
+    },
+    "PLATFORMS": {
+        "trending on Artstation": "Largo",
+        "trending on pixiv": "Andante",
+        "trending on Deviantart": "Moderato",
+        "Behance illustration": "Presto"
+    }
+}

@@ -11,8 +11,18 @@ import { getAttributeCounts } from "./attributes";
 import { getActivity } from "./activity";
 import { getListings, getListingByTokenId } from "./listings";
 import { getScapeImage } from "./images";
-import { get27yScape, get27yCurrent, get27yNext } from "./27y";
+import {
+  get27yScape,
+  get27yCurrent,
+  get27yNext,
+  get27yInitialImage,
+  get27yPregenerations,
+  post27yPregenerate,
+  post27yChooseInitialImage,
+  post27yRegenerateImage,
+} from "./27y";
 import { getSESMetadata } from "./ses";
+import { handleLeonardoWebhook } from "./webhooks";
 
 const app = new Hono();
 
@@ -58,5 +68,15 @@ app.get("/ses/:tokenId", getSESMetadata);
 app.get("/27y/current", get27yCurrent);
 app.get("/27y/next", get27yNext);
 app.get("/27y/:tokenId", get27yScape);
+
+// TwentySevenYear pregeneration routes
+app.get("/27y/:tokenId/initial-image", get27yInitialImage);
+app.get("/27y/:tokenId/pregenerations", get27yPregenerations);
+app.post("/27y/:tokenId/pregenerate", post27yPregenerate);
+app.post("/27y/:tokenId/pregenerations/choose", post27yChooseInitialImage);
+app.post("/27y/images/:taskId/regenerate", post27yRegenerateImage);
+
+// Webhooks
+app.post("/webhooks/leonardo", handleLeonardoWebhook);
 
 export default app;
