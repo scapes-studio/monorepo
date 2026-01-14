@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { Gallery27OwnedScape } from "~/types/gallery27";
 
-const CDN_BASE = "https://cdn.scapes.xyz";
-
 const props = defineProps<{
   scape: Gallery27OwnedScape;
 }>();
@@ -12,16 +10,8 @@ const formattedDate = computed(() => {
   return new Date(props.scape.date * 1000).toLocaleDateString();
 });
 
-// Construct image URL
-// - With step: show specific step image
-// - Without step: show base path (no suffix)
-const imageUrl = computed(() => {
-  if (!props.scape.imagePath) return null;
-  if (props.scape.step !== null) {
-    return `${CDN_BASE}/${props.scape.imagePath}/steps/${props.scape.step.toString().padStart(3, "0")}.png`;
-  }
-  return `${CDN_BASE}/${props.scape.imagePath}`;
-});
+const CDN_BASE = "https://cdn.scapes.xyz";
+const imageUrl = computed(() => `${CDN_BASE}/${props.scape.imagePath}`);
 </script>
 
 <template>
