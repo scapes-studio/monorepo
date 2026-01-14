@@ -6,4 +6,4 @@
 5 * * * * pnpm --dir /app/indexer cli import:listings --slug twenty-seven-year-scapes
 
 # Process merge images every minute
-* * * * * pnpm --dir /app/indexer cli process:merge-images --batch-size 50
+* * * * * pnpm --dir /app/indexer cli process:merge-images --batch-size 10
