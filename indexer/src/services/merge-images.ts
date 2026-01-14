@@ -45,10 +45,10 @@ export class MergeImagesService {
 
     // Query scapes with tokenId > 10000 that aren't processed
     const pendingScapes = await viewsDb.execute(
-      sql`SELECT token_id::integer as "tokenId" FROM scape
-          WHERE token_id > ${MERGE_TOKEN_ID_START - 1}
-          ${processedIds.length > 0 ? sql`AND token_id NOT IN (${sql.join(processedIds.map(id => sql`${id}`), sql`, `)})` : sql``}
-          ORDER BY token_id ASC
+      sql`SELECT id::integer as "tokenId" FROM scape
+          WHERE id > ${MERGE_TOKEN_ID_START - 1}
+          ${processedIds.length > 0 ? sql`AND id NOT IN (${sql.join(processedIds.map(id => sql`${id}`), sql`, `)})` : sql``}
+          ORDER BY id ASC
           LIMIT ${limit}`,
     );
 
@@ -233,7 +233,7 @@ export class MergeImagesService {
 
     // Get total merges from scapes table
     const totalResult = await viewsDb.execute(
-      sql`SELECT COUNT(*)::integer as count FROM scape WHERE token_id > ${MERGE_TOKEN_ID_START - 1}`,
+      sql`SELECT COUNT(*)::integer as count FROM scape WHERE id > ${MERGE_TOKEN_ID_START - 1}`,
     );
     const total = (totalResult.rows[0] as { count: number }).count;
 
