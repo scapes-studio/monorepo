@@ -20,7 +20,7 @@
 ## Key files
 - `indexer/ponder.config.ts` — chain/contract config.
 - `indexer/ponder.schema.ts` — onchain schema.
-- `indexer/src/offchain.ts` — offchain tables.
+- `indexer/offchain.schema.ts` — offchain tables.
 - `indexer/src/index.ts` — event handlers.
 - `indexer/src/api/` — Hono routes.
 - `website/app/pages/` — Nuxt routes.
