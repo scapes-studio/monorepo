@@ -8,10 +8,17 @@ const scapesABI = parseAbi([
 const SCAPES_CONTRACT = "0xb7def63a9040ad5dc431aff79045617922f4023a";
 
 export class ImageService {
-  private client = createPublicClient({
-    chain: mainnet,
-    transport: http(process.env.PONDER_RPC_URL_1),
-  });
+  private _client: ReturnType<typeof createPublicClient> | null = null;
+
+  private get client() {
+    if (!this._client) {
+      this._client = createPublicClient({
+        chain: mainnet,
+        transport: http(process.env.PONDER_RPC_URL_1),
+      });
+    }
+    return this._client;
+  }
 
   async getScapeImage(tokenId: bigint, scale: bigint = 1n): Promise<string> {
     const result = await this.client.readContract({

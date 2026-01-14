@@ -23,12 +23,13 @@ const getS3Client = (): S3Client => {
 
 export class S3Service {
   private client: S3Client | null = null;
-  private bucket: string;
-  private publicUrl: string;
 
-  constructor() {
-    this.bucket = process.env.S3_BUCKET || "";
-    this.publicUrl = process.env.S3_PUBLIC_URL || "";
+  private get bucket(): string {
+    return process.env.S3_BUCKET || "";
+  }
+
+  private get publicUrl(): string {
+    return process.env.S3_PUBLIC_URL || "";
   }
 
   private getClient(): S3Client {
