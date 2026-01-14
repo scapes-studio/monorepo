@@ -1,4 +1,11 @@
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  ListObjectsV2Command,
+  HeadObjectCommand,
+  CopyObjectCommand,
+} from "@aws-sdk/client-s3";
 
 const getS3Client = (): S3Client => {
   const endpoint = process.env.S3_ENDPOINT;
@@ -93,6 +100,80 @@ export class S3Service {
     // Fallback to direct bucket URL
     const region = process.env.S3_REGION || "nyc3";
     return `https://${this.bucket}.${region}.digitaloceanspaces.com/${path}`;
+  }
+
+  async listObjects(prefix: string): Promise<string[]> {
+    if (!this.bucket) {
+      throw new Error("S3_BUCKET is required");
+    }
+
+    const client = this.getClient();
+    const keys: string[] = [];
+    let continuationToken: string | undefined;
+
+    do {
+      const response = await client.send(
+        new ListObjectsV2Command({
+          Bucket: this.bucket,
+          Prefix: prefix,
+          ContinuationToken: continuationToken,
+        }),
+      );
+
+      for (const obj of response.Contents ?? []) {
+        if (obj.Key) {
+          keys.push(obj.Key);
+        }
+      }
+
+      continuationToken = response.NextContinuationToken;
+    } while (continuationToken);
+
+    return keys;
+  }
+
+  async objectExists(key: string): Promise<boolean> {
+    if (!this.bucket) {
+      throw new Error("S3_BUCKET is required");
+    }
+
+    const client = this.getClient();
+
+    try {
+      await client.send(
+        new HeadObjectCommand({
+          Bucket: this.bucket,
+          Key: key,
+        }),
+      );
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async copyObject(
+    sourceKey: string,
+    destKey: string,
+    contentType?: string,
+  ): Promise<void> {
+    if (!this.bucket) {
+      throw new Error("S3_BUCKET is required");
+    }
+
+    const client = this.getClient();
+
+    await client.send(
+      new CopyObjectCommand({
+        Bucket: this.bucket,
+        CopySource: `${this.bucket}/${sourceKey}`,
+        Key: destKey,
+        ContentType: contentType,
+        ACL: "public-read",
+        CacheControl: "public, max-age=31536000, immutable",
+        MetadataDirective: contentType ? "REPLACE" : "COPY",
+      }),
+    );
   }
 }
 
