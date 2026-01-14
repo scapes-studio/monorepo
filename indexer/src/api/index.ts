@@ -11,6 +11,7 @@ import { getAttributeCounts } from "./attributes";
 import { getActivity } from "./activity";
 import { getListings, getListingByTokenId } from "./listings";
 import { getScapeImage } from "./images";
+import { get27yScape, get27yCurrent, get27yNext } from "./27y";
 
 const app = new Hono();
 
@@ -48,5 +49,10 @@ app.get("/twenty-seven-year-scapes/:tokenId/history", getTwentySevenYearScapeHis
 
 // Activity feed route
 app.get("/activity", getActivity);
+
+// TwentySevenYear routes (must be before /27y/:tokenId to avoid matching)
+app.get("/27y/current", get27yCurrent);
+app.get("/27y/next", get27yNext);
+app.get("/27y/:tokenId", get27yScape);
 
 export default app;

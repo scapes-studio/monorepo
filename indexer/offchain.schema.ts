@@ -1,5 +1,9 @@
-import { pgSchema, text, integer, boolean, json, numeric } from "drizzle-orm/pg-core";
+import { pgSchema, text, integer, boolean, json, numeric, serial, bigint } from "drizzle-orm/pg-core";
 import type { Price, VolumeStats, EnsProfileData } from "./ponder.types";
+
+// Types for twentySevenYear tables
+export type TwentySevenYearScapeData = Record<string, unknown>;
+export type TwentySevenYearImageInput = { prompt?: string; [key: string]: unknown };
 
 export const offchainSchema = pgSchema("offchain");
 
@@ -52,4 +56,42 @@ export const ensProfile = offchainSchema.table("ens_profile", {
   ens: text("ens"),
   data: json("data").$type<EnsProfileData>(),
   updatedAt: integer("updated_at").notNull(),
+});
+
+// TwentySevenYear scape details (offchain metadata)
+export const twentySevenYearScapeDetail = offchainSchema.table("twenty_seven_year_scape_detail", {
+  tokenId: integer("token_id").primaryKey(),
+  scapeId: integer("scape_id"),                    // Parent PunkScape
+  date: bigint("date", { mode: "number" }),        // Unix timestamp (bigint for dates beyond 2038)
+  auctionEndsAt: bigint("auction_ends_at", { mode: "number" }),
+  description: text("description"),
+  requestId: integer("request_id"),                // FK to winning request
+  imagePath: text("image_path"),                   // S3 path
+  step: integer("step"),                           // AI generation step used
+  imageCid: text("image_cid"),                     // IPFS CID for image
+  metadataCid: text("metadata_cid"),               // IPFS CID for metadata
+  data: json("data").$type<TwentySevenYearScapeData>(),
+  owner: text("owner"),
+  initialRenderId: integer("initial_render_id"),
+  completedAt: bigint("completed_at", { mode: "number" }),
+  createdAt: bigint("created_at", { mode: "number" }),
+  updatedAt: bigint("updated_at", { mode: "number" }),
+});
+
+// TwentySevenYear rendering requests (bids and pre-generations)
+export const twentySevenYearRequest = offchainSchema.table("twenty_seven_year_request", {
+  id: serial("id").primaryKey(),
+  tokenId: integer("token_id").notNull(),          // FK to twentySevenYearScapeDetail
+  from: text("from"),                              // Bidder address (null for pre-gens)
+  transactionHash: text("transaction_hash"),
+  value: numeric("value", { precision: 128, scale: 0 }), // Bid in wei (null for pre-gens)
+  description: text("description"),                // Bid prompt
+  // Embedded AI image fields
+  imagePath: text("image_path"),                   // S3 path
+  imageInput: json("image_input").$type<TwentySevenYearImageInput>(),
+  imageSteps: integer("image_steps"),
+  imageTaskId: text("image_task_id"),              // Leonardo AI task ID
+  createdAt: bigint("created_at", { mode: "number" }),
+  startedProcessingAt: bigint("started_processing_at", { mode: "number" }),
+  completedAt: bigint("completed_at", { mode: "number" }),
 });
