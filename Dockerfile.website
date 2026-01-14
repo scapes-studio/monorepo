@@ -2,9 +2,6 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 
-# Install build dependencies for sharp
-RUN apk add --no-cache python3 make g++ vips-dev
-
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
@@ -25,13 +22,12 @@ RUN pnpm build
 FROM node:22-alpine
 WORKDIR /app
 
-# Install runtime dependencies for sharp
-RUN apk add --no-cache vips
-
 # Copy output and externalized node_modules
 COPY --from=build /app/website/.output/ ./
-COPY --from=build /app/node_modules/.pnpm/@scapes-studio+scape-renderer*/node_modules/@scapes-studio/scape-renderer ./node_modules/@scapes-studio/scape-renderer
-COPY --from=build /app/node_modules/.pnpm/sharp*/node_modules/sharp ./node_modules/sharp
+COPY --from=build /app/node_modules/.pnpm/@scapes-studio+scape-renderer*/node_modules/@scapes-studio/scape-renderer ./server/node_modules/@scapes-studio/scape-renderer
+COPY --from=build /app/node_modules/.pnpm/sharp@*/node_modules/sharp ./server/node_modules/sharp
+COPY --from=build /app/node_modules/.pnpm/@img+sharp-linuxmusl-x64*/node_modules/@img/sharp-linuxmusl-x64 ./server/node_modules/@img/sharp-linuxmusl-x64
+COPY --from=build /app/node_modules/.pnpm/@img+sharp-libvips-linuxmusl-x64*/node_modules/@img/sharp-libvips-linuxmusl-x64 ./server/node_modules/@img/sharp-libvips-linuxmusl-x64
 
 ENV HOST=0.0.0.0
 

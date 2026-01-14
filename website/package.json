@@ -18,7 +18,7 @@
     "@1001-digital/layers.evm": "latest",
     "@scapes-studio/abis": "workspace:^",
     "@scapes-studio/indexer": "workspace:^",
-    "@scapes-studio/scape-renderer": "^1.0.6",
+    "@scapes-studio/scape-renderer": "^1.1.0",
     "@ponder/client": "^0.16.1",
     "@wagmi/core": "^2.16.4",
     "@wagmi/vue": "^0.4.3",

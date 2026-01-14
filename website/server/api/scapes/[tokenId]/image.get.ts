@@ -1,8 +1,7 @@
-/// <reference path="../../../../types/scape-renderer.d.ts" />
-import MergeModule from "@scapes-studio/scape-renderer/build/src/Merge";
+import { createRequire } from "module";
 
-// Handle CJS default export
-const Merge = (MergeModule as { default?: typeof MergeModule }).default || MergeModule;
+const require = createRequire(import.meta.url);
+const Merge = require("@scapes-studio/scape-renderer/build/src/Merge").default;
 
 export default defineEventHandler(async (event) => {
   const tokenId = getRouterParam(event, "tokenId");
