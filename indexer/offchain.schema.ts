@@ -3,7 +3,7 @@ import type { Price, VolumeStats, EnsProfileData } from "./ponder.types";
 
 // Types for twentySevenYear tables
 export type TwentySevenYearScapeData = Record<string, unknown>;
-export type TwentySevenYearImageInput = { prompt?: string; [key: string]: unknown };
+export type TwentySevenYearImageInput = { prompt?: string;[key: string]: unknown };
 
 export const offchainSchema = pgSchema("offchain");
 
@@ -58,6 +58,15 @@ export const ensProfile = offchainSchema.table("ens_profile", {
   updatedAt: integer("updated_at").notNull(),
 });
 
+// Merge image processing status
+export const mergeImage = offchainSchema.table("merge_image", {
+  tokenId: integer("token_id").primaryKey(),
+  status: text("status").notNull().default("pending"), // pending | processed | failed
+  errorMessage: text("error_message"),
+  processedAt: integer("processed_at"),
+  createdAt: integer("created_at").notNull(),
+});
+
 // TwentySevenYear scape details (offchain metadata)
 export const twentySevenYearScapeDetail = offchainSchema.table("twenty_seven_year_scape_detail", {
   tokenId: integer("token_id").primaryKey(),
@@ -76,15 +85,6 @@ export const twentySevenYearScapeDetail = offchainSchema.table("twenty_seven_yea
   completedAt: bigint("completed_at", { mode: "number" }),
   createdAt: bigint("created_at", { mode: "number" }),
   updatedAt: bigint("updated_at", { mode: "number" }),
-});
-
-// Merge image processing status
-export const mergeImage = offchainSchema.table("merge_image", {
-  tokenId: integer("token_id").primaryKey(),
-  status: text("status").notNull().default("pending"), // pending | processed | failed
-  errorMessage: text("error_message"),
-  processedAt: integer("processed_at"),
-  createdAt: integer("created_at").notNull(),
 });
 
 // TwentySevenYear rendering requests (bids and pre-generations)
