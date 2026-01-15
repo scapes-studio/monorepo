@@ -166,7 +166,7 @@ export async function postSignClaim(c: Context) {
         .update(twentySevenYearScapeDetail)
         .set({
           requestId: body.requestId,
-          step: body.step,
+          step: body.step || null,
           imagePath: imageRequest.imagePath,
           imageCid: provenance.imageCID,
           metadataCid: provenance.metadataCID,
@@ -184,7 +184,7 @@ export async function postSignClaim(c: Context) {
       .update(twentySevenYearScapeDetail)
       .set({
         requestId: body.requestId,
-        step: body.step,
+        step: body.step || null,
         imagePath: imageRequest.imagePath,
         updatedAt: now,
       })
