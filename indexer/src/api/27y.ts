@@ -19,9 +19,14 @@ export async function get27yScape(c: Context) {
     return c.json({ error: "Invalid tokenId" }, 400);
   }
 
-  const db = getOffchainDb();
+  // Check onchain table to see if token is minted
+  const onchainScape = await db.query.twentySevenYearScape.findFirst({
+    where: eq(schema.twentySevenYearScape.id, BigInt(tokenId)),
+  });
 
-  const scape = await db.query.twentySevenYearScapeDetail.findFirst({
+  const offchainDb = getOffchainDb();
+
+  const scape = await offchainDb.query.twentySevenYearScapeDetail.findFirst({
     where: eq(twentySevenYearScapeDetail.tokenId, tokenId),
   });
 
@@ -29,7 +34,10 @@ export async function get27yScape(c: Context) {
     return c.json({ error: "Scape not found" }, 404);
   }
 
-  return c.json(scape);
+  return c.json({
+    ...scape,
+    isMinted: onchainScape !== null,
+  });
 }
 
 /**

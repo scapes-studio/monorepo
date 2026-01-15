@@ -78,7 +78,7 @@ useHead({
             :token-id="tokenId"
             :scape-id="scape.scapeId"
             :description="scape.description"
-            :is-on-chain="auction?.settled === true"
+            :is-on-chain="scape.isMinted"
           />
 
           <Gallery27BidHistory

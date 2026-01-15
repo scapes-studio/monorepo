@@ -9,6 +9,7 @@ export interface Gallery27ScapeDetail {
   owner: string | null;
   initialRenderId: number | null;
   completedAt: number | null;
+  isMinted: boolean;
 }
 
 export interface Gallery27AuctionState {
