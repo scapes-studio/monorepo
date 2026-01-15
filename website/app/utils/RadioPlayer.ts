@@ -3,6 +3,7 @@ import {
   FADE_INTERVAL,
   FADE_INCREMENT,
   SCAPE_DURATION,
+  SONG_DURATION,
   getAudioUrl,
   getCoverUrl,
   type ScapeInfo,
@@ -156,6 +157,34 @@ export class RadioPlayer {
     navigator.mediaSession.setActionHandler("play", () => this.start());
     navigator.mediaSession.setActionHandler("pause", () => this.stop());
     navigator.mediaSession.setActionHandler("nexttrack", () => this.next());
+    navigator.mediaSession.setActionHandler("previoustrack", () => this.restartOrPrevious());
+    navigator.mediaSession.setActionHandler("seekto", (details) => {
+      if (details.seekTime !== undefined && this.currentScape) {
+        this.currentScape.setPosition(details.seekTime * 1000);
+        this.updateMediaSessionPosition();
+      }
+    });
+
+    this.updateMediaSessionPosition();
+  }
+
+  private updateMediaSessionPosition(): void {
+    if (!this.hasMediaSession || !this.currentScape) return;
+    if (!("setPositionState" in navigator.mediaSession)) return;
+
+    const positionMs = this.currentScape.getPosition();
+    const positionSec = Math.max(0, positionMs / 1000);
+    const durationSec = SONG_DURATION / 1000;
+
+    try {
+      navigator.mediaSession.setPositionState({
+        duration: durationSec,
+        playbackRate: 1.0,
+        position: Math.min(positionSec, durationSec),
+      });
+    } catch {
+      // Some browsers may throw if position > duration
+    }
   }
 
   private async requestWakeLock(): Promise<void> {
@@ -177,11 +206,19 @@ export class RadioPlayer {
 
   private startProgressTracking(): void {
     this.stopProgressTracking();
+    let updateCounter = 0;
     this.progressInterval = setInterval(() => {
       if (!this.currentScape) return;
       const position = this.currentScape.getPosition();
       const progress = Math.min((position / SCAPE_DURATION) * 100, 100);
       this.notifyStateChange({ progress });
+
+      // Update media session position every second (every 10 intervals)
+      updateCounter++;
+      if (updateCounter >= 10) {
+        updateCounter = 0;
+        this.updateMediaSessionPosition();
+      }
     }, 100);
   }
 
@@ -271,6 +308,43 @@ export class RadioPlayer {
   queueNext(id: number): void {
     this.nextScape?.destroy();
     this.nextScape = new Scape(id);
+  }
+
+  restartOrPrevious(): void {
+    if (!this.currentScape) return;
+
+    // If more than 3 seconds in, restart current track
+    if (this.currentScape.getPosition() > 3000) {
+      this.currentScape.setPosition(0);
+      this.notifyStateChange({ progress: 0 });
+      this.updateMediaSessionPosition();
+      return;
+    }
+
+    // Otherwise go to previous if available
+    if (this.previousScape) {
+      this.cancelAutoSkip();
+      this.currentScape.fadeOut();
+      this.previousScape.fadeIn(this.currentScape);
+
+      // Rotate scapes backwards
+      this.nextScape?.destroy();
+      this.nextScape = this.currentScape;
+      this.currentScape = this.previousScape;
+      this.previousScape = null;
+
+      this.notifyStateChange({
+        currentScape: this.currentScape.info,
+        progress: 0,
+      });
+      this.setupMediaSession();
+      this.scheduleAutoSkip();
+    } else {
+      // No previous, just restart
+      this.currentScape.setPosition(0);
+      this.notifyStateChange({ progress: 0 });
+      this.updateMediaSessionPosition();
+    }
   }
 
   switchToScape(id: number): void {
