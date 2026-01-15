@@ -522,6 +522,42 @@ export async function get27yAll(c: Context) {
 }
 
 /**
+ * GET /gallery27/:tokenId/metadata.json
+ * Get NFT metadata for a minted Gallery27 scape
+ */
+export async function get27yMetadata(c: Context) {
+  const tokenIdParam = c.req.param("tokenId");
+  const tokenId = parseInt(tokenIdParam, 10);
+
+  if (isNaN(tokenId) || tokenId < 1 || tokenId > 10000) {
+    return c.json({ error: "Invalid tokenId" }, 400);
+  }
+
+  const offchainDb = getOffchainDb();
+  const scape = await offchainDb.query.twentySevenYearScapeDetail.findFirst({
+    where: eq(twentySevenYearScapeDetail.tokenId, tokenId),
+  });
+
+  if (!scape) {
+    return c.json({ error: "Scape not found" }, 404);
+  }
+
+  if (!scape.data) {
+    return c.json({ error: "Scape not minted" }, 403);
+  }
+
+  return c.json({
+    provenance: `ipfs://${scape.metadataCid}`,
+    provenance_gateways: [
+      `https://gateway.pinata.cloud/ipfs/${scape.metadataCid}`,
+      `https://ipfs.io/ipfs/${scape.metadataCid}`,
+      `https://cloudflare-ipfs.com/ipfs/${scape.metadataCid}`,
+    ],
+    ...scape.data,
+  });
+}
+
+/**
  * GET /profiles/:address/27y-scapes
  * Get 27Y scapes owned by address
  */

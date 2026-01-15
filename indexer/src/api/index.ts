@@ -24,6 +24,7 @@ import {
   post27yRegenerateImage,
   get27yAuction,
   get27yBids,
+  get27yMetadata,
   get27yScapesByOwner,
 } from "./27y";
 import { getSESMetadata } from "./ses";
@@ -86,6 +87,9 @@ app.post("/27y/images/:taskId/regenerate", post27yRegenerateImage);
 // TwentySevenYear auction and bids routes
 app.get("/27y/:tokenId/auction", get27yAuction);
 app.get("/27y/:tokenId/bids", get27yBids);
+
+// Gallery27 metadata route (legacy API path)
+app.get("/gallery27/:tokenId/metadata.json", get27yMetadata);
 
 // Profile 27Y scapes route
 app.get("/profiles/:address/27y-scapes", get27yScapesByOwner);
