@@ -1,6 +1,3 @@
-import { CID } from "multiformats/cid";
-import { sha256 } from "multiformats/hashes/sha2";
-import * as raw from "multiformats/codecs/raw";
 import { s3Service } from "./s3";
 import { pinataService } from "./pinata";
 import {
@@ -30,14 +27,6 @@ type ImageRequestForMetadata = {
 };
 
 class MetadataService {
-  /**
-   * Generate a CID for a buffer using multiformats.
-   */
-  async cidForBuffer(bytes: Uint8Array): Promise<string> {
-    const hash = await sha256.digest(bytes);
-    return CID.createV1(raw.code, hash).toString();
-  }
-
   /**
    * Get the upscaled image URL from S3.
    * Handles both v1 and v2 image path formats.
@@ -92,8 +81,13 @@ class MetadataService {
       imageRequest.imagePath,
     );
 
-    // Generate image CID
-    const imageCID = await this.cidForBuffer(imageBuffer);
+    // Upload image to Pinata and get the CID
+    const filename = `twenty-seven-year-${scapeDetail.tokenId}-${scapeDetail.scapeId ?? 0}`;
+    const imageCID = await pinataService.uploadFile(
+      imageBuffer,
+      filename + ".png",
+      "image/png",
+    );
 
     // Get attributes from image input
     const inputAttributes =
@@ -137,14 +131,12 @@ class MetadataService {
       ],
     };
 
-    // Generate metadata CID
-    const metadataBuffer = Buffer.from(JSON.stringify(metadata, null, 4));
-    const metadataCID = await this.cidForBuffer(metadataBuffer);
+    // Upload metadata to Pinata and get the CID
+    const metadataCID = await pinataService.uploadJson(metadata, filename + ".json");
 
-    // Upload to Pinata (non-blocking)
-    this.uploadToPinata(scapeDetail, imageBuffer, metadata).catch((error) => {
-      console.error("Failed to upload to Pinata:", error);
-    });
+    console.log(
+      `Uploaded to Pinata: 27y scape #${scapeDetail.tokenId} (scape #${scapeDetail.scapeId})`,
+    );
 
     return {
       imageCID,
@@ -153,26 +145,6 @@ class MetadataService {
     };
   }
 
-  /**
-   * Upload image and metadata to Pinata IPFS.
-   */
-  private async uploadToPinata(
-    scapeDetail: ScapeDetailForMetadata,
-    imageBuffer: Buffer,
-    metadata: Record<string, unknown>,
-  ): Promise<void> {
-    const filename = `twenty-seven-year-${scapeDetail.tokenId}-${scapeDetail.scapeId}`;
-
-    // Upload image
-    await pinataService.uploadFile(imageBuffer, filename + '.png', "image/png");
-
-    // Upload metadata
-    await pinataService.uploadJson(metadata, filename + '.json');
-
-    console.log(
-      `Uploaded to Pinata: 27y scape #${scapeDetail.tokenId} (scape #${scapeDetail.scapeId})`,
-    );
-  }
 }
 
 export const metadataService = new MetadataService();
