@@ -3,6 +3,7 @@ import type { Gallery27AuctionState } from "~/types/gallery27";
 
 const props = defineProps<{
   auction: Gallery27AuctionState | null;
+  isOnChain: boolean
 }>();
 
 const formattedBid = computed(() => {
@@ -23,7 +24,7 @@ const auctionStatus = computed(() => {
   }
 
   if (!props.auction.endTimestamp) return "not-started";
-  if (now >= props.auction.endTimestamp) return "ended";
+  if (props.isOnChain || (now >= props.auction.endTimestamp)) return "ended";
   return "active";
 });
 </script>
@@ -74,7 +75,8 @@ const auctionStatus = computed(() => {
       </div>
 
       <div v-if="auction.latestBidder" class="gallery27-meta__row">
-        <span class="gallery27-meta__label">{{ auctionStatus === 'ended' || auctionStatus === 'settled' ? 'Winner' : 'Leading Bidder' }}</span>
+        <span class="gallery27-meta__label">{{ auctionStatus === 'ended' || auctionStatus === 'settled' ? 'Winner' :
+          'Leading Bidder' }}</span>
         <span class="gallery27-meta__value">
           <AccountLink :address="auction.latestBidder" />
         </span>

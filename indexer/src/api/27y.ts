@@ -36,7 +36,7 @@ export async function get27yScape(c: Context) {
 
   return c.json({
     ...scape,
-    isMinted: onchainScape !== null,
+    isMinted: !!onchainScape,
   });
 }
 
@@ -347,7 +347,7 @@ export async function get27yAuction(c: Context) {
     latestBidder: auction.latestBidder,
     latestBid: auction.latestBid?.toString() ?? null,
     startTimestamp: scapeDetail.date ?? null,
-    endTimestamp: auction.endTimestamp,
+    endTimestamp: auction.endTimestamp ?? scapeDetail.auctionEndsAt ?? null,
     bidCount: auction.bidCount,
     settled: scapeDetail.completedAt !== null,
   });
@@ -391,9 +391,9 @@ export async function get27yBids(c: Context) {
   const bidderAddresses = [...new Set(onchainBids.map(b => b.bidder.toLowerCase()))];
   const ensProfiles = bidderAddresses.length > 0
     ? await offchainDb
-        .select()
-        .from(ensProfile)
-        .where(sql`LOWER(${ensProfile.address}) IN (${sql.join(bidderAddresses.map(a => sql`${a}`), sql`, `)})`)
+      .select()
+      .from(ensProfile)
+      .where(sql`LOWER(${ensProfile.address}) IN (${sql.join(bidderAddresses.map(a => sql`${a}`), sql`, `)})`)
     : [];
 
   const ensMap = new Map(ensProfiles.map(p => [p.address.toLowerCase(), p.ens]));
@@ -409,8 +409,8 @@ export async function get27yBids(c: Context) {
     // Find matching request by address and message
     const matchingRequest = auctionStarted
       ? requests.find(
-          r => r.from?.toLowerCase() === bid.bidder.toLowerCase() && r.description === bid.message
-        )
+        r => r.from?.toLowerCase() === bid.bidder.toLowerCase() && r.description === bid.message
+      )
       : null;
 
     return {
@@ -423,10 +423,10 @@ export async function get27yBids(c: Context) {
       txHash: bid.txHash,
       image: matchingRequest?.imagePath
         ? {
-            id: matchingRequest.id,
-            path: matchingRequest.imagePath,
-            steps: matchingRequest.imageSteps ?? null,
-          }
+          id: matchingRequest.id,
+          path: matchingRequest.imagePath,
+          steps: matchingRequest.imageSteps ?? null,
+        }
         : null,
     };
   });

@@ -72,22 +72,13 @@ useHead({
         </div>
 
         <aside class="gallery27-page__sidebar">
-          <Gallery27Meta :auction="auction ?? null" />
+          <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" />
 
-          <Gallery27Description
-            :token-id="tokenId"
-            :scape-id="scape.scapeId"
-            :description="scape.description"
-            :is-on-chain="scape.isMinted"
-          />
+          <Gallery27Description :token-id="tokenId" :scape-id="scape.scapeId" :description="scape.description"
+            :is-on-chain="scape.isMinted" />
 
-          <Gallery27BidHistory
-            v-if="bidsData"
-            v-model:selected-bid-id="selectedBidId"
-            :bids="bidsData.bids"
-            :initial-render="bidsData.initialRender"
-            :accepted-image="bidsData.acceptedImage"
-          />
+          <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids"
+            :initial-render="bidsData.initialRender" :accepted-image="bidsData.acceptedImage" />
         </aside>
       </div>
     </template>
