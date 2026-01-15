@@ -161,13 +161,13 @@ class MetadataService {
     imageBuffer: Buffer,
     metadata: Record<string, unknown>,
   ): Promise<void> {
-    const filename = `twenty-seven-year-${scapeDetail.tokenId}-${scapeDetail.scapeId}.png`;
+    const filename = `twenty-seven-year-${scapeDetail.tokenId}-${scapeDetail.scapeId}`;
 
     // Upload image
-    await pinataService.uploadFile(imageBuffer, filename, "image/png");
+    await pinataService.uploadFile(imageBuffer, filename + '.png', "image/png");
 
     // Upload metadata
-    await pinataService.uploadJson(metadata);
+    await pinataService.uploadJson(metadata, filename + '.json');
 
     console.log(
       `Uploaded to Pinata: 27y scape #${scapeDetail.tokenId} (scape #${scapeDetail.scapeId})`,

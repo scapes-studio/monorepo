@@ -35,9 +35,9 @@ class PinataService {
    * Upload JSON data to IPFS via Pinata.
    * Returns the IPFS CID.
    */
-  async uploadJson(data: object): Promise<string> {
+  async uploadJson(data: object, filename: string): Promise<string> {
     const sdk = this.getSDK();
-    const result = await sdk.upload.json(data);
+    const result = await sdk.upload.json(data, { metadata: { name: filename } });
     return result.cid;
   }
 
