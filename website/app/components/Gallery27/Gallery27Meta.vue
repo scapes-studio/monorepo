@@ -50,9 +50,18 @@ const auctionStatus = computed(() => {
         <span class="gallery27-meta__value">{{ formattedBid }} ETH</span>
       </div>
 
-      <div class="gallery27-meta__row">
+      <div v-if="auctionStatus !== 'not-started'" class="gallery27-meta__row">
         <span class="gallery27-meta__label">Bids</span>
         <span class="gallery27-meta__value">{{ auction.bidCount }}</span>
+      </div>
+
+      <div v-if="auctionStatus === 'not-started' && auction.startTimestamp" class="gallery27-meta__row">
+        <span class="gallery27-meta__label">Starts in</span>
+        <span class="gallery27-meta__value">
+          <ClientOnly>
+            <Gallery27Countdown :end-timestamp="auction.startTimestamp" />
+          </ClientOnly>
+        </span>
       </div>
 
       <div v-if="auctionStatus === 'active' && auction.endTimestamp" class="gallery27-meta__row">
