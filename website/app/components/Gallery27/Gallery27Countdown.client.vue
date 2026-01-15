@@ -7,57 +7,28 @@ const emit = defineEmits<{
   ended: [];
 }>();
 
-const timeLeft = ref("");
+const now = useSeconds();
 const hasEnded = ref(false);
 
-const updateCountdown = () => {
-  if (!props.endTimestamp) {
-    timeLeft.value = "";
-    return;
-  }
-
-  const now = Math.floor(Date.now() / 1000);
-  const diff = props.endTimestamp - now;
-
-  if (diff <= 0) {
-    timeLeft.value = "Ended";
-    if (!hasEnded.value) {
-      hasEnded.value = true;
-      emit("ended");
-    }
-    return;
-  }
-
-  const days = Math.floor(diff / 86400);
-  const hours = Math.floor((diff % 86400) / 3600);
-  const minutes = Math.floor((diff % 3600) / 60);
-  const seconds = diff % 60;
-
-  if (days > 0) {
-    timeLeft.value = `${days}d ${hours}h ${minutes}m`;
-  } else if (hours > 0) {
-    timeLeft.value = `${hours}h ${minutes}m ${seconds}s`;
-  } else if (minutes > 0) {
-    timeLeft.value = `${minutes}m ${seconds}s`;
-  } else {
-    timeLeft.value = `${seconds}s`;
-  }
-};
-
-let interval: ReturnType<typeof setInterval> | null = null;
-
-onMounted(() => {
-  updateCountdown();
-  interval = setInterval(updateCountdown, 1000);
+const diff = computed(() => {
+  if (!props.endTimestamp) return 0;
+  return props.endTimestamp - now.value;
 });
 
-onUnmounted(() => {
-  if (interval) {
-    clearInterval(interval);
-  }
+const { str } = useCountDown(diff);
+
+const timeLeft = computed(() => {
+  if (!props.endTimestamp) return "";
+  if (diff.value <= 0) return "Ended";
+  return str.value;
 });
 
-watch(() => props.endTimestamp, updateCountdown);
+watch(diff, (value) => {
+  if (value <= 0 && !hasEnded.value) {
+    hasEnded.value = true;
+    emit("ended");
+  }
+});
 </script>
 
 <template>
