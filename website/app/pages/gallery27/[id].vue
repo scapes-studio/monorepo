@@ -29,10 +29,27 @@ if (import.meta.client) {
     clearFixedScape();
   });
 }
-const { data: auction, pending: auctionPending, isActive } = useGallery27Auction(tokenIdRef);
+const { data: auction, pending: auctionPending, isActive, refresh: refreshAuction } = useGallery27Auction(tokenIdRef);
 const { data: bidsData, pending: bidsPending, refresh: refreshBids } = await useGallery27Bids(tokenIdRef);
 
 const selectedBidId = ref<string | null>(null);
+
+// Get the selected image for claim flow
+const selectedImage = computed(() => {
+  if (!bidsData.value || !selectedBidId.value) return null;
+
+  if (selectedBidId.value === "initial") {
+    return bidsData.value.initialRender;
+  }
+
+  const bid = bidsData.value.bids.find(b => b.id === selectedBidId.value);
+  return bid?.image ?? null;
+});
+
+// Handle action completion (refresh data)
+const handleActionComplete = async () => {
+  await Promise.all([refreshAuction(), refreshBids()]);
+};
 
 const displayedImage = computed(() => {
   if (!bidsData.value) return null;
@@ -90,6 +107,17 @@ useHead({
 
         <aside class="gallery27-page__sidebar">
           <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" />
+
+          <Gallery27Actions
+            v-if="scape.scapeId"
+            :punk-scape-id="scape.scapeId"
+            :token-id="tokenId"
+            :auction="auction ?? null"
+            :is-active="isActive"
+            :is-minted="scape.isMinted"
+            :selected-image="selectedImage"
+            @action-complete="handleActionComplete"
+          />
 
           <Gallery27Description :token-id="tokenId" :scape-id="scape.scapeId" :description="scape.description"
             :is-on-chain="scape.isMinted" />

@@ -27,6 +27,7 @@ import {
   get27yMetadata,
   get27yScapesByOwner,
 } from "./27y";
+import { postSignInitializeAuction, postSignClaim } from "./gallery27-actions";
 import { getSESMetadata } from "./ses";
 import { handleLeonardoWebhook } from "./webhooks";
 
@@ -87,6 +88,10 @@ app.post("/27y/images/:taskId/regenerate", post27yRegenerateImage);
 // TwentySevenYear auction and bids routes
 app.get("/27y/:tokenId/auction", get27yAuction);
 app.get("/27y/:tokenId/bids", get27yBids);
+
+// Gallery27 signature routes (for onchain actions)
+app.post("/27y/sign-initialize-auction", postSignInitializeAuction);
+app.post("/27y/sign-claim", postSignClaim);
 
 // Gallery27 metadata route (legacy API path)
 app.get("/gallery27/:tokenId/metadata.json", get27yMetadata);
