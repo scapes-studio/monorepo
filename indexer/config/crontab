@@ -7,3 +7,6 @@
 
 # Process merge images every minute
 * * * * * pnpm --dir /app/indexer cli process:merge-images --batch-size 10
+
+# Pregenerate AI images for TwentySevenYear scapes (3 days ahead, daily at midnight UTC)
+0 0 * * * pnpm --dir /app/indexer cli generate:27y-image --days-ahead 3 --count 1
