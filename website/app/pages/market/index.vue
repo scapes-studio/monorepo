@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { SortOption } from "~/composables/useListedScapes";
 
+useSeo({
+  title: 'Market',
+  description: 'Browse Scapes currently listed for sale on the marketplace.',
+});
+
 const sortOptions = [
   { value: "price-asc", label: "Price: Low to High" },
   { value: "price-desc", label: "Price: High to Low" },

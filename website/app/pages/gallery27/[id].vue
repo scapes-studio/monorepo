@@ -99,9 +99,23 @@ const fallbackScapeId = computed(() => scape.value?.scapeId ?? null);
 const showFallbackScape = computed(() => !displayedImage.value && fallbackScapeId.value !== null);
 
 // Page meta
-useHead({
-  title: computed(() => scape.value ? `Day ${scape.value.tokenId} | Gallery27` : "Gallery27"),
+const seoOptions = computed(() => {
+  const day = scape.value?.tokenId;
+  const imagePath = displayedImage.value?.path;
+  const ogImage = imagePath
+    ? `https://cdn.scapes.xyz/${imagePath}`
+    : scape.value?.scapeId
+      ? `https://cdn.scapes.xyz/scapes/sm/${scape.value.scapeId}.png`
+      : undefined;
+
+  return {
+    title: day ? `Day ${day}` : 'Gallery27',
+    description: scape.value?.description || `Day ${day} of the 27 Year Scapes collection. AI-generated artwork based on a PunkScape.`,
+    image: ogImage,
+    imageAlt: day ? `Gallery27 Day ${day}` : 'Gallery27',
+  };
 });
+useSeo(seoOptions);
 </script>
 
 <template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { eq } from "@ponder/client";
+import { shortenAddress } from "~/composables/useENSResolution";
 
 type SalePrice = {
   wei?: string;
@@ -113,6 +114,30 @@ const {
 } = useScapeListing(scapeId);
 
 const { data: gallery27TokenId } = await useGallery27ByScape(scapeId);
+
+// Page meta
+const seoOptions = computed(() => {
+  const id = scapeId.value;
+  const attrs = attributes.value;
+  let description = `View Scape #${id} details, ownership history, and marketplace listings.`;
+  if (attrs && typeof attrs === 'object') {
+    const attrEntries = Object.entries(attrs as Record<string, string>)
+      .filter(([key]) => key !== 'Seed')
+      .slice(0, 4)
+      .map(([key, value]) => `${key}: ${value}`);
+    if (attrEntries.length > 0) {
+      description = `Scape #${id} - ${attrEntries.join(', ')}. View ownership history and marketplace listings.`;
+    }
+  }
+
+  return {
+    title: `Scape #${id}`,
+    description,
+    image: `https://cdn.scapes.xyz/scapes/sm/${id}.png`,
+    imageAlt: `Scape #${id}`,
+  };
+});
+useSeo(seoOptions);
 
 const sesModalOpen = ref(false);
 </script>

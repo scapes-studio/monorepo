@@ -22,8 +22,9 @@ watch(
   { immediate: true },
 );
 
-useHead({
-  title: "Current Auction | Gallery27",
+useSeo({
+  title: 'Current Auction',
+  description: 'View the current Gallery27 auction. Daily AI-generated scapes for 27 years.',
 });
 </script>
 

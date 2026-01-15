@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { shortenAddress } from "~/composables/useENSResolution";
+
 const route = useRoute();
 
 const accountId = computed(() => route.params.id as string | undefined);
@@ -18,6 +20,23 @@ const currentTab = computed(() => {
   if (path.endsWith("/twenty-seven-year-scapes")) return "gallery27";
   return "scapes";
 });
+
+// Page meta
+const seoOptions = computed(() => {
+  const ens = profile.value?.ens;
+  const addr = displayAddress.value;
+  const displayName = ens || (addr ? shortenAddress(addr) : 'Profile');
+  const tabName = currentTab.value === 'gallery27' ? '27 Year Scapes' : 'Scapes';
+
+  return {
+    title: `${displayName} - ${tabName}`,
+    description: profileData.value?.description
+      || `View ${displayName}'s ${tabName} collection on Scapes.`,
+    image: profileData.value?.avatar || undefined,
+    imageAlt: `${displayName}'s profile`,
+  };
+});
+useSeo(seoOptions);
 </script>
 
 <template>

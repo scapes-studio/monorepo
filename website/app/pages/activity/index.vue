@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { ActivityFilters } from "~/types/activity";
 
+useSeo({
+  title: 'Activity',
+  description: 'Recent activity across Scapes collections - transfers, sales, and listings.',
+});
+
 const route = useRoute();
 const router = useRouter();
 

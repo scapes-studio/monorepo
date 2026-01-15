@@ -2,6 +2,17 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-07',
   devtools: { enabled: true },
+  app: {
+    head: {
+      titleTemplate: '%s | Scapes',
+      meta: [
+        { name: 'description', content: 'Composable places stored on the Ethereum Blockchain.' },
+        { property: 'og:site_name', content: 'Scapes' },
+        { property: 'og:type', content: 'website' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+      ],
+    },
+  },
   imports: {
     presets: [
       {

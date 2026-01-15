@@ -1,4 +1,9 @@
 <script setup lang="ts">
+useSeo({
+  title: '27 Year Scapes',
+  description: 'A daily AI-generated scape for 27 years. Browse the Gallery27 collection.',
+});
+
 const { scapes, total, loading, error, hasMore, loadMore } = useGallery27List();
 </script>
 

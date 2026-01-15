@@ -51,9 +51,9 @@ const updateSelectedTraits = (newTraits: string[]) => {
   selectedTraits.value = newTraits
 }
 
-useSeoMeta({
-  title: "Scapes Gallery",
-  description: "Explore all 10,000 Scapes - pixel-art landscapes from September 2021",
+useSeo({
+  title: 'Scapes Gallery',
+  description: 'Explore all 10,000 Scapes - pixel-art landscapes from September 2021.',
 })
 </script>
 

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+useSeo({
+  title: 'Scape Owners',
+  description: 'Leaderboard of Scape owners ranked by total scapes owned.',
+});
 
 const client = usePonderClient();
 const { public: { scapeCollectionAddress } } = useRuntimeConfig();

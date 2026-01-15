@@ -1,5 +1,10 @@
 <script setup lang="ts">
 const { scapes, loading, error } = useRandomScapes();
+
+useSeo({
+  title: 'Home',
+  description: 'Composable places stored on the Ethereum Blockchain. Explore 10,000 pixel-art landscapes.',
+});
 </script>
 
 <template>
