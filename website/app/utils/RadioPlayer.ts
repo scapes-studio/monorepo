@@ -16,10 +16,13 @@ class Scape {
 
   constructor(id: number) {
     this.id = id;
+    // Use HTML5 Audio mode for MediaSession API compatibility
+    // See: https://github.com/regosen/Gapless-5/issues/22
     this.player = new Gapless5({
       loop: true,
       volume: 0,
-      useWebAudio: true,
+      useWebAudio: false,
+      useHTML5Audio: true,
     });
     this.player.addTrack(getAudioUrl(id));
   }
@@ -63,6 +66,8 @@ class Scape {
   }
 
   fadeIn(basedOnScape?: Scape): Promise<void> {
+    // Ensure volume starts at 0 before fading in
+    this.setVolume(0);
     this.play();
     if (basedOnScape) {
       this.syncTo(basedOnScape);
