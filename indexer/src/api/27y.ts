@@ -406,9 +406,25 @@ export async function get27yBids(c: Context) {
     }
   }
 
+  // Get accepted/winning image if set
+  let acceptedImage = null;
+  if (scapeDetail.requestId) {
+    const acceptedRequest = await offchainDb.query.twentySevenYearRequest.findFirst({
+      where: eq(twentySevenYearRequest.id, scapeDetail.requestId),
+    });
+    if (acceptedRequest?.imagePath) {
+      acceptedImage = {
+        id: acceptedRequest.id,
+        path: acceptedRequest.imagePath,
+        steps: acceptedRequest.imageSteps ?? null,
+      };
+    }
+  }
+
   return c.json({
     bids,
     initialRender,
+    acceptedImage,
   });
 }
 

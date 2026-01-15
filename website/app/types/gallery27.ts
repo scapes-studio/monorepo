@@ -41,6 +41,7 @@ export interface Gallery27Bid {
 export interface Gallery27BidsResponse {
   bids: Gallery27Bid[];
   initialRender: Gallery27Image | null;
+  acceptedImage: Gallery27Image | null;
 }
 
 export interface Gallery27OwnedScape {

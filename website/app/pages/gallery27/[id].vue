@@ -25,9 +25,9 @@ const displayedImage = computed(() => {
     return bid?.image ?? null;
   }
 
-  // Default to latest bid's image or initial render
-  if (bidsData.value.bids.length > 0 && bidsData.value.bids[0]?.image) {
-    return bidsData.value.bids[0].image;
+  // Default to accepted/winning image, then initial render
+  if (bidsData.value.acceptedImage) {
+    return bidsData.value.acceptedImage;
   }
 
   return bidsData.value.initialRender;
