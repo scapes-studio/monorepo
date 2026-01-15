@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.968.0",
+    "multiformats": "^13.3.1",
+    "pinata": "^1.6.1",
     "@ponder/client": "^0.16.0",
     "@scapes-studio/abis": "workspace:*",
     "@scapes-studio/scape-renderer": "^1.1.0",

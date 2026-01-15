@@ -16,6 +16,7 @@ import {
   GALLERY27_V1_ADDRESS,
   GALLERY27_ADDRESS,
 } from "../services/gallery27-signer";
+import { metadataService } from "../services/metadata";
 
 /**
  * POST /27y/sign-initialize-auction
@@ -137,15 +138,48 @@ export async function postSignClaim(c: Context) {
     return c.json({ error: "Image not yet generated" }, 400);
   }
 
-  // Check if metadata CID already exists
-  if (!scapeDetail.metadataCid) {
-    // TODO: Generate metadata and upload to IPFS
-    // For now, require metadata to be pre-generated
-    return c.json({ error: "Metadata CID not yet generated. Please contact admin." }, 400);
-  }
+  // Generate metadata if not already generated
+  let metadataCid = scapeDetail.metadataCid;
+  let metadata = scapeDetail.data;
 
-  // Update scape detail with chosen request (if not already set)
-  if (scapeDetail.requestId !== body.requestId || scapeDetail.step !== body.step) {
+  if (!metadataCid) {
+    try {
+      const provenance = await metadataService.generateProvenanceData(
+        {
+          tokenId: scapeDetail.tokenId,
+          scapeId: scapeDetail.scapeId,
+          description: scapeDetail.description,
+          date: scapeDetail.date,
+        },
+        {
+          imagePath: imageRequest.imagePath,
+          imageInput: imageRequest.imageInput,
+          createdAt: imageRequest.createdAt,
+        },
+      );
+
+      metadataCid = provenance.metadataCID;
+      metadata = provenance.metadata;
+
+      // Update scape detail with generated metadata
+      await offchainDb
+        .update(twentySevenYearScapeDetail)
+        .set({
+          requestId: body.requestId,
+          step: body.step,
+          imagePath: imageRequest.imagePath,
+          imageCid: provenance.imageCID,
+          metadataCid: provenance.metadataCID,
+          data: provenance.metadata,
+          updatedAt: now,
+        })
+        .where(eq(twentySevenYearScapeDetail.tokenId, scapeDetail.tokenId));
+    } catch (error) {
+      console.error("Failed to generate metadata:", error);
+      return c.json({ error: "Failed to generate metadata" }, 500);
+    }
+  } else if (scapeDetail.requestId !== body.requestId || scapeDetail.step !== body.step) {
+    // Update scape detail with chosen request (if not already set)
     await offchainDb
       .update(twentySevenYearScapeDetail)
       .set({
@@ -161,7 +195,7 @@ export async function postSignClaim(c: Context) {
   const signature = await gallery27SignerService.signClaim(
     BigInt(body.punkScapeId),
     BigInt(scapeDetail.tokenId),
-    scapeDetail.metadataCid,
+    metadataCid,
   );
 
   // Determine contract address
@@ -172,8 +206,8 @@ export async function postSignClaim(c: Context) {
   return c.json({
     tokenId: scapeDetail.tokenId,
     punkScapeId: body.punkScapeId,
-    cid: scapeDetail.metadataCid,
-    metadata: scapeDetail.data ?? null,
+    cid: metadataCid,
+    metadata: metadata ?? null,
     signature,
     contractAddress,
   });
