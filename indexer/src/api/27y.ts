@@ -431,10 +431,12 @@ export async function get27yBids(c: Context) {
 /**
  * GET /27y/all
  * Get paginated list of all 27Y scapes with images
+ * Note: AI images are hidden for auctions that haven't started yet
  */
 export async function get27yAll(c: Context) {
   const limit = Math.min(Number(c.req.query("limit") ?? 50), 100);
   const offset = Number(c.req.query("offset") ?? 0);
+  const now = Math.floor(Date.now() / 1000);
 
   const offchainDb = getOffchainDb();
 
@@ -445,7 +447,7 @@ export async function get27yAll(c: Context) {
   const total = Number(countResult[0]?.count ?? 0);
 
   // Query scapes with left join to get initial render path
-  const scapes = await offchainDb
+  const rawScapes = await offchainDb
     .select({
       tokenId: twentySevenYearScapeDetail.tokenId,
       date: twentySevenYearScapeDetail.date,
@@ -461,6 +463,16 @@ export async function get27yAll(c: Context) {
     .orderBy(twentySevenYearScapeDetail.tokenId)
     .limit(limit)
     .offset(offset);
+
+  // Hide AI images for auctions that haven't started yet
+  const scapes = rawScapes.map((scape) => {
+    const auctionStarted = scape.date !== null && scape.date <= now;
+    return {
+      ...scape,
+      imagePath: auctionStarted ? scape.imagePath : null,
+      initialRenderPath: auctionStarted ? scape.initialRenderPath : null,
+    };
+  });
 
   return c.json({
     scapes,

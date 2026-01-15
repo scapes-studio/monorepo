@@ -1,6 +1,6 @@
 import type { Gallery27ListItem, Gallery27ListResponse } from "~/types/gallery27";
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 500;
 
 export const useGallery27List = () => {
   const runtimeConfig = useRuntimeConfig();
