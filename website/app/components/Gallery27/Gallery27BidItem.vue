@@ -26,23 +26,14 @@ const etherscanUrl = computed(() => {
 });
 
 // Construct thumbnail URL
-// - With steps: ${path}/final.png
-// - Without steps: just ${path}
 const thumbnailUrl = computed(() => {
   if (!props.bid.image?.path) return null;
-  if (props.bid.image.steps && props.bid.image.steps > 0) {
-    return `${CDN_BASE}/${props.bid.image.path}/final.png`;
-  }
   return `${CDN_BASE}/${props.bid.image.path}`;
 });
 </script>
 
 <template>
-  <div
-    class="gallery27-bid-item"
-    :class="{ 'gallery27-bid-item--selected': selected }"
-    @click="$emit('select')"
-  >
+  <div class="gallery27-bid-item" :class="{ 'gallery27-bid-item--selected': selected }" @click="$emit('select')">
     <div v-if="thumbnailUrl" class="gallery27-bid-item__thumbnail">
       <img :src="thumbnailUrl" :alt="`Bid by ${bid.bidderEns || bid.bidder}`" />
     </div>

@@ -1,38 +1,37 @@
 <script setup lang="ts">
 import type { Gallery27Image } from "~/types/gallery27";
 
-const CDN_BASE = "https://cdn.scapes.xyz";
-
 const props = defineProps<{
   image: Gallery27Image | null;
   alt?: string;
 }>();
 
-// Construct image URL - show upscaled version
-// - With steps: ${path}/${pad(step, 3)}_upscaled.png
-// - Without steps: ${path}_upscaled
+const CDN_BASE = "https://cdn.scapes.xyz";
+const useBasePath = ref(false);
+
 const imageUrl = computed(() => {
   if (!props.image?.path) return null;
 
-  // If image has steps, show upscaled step version
-  if (props.image.steps && props.image.steps > 0) {
-    const finalStep = props.image.steps - 1;
-    return `${CDN_BASE}/${props.image.path}/${finalStep.toString().padStart(3, "0")}_upscaled.png`;
+  if (useBasePath.value) {
+    return `${CDN_BASE}/${props.image.path}`;
   }
-
-  // No steps - show upscaled version
   return `${CDN_BASE}/${props.image.path}_upscaled`;
+});
+
+const onImageError = () => {
+  if (!useBasePath.value) {
+    useBasePath.value = true;
+  }
+};
+
+watch(() => props.image?.path, () => {
+  useBasePath.value = false;
 });
 </script>
 
 <template>
   <div class="gallery27-painting">
-    <img
-      v-if="imageUrl"
-      :src="imageUrl"
-      :alt="alt || 'Gallery27 Painting'"
-      class="gallery27-painting__image"
-    />
+    <img v-if="imageUrl" :src="imageUrl" :alt="alt || 'Gallery27 Painting'" class="gallery27-painting__image" @error="onImageError" />
     <div v-else class="gallery27-painting__placeholder">
       No image available
     </div>
