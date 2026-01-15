@@ -20,6 +20,10 @@ const selectedBidId = ref<string | null>(null);
 const displayedImage = computed(() => {
   if (!bidsData.value) return null;
 
+  if (selectedBidId.value === "initial") {
+    return bidsData.value.initialRender;
+  }
+
   if (selectedBidId.value) {
     const bid = bidsData.value.bids.find(b => b.id === selectedBidId.value);
     return bid?.image ?? null;
