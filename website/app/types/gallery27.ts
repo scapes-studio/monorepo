@@ -16,6 +16,7 @@ export interface Gallery27AuctionState {
   punkScapeId: number;
   latestBidder: string | null;
   latestBid: string | null;
+  startTimestamp: number | null;
   endTimestamp: number | null;
   bidCount: number;
   settled: boolean;

@@ -16,6 +16,12 @@ const auctionStatus = computed(() => {
   if (props.auction.settled) return "settled";
 
   const now = Math.floor(Date.now() / 1000);
+
+  // Check if auction has started
+  if (props.auction.startTimestamp && now < props.auction.startTimestamp) {
+    return "not-started";
+  }
+
   if (!props.auction.endTimestamp) return "not-started";
   if (now >= props.auction.endTimestamp) return "ended";
   return "active";
