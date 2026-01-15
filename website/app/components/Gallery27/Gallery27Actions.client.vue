@@ -39,7 +39,7 @@ const canClaim = computed(() => {
 
 // Minimum bid calculation (5% increase from latest bid or starting price)
 const minimumBid = computed(() => {
-  if (!props.auction?.latestBid) return "0.01";
+  if (!props.auction?.latestBid) return "0.05";
   const current = BigInt(props.auction.latestBid);
   // 5% increase minimum (500 basis points)
   const minimum = current + (current * 5n) / 100n;
@@ -53,7 +53,8 @@ const withdrawFlowRef = ref<{ initializeRequest: () => Promise<unknown> } | null
 
 // Request handlers
 const bidRequest = async (): Promise<Hash> => {
-  const value = parseEther(bidAmount.value);
+  // Convert to string since v-model with type="number" gives us a number
+  const value = parseEther(String(bidAmount.value));
   if (isFirstBid.value) {
     return initializeAuction(bidMessage.value, value);
   }
@@ -84,19 +85,19 @@ const handleBidComplete = () => {
 // Text configs
 const bidText = computed(() => ({
   title: {
-    confirm: isFirstBid.value ? "Start Auction" : "Place Bid",
+    confirm: "Place Bid",
     requesting: "Confirm in Wallet",
-    waiting: isFirstBid.value ? "Starting Auction" : "Placing Bid",
+    waiting: "Placing Bid",
     complete: "Bid Placed!",
   },
   lead: {
-    confirm: `${isFirstBid.value ? "Start auction with" : "Bid"} ${bidAmount.value || "..."} ETH`,
+    confirm: `Bid ${bidAmount.value || "..."} ETH`,
     requesting: "Please confirm the transaction in your wallet.",
     waiting: "Your bid is being recorded on-chain.",
     complete: "You are now the leading bidder!",
   },
   action: {
-    confirm: isFirstBid.value ? "Start Auction" : "Place Bid",
+    confirm: "Place Bid",
     error: "Try Again",
   },
 }));
@@ -146,7 +147,7 @@ const withdrawText = {
     <template v-if="isActive">
       <div v-if="!showBidForm" class="gallery27-actions__cta">
         <button type="button" class="gallery27-actions__btn" @click="showBidForm = true">
-          {{ isFirstBid ? "Start Auction" : "Place Bid" }}
+          Place Bid
         </button>
         <p v-if="!isFirstBid" class="gallery27-actions__hint">
           Minimum bid: {{ minimumBid }} ETH
@@ -193,7 +194,7 @@ const withdrawText = {
                 :disabled="!bidAmount || Number(bidAmount) < Number(minimumBid)"
                 @click="start"
               >
-                {{ isFirstBid ? "Start Auction" : "Place Bid" }}
+                Place Bid
               </button>
             </div>
           </template>
