@@ -9,9 +9,14 @@ const { scapes, total, loading, error, hasMore, loadMore } = useGallery27List();
         <h1>27 Year Scapes</h1>
         <p class="gallery27-page__subtitle">A daily AI-generated scape for 27 years.</p>
       </div>
-      <span v-if="total !== null" class="gallery27-page__count">
-        {{ total }} scapes
-      </span>
+      <div class="gallery27-page__header-actions">
+        <NuxtLink to="/gallery27/now" class="gallery27-page__current-link">
+          Current Auction
+        </NuxtLink>
+        <span v-if="total !== null" class="gallery27-page__count">
+          {{ total }} scapes
+        </span>
+      </div>
     </header>
 
     <div v-if="loading && scapes.length === 0" class="gallery27-page__status">
@@ -64,6 +69,22 @@ const { scapes, total, loading, error, hasMore, loadMore } = useGallery27List();
 .gallery27-page__subtitle {
   margin: 0;
   color: var(--muted);
+}
+
+.gallery27-page__header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacer);
+  align-items: center;
+}
+
+.gallery27-page__current-link {
+  padding: var(--spacer-xs) var(--spacer-sm);
+  border-radius: var(--size-10);
+  background: var(--color);
+  color: var(--background);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
 }
 
 .gallery27-page__count {
