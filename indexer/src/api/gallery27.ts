@@ -8,10 +8,10 @@ import { aiImageService } from "../services/ai-image";
 import { s3Service } from "../services/s3";
 
 /**
- * GET /27y/:tokenId
+ * GET /gallery27/:tokenId
  * Get twentySevenYearScape details by token ID
  */
-export async function get27yScape(c: Context) {
+export async function getGallery27Scape(c: Context) {
   const tokenIdParam = c.req.param("tokenId");
   const tokenId = parseInt(tokenIdParam, 10);
 
@@ -53,10 +53,10 @@ export async function get27yScape(c: Context) {
 }
 
 /**
- * GET /27y/by-scape/:scapeId
+ * GET /gallery27/by-scape/:scapeId
  * Look up Gallery27 token by parent PunkScape ID
  */
-export async function get27yByScapeId(c: Context) {
+export async function getGallery27ByScapeId(c: Context) {
   const scapeIdParam = c.req.param("scapeId");
   const scapeId = parseInt(scapeIdParam, 10);
 
@@ -78,10 +78,10 @@ export async function get27yByScapeId(c: Context) {
 }
 
 /**
- * GET /27y/current
+ * GET /gallery27/current
  * Get the currently active scape (auction in progress)
  */
-export async function get27yCurrent(c: Context) {
+export async function getGallery27Current(c: Context) {
   const db = getOffchainDb();
   const now = Math.floor(Date.now() / 1000);
 
@@ -100,10 +100,10 @@ export async function get27yCurrent(c: Context) {
 }
 
 /**
- * GET /27y/next
+ * GET /gallery27/next
  * Get the next upcoming scape
  */
-export async function get27yNext(c: Context) {
+export async function getGallery27Next(c: Context) {
   const db = getOffchainDb();
   const now = Math.floor(Date.now() / 1000);
 
@@ -137,10 +137,10 @@ function verifyTeamToken(c: Context): boolean {
 }
 
 /**
- * GET /27y/:tokenId/initial-image
+ * GET /gallery27/:tokenId/initial-image
  * Get the initial image URL for a scape
  */
-export async function get27yInitialImage(c: Context) {
+export async function getGallery27InitialImage(c: Context) {
   const tokenIdParam = c.req.param("tokenId");
   const tokenId = parseInt(tokenIdParam, 10);
 
@@ -172,10 +172,10 @@ export async function get27yInitialImage(c: Context) {
 }
 
 /**
- * GET /27y/:tokenId/pregenerations
+ * GET /gallery27/:tokenId/pregenerations
  * List completed pregenerations for a scape
  */
-export async function get27yPregenerations(c: Context) {
+export async function getGallery27Pregenerations(c: Context) {
   const tokenIdParam = c.req.param("tokenId");
   const tokenId = parseInt(tokenIdParam, 10);
   const count = parseInt(c.req.query("count") ?? "10", 10);
@@ -199,10 +199,10 @@ export async function get27yPregenerations(c: Context) {
 }
 
 /**
- * POST /27y/:tokenId/pregenerate
+ * POST /gallery27/:tokenId/pregenerate
  * Trigger image generation for a scape (requires auth)
  */
-export async function post27yPregenerate(c: Context) {
+export async function postGallery27Pregenerate(c: Context) {
   if (!verifyTeamToken(c)) {
     return c.json({ error: "Unauthorized" }, 401);
   }
@@ -251,10 +251,10 @@ export async function post27yPregenerate(c: Context) {
 }
 
 /**
- * POST /27y/:tokenId/pregenerations/choose
+ * POST /gallery27/:tokenId/pregenerations/choose
  * Choose the initial image for a scape (requires auth)
  */
-export async function post27yChooseInitialImage(c: Context) {
+export async function postGallery27ChooseInitialImage(c: Context) {
   if (!verifyTeamToken(c)) {
     return c.json({ error: "Unauthorized" }, 401);
   }
@@ -283,10 +283,10 @@ export async function post27yChooseInitialImage(c: Context) {
 }
 
 /**
- * POST /27y/images/:taskId/regenerate
+ * POST /gallery27/images/:taskId/regenerate
  * Regenerate an image with the same parameters (requires auth)
  */
-export async function post27yRegenerateImage(c: Context) {
+export async function postGallery27RegenerateImage(c: Context) {
   if (!verifyTeamToken(c)) {
     return c.json({ error: "Unauthorized" }, 401);
   }
@@ -311,10 +311,10 @@ export async function post27yRegenerateImage(c: Context) {
 }
 
 /**
- * GET /27y/:tokenId/auction
+ * GET /gallery27/:tokenId/auction
  * Get auction state from onchain data
  */
-export async function get27yAuction(c: Context) {
+export async function getGallery27Auction(c: Context) {
   const tokenIdParam = c.req.param("tokenId");
   const tokenId = parseInt(tokenIdParam, 10);
 
@@ -366,11 +366,11 @@ export async function get27yAuction(c: Context) {
 }
 
 /**
- * GET /27y/:tokenId/bids
+ * GET /gallery27/:tokenId/bids
  * Get bid history with AI images
  * Note: AI images are hidden for auctions that haven't started yet
  */
-export async function get27yBids(c: Context) {
+export async function getGallery27Bids(c: Context) {
   const tokenIdParam = c.req.param("tokenId");
   const tokenId = parseInt(tokenIdParam, 10);
 
@@ -481,11 +481,11 @@ export async function get27yBids(c: Context) {
 }
 
 /**
- * GET /27y/all
+ * GET /gallery27/all
  * Get paginated list of all 27Y scapes with images
  * Note: AI images are hidden for auctions that haven't started yet
  */
-export async function get27yAll(c: Context) {
+export async function getGallery27All(c: Context) {
   const limit = Math.min(Number(c.req.query("limit") ?? 50), 100);
   const offset = Number(c.req.query("offset") ?? 0);
   const now = Math.floor(Date.now() / 1000);
@@ -537,7 +537,7 @@ export async function get27yAll(c: Context) {
  * GET /gallery27/:tokenId/metadata.json
  * Get NFT metadata for a minted Gallery27 scape
  */
-export async function get27yMetadata(c: Context) {
+export async function getGallery27Metadata(c: Context) {
   const tokenIdParam = c.req.param("tokenId");
   const tokenId = parseInt(tokenIdParam, 10);
 
@@ -570,10 +570,10 @@ export async function get27yMetadata(c: Context) {
 }
 
 /**
- * GET /profiles/:address/27y-scapes
+ * GET /profiles/:address/gallery27-scapes
  * Get 27Y scapes owned by address
  */
-export async function get27yScapesByOwner(c: Context) {
+export async function getGallery27ScapesByOwner(c: Context) {
   const address = c.req.param("address");
 
   if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {

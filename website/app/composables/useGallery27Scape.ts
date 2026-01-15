@@ -10,7 +10,7 @@ export const useGallery27Scape = (tokenId: Ref<string | number | undefined>) => 
     async () => {
       if (!tokenId.value) return null;
       const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
-      return await $fetch<Gallery27ScapeDetail>(`${baseUrl}/27y/${tokenId.value}`);
+      return await $fetch<Gallery27ScapeDetail>(`${baseUrl}/gallery27/${tokenId.value}`);
     },
     { watch: [tokenId] },
   );

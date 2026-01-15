@@ -92,9 +92,9 @@ export const getActivity = async (c: Context) => {
 
       UNION ALL
 
-      -- 27-year scape transfers
+      -- Gallery27 scape transfers
       SELECT
-        'transfer-27y-' || id as id,
+        'transfer-gallery27-' || id as id,
         'transfer' as type,
         timestamp,
         'twenty-seven-year-scapes' as collection,

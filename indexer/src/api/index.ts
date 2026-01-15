@@ -12,21 +12,21 @@ import { getActivity } from "./activity";
 import { getListings, getListingByTokenId } from "./listings";
 import { getScapeImage } from "./images";
 import {
-  get27yScape,
-  get27yByScapeId,
-  get27yCurrent,
-  get27yNext,
-  get27yAll,
-  get27yInitialImage,
-  get27yPregenerations,
-  post27yPregenerate,
-  post27yChooseInitialImage,
-  post27yRegenerateImage,
-  get27yAuction,
-  get27yBids,
-  get27yMetadata,
-  get27yScapesByOwner,
-} from "./27y";
+  getGallery27Scape,
+  getGallery27ByScapeId,
+  getGallery27Current,
+  getGallery27Next,
+  getGallery27All,
+  getGallery27InitialImage,
+  getGallery27Pregenerations,
+  postGallery27Pregenerate,
+  postGallery27ChooseInitialImage,
+  postGallery27RegenerateImage,
+  getGallery27Auction,
+  getGallery27Bids,
+  getGallery27Metadata,
+  getGallery27ScapesByOwner,
+} from "./gallery27";
 import { postSignInitializeAuction, postSignClaim } from "./gallery27-actions";
 import { getSESMetadata } from "./ses";
 import { handleLeonardoWebhook } from "./webhooks";
@@ -71,33 +71,33 @@ app.get("/activity", getActivity);
 // SES metadata route
 app.get("/ses/:tokenId", getSESMetadata);
 
-// TwentySevenYear routes (must be before /27y/:tokenId to avoid matching)
-app.get("/27y/current", get27yCurrent);
-app.get("/27y/next", get27yNext);
-app.get("/27y/all", get27yAll);
-app.get("/27y/by-scape/:scapeId", get27yByScapeId);
-app.get("/27y/:tokenId", get27yScape);
+// Gallery27 routes (must be before /gallery27/:tokenId to avoid matching)
+app.get("/gallery27/current", getGallery27Current);
+app.get("/gallery27/next", getGallery27Next);
+app.get("/gallery27/all", getGallery27All);
+app.get("/gallery27/by-scape/:scapeId", getGallery27ByScapeId);
+app.get("/gallery27/:tokenId", getGallery27Scape);
 
-// TwentySevenYear pregeneration routes
-app.get("/27y/:tokenId/initial-image", get27yInitialImage);
-app.get("/27y/:tokenId/pregenerations", get27yPregenerations);
-app.post("/27y/:tokenId/pregenerate", post27yPregenerate);
-app.post("/27y/:tokenId/pregenerations/choose", post27yChooseInitialImage);
-app.post("/27y/images/:taskId/regenerate", post27yRegenerateImage);
+// Gallery27 pregeneration routes
+app.get("/gallery27/:tokenId/initial-image", getGallery27InitialImage);
+app.get("/gallery27/:tokenId/pregenerations", getGallery27Pregenerations);
+app.post("/gallery27/:tokenId/pregenerate", postGallery27Pregenerate);
+app.post("/gallery27/:tokenId/pregenerations/choose", postGallery27ChooseInitialImage);
+app.post("/gallery27/images/:taskId/regenerate", postGallery27RegenerateImage);
 
-// TwentySevenYear auction and bids routes
-app.get("/27y/:tokenId/auction", get27yAuction);
-app.get("/27y/:tokenId/bids", get27yBids);
+// Gallery27 auction and bids routes
+app.get("/gallery27/:tokenId/auction", getGallery27Auction);
+app.get("/gallery27/:tokenId/bids", getGallery27Bids);
 
 // Gallery27 signature routes (for onchain actions)
-app.post("/27y/sign-initialize-auction", postSignInitializeAuction);
-app.post("/27y/sign-claim", postSignClaim);
+app.post("/gallery27/sign-initialize-auction", postSignInitializeAuction);
+app.post("/gallery27/sign-claim", postSignClaim);
 
-// Gallery27 metadata route (legacy API path)
-app.get("/gallery27/:tokenId/metadata.json", get27yMetadata);
+// Gallery27 metadata route
+app.get("/gallery27/:tokenId/metadata.json", getGallery27Metadata);
 
-// Profile 27Y scapes route
-app.get("/profiles/:address/27y-scapes", get27yScapesByOwner);
+// Profile Gallery27 scapes route
+app.get("/profiles/:address/gallery27-scapes", getGallery27ScapesByOwner);
 
 // Webhooks
 app.post("/webhooks/leonardo", handleLeonardoWebhook);

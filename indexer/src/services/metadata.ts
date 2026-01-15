@@ -82,7 +82,6 @@ class MetadataService {
   async generateProvenanceData(
     scapeDetail: ScapeDetailForMetadata,
     imageRequest: ImageRequestForMetadata,
-    step: number,
   ): Promise<ProvenanceData> {
     if (!imageRequest.imagePath) {
       throw new Error("Image path is required");
@@ -91,7 +90,6 @@ class MetadataService {
     // Download the upscaled image
     const imageBuffer = await this.downloadUpscaledImage(
       imageRequest.imagePath,
-      step,
     );
 
     // Generate image CID

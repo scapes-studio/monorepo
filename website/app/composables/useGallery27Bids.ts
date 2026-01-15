@@ -10,7 +10,7 @@ export const useGallery27Bids = (tokenId: Ref<string | number | undefined>) => {
     async () => {
       if (!tokenId.value) return null;
       const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
-      return await $fetch<Gallery27BidsResponse>(`${baseUrl}/27y/${tokenId.value}/bids`);
+      return await $fetch<Gallery27BidsResponse>(`${baseUrl}/gallery27/${tokenId.value}/bids`);
     },
     { watch: [tokenId] },
   );

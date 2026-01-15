@@ -9,7 +9,7 @@ const injected = inject<{
 
 const resolvedAddress = injected?.resolvedAddress ?? ref(null);
 
-const { data, pending, error } = await use27YScapesByOwner(resolvedAddress);
+const { data, pending, error } = await useGallery27ScapesByOwner(resolvedAddress);
 
 const scapes = computed(() => data.value?.scapes ?? []);
 </script>

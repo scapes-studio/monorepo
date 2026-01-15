@@ -15,7 +15,7 @@ provide("profile", { profile, resolvedAddress, displayAddress });
 // Determine current tab
 const currentTab = computed(() => {
   const path = route.path;
-  if (path.endsWith("/twenty-seven-year-scapes")) return "27y";
+  if (path.endsWith("/twenty-seven-year-scapes")) return "gallery27";
   return "scapes";
 });
 </script>
@@ -45,7 +45,7 @@ const currentTab = computed(() => {
         <NuxtLink
           :to="`/people/${accountId}/twenty-seven-year-scapes`"
           class="account-page__tab"
-          :class="{ 'account-page__tab--active': currentTab === '27y' }"
+          :class="{ 'account-page__tab--active': currentTab === 'gallery27' }"
         >
           Twenty Seven Year Scapes
         </NuxtLink>

@@ -1,18 +1,18 @@
 import type { Command } from "commander";
 import { importSalesCommand } from "./import-sales";
 import { importListingsCommand } from "./import-listings";
-import { import27yCommand } from "./import-27y";
+import { importGallery27Command } from "./import-gallery27";
 import { checkRewardsCommand } from "./check-rewards";
 import { processMergeImagesCommand } from "./process-merge-images";
-import { generate27yImageCommand } from "./generate-27y-image";
-import { organize27yImagesCommand } from "./organize-27y-images";
+import { generateGallery27ImageCommand } from "./generate-gallery27-image";
+import { organizeGallery27ImagesCommand } from "./organize-gallery27-images";
 
 export function loadCommands(program: Command): void {
   program.addCommand(importSalesCommand);
   program.addCommand(importListingsCommand);
-  program.addCommand(import27yCommand);
+  program.addCommand(importGallery27Command);
   program.addCommand(checkRewardsCommand);
   program.addCommand(processMergeImagesCommand);
-  program.addCommand(generate27yImageCommand);
-  program.addCommand(organize27yImagesCommand);
+  program.addCommand(generateGallery27ImageCommand);
+  program.addCommand(organizeGallery27ImagesCommand);
 }

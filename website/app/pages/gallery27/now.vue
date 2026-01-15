@@ -7,7 +7,7 @@ const { data: scape, pending, error } = await useAsyncData(
   "gallery27-current",
   async () => {
     const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
-    return await $fetch<Gallery27ScapeDetail>(`${baseUrl}/27y/current`);
+    return await $fetch<Gallery27ScapeDetail>(`${baseUrl}/gallery27/current`);
   },
 );
 

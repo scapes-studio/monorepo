@@ -5,7 +5,7 @@ import { aiImageService } from "../services/ai-image";
 import { generatePrompt } from "../services/prompt-generator";
 import { twentySevenYearScapeDetail } from "../../offchain.schema";
 
-export const generate27yImageCommand = new Command("generate:27y-image")
+export const generateGallery27ImageCommand = new Command("generate:gallery27-image")
   .description("Generate AI image for a TwentySevenYear scape")
   .option("--token-id <id>", "Token ID of the TwentySevenYear scape")
   .option("--days-ahead <n>", "Generate for scape N days from now")

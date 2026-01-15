@@ -68,7 +68,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
 
     // Get signature from API
     const response = await $fetch<SignInitializeAuctionResponse>(
-      `${getApiUrl()}/27y/sign-initialize-auction`,
+      `${getApiUrl()}/gallery27/sign-initialize-auction`,
       {
         method: "POST",
         body: { punkScapeId: scapeId },
@@ -117,7 +117,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
 
     // Get signature and metadata CID from API
     const response = await $fetch<SignClaimResponse>(
-      `${getApiUrl()}/27y/sign-claim`,
+      `${getApiUrl()}/gallery27/sign-claim`,
       {
         method: "POST",
         body: { punkScapeId: scapeId, requestId, step },

@@ -9,7 +9,7 @@ export const useGallery27ByScape = (scapeId: Ref<string | number | undefined>) =
       if (!scapeId.value) return null;
       const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
       try {
-        const result = await $fetch<{ tokenId: number }>(`${baseUrl}/27y/by-scape/${scapeId.value}`);
+        const result = await $fetch<{ tokenId: number }>(`${baseUrl}/gallery27/by-scape/${scapeId.value}`);
         return result.tokenId;
       } catch {
         return null;

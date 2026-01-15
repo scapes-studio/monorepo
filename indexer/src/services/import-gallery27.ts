@@ -11,7 +11,7 @@ const { Pool } = pg;
 function getLegacyPool(): pg.Pool {
   const connectionString = process.env.PUNKSCAPE_DATABASE_URL;
   if (!connectionString) {
-    throw new Error("PUNKSCAPE_DATABASE_URL is required for 27y import");
+    throw new Error("PUNKSCAPE_DATABASE_URL is required for gallery27 import");
   }
   return new Pool({ connectionString });
 }
@@ -59,7 +59,7 @@ function dateToTimestamp(date: Date | null): number | null {
   return Math.floor(date.getTime() / 1000);
 }
 
-export class Import27yService {
+export class ImportGallery27Service {
   /**
    * Import all twentySevenYearScape details from legacy database
    */
@@ -239,4 +239,4 @@ export class Import27yService {
 }
 
 // Singleton instance
-export const import27yService = new Import27yService();
+export const importGallery27Service = new ImportGallery27Service();

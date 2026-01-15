@@ -14,10 +14,10 @@ interface ProcessResult {
   message?: string;
 }
 
-export const organize27yImagesCommand = new Command("organize:27y-images")
+export const organizeGallery27ImagesCommand = new Command("organize:gallery27-images")
   .description("Extract step images to canonical S3 paths for TwentySevenYear scapes")
   .option("--dry-run", "Show what would be done without making changes")
-  .option("--token-id <id>", "Process all requests for a specific 27Y token")
+  .option("--token-id <id>", "Process all requests for a specific Gallery27 token")
   .option("--stats", "Show processing statistics only")
   .action(
     async (options: {
@@ -58,7 +58,7 @@ export const organize27yImagesCommand = new Command("organize:27y-images")
 
       // Stats mode
       if (options.stats) {
-        console.log("\nOrganize 27Y Images Stats:");
+        console.log("\nOrganize Gallery27 Images Stats:");
         console.log(`  Total requests with imagePath: ${filtered.length}`);
         console.log(`  Unique tokens: ${tokenIds.length}`);
 

@@ -10,9 +10,9 @@ const GALLERY27_V2 = "0x25eF4D7F1D2706808D67a7Ecf577062B055aFD4E";
 const GALLERY27_V1 = "0x6f051b2B1765eDB6A892be7736C04AaB0468AF27";
 
 export const checkRewardsCommand = new Command("check:rewards")
-  .description("Check which 27y auctions have claimed rewards")
-  .requiredOption("--from <id>", "Start 27y token ID", parseInt)
-  .requiredOption("--to <id>", "End 27y token ID", parseInt)
+  .description("Check which gallery27 auctions have claimed rewards")
+  .requiredOption("--from <id>", "Start gallery27 token ID", parseInt)
+  .requiredOption("--to <id>", "End gallery27 token ID", parseInt)
   .action(async (options: { from: number; to: number }) => {
     try {
       const db = getOffchainDb();
@@ -71,13 +71,13 @@ export const checkRewardsCommand = new Command("check:rewards")
 
         if (endTimestamp === 0n) {
           noAuction++;
-          console.log(`27y #${scape.tokenId} (scape #${scape.scapeId}): no auction`);
+          console.log(`gallery27 #${scape.tokenId} (scape #${scape.scapeId}): no auction`);
         } else if (rewardsClaimed) {
           claimed++;
-          console.log(`27y #${scape.tokenId} (scape #${scape.scapeId}): claimed (${contract})`);
+          console.log(`gallery27 #${scape.tokenId} (scape #${scape.scapeId}): claimed (${contract})`);
         } else {
           unclaimed++;
-          console.log(`27y #${scape.tokenId} (scape #${scape.scapeId}): unclaimed (${contract})`);
+          console.log(`gallery27 #${scape.tokenId} (scape #${scape.scapeId}): unclaimed (${contract})`);
         }
       }
 

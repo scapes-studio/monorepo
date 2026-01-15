@@ -12,7 +12,7 @@ export const useGallery27List = () => {
   const loadMoreHasMore = ref<boolean | null>(null);
 
   const fetchScapes = async (offset: number, limit: number) => {
-    const response = await $fetch<Gallery27ListResponse>(`${apiUrl}/27y/all`, {
+    const response = await $fetch<Gallery27ListResponse>(`${apiUrl}/gallery27/all`, {
       query: { limit, offset },
     });
     return response;
