@@ -75,6 +75,7 @@ useHead({
             v-model:selected-bid-id="selectedBidId"
             :bids="bidsData.bids"
             :initial-render="bidsData.initialRender"
+            :accepted-image="bidsData.acceptedImage"
           />
         </aside>
       </div>

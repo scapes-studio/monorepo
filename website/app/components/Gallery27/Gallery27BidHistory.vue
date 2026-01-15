@@ -6,6 +6,7 @@ const CDN_BASE = "https://cdn.scapes.xyz";
 const props = defineProps<{
   bids: Gallery27Bid[];
   initialRender: Gallery27Image | null;
+  acceptedImage: Gallery27Image | null;
 }>();
 
 const selectedBidId = defineModel<string | null>("selectedBidId");
@@ -13,6 +14,19 @@ const selectedBidId = defineModel<string | null>("selectedBidId");
 const initialRenderThumbnail = computed(() => {
   if (!props.initialRender?.path) return null;
   return `${CDN_BASE}/${props.initialRender.path}`;
+});
+
+// Determine which item is currently "active" (displayed in the painting)
+const activeBidId = computed(() => {
+  if (selectedBidId.value) return selectedBidId.value;
+
+  // Default: find bid matching accepted image, or fall back to initial
+  if (props.acceptedImage) {
+    const acceptedBid = props.bids.find(b => b.image?.id === props.acceptedImage?.id);
+    if (acceptedBid) return acceptedBid.id;
+  }
+
+  return "initial";
 });
 
 const selectedImage = computed(() => {
@@ -36,7 +50,7 @@ defineExpose({ selectedImage });
     <div
       v-if="initialRender"
       class="gallery27-bid-history__initial"
-      :class="{ 'gallery27-bid-history__initial--selected': selectedBidId === 'initial' }"
+      :class="{ 'gallery27-bid-history__initial--selected': activeBidId === 'initial' }"
       @click="selectedBidId = 'initial'"
     >
       <div v-if="initialRenderThumbnail" class="gallery27-bid-history__initial-thumbnail">
@@ -54,7 +68,7 @@ defineExpose({ selectedImage });
         v-for="bid in bids"
         :key="bid.id"
         :bid="bid"
-        :selected="selectedBidId === bid.id"
+        :selected="activeBidId === bid.id"
         @select="selectedBidId = bid.id"
       />
     </div>
