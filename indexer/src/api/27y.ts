@@ -321,6 +321,7 @@ export async function get27yAuction(c: Context) {
 /**
  * GET /27y/:tokenId/bids
  * Get bid history with AI images
+ * Note: AI images are hidden for auctions that haven't started yet
  */
 export async function get27yBids(c: Context) {
   const tokenIdParam = c.req.param("tokenId");
@@ -341,6 +342,8 @@ export async function get27yBids(c: Context) {
   }
 
   const punkScapeId = scapeDetail.scapeId ?? tokenId;
+  const now = Math.floor(Date.now() / 1000);
+  const auctionStarted = scapeDetail.date !== null && scapeDetail.date <= now;
 
   // Query onchain bids
   const onchainBids = await db
@@ -366,12 +369,14 @@ export async function get27yBids(c: Context) {
     .from(twentySevenYearRequest)
     .where(eq(twentySevenYearRequest.tokenId, tokenId));
 
-  // Build bid list with images
+  // Build bid list with images (hidden for future auctions)
   const bids = onchainBids.map(bid => {
     // Find matching request by address and message
-    const matchingRequest = requests.find(
-      r => r.from?.toLowerCase() === bid.bidder.toLowerCase() && r.description === bid.message
-    );
+    const matchingRequest = auctionStarted
+      ? requests.find(
+          r => r.from?.toLowerCase() === bid.bidder.toLowerCase() && r.description === bid.message
+        )
+      : null;
 
     return {
       id: bid.id,
@@ -391,9 +396,9 @@ export async function get27yBids(c: Context) {
     };
   });
 
-  // Get initial render if set
+  // Get initial render if set (hidden for future auctions)
   let initialRender = null;
-  if (scapeDetail.initialRenderId) {
+  if (auctionStarted && scapeDetail.initialRenderId) {
     const initialRequest = await offchainDb.query.twentySevenYearRequest.findFirst({
       where: eq(twentySevenYearRequest.id, scapeDetail.initialRenderId),
     });
@@ -406,9 +411,9 @@ export async function get27yBids(c: Context) {
     }
   }
 
-  // Get accepted/winning image if set
+  // Get accepted/winning image if set (hidden for future auctions)
   let acceptedImage = null;
-  if (scapeDetail.requestId) {
+  if (auctionStarted && scapeDetail.requestId) {
     const acceptedRequest = await offchainDb.query.twentySevenYearRequest.findFirst({
       where: eq(twentySevenYearRequest.id, scapeDetail.requestId),
     });

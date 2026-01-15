@@ -37,6 +37,10 @@ const displayedImage = computed(() => {
   return bidsData.value.initialRender;
 });
 
+// Fallback to parent PunkScape image when no AI image is available (future auctions)
+const fallbackScapeId = computed(() => scape.value?.scapeId ?? null);
+const showFallbackScape = computed(() => !displayedImage.value && fallbackScapeId.value !== null);
+
 // Page meta
 useHead({
   title: computed(() => scape.value ? `Day ${scape.value.tokenId} | Gallery27` : "Gallery27"),
@@ -58,7 +62,13 @@ useHead({
 
       <div class="gallery27-page__content">
         <div class="gallery27-page__main">
-          <Gallery27Painting :image="displayedImage" :alt="`Day ${tokenId}`" />
+          <Gallery27Painting v-if="displayedImage" :image="displayedImage" :alt="`Day ${tokenId}`" />
+          <div v-else-if="showFallbackScape" class="gallery27-page__fallback">
+            <ScapesImage :id="fallbackScapeId!" />
+          </div>
+          <div v-else class="gallery27-page__placeholder">
+            No image available
+          </div>
         </div>
 
         <aside class="gallery27-page__sidebar">
@@ -124,5 +134,22 @@ useHead({
   display: grid;
   gap: var(--spacer-lg);
   align-content: start;
+}
+
+.gallery27-page__fallback {
+  aspect-ratio: 1;
+  border-radius: var(--spacer-xs);
+  overflow: hidden;
+  background: var(--gray-z-1);
+}
+
+.gallery27-page__placeholder {
+  aspect-ratio: 1;
+  border-radius: var(--spacer-xs);
+  background: var(--gray-z-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
 }
 </style>
