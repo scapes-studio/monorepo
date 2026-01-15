@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { Gallery27OwnedScape } from "~/types/gallery27";
+import type { Gallery27OwnedScape, Gallery27ListItem } from "~/types/gallery27";
+
+type ScapeItem = Gallery27OwnedScape | Gallery27ListItem;
 
 const props = defineProps<{
-  scape: Gallery27OwnedScape;
+  scape: ScapeItem;
 }>();
 
 const formattedDate = computed(() => {
@@ -11,7 +13,27 @@ const formattedDate = computed(() => {
 });
 
 const CDN_BASE = "https://cdn.scapes.xyz";
-const imageUrl = computed(() => `${CDN_BASE}/${props.scape.imagePath}`);
+
+const imageUrl = computed(() => {
+  const scape = props.scape;
+
+  // Priority 1: Winning/accepted image
+  if (scape.imagePath) {
+    return `${CDN_BASE}/${scape.imagePath}`;
+  }
+
+  // Priority 2: Initial render (only available on Gallery27ListItem)
+  if ("initialRenderPath" in scape && scape.initialRenderPath) {
+    return `${CDN_BASE}/${scape.initialRenderPath}`;
+  }
+
+  // Priority 3: Parent PunkScape image
+  if (scape.scapeId) {
+    return `${CDN_BASE}/scapes/sm/${scape.scapeId}.png`;
+  }
+
+  return null;
+});
 </script>
 
 <template>

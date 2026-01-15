@@ -429,6 +429,47 @@ export async function get27yBids(c: Context) {
 }
 
 /**
+ * GET /27y/all
+ * Get paginated list of all 27Y scapes with images
+ */
+export async function get27yAll(c: Context) {
+  const limit = Math.min(Number(c.req.query("limit") ?? 50), 100);
+  const offset = Number(c.req.query("offset") ?? 0);
+
+  const offchainDb = getOffchainDb();
+
+  // Get total count
+  const countResult = await offchainDb
+    .select({ count: sql<number>`count(*)` })
+    .from(twentySevenYearScapeDetail);
+  const total = Number(countResult[0]?.count ?? 0);
+
+  // Query scapes with left join to get initial render path
+  const scapes = await offchainDb
+    .select({
+      tokenId: twentySevenYearScapeDetail.tokenId,
+      date: twentySevenYearScapeDetail.date,
+      scapeId: twentySevenYearScapeDetail.scapeId,
+      imagePath: twentySevenYearScapeDetail.imagePath,
+      initialRenderPath: twentySevenYearRequest.imagePath,
+    })
+    .from(twentySevenYearScapeDetail)
+    .leftJoin(
+      twentySevenYearRequest,
+      eq(twentySevenYearScapeDetail.initialRenderId, twentySevenYearRequest.id)
+    )
+    .orderBy(twentySevenYearScapeDetail.tokenId)
+    .limit(limit)
+    .offset(offset);
+
+  return c.json({
+    scapes,
+    total,
+    hasMore: offset + scapes.length < total,
+  });
+}
+
+/**
  * GET /profiles/:address/27y-scapes
  * Get 27Y scapes owned by address
  */

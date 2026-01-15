@@ -15,6 +15,7 @@ import {
   get27yScape,
   get27yCurrent,
   get27yNext,
+  get27yAll,
   get27yInitialImage,
   get27yPregenerations,
   post27yPregenerate,
@@ -70,6 +71,7 @@ app.get("/ses/:tokenId", getSESMetadata);
 // TwentySevenYear routes (must be before /27y/:tokenId to avoid matching)
 app.get("/27y/current", get27yCurrent);
 app.get("/27y/next", get27yNext);
+app.get("/27y/all", get27yAll);
 app.get("/27y/:tokenId", get27yScape);
 
 // TwentySevenYear pregeneration routes

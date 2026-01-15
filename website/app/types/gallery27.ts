@@ -57,3 +57,17 @@ export interface Gallery27OwnedScape {
 export interface Gallery27OwnedScapesResponse {
   scapes: Gallery27OwnedScape[];
 }
+
+export interface Gallery27ListItem {
+  tokenId: number;
+  date: number | null;
+  scapeId: number | null;
+  imagePath: string | null;
+  initialRenderPath: string | null;
+}
+
+export interface Gallery27ListResponse {
+  scapes: Gallery27ListItem[];
+  total: number;
+  hasMore: boolean;
+}
