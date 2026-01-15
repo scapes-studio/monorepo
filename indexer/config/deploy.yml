@@ -53,6 +53,10 @@ env:
     - S3_PUBLIC_URL
     - G27_SIGNER_PRIVATE_KEY
     - G27V1_SIGNER_PRIVATE_KEY
+    - PINATA_JWT
+    - PINATA_GATEWAY
+    - LEONARDO_KEY
+    - TEAM_TOKEN
 
 accessories:
   db:

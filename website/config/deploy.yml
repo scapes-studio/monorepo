@@ -30,6 +30,8 @@ builder:
 env:
   clear:
     NUXT_PUBLIC_API_URL: https://indexer.scapes.xyz
+  secret:
+    - NUXT_PUBLIC_RPC_URL
 
 ssh:
   user: root
