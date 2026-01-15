@@ -34,8 +34,20 @@ export async function get27yScape(c: Context) {
     return c.json({ error: "Scape not found" }, 404);
   }
 
+  // Get parent PunkScape owner if scapeId exists
+  let punkScapeOwner: string | null = null;
+  if (scape.scapeId) {
+    const parentScape = await db.query.scape.findFirst({
+      where: eq(schema.scape.id, BigInt(scape.scapeId)),
+    });
+    if (parentScape) {
+      punkScapeOwner = parentScape.owner;
+    }
+  }
+
   return c.json({
     ...scape,
+    punkScapeOwner,
     isMinted: !!onchainScape,
   });
 }

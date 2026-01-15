@@ -7,6 +7,7 @@ export interface Gallery27ScapeDetail {
   imagePath: string | null;
   imageCid: string | null;
   owner: string | null;
+  punkScapeOwner: string | null;
   initialRenderId: number | null;
   completedAt: number | null;
   isMinted: boolean;

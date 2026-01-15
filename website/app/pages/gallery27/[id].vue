@@ -34,16 +34,39 @@ const { data: bidsData, pending: bidsPending, refresh: refreshBids } = await use
 
 const selectedBidId = ref<string | null>(null);
 
-// Get the selected image for claim flow
+// Get the selected image for claim flow (defaults to displayed image)
 const selectedImage = computed(() => {
-  if (!bidsData.value || !selectedBidId.value) return null;
+  if (!bidsData.value) return null;
 
   if (selectedBidId.value === "initial") {
     return bidsData.value.initialRender;
   }
 
-  const bid = bidsData.value.bids.find(b => b.id === selectedBidId.value);
-  return bid?.image ?? null;
+  if (selectedBidId.value) {
+    const bid = bidsData.value.bids.find(b => b.id === selectedBidId.value);
+    return bid?.image ?? null;
+  }
+
+  // Default to accepted/winning image, then initial render (same as displayedImage)
+  if (bidsData.value.acceptedImage) {
+    return bidsData.value.acceptedImage;
+  }
+
+  return bidsData.value.initialRender;
+});
+
+// Get the latest bidder (winner) - prefer auction data, fallback to first bid
+const latestBidder = computed(() => {
+  // First try onchain auction data
+  if (auction.value?.latestBidder) {
+    return auction.value.latestBidder;
+  }
+  // Fallback to first bid in list (bids are ordered by timestamp desc)
+  const firstBid = bidsData.value?.bids[0];
+  if (firstBid) {
+    return firstBid.bidder;
+  }
+  return null;
 });
 
 // Handle action completion (refresh data)
@@ -113,6 +136,8 @@ useHead({
             :punk-scape-id="scape.scapeId"
             :token-id="tokenId"
             :auction="auction ?? null"
+            :latest-bidder="latestBidder"
+            :punk-scape-owner="scape.punkScapeOwner"
             :is-active="isActive"
             :is-minted="scape.isMinted"
             :selected-image="selectedImage"

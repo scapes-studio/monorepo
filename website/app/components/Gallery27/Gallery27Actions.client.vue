@@ -8,6 +8,8 @@ const props = defineProps<{
   punkScapeId: number;
   tokenId: number;
   auction: Gallery27AuctionState | null;
+  latestBidder: string | null;
+  punkScapeOwner: string | null;
   isActive: boolean;
   isMinted: boolean;
   selectedImage: Gallery27Image | null;
@@ -27,10 +29,18 @@ const bidAmount = ref("");
 const showBidForm = ref(false);
 
 // Computed states
-const isFirstBid = computed(() => !props.auction?.latestBidder);
+const isFirstBid = computed(() => !props.latestBidder);
 const isWinner = computed(() => {
-  if (!address.value || !props.auction?.latestBidder) return false;
-  return address.value.toLowerCase() === props.auction.latestBidder.toLowerCase();
+  if (!address.value) return false;
+  // If there's a bidder, check if user is the winning bidder
+  if (props.latestBidder) {
+    return address.value.toLowerCase() === props.latestBidder.toLowerCase();
+  }
+  // If no bids, check if user is the PunkScape owner
+  if (props.punkScapeOwner) {
+    return address.value.toLowerCase() === props.punkScapeOwner.toLowerCase();
+  }
+  return false;
 });
 
 const canClaim = computed(() => {
