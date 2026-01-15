@@ -54,9 +54,38 @@ function buildSeaportJoinCondition(
   return sql.join(clauses, sql` AND `);
 }
 
+type TransferEvent = {
+  type: "transfer" | "sale";
+  id: string;
+  timestamp: number;
+  from: string;
+  to: string;
+  txHash: string;
+  sale: {
+    id: string | number;
+    price: unknown;
+    seller: string | null;
+    buyer: string | null;
+    slug: string | null;
+    source: "seaport" | "onchain";
+  } | null;
+};
+
+type ListingEvent = {
+  type: "listing";
+  id: string;
+  timestamp: number;
+  lister: string;
+  price: { wei: string; eth: number };
+  isActive: boolean;
+  txHash: string;
+};
+
+type HistoryEvent = TransferEvent | ListingEvent;
+
 /**
  * Creates a history handler for a specific collection
- * Returns all transfers ordered by timestamp desc, with sale data where applicable
+ * Returns all transfers and listings ordered by timestamp desc
  */
 function createHistoryHandler(collectionKey: CollectionKey) {
   const collection = COLLECTIONS[collectionKey];
@@ -84,7 +113,8 @@ function createHistoryHandler(collectionKey: CollectionKey) {
       seaportSlug: seaportSale.slug,
     } as const;
 
-    const result = collection.includeOnchainSales
+    // Query transfers with sales
+    const transferResult = collection.includeOnchainSales
       ? await db
           .select({
             ...baseSelectFields,
@@ -100,7 +130,6 @@ function createHistoryHandler(collectionKey: CollectionKey) {
             sql`${transferTable.txHash} = ${schema.sale.txHash} AND ${transferTable.scape} = ${schema.sale.tokenId}`,
           )
           .where(eq(transferTable.scape, tokenIdValue))
-          .orderBy(desc(transferTable.timestamp))
       : await db
           .select({
             ...baseSelectFields,
@@ -111,17 +140,27 @@ function createHistoryHandler(collectionKey: CollectionKey) {
           })
           .from(transferTable)
           .leftJoin(seaportSale, seaportJoinCondition)
-          .where(eq(transferTable.scape, tokenIdValue))
-          .orderBy(desc(transferTable.timestamp));
+          .where(eq(transferTable.scape, tokenIdValue));
 
-    // Transform results - prefer seaport data if available, fall back to onchain sale
-    const history = result.map((row) => ({
-      id: row.transferId,
-      timestamp: row.timestamp,
-      from: row.from,
-      to: row.to,
-      txHash: row.txHash,
-      sale: row.seaportSaleId
+    // Query onchain offers (only for scapes collection which has the offer table)
+    const onchainOffers =
+      collectionKey === "scapes"
+        ? await db
+            .select({
+              tokenId: schema.offer.tokenId,
+              lister: schema.offer.lister,
+              price: schema.offer.price,
+              isActive: schema.offer.isActive,
+              updatedAt: schema.offer.updatedAt,
+              txHash: schema.offer.txHash,
+            })
+            .from(schema.offer)
+            .where(eq(schema.offer.tokenId, tokenIdValue))
+        : [];
+
+    // Transform transfers - prefer seaport data if available, fall back to onchain sale
+    const transfers: TransferEvent[] = transferResult.map((row) => {
+      const sale = row.seaportSaleId
         ? {
             id: row.seaportSaleId,
             price: row.seaportSalePrice,
@@ -132,22 +171,53 @@ function createHistoryHandler(collectionKey: CollectionKey) {
           }
         : collection.includeOnchainSales && row.onchainSaleId
           ? {
-              id: row.onchainSaleId,
+              id: row.onchainSaleId as string,
               price: { wei: row.onchainSalePrice!.toString() },
-              seller: row.onchainSeller,
-              buyer: row.onchainBuyer,
+              seller: row.onchainSeller as string,
+              buyer: row.onchainBuyer as string,
               slug: collection.key,
               source: "onchain" as const,
             }
-          : null,
-    }));
+          : null;
+
+      return {
+        type: sale ? ("sale" as const) : ("transfer" as const),
+        id: row.transferId,
+        timestamp: row.timestamp,
+        from: row.from,
+        to: row.to,
+        txHash: row.txHash,
+        sale,
+      };
+    });
+
+    // Transform onchain offers
+    const listings: ListingEvent[] = onchainOffers.map((row) => {
+      const priceWei = row.price.toString();
+      const priceEth = Number(row.price) / 1e18;
+      return {
+        type: "listing" as const,
+        id: `listing-${row.tokenId}`,
+        timestamp: row.updatedAt,
+        lister: row.lister,
+        price: { wei: priceWei, eth: priceEth },
+        isActive: row.isActive,
+        txHash: row.txHash,
+      };
+    });
+
+    // Combine and sort by timestamp desc
+    const history: HistoryEvent[] = [...transfers, ...listings].sort(
+      (a, b) => b.timestamp - a.timestamp,
+    );
 
     return c.json({
       collection: collection.key,
       tokenId,
       history,
-      totalTransfers: history.length,
-      totalSales: history.filter((h) => h.sale !== null).length,
+      totalTransfers: transfers.length,
+      totalSales: transfers.filter((t) => t.sale !== null).length,
+      totalListings: listings.length,
     });
   };
 }

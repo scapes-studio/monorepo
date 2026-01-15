@@ -18,7 +18,8 @@ type SaleDetails = {
   source?: string;
 };
 
-type ScapeHistoryEntry = {
+type TransferEntry = {
+  type: "transfer" | "sale";
   id: string;
   timestamp: number;
   from: string;
@@ -26,6 +27,18 @@ type ScapeHistoryEntry = {
   txHash: string;
   sale: SaleDetails | null;
 };
+
+type ListingEntry = {
+  type: "listing";
+  id: string;
+  timestamp: number;
+  lister: string;
+  price: { wei: string; eth: number };
+  isActive: boolean;
+  txHash: string;
+};
+
+type ScapeHistoryEntry = TransferEntry | ListingEntry;
 
 const props = defineProps<{ history?: ScapeHistoryEntry[]; pending?: boolean; error?: unknown | null }>();
 
