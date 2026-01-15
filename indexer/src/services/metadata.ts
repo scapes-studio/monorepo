@@ -111,7 +111,7 @@ class MetadataService {
       name: `Day ${scapeDetail.tokenId}: ${scapeDetail.description ?? ""}`,
       description,
       image: `ipfs://${imageCID}`,
-      external_url: `https://gallery27.scapes.xyz/${scapeDetail.tokenId}`,
+      external_url: `https://scapes.xyz/gallery27/${scapeDetail.tokenId}`,
       attributes: [
         ...inputAttributes,
         {
