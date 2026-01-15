@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Gallery27OwnedScape, Gallery27ListItem } from "~/types/gallery27";
+import type { Gallery27OwnedScape, Gallery27ListItem, Gallery27ClaimableScape } from "~/types/gallery27";
 
 defineProps<{
-  scapes: (Gallery27OwnedScape | Gallery27ListItem)[];
+  scapes: (Gallery27OwnedScape | Gallery27ListItem | Gallery27ClaimableScape)[];
 }>();
 </script>
 

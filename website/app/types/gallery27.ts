@@ -74,3 +74,18 @@ export interface Gallery27ListResponse {
   total: number;
   hasMore: boolean;
 }
+
+export interface Gallery27ClaimableScape {
+  tokenId: number;
+  scapeId: number | null;
+  date: number | null;
+  auctionEndsAt: number | null;
+  description: string | null;
+  imagePath: string | null;
+  initialRenderPath: string | null;
+  claimReason: "auction_winner" | "punkscape_owner";
+}
+
+export interface Gallery27ClaimableScapesResponse {
+  scapes: Gallery27ClaimableScape[];
+}

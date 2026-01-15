@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useAccount } from "@wagmi/vue";
 import type { ProfileResponse } from "~/composables/useProfile";
 
 const injected = inject<{
@@ -9,15 +10,40 @@ const injected = inject<{
 
 const resolvedAddress = injected?.resolvedAddress ?? ref(null);
 
-const { data, pending, error } = await useGallery27ScapesByOwner(resolvedAddress);
+// Check if viewing own profile
+const { address: connectedAddress } = useAccount();
+const isOwnProfile = computed(() =>
+  connectedAddress.value?.toLowerCase() === resolvedAddress.value?.toLowerCase()
+);
 
+// Fetch owned scapes
+const { data, pending, error } = await useGallery27ScapesByOwner(resolvedAddress);
 const scapes = computed(() => data.value?.scapes ?? []);
+
+// Fetch claimable scapes only when viewing own profile
+const claimableOwner = computed(() => isOwnProfile.value ? resolvedAddress.value : null);
+const { data: claimableData, pending: claimablePending } = await useGallery27ClaimableByOwner(claimableOwner);
+const claimableScapes = computed(() => claimableData.value?.scapes ?? []);
+const showClaimable = computed(() => isOwnProfile.value && claimableScapes.value.length > 0);
 </script>
 
 <template>
   <section class="gallery27-tab">
+    <!-- Claimable Section (only shown on own profile) -->
+    <template v-if="showClaimable">
+      <header class="gallery27-tab__header">
+        <h2>Claimable</h2>
+        <span>{{ claimableScapes.length }} to claim</span>
+      </header>
+      <Gallery27Grid :scapes="claimableScapes" />
+    </template>
+    <div v-else-if="isOwnProfile && claimablePending" class="gallery27-tab__status">
+      Checking for claimable scapes…
+    </div>
+
+    <!-- Owned Section -->
     <header class="gallery27-tab__header">
-      <h2>Twenty Seven Year Scapes</h2>
+      <h2>Owned</h2>
       <span>{{ scapes.length }} owned</span>
     </header>
 

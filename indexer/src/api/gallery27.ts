@@ -618,3 +618,116 @@ export async function getGallery27ScapesByOwner(c: Context) {
 
   return c.json({ scapes });
 }
+
+/**
+ * GET /profiles/:address/27y-claimable
+ * Get 27Y scapes claimable by address (won auction but not yet claimed)
+ */
+export async function getGallery27ClaimableByAddress(c: Context) {
+  const address = c.req.param("address");
+
+  if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
+    return c.json({ error: "Invalid address" }, 400);
+  }
+
+  const normalizedAddress = address.toLowerCase() as `0x${string}`;
+  const now = Math.floor(Date.now() / 1000);
+  const offchainDb = getOffchainDb();
+
+  // Get all minted 27Y token IDs to exclude
+  const mintedScapes = await db.select({ id: schema.twentySevenYearScape.id }).from(schema.twentySevenYearScape);
+  const mintedTokenIds = new Set(mintedScapes.map(s => Number(s.id)));
+
+  // Case 1: User is latestBidder in an auction that has ended
+  const auctionsWonByBidding = await db
+    .select()
+    .from(schema.gallery27Auction)
+    .where(
+      and(
+        eq(schema.gallery27Auction.latestBidder, normalizedAddress),
+        lt(schema.gallery27Auction.endTimestamp, now)
+      )
+    );
+
+  // Case 2: User owns PunkScape with no bids and auction has ended
+  // First get PunkScapes owned by user
+  const ownedPunkScapes = await db
+    .select({ id: schema.scape.id })
+    .from(schema.scape)
+    .where(eq(schema.scape.owner, normalizedAddress));
+
+  const ownedPunkScapeIds = new Set(ownedPunkScapes.map(s => Number(s.id)));
+
+  // Find auctions with no bids (latestBidder is null) for PunkScapes the user owns
+  const auctionsWonByOwnership = ownedPunkScapeIds.size > 0
+    ? await offchainDb
+        .select()
+        .from(twentySevenYearScapeDetail)
+        .where(
+          and(
+            sql`${twentySevenYearScapeDetail.scapeId} IN (${sql.join([...ownedPunkScapeIds].map(id => sql`${id}`), sql`, `)})`,
+            lt(twentySevenYearScapeDetail.auctionEndsAt, now)
+          )
+        )
+    : [];
+
+  // Check which of these have no bids (latestBidder is null in gallery27Auction)
+  const noBidAuctionScapeIds: number[] = [];
+  for (const detail of auctionsWonByOwnership) {
+    if (!detail.scapeId) continue;
+
+    const auction = await db.query.gallery27Auction.findFirst({
+      where: eq(schema.gallery27Auction.punkScapeId, BigInt(detail.scapeId)),
+    });
+
+    // Claimable if no auction exists OR auction has no latestBidder
+    if (!auction || !auction.latestBidder) {
+      noBidAuctionScapeIds.push(detail.scapeId);
+    }
+  }
+
+  // Collect all claimable scapeIds (PunkScape IDs)
+  const claimableByBiddingScapeIds = auctionsWonByBidding.map(a => Number(a.punkScapeId));
+  const allClaimableScapeIds = [...new Set([...claimableByBiddingScapeIds, ...noBidAuctionScapeIds])];
+
+  if (allClaimableScapeIds.length === 0) {
+    return c.json({ scapes: [] });
+  }
+
+  // Get offchain details for claimable scapes
+  const details = await offchainDb
+    .select({
+      tokenId: twentySevenYearScapeDetail.tokenId,
+      scapeId: twentySevenYearScapeDetail.scapeId,
+      date: twentySevenYearScapeDetail.date,
+      auctionEndsAt: twentySevenYearScapeDetail.auctionEndsAt,
+      description: twentySevenYearScapeDetail.description,
+      imagePath: twentySevenYearScapeDetail.imagePath,
+      initialRenderPath: twentySevenYearRequest.imagePath,
+    })
+    .from(twentySevenYearScapeDetail)
+    .leftJoin(
+      twentySevenYearRequest,
+      eq(twentySevenYearScapeDetail.initialRenderId, twentySevenYearRequest.id)
+    )
+    .where(sql`${twentySevenYearScapeDetail.scapeId} IN (${sql.join(allClaimableScapeIds.map(id => sql`${id}`), sql`, `)})`);
+
+  // Filter out already minted and build response
+  const claimableBiddingSet = new Set(claimableByBiddingScapeIds);
+  const scapes = details
+    .filter(d => !mintedTokenIds.has(d.tokenId))
+    .map(detail => ({
+      tokenId: detail.tokenId,
+      scapeId: detail.scapeId,
+      date: detail.date,
+      auctionEndsAt: detail.auctionEndsAt,
+      description: detail.description,
+      imagePath: detail.imagePath,
+      initialRenderPath: detail.initialRenderPath,
+      claimReason: detail.scapeId && claimableBiddingSet.has(detail.scapeId)
+        ? "auction_winner" as const
+        : "punkscape_owner" as const,
+    }));
+
+  return c.json({ scapes });
+}

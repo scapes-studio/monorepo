@@ -26,6 +26,7 @@ import {
   getGallery27Bids,
   getGallery27Metadata,
   getGallery27ScapesByOwner,
+  getGallery27ClaimableByAddress,
 } from "./gallery27";
 import { postSignInitializeAuction, postSignClaim } from "./gallery27-actions";
 import { getSESMetadata } from "./ses";
@@ -96,8 +97,9 @@ app.post("/gallery27/sign-claim", postSignClaim);
 // Gallery27 metadata route
 app.get("/gallery27/:tokenId/metadata.json", getGallery27Metadata);
 
-// Profile Gallery27 scapes route
+// Profile Gallery27 scapes routes
 app.get("/profiles/:address/gallery27-scapes", getGallery27ScapesByOwner);
+app.get("/profiles/:address/gallery27-claimable", getGallery27ClaimableByAddress);
 
 // Webhooks
 app.post("/webhooks/leonardo", handleLeonardoWebhook);
