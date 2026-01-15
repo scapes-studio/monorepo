@@ -27,7 +27,7 @@ class PinataService {
   ): Promise<string> {
     const sdk = this.getSDK();
     const file = new File([buffer], filename, { type: contentType });
-    const result = await sdk.upload.file(file);
+    const result = await sdk.upload.public.file(file);
     return result.cid;
   }
 
@@ -37,7 +37,7 @@ class PinataService {
    */
   async uploadJson(data: object, filename: string): Promise<string> {
     const sdk = this.getSDK();
-    const result = await sdk.upload.json(data, { metadata: { name: filename } });
+    const result = await sdk.upload.public.json(data).name(filename);
     return result.cid;
   }
 

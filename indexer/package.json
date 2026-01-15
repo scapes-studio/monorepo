@@ -17,8 +17,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.968.0",
-    "multiformats": "^13.3.1",
-    "pinata": "^1.6.1",
     "@ponder/client": "^0.16.0",
     "@scapes-studio/abis": "workspace:*",
     "@scapes-studio/scape-renderer": "^1.1.0",
@@ -26,7 +24,9 @@
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.41.0",
     "hono": "^4.5.0",
+    "multiformats": "^13.3.1",
     "pg": "^8.14.1",
+    "pinata": "^2.5.3",
     "ponder": "^0.16.0",
     "sharp": "^0.34.5",
     "viem": "^2.21.3"
