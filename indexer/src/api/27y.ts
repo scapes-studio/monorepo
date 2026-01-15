@@ -33,6 +33,31 @@ export async function get27yScape(c: Context) {
 }
 
 /**
+ * GET /27y/by-scape/:scapeId
+ * Look up Gallery27 token by parent PunkScape ID
+ */
+export async function get27yByScapeId(c: Context) {
+  const scapeIdParam = c.req.param("scapeId");
+  const scapeId = parseInt(scapeIdParam, 10);
+
+  if (isNaN(scapeId) || scapeId < 1 || scapeId > 10000) {
+    return c.json({ error: "Invalid scapeId" }, 400);
+  }
+
+  const db = getOffchainDb();
+
+  const scape = await db.query.twentySevenYearScapeDetail.findFirst({
+    where: eq(twentySevenYearScapeDetail.scapeId, scapeId),
+  });
+
+  if (!scape) {
+    return c.json({ error: "No Gallery27 token found for this scape" }, 404);
+  }
+
+  return c.json({ tokenId: scape.tokenId });
+}
+
+/**
  * GET /27y/current
  * Get the currently active scape (auction in progress)
  */

@@ -13,6 +13,7 @@ import { getListings, getListingByTokenId } from "./listings";
 import { getScapeImage } from "./images";
 import {
   get27yScape,
+  get27yByScapeId,
   get27yCurrent,
   get27yNext,
   get27yAll,
@@ -72,6 +73,7 @@ app.get("/ses/:tokenId", getSESMetadata);
 app.get("/27y/current", get27yCurrent);
 app.get("/27y/next", get27yNext);
 app.get("/27y/all", get27yAll);
+app.get("/27y/by-scape/:scapeId", get27yByScapeId);
 app.get("/27y/:tokenId", get27yScape);
 
 // TwentySevenYear pregeneration routes

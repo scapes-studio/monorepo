@@ -81,6 +81,8 @@ const {
   refresh: refreshListing,
 } = useScapeListing(scapeId);
 
+const { data: gallery27TokenId } = await useGallery27ByScape(scapeId);
+
 const sesModalOpen = ref(false);
 </script>
 
@@ -103,6 +105,13 @@ const sesModalOpen = ref(false);
             <AccountLink :address="owner" class="scape-detail__owner-link" />
           </template>
         </div>
+        <NuxtLink
+          v-if="gallery27TokenId"
+          :to="`/gallery27/${gallery27TokenId}`"
+          class="scape-detail__gallery27-link"
+        >
+          View Gallery27 Day {{ gallery27TokenId }}
+        </NuxtLink>
         <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
           class="scape-detail__listings" />
         <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
@@ -166,6 +175,18 @@ const sesModalOpen = ref(false);
 }
 
 .scape-detail__owner-link:hover {
+  text-decoration: underline;
+}
+
+.scape-detail__gallery27-link {
+  display: inline-block;
+  margin-top: var(--spacer-sm);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+}
+
+.scape-detail__gallery27-link:hover {
   text-decoration: underline;
 }
 
