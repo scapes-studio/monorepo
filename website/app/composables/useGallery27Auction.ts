@@ -26,6 +26,7 @@ export const useGallery27Auction = (tokenId: Ref<string | number | undefined>) =
   let pollInterval: ReturnType<typeof setInterval> | null = null;
 
   const startPolling = () => {
+    if (import.meta.server) return;
     if (pollInterval) return;
     pollInterval = setInterval(() => {
       if (isActive.value) {
