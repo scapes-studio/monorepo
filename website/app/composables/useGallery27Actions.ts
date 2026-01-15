@@ -1,21 +1,21 @@
 import { writeContract, readContract } from "@wagmi/core";
 import type { Config } from "@wagmi/vue";
-import type { Hash, Address } from "viem";
+import type { Hash, Hex } from "viem";
 import { gallery27ABI } from "@scapes-studio/abis";
 
-// Contract addresses
-const GALLERY27_V1_ADDRESS = "0x6f051b2B1765eDB6A892be7736C04AaB0468AF27" as const;
-const GALLERY27_ADDRESS = "0x25eF4D7F1D2706808D67a7Ecf577062B055aFD4E" as const;
+// Contract addresses (typed as hex strings for viem)
+const GALLERY27_V1_ADDRESS: Hex = "0x6f051b2B1765eDB6A892be7736C04AaB0468AF27";
+const GALLERY27_ADDRESS: Hex = "0x25eF4D7F1D2706808D67a7Ecf577062B055aFD4E";
 
 // V1 token IDs for claim routing
 const V1_TOKEN_IDS = [88, 102, 107, 109, 110, 128, 140, 142, 149, 160, 187];
 
-// Response types from API
+// Response types from API (JSON loses type info, so we use string)
 interface SignInitializeAuctionResponse {
   punkScapeId: number;
   auctionEndsAt: number;
-  signature: `0x${string}`;
-  contractAddress: Address;
+  signature: string;
+  contractAddress: string;
 }
 
 interface SignClaimResponse {
@@ -23,8 +23,8 @@ interface SignClaimResponse {
   punkScapeId: number;
   cid: string;
   metadata: Record<string, unknown> | null;
-  signature: `0x${string}`;
-  contractAddress: Address;
+  signature: string;
+  contractAddress: string;
 }
 
 export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>) => {
@@ -36,7 +36,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
   /**
    * Get the appropriate contract address for a token ID.
    */
-  const getContractAddress = (tokenId?: number): Address => {
+  const getContractAddress = (tokenId?: number): Hex => {
     if (tokenId && V1_TOKEN_IDS.includes(tokenId)) {
       return GALLERY27_V1_ADDRESS;
     }
@@ -75,15 +75,15 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
       },
     );
 
-    // Call contract
+    // Call contract (cast API string responses to proper hex types)
     return writeContract($wagmi as Config, {
-      address: response.contractAddress,
+      address: response.contractAddress as Hex,
       abi: gallery27ABI,
       functionName: "initializeAuction",
       args: [
         BigInt(scapeId),
         BigInt(response.auctionEndsAt),
-        response.signature,
+        response.signature as Hex,
         message,
       ],
       value,
@@ -124,15 +124,16 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
       },
     );
 
+    // Call contract (cast API string responses to proper hex types)
     return writeContract($wagmi as Config, {
-      address: response.contractAddress,
+      address: response.contractAddress as Hex,
       abi: gallery27ABI,
       functionName: "claim",
       args: [
         BigInt(scapeId),
         BigInt(response.tokenId),
         response.cid,
-        response.signature,
+        response.signature as Hex,
       ],
     });
   };
