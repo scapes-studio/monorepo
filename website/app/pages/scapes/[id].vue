@@ -41,6 +41,23 @@ const route = useRoute();
 const scapeId = computed(() => route.params.id as string);
 const client = usePonderClient();
 
+// Radio integration: play this scape when on detail page (client-only)
+if (import.meta.client) {
+  const { setFixedScape, clearFixedScape } = useScapeRadio();
+  watch(
+    scapeId,
+    (id) => {
+      if (id) {
+        setFixedScape(Number(id));
+      }
+    },
+    { immediate: true },
+  );
+  onBeforeUnmount(() => {
+    clearFixedScape();
+  });
+}
+
 const { data, pending, error } = await useAPI<ScapeHistoryResponse>(
   () => `/scapes/${scapeId.value}/history`,
   { watch: [scapeId] },

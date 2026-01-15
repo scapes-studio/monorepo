@@ -12,6 +12,23 @@ const tokenId = computed(() => {
 const tokenIdRef = computed(() => tokenId.value?.toString());
 
 const { data: scape, pending: scapePending, error: scapeError } = await useGallery27Scape(tokenIdRef);
+
+// Radio integration: play the underlying scape when on detail page (client-only)
+if (import.meta.client) {
+  const { setFixedScape, clearFixedScape } = useScapeRadio();
+  watch(
+    () => scape.value?.scapeId,
+    (scapeId) => {
+      if (scapeId) {
+        setFixedScape(scapeId);
+      }
+    },
+    { immediate: true },
+  );
+  onBeforeUnmount(() => {
+    clearFixedScape();
+  });
+}
 const { data: auction, pending: auctionPending, isActive } = useGallery27Auction(tokenIdRef);
 const { data: bidsData, pending: bidsPending, refresh: refreshBids } = await useGallery27Bids(tokenIdRef);
 
