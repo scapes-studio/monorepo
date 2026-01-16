@@ -133,11 +133,37 @@ const seoOptions = computed(() => {
   return {
     title: `Scape #${id}`,
     description,
-    image: `https://cdn.scapes.xyz/scapes/sm/${id}.png`,
-    imageAlt: `Scape #${id}`,
+    image: null,
+    imageAlt: null,
   };
 });
 useSeo(seoOptions);
+
+const ogTitle = computed(() => `Scape #${scapeId.value}`);
+const ogSubtitle = computed(() => {
+  const attrs = attributes.value;
+  if (attrs && typeof attrs === "object") {
+    const attrEntries = Object.entries(attrs as Record<string, string>)
+      .filter(([key]) => key !== "Seed")
+      .slice(0, 2)
+      .map(([key, value]) => `${key}: ${value}`);
+    if (attrEntries.length > 0) {
+      return attrEntries.join(" · ");
+    }
+  }
+  return "Ownership, history, and listings.";
+});
+const ogImage = computed(
+  () => `https://cdn.scapes.xyz/scapes/sm/${scapeId.value}.png`,
+);
+
+defineOgImage({
+  component: "ScapeDetail",
+  title: ogTitle,
+  subtitle: ogSubtitle,
+  image: ogImage,
+  cacheMaxAgeSeconds: 0,
+});
 
 const sesModalOpen = ref(false);
 </script>

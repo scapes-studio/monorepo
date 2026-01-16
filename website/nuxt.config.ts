@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-07',
   devtools: { enabled: true },
+  modules: ['nuxt-og-image'],
   app: {
     head: {
       titleTemplate: '%s | Scapes',
@@ -12,6 +13,10 @@ export default defineNuxtConfig({
         { name: 'twitter:card', content: 'summary_large_image' },
       ],
     },
+  },
+  site: {
+    url: 'https://scapes.xyz',
+    name: 'Scapes',
   },
   imports: {
     presets: [

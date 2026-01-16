@@ -1,9 +1,23 @@
 <script setup lang="ts">
 import type { SortOption } from "~/composables/useListedScapes";
 
+const ogTitle = "Market";
+const ogSubtitle = "Browse Scapes currently listed for sale on the marketplace.";
+const ogImage = "https://scapes.xyz/og-default.png";
+
 useSeo({
-  title: 'Market',
-  description: 'Browse Scapes currently listed for sale on the marketplace.',
+  title: ogTitle,
+  description: ogSubtitle,
+  image: null,
+  imageAlt: null,
+});
+
+defineOgImage({
+  component: "MarketIndex",
+  title: ogTitle,
+  subtitle: ogSubtitle,
+  image: ogImage,
+  cacheMaxAgeSeconds: 0,
 });
 
 const sortOptions = [

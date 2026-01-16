@@ -8,9 +8,12 @@ const injected = inject<{
   displayAddress: Ref<string>;
 }>("profile");
 
+const profile = injected?.profile ?? ref(null);
 const resolvedAddress = injected?.resolvedAddress ?? ref(null);
+const displayAddress = injected?.displayAddress ?? computed(() => resolvedAddress.value ?? "");
 
 // Check if viewing own profile
+// FIXME: Use the composable from layers.evm
 const { address: connectedAddress } = useAccount();
 const isOwnProfile = computed(() =>
   connectedAddress.value?.toLowerCase() === resolvedAddress.value?.toLowerCase()
@@ -25,6 +28,35 @@ const claimableOwner = computed(() => isOwnProfile.value ? resolvedAddress.value
 const { data: claimableData, pending: claimablePending } = await useGallery27ClaimableByOwner(claimableOwner);
 const claimableScapes = computed(() => claimableData.value?.scapes ?? []);
 const showClaimable = computed(() => isOwnProfile.value && claimableScapes.value.length > 0);
+
+const ogTitle = computed(() =>
+  displayAddress.value
+    ? `Gallery27 for ${displayAddress.value}`
+    : "Gallery27",
+);
+const ogSubtitle = computed(
+  () => "Twenty Seven Year Scapes owned by this collector.",
+);
+const ogImage = computed(
+  () =>
+    profile.value?.data?.avatar || null
+);
+
+const seoOptions = computed(() => ({
+  title: ogTitle.value,
+  description: ogSubtitle.value,
+  image: null,
+  imageAlt: null,
+}));
+useSeo(seoOptions);
+
+defineOgImage({
+  component: "PeopleGallery27",
+  title: ogTitle,
+  subtitle: ogSubtitle,
+  image: ogImage,
+  cacheMaxAgeSeconds: 0,
+});
 </script>
 
 <template>

@@ -99,23 +99,40 @@ const fallbackScapeId = computed(() => scape.value?.scapeId ?? null);
 const showFallbackScape = computed(() => !displayedImage.value && fallbackScapeId.value !== null);
 
 // Page meta
-const seoOptions = computed(() => {
-  const day = scape.value?.tokenId;
+const ogDay = computed(() => scape.value?.tokenId);
+const ogImage = computed(() => {
   const imagePath = displayedImage.value?.path;
-  const ogImage = imagePath
-    ? `https://cdn.scapes.xyz/${imagePath}`
-    : scape.value?.scapeId
-      ? `https://cdn.scapes.xyz/scapes/sm/${scape.value.scapeId}.png`
-      : undefined;
-
-  return {
-    title: day ? `Day ${day}` : 'Gallery27',
-    description: scape.value?.description || `Day ${day} of the 27 Year Scapes collection. AI-generated artwork based on a PunkScape.`,
-    image: ogImage,
-    imageAlt: day ? `Gallery27 Day ${day}` : 'Gallery27',
-  };
+  if (imagePath) {
+    return `https://cdn.scapes.xyz/${imagePath}`;
+  }
+  if (scape.value?.scapeId) {
+    return `https://cdn.scapes.xyz/scapes/sm/${scape.value.scapeId}.png`;
+  }
+  return "https://scapes.xyz/og-default.png";
 });
+const ogTitle = computed(() => (ogDay.value ? `Day ${ogDay.value}` : "Gallery27"));
+const ogSubtitle = computed(() =>
+  scape.value?.description ||
+  (ogDay.value
+    ? `Day ${ogDay.value} of the 27 Year Scapes collection.`
+    : "27 Year Scapes gallery."),
+);
+
+const seoOptions = computed(() => ({
+  title: ogTitle.value,
+  description: ogSubtitle.value,
+  image: null,
+  imageAlt: null,
+}));
 useSeo(seoOptions);
+
+defineOgImage({
+  component: "Gallery27Detail",
+  title: ogTitle,
+  subtitle: ogSubtitle,
+  image: ogImage,
+  cacheMaxAgeSeconds: 0,
+});
 </script>
 
 <template>

@@ -1,7 +1,21 @@
 <script setup lang="ts">
+const ogTitle = "Scape Owners";
+const ogSubtitle = "Leaderboard of Scape owners ranked by total scapes owned.";
+const ogImage = "https://scapes.xyz/og-default.png";
+
 useSeo({
-  title: 'Scape Owners',
-  description: 'Leaderboard of Scape owners ranked by total scapes owned.',
+  title: ogTitle,
+  description: ogSubtitle,
+  image: null,
+  imageAlt: null,
+});
+
+defineOgImage({
+  component: "PeopleIndex",
+  title: ogTitle,
+  subtitle: ogSubtitle,
+  image: ogImage,
+  cacheMaxAgeSeconds: 0,
 });
 
 const client = usePonderClient();

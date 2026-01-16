@@ -7,7 +7,9 @@ const injected = inject<{
   displayAddress: Ref<string>;
 }>("profile");
 
+const profile = injected?.profile ?? ref(null);
 const resolvedAddress = injected?.resolvedAddress ?? ref(null);
+const displayAddress = injected?.displayAddress ?? computed(() => resolvedAddress.value ?? "");
 
 const {
   scapes,
@@ -19,6 +21,29 @@ const {
 } = useScapesByOwner(resolvedAddress);
 
 const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length);
+
+const ogTitle = computed(() =>
+  displayAddress.value ? `Profile ${displayAddress.value}` : "Profile",
+);
+const ogSubtitle = computed(
+  () => profile.value?.data?.description || "Scapes owned and activity overview.",
+);
+
+const seoOptions = computed(() => ({
+  title: ogTitle.value,
+  description: ogSubtitle.value,
+  image: null,
+  imageAlt: null,
+}));
+useSeo(seoOptions);
+
+defineOgImage({
+  component: "PeopleProfile",
+  title: ogTitle,
+  subtitle: ogSubtitle,
+  image: profile.value?.data?.avatar || null,
+  cacheMaxAgeSeconds: 0,
+});
 </script>
 
 <template>
