@@ -14,7 +14,6 @@ defineProps<{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: Inter, ui-sans-serif, system-ui;
   ">
     <div v-if="image">
       <img :src="image" style="

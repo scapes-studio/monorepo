@@ -106,7 +106,7 @@ const ogImage = computed(() => {
     return `https://cdn.scapes.xyz/${imagePath}`;
   }
   if (scape.value?.scapeId) {
-    return `https://cdn.scapes.xyz/scapes/sm/${scape.value.scapeId}.png`;
+    return `https://scapes.xyz/__og-image__/image/scapes/${scape.value.scapeId}/og.png`;
   }
   return "https://scapes.xyz/og-default.png";
 });
@@ -121,20 +121,9 @@ const ogSubtitle = computed(() =>
 const seoOptions = computed(() => ({
   title: ogTitle.value,
   description: ogSubtitle.value,
-  image: null,
-  imageAlt: null,
+  image: ogImage.value,
 }));
 useSeo(seoOptions);
-
-defineOgImageComponent(
-  "Gallery27Detail",
-  {
-    title: ogTitle,
-    subtitle: ogSubtitle,
-    image: ogImage,
-  },
-
-);
 </script>
 
 <template>
@@ -164,18 +153,10 @@ defineOgImageComponent(
         <aside class="gallery27-page__sidebar">
           <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" />
 
-          <Gallery27Actions
-            v-if="scape.scapeId"
-            :punk-scape-id="scape.scapeId"
-            :token-id="tokenId"
-            :auction="auction ?? null"
-            :latest-bidder="latestBidder"
-            :punk-scape-owner="scape.punkScapeOwner"
-            :is-active="isActive"
-            :is-minted="scape.isMinted"
-            :selected-image="selectedImage"
-            @action-complete="handleActionComplete"
-          />
+          <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId"
+            :auction="auction ?? null" :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner"
+            :is-active="isActive" :is-minted="scape.isMinted" :selected-image="selectedImage"
+            @action-complete="handleActionComplete" />
 
           <Gallery27Description :token-id="tokenId" :scape-id="scape.scapeId" :description="scape.description"
             :is-on-chain="scape.isMinted" />
