@@ -135,6 +135,7 @@ const updateProfile = async (address: `0x${string}`, providedEns: string | null 
 
   const data = {
     avatar: "",
+    header: "",
     description: "",
     links: {
       url: "",
@@ -146,8 +147,9 @@ const updateProfile = async (address: `0x${string}`, providedEns: string | null 
 
   if (ens) {
     const normalizedEns = normalize(ens);
-    const [avatar, description, url, email, twitter, github] = await Promise.all([
+    const [avatar, header, description, url, email, twitter, github] = await Promise.all([
       client.getEnsAvatar({ name: normalizedEns }),
+      client.getEnsText({ name: normalizedEns, key: "header" }),
       client.getEnsText({ name: normalizedEns, key: "description" }),
       client.getEnsText({ name: normalizedEns, key: "url" }),
       client.getEnsText({ name: normalizedEns, key: "email" }),
@@ -156,6 +158,7 @@ const updateProfile = async (address: `0x${string}`, providedEns: string | null 
     ]);
 
     if (avatar) data.avatar = avatar;
+    if (header) data.header = header;
     if (description) data.description = description;
     if (url) data.links.url = url;
     if (email) data.links.email = email;

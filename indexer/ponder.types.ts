@@ -31,6 +31,7 @@ export type VolumeStats = {
 
 export type EnsProfileData = {
   avatar: string;
+  header: string;
   description: string;
   links: {
     url: string;

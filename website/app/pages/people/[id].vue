@@ -48,7 +48,7 @@ useSeo(seoOptions);
 
     <template v-else>
       <div class="account-page__profile">
-        <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null" />
+        <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null" :header="profileData?.header ?? null" />
         <ProfileBio :description="profileData?.description ?? null" />
         <ProfileLinks :links="profileData?.links ?? null" />
       </div>

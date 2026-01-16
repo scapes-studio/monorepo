@@ -1,33 +1,64 @@
 <script setup lang="ts">
-const props = defineProps<{ address: string; ens: string | null; avatar: string | null }>();
+const props = defineProps<{
+  address: string;
+  ens: string | null;
+  avatar: string | null;
+  header: string | null;
+}>();
+
+const { resolveIpfsUrl } = useIpfs();
 
 const displayName = computed(() => props.ens || props.address);
+const resolvedAvatar = computed(() => resolveIpfsUrl(props.avatar));
+const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
 </script>
 
 <template>
   <section class="profile-header">
-    <div class="profile-header__avatar">
-      <img v-if="avatar" :src="avatar" alt="Profile avatar" />
-      <div v-else class="profile-header__avatar-fallback">
-        {{ displayName.slice(0, 2).toUpperCase() }}
-      </div>
+    <div v-if="resolvedHeader" class="profile-header__banner">
+      <img :src="resolvedHeader" alt="Profile header" />
     </div>
 
-    <div class="profile-header__meta">
-      <h1>{{ displayName }}</h1>
-      <p class="profile-header__address">{{ address }}</p>
+    <div class="profile-header__content">
+      <div class="profile-header__avatar">
+        <img v-if="resolvedAvatar" :src="resolvedAvatar" alt="Profile avatar" />
+        <div v-else class="profile-header__avatar-fallback">
+          {{ displayName.slice(0, 2).toUpperCase() }}
+        </div>
+      </div>
+
+      <div class="profile-header__meta">
+        <h1>{{ displayName }}</h1>
+        <p class="profile-header__address">{{ address }}</p>
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
 .profile-header {
+  border: var(--border);
+  border-radius: var(--spacer);
+  overflow: hidden;
+}
+
+.profile-header__banner {
+  width: 100%;
+  height: var(--size-11);
+  background: var(--gray-z-1);
+}
+
+.profile-header__banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-header__content {
   display: flex;
   gap: var(--spacer);
   align-items: center;
   padding: var(--spacer);
-  border: var(--border);
-  border-radius: var(--spacer);
 }
 
 .profile-header__avatar {

@@ -7,6 +7,7 @@ export type ProfileLinks = {
 
 export type ProfileData = {
   avatar?: string;
+  header?: string;
   description?: string;
   links?: ProfileLinks;
 };
