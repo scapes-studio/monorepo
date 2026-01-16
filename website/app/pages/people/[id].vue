@@ -5,11 +5,21 @@ const route = useRoute();
 
 const accountId = computed(() => route.params.id as string | undefined);
 
-const { data: profile, pending: profilePending, error: profileError } = await useProfile(accountId);
+const { data: profile, pending: profilePending, error: profileError, forceRefresh } = await useProfile(accountId);
 
 const profileData = computed(() => profile.value?.data ?? null);
 const resolvedAddress = computed(() => profile.value?.address ?? null);
 const displayAddress = computed(() => profile.value?.address ?? accountId.value ?? "");
+
+const isRefreshing = ref(false);
+const handleRefresh = async () => {
+  isRefreshing.value = true;
+  try {
+    await forceRefresh();
+  } finally {
+    isRefreshing.value = false;
+  }
+};
 
 // Provide profile data to child pages
 provide("profile", { profile, resolvedAddress, displayAddress });
@@ -51,6 +61,13 @@ useSeo(seoOptions);
         <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null" :header="profileData?.header ?? null" />
         <ProfileBio :description="profileData?.description ?? null" />
         <ProfileLinks :links="profileData?.links ?? null" />
+        <button
+          class="account-page__refresh"
+          :disabled="isRefreshing"
+          @click="handleRefresh"
+        >
+          {{ isRefreshing ? 'Refreshing...' : 'Refresh from ENS' }}
+        </button>
       </div>
 
       <nav class="account-page__tabs">
@@ -116,5 +133,26 @@ useSeo(seoOptions);
 
 .account-page__status--error {
   background: oklch(from var(--error) l c h / 0.1);
+}
+
+.account-page__refresh {
+  justify-self: start;
+  padding: var(--spacer-xs) var(--spacer-sm);
+  font-size: var(--font-sm);
+  color: var(--muted);
+  background: transparent;
+  border: var(--border);
+  border-radius: var(--size-2);
+  cursor: pointer;
+}
+
+.account-page__refresh:hover:not(:disabled) {
+  color: inherit;
+  border-color: currentColor;
+}
+
+.account-page__refresh:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

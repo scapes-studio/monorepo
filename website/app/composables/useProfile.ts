@@ -19,12 +19,12 @@ export type ProfileResponse = {
   updatedAt: string;
 };
 
-export const useProfile = (identifier: Ref<string | null | undefined>) => {
+export const useProfile = async (identifier: Ref<string | null | undefined>) => {
   const runtimeConfig = useRuntimeConfig();
 
   const asyncKey = computed(() => `profile-${identifier.value?.toLowerCase() ?? "unknown"}`);
 
-  return useAsyncData(
+  const asyncData = await useAsyncData(
     asyncKey,
     async () => {
       if (!identifier.value) return null;
@@ -32,4 +32,15 @@ export const useProfile = (identifier: Ref<string | null | undefined>) => {
       return await $fetch<ProfileResponse>(`${baseUrl}/profiles/${identifier.value}`);
     },
   );
+
+  const forceRefresh = async () => {
+    if (!identifier.value) return;
+    const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
+    await $fetch<ProfileResponse>(`${baseUrl}/profiles/${identifier.value}`, {
+      method: "POST",
+    });
+    await asyncData.refresh();
+  };
+
+  return { ...asyncData, forceRefresh };
 };
