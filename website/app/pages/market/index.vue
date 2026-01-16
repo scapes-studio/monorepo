@@ -12,13 +12,15 @@ useSeo({
   imageAlt: null,
 });
 
-defineOgImage({
-  component: "MarketIndex",
-  title: ogTitle,
-  subtitle: ogSubtitle,
-  image: ogImage,
-  cacheMaxAgeSeconds: 0,
-});
+defineOgImageComponent(
+  "MarketIndex",
+  {
+    title: ogTitle,
+    subtitle: ogSubtitle,
+    image: ogImage,
+  },
+
+);
 
 const sortOptions = [
   { value: "price-asc", label: "Price: Low to High" },

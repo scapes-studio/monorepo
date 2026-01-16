@@ -157,13 +157,15 @@ const ogImage = computed(
   () => `https://cdn.scapes.xyz/scapes/sm/${scapeId.value}.png`,
 );
 
-defineOgImage({
-  component: "ScapeDetail",
-  title: ogTitle,
-  subtitle: ogSubtitle,
-  image: ogImage,
-  cacheMaxAgeSeconds: 0,
-});
+defineOgImageComponent(
+  "ScapeDetail",
+  {
+    title: ogTitle,
+    subtitle: ogSubtitle,
+    image: ogImage,
+  },
+
+);
 
 const sesModalOpen = ref(false);
 </script>

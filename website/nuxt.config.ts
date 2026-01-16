@@ -18,6 +18,12 @@ export default defineNuxtConfig({
     url: 'https://scapes.xyz',
     name: 'Scapes',
   },
+  ogImage: {
+    componentDirs: ['app/components/OgImage'],
+    defaults: {
+      cacheMaxAgeSeconds: 0,
+    },
+  },
   imports: {
     presets: [
       {

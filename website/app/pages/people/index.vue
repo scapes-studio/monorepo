@@ -10,13 +10,15 @@ useSeo({
   imageAlt: null,
 });
 
-defineOgImage({
-  component: "PeopleIndex",
-  title: ogTitle,
-  subtitle: ogSubtitle,
-  image: ogImage,
-  cacheMaxAgeSeconds: 0,
-});
+defineOgImageComponent(
+  "PeopleIndex",
+  {
+    title: ogTitle,
+    subtitle: ogSubtitle,
+    image: ogImage,
+  },
+
+);
 
 const client = usePonderClient();
 const { public: { scapeCollectionAddress } } = useRuntimeConfig();

@@ -50,13 +50,15 @@ const seoOptions = computed(() => ({
 }));
 useSeo(seoOptions);
 
-defineOgImage({
-  component: "PeopleGallery27",
-  title: ogTitle,
-  subtitle: ogSubtitle,
-  image: ogImage,
-  cacheMaxAgeSeconds: 0,
-});
+defineOgImageComponent(
+  "PeopleGallery27",
+  {
+    title: ogTitle,
+    subtitle: ogSubtitle,
+    image: ogImage,
+  },
+  { cacheMaxAgeSeconds: 0 },
+);
 </script>
 
 <template>

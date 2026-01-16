@@ -28,6 +28,12 @@ const ogTitle = computed(() =>
 const ogSubtitle = computed(
   () => profile.value?.data?.description || "Scapes owned and activity overview.",
 );
+const ogImage = computed(
+  () =>
+    profile.value?.data?.avatar ||
+    profile.value?.data?.header ||
+    "https://scapes.xyz/og-default.png",
+);
 
 const seoOptions = computed(() => ({
   title: ogTitle.value,
@@ -37,13 +43,15 @@ const seoOptions = computed(() => ({
 }));
 useSeo(seoOptions);
 
-defineOgImage({
-  component: "PeopleProfile",
-  title: ogTitle,
-  subtitle: ogSubtitle,
-  image: profile.value?.data?.avatar || null,
-  cacheMaxAgeSeconds: 0,
-});
+defineOgImageComponent(
+  "PeopleProfile",
+  {
+    title: ogTitle,
+    subtitle: ogSubtitle,
+    image: ogImage,
+  },
+
+);
 </script>
 
 <template>

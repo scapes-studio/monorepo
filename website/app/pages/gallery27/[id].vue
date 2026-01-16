@@ -126,13 +126,15 @@ const seoOptions = computed(() => ({
 }));
 useSeo(seoOptions);
 
-defineOgImage({
-  component: "Gallery27Detail",
-  title: ogTitle,
-  subtitle: ogSubtitle,
-  image: ogImage,
-  cacheMaxAgeSeconds: 0,
-});
+defineOgImageComponent(
+  "Gallery27Detail",
+  {
+    title: ogTitle,
+    subtitle: ogSubtitle,
+    image: ogImage,
+  },
+
+);
 </script>
 
 <template>
