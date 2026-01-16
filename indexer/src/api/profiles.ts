@@ -1,5 +1,5 @@
 import { db, publicClients } from "ponder:api";
-import { eq, or } from "drizzle-orm";
+import { eq, or, ne, and } from "drizzle-orm";
 import { type Context } from "hono";
 import { isAddress } from "viem";
 import { normalize } from "viem/ens";
@@ -172,8 +172,16 @@ const updateProfile = async (address: `0x${string}`, providedEns: string | null 
     updatedAt: Math.floor(Date.now() / 1000),
   };
 
-  // Use offchain db directly - no triggers to disable for offchain tables
   const offchainDb = getOffchainDb();
+
+  // Clear ENS from any other address that has it cached (handles ENS transfers)
+  if (ens) {
+    await offchainDb
+      .update(ensProfile)
+      .set({ ens: null })
+      .where(and(eq(ensProfile.ens, ens), ne(ensProfile.address, normalizedAddress)));
+  }
+
   await offchainDb
     .insert(ensProfile)
     .values({
