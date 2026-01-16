@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { eq } from "@ponder/client";
-import { shortenAddress } from "~/composables/useENSResolution";
 
 type SalePrice = {
   wei?: string;
@@ -154,7 +153,7 @@ const ogSubtitle = computed(() => {
   return "Ownership, history, and listings.";
 });
 const ogImage = computed(
-  () => `https://cdn.scapes.xyz/scapes/sm/${scapeId.value}.png`,
+  () => `https://cdn.scapes.xyz/scapes/lg/${scapeId.value}.png`,
 );
 
 defineOgImageComponent(
@@ -164,7 +163,10 @@ defineOgImageComponent(
     subtitle: ogSubtitle,
     image: ogImage,
   },
-
+  {
+    width: 1200,
+    height: 1200,
+  },
 );
 
 const sesModalOpen = ref(false);
@@ -189,11 +191,7 @@ const sesModalOpen = ref(false);
             <AccountLink :address="owner" class="scape-detail__owner-link" />
           </template>
         </div>
-        <NuxtLink
-          v-if="gallery27TokenId"
-          :to="`/gallery27/${gallery27TokenId}`"
-          class="scape-detail__gallery27-link"
-        >
+        <NuxtLink v-if="gallery27TokenId" :to="`/gallery27/${gallery27TokenId}`" class="scape-detail__gallery27-link">
           View Gallery27 Day {{ gallery27TokenId }}
         </NuxtLink>
         <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
