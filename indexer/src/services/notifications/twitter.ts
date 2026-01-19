@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import { Client, OAuth1, type OAuth1Config, type ClientConfig } from "@xdevplatform/xdk";
 import type {
   NotificationEventType,
   MergeEvent,
@@ -9,88 +9,31 @@ import type {
 } from "./types";
 import { formatEth, formatAddress } from "./formatters";
 
-interface OAuthCredentials {
-  consumerKey: string;
-  consumerSecret: string;
-  accessToken: string;
-  accessTokenSecret: string;
-}
-
-function getCredentials(eventType: NotificationEventType): OAuthCredentials | null {
+function getOAuth1Config(eventType: NotificationEventType): OAuth1Config | null {
   // G27 events use a different Twitter account
   if (eventType.startsWith("g27_")) {
-    const consumerKey = process.env.G27_TWITTER_CONSUMER_KEY;
-    const consumerSecret = process.env.G27_TWITTER_CONSUMER_SECRET;
+    const apiKey = process.env.G27_TWITTER_CONSUMER_KEY;
+    const apiSecret = process.env.G27_TWITTER_CONSUMER_SECRET;
     const accessToken = process.env.G27_TWITTER_OAUTH_TOKEN;
     const accessTokenSecret = process.env.G27_TWITTER_OAUTH_TOKEN_SECRET;
 
-    if (!consumerKey || !consumerSecret || !accessToken || !accessTokenSecret) {
+    if (!apiKey || !apiSecret || !accessToken || !accessTokenSecret) {
       return null;
     }
 
-    return { consumerKey, consumerSecret, accessToken, accessTokenSecret };
+    return { apiKey, apiSecret, accessToken, accessTokenSecret, callback: "oob" };
   }
 
-  const consumerKey = process.env.TWITTER_CONSUMER_KEY;
-  const consumerSecret = process.env.TWITTER_CONSUMER_SECRET;
+  const apiKey = process.env.TWITTER_CONSUMER_KEY;
+  const apiSecret = process.env.TWITTER_CONSUMER_SECRET;
   const accessToken = process.env.TWITTER_OAUTH_TOKEN;
   const accessTokenSecret = process.env.TWITTER_OAUTH_TOKEN_SECRET;
 
-  if (!consumerKey || !consumerSecret || !accessToken || !accessTokenSecret) {
+  if (!apiKey || !apiSecret || !accessToken || !accessTokenSecret) {
     return null;
   }
 
-  return { consumerKey, consumerSecret, accessToken, accessTokenSecret };
-}
-
-function generateOAuthSignature(
-  method: string,
-  url: string,
-  params: Record<string, string>,
-  credentials: OAuthCredentials
-): string {
-  const sortedParams = Object.entries(params)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-    .join("&");
-
-  const signatureBaseString = [
-    method.toUpperCase(),
-    encodeURIComponent(url),
-    encodeURIComponent(sortedParams),
-  ].join("&");
-
-  const signingKey = `${encodeURIComponent(credentials.consumerSecret)}&${encodeURIComponent(credentials.accessTokenSecret)}`;
-
-  return crypto
-    .createHmac("sha1", signingKey)
-    .update(signatureBaseString)
-    .digest("base64");
-}
-
-function generateAuthHeader(
-  method: string,
-  url: string,
-  credentials: OAuthCredentials
-): string {
-  const oauthParams: Record<string, string> = {
-    oauth_consumer_key: credentials.consumerKey,
-    oauth_nonce: crypto.randomBytes(16).toString("hex"),
-    oauth_signature_method: "HMAC-SHA1",
-    oauth_timestamp: Math.floor(Date.now() / 1000).toString(),
-    oauth_token: credentials.accessToken,
-    oauth_version: "1.0",
-  };
-
-  const signature = generateOAuthSignature(method, url, oauthParams, credentials);
-  oauthParams.oauth_signature = signature;
-
-  const headerParts = Object.entries(oauthParams)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => `${encodeURIComponent(key)}="${encodeURIComponent(value)}"`)
-    .join(", ");
-
-  return `OAuth ${headerParts}`;
+  return { apiKey, apiSecret, accessToken, accessTokenSecret, callback: "oob" };
 }
 
 function formatTweet(
@@ -134,29 +77,18 @@ class TwitterService {
     eventType: NotificationEventType,
     event: MergeEvent | OfferEvent | SaleEvent | G27BidEvent | G27ClaimEvent
   ): Promise<void> {
-    const credentials = getCredentials(eventType);
-    if (!credentials) {
+    const oauth1Config = getOAuth1Config(eventType);
+    if (!oauth1Config) {
       console.warn(`No Twitter credentials configured for ${eventType}`);
       return;
     }
 
+    const oauth1 = new OAuth1(oauth1Config);
+    const config: ClientConfig = { oauth1 };
+    const client = new Client(config);
+
     const text = formatTweet(eventType, event);
-    const url = "https://api.twitter.com/2/tweets";
-    const authHeader = generateAuthHeader("POST", url, credentials);
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: authHeader,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Twitter API failed (${response.status}): ${errorText}`);
-    }
+    await client.posts.create({ text });
   }
 }
 
