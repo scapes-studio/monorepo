@@ -80,4 +80,39 @@ export const scapesABI = [
       },
     ],
   },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      {
+        name: "merge_",
+        internalType: "struct ScapesMerge.Merge",
+        type: "tuple",
+        components: [
+          {
+            name: "parts",
+            internalType: "struct ScapesMerge.MergePart[]",
+            type: "tuple[]",
+            components: [
+              { name: "tokenId", internalType: "uint256", type: "uint256" },
+              { name: "flipX", internalType: "bool", type: "bool" },
+              { name: "flipY", internalType: "bool", type: "bool" },
+            ],
+          },
+          { name: "isFade", internalType: "bool", type: "bool" },
+        ],
+      },
+    ],
+    name: "purge",
+    outputs: [],
+  },
+  {
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [
+      { name: "mergeTokenId", internalType: "uint256", type: "uint256" },
+    ],
+    name: "purge",
+    outputs: [],
+  },
 ] as const;
