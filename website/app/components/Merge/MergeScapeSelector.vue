@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ScapeRecord } from "~/composables/useScapesByOwner";
+import { useConnection } from '@wagmi/vue'
 
 const props = defineProps<{
   selectedIds: bigint[];
