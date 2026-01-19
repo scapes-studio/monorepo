@@ -52,6 +52,7 @@ const { getAccountDisplay } = useENSResolution()
     </ul>
 
     <div class="main-menu__actions">
+      <ScapeRadioInline />
       <EvmConnect>
         <template #connected="{ address }">
           <NuxtLink :to="getAccountDisplay(address).url">
@@ -66,21 +67,27 @@ const { getAccountDisplay } = useENSResolution()
 <style scoped>
 .main-menu {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: var(--spacer-md);
+  left: var(--spacer-md);
+  right: var(--spacer-md);
   z-index: 100;
   display: flex;
   align-items: center;
   gap: var(--spacer);
   padding: var(--spacer-sm) var(--spacer);
   background: var(--color-background, #fff);
-  border-top: 1px solid var(--color-border);
+  border: 3px solid #000;
 }
 
 .main-menu__nav {
   display: flex;
   gap: var(--spacer-sm);
   flex: 1;
+}
+
+.main-menu__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacer);
 }
 </style>
