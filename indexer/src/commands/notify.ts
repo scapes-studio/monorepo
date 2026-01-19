@@ -32,6 +32,11 @@ export const notifyCommand = new Command("notify")
       channels?: string;
       dryRun?: boolean;
     }) => {
+      if (process.env.SKIP_NOTIFICATIONS === "true") {
+        console.log("Notifications skipped (SKIP_NOTIFICATIONS=true)");
+        process.exit(0);
+      }
+
       const eventTypes = options.types
         ? (options.types.split(",") as NotificationEventType[])
         : ALL_EVENT_TYPES;
