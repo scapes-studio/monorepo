@@ -398,6 +398,10 @@ export class RadioPlayer {
     return this.currentScape?.info ?? null;
   }
 
+  setVolume(volume: number): void {
+    this.currentScape?.setVolume(volume);
+  }
+
   destroy(): void {
     this.cancelAutoSkip();
     this.stopProgressTracking();

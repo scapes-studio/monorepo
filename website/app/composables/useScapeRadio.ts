@@ -12,6 +12,7 @@ interface RadioState {
   progress: number;
   isExpanded: boolean;
   hasStarted: boolean;
+  volume: number;
 }
 
 // Module-level state - persists across all component instances and page navigation
@@ -24,6 +25,7 @@ const state = reactive<RadioState>({
   progress: 0,
   isExpanded: false,
   hasStarted: false,
+  volume: 1,
 });
 
 // Single RadioPlayer instance (lazy initialized on first play)
@@ -140,6 +142,13 @@ export const useScapeRadio = () => {
     state.isExpanded = !state.isExpanded;
   };
 
+  const setVolume = (vol: number): void => {
+    state.volume = Math.max(0, Math.min(1, vol));
+    player?.setVolume(state.volume);
+  };
+
+  const volume = computed(() => state.volume);
+
   return {
     // State
     isPlaying,
@@ -149,6 +158,7 @@ export const useScapeRadio = () => {
     progress,
     isExpanded,
     hasStarted,
+    volume,
     // Actions
     play,
     pause,
@@ -159,5 +169,6 @@ export const useScapeRadio = () => {
     expand,
     collapse,
     toggleExpanded,
+    setVolume,
   };
 };
