@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useAccount } from "@wagmi/vue";
 import type { ScapeRecord } from "~/composables/useScapesByOwner";
 
 const props = defineProps<{
@@ -11,7 +10,7 @@ const emit = defineEmits<{
   select: [id: bigint];
 }>();
 
-const { address, isConnected } = useAccount();
+const { address, isConnected } = useConnection();
 const onlyOwned = ref(false);
 const searchQuery = ref("");
 
@@ -23,7 +22,7 @@ const selectedTraits = ref<string[]>([]);
 const sortBy = ref<"id-asc" | "id-desc">("id-asc");
 
 const galleryData = useScapesGallery(selectedTraits, sortBy, ref(false));
-const ownerData = useScapesByOwner(ownerAddress);
+const ownerData = await useScapesByOwner(ownerAddress);
 
 const searchedId = computed(() => {
   const num = parseInt(searchQuery.value, 10);

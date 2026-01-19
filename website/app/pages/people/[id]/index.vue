@@ -18,7 +18,7 @@ const {
   error: scapesError,
   hasMore,
   loadMore,
-} = useScapesByOwner(resolvedAddress);
+} = await useScapesByOwner(resolvedAddress);
 
 const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length);
 

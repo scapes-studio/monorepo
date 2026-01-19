@@ -58,31 +58,22 @@ useSeo(seoOptions);
 
     <template v-else>
       <div class="account-page__profile">
-        <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null" :header="profileData?.header ?? null" />
+        <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null"
+          :header="profileData?.header ?? null" />
         <ProfileBio :description="profileData?.description ?? null" />
         <ProfileLinks :links="profileData?.links ?? null" />
-        <button
-          class="account-page__refresh"
-          :disabled="isRefreshing"
-          @click="handleRefresh"
-        >
+        <button class="account-page__refresh" :disabled="isRefreshing" @click="handleRefresh">
           {{ isRefreshing ? 'Refreshing...' : 'Refresh from ENS' }}
         </button>
       </div>
 
       <nav class="account-page__tabs">
-        <NuxtLink
-          :to="`/people/${accountId}`"
-          class="account-page__tab"
-          :class="{ 'account-page__tab--active': currentTab === 'scapes' }"
-        >
+        <NuxtLink :to="`/people/${accountId}`" class="account-page__tab"
+          :class="{ 'account-page__tab--active': currentTab === 'scapes' }">
           Scapes
         </NuxtLink>
-        <NuxtLink
-          :to="`/people/${accountId}/twenty-seven-year-scapes`"
-          class="account-page__tab"
-          :class="{ 'account-page__tab--active': currentTab === 'gallery27' }"
-        >
+        <NuxtLink :to="`/people/${accountId}/twenty-seven-year-scapes`" class="account-page__tab"
+          :class="{ 'account-page__tab--active': currentTab === 'gallery27' }">
           Twenty Seven Year Scapes
         </NuxtLink>
       </nav>

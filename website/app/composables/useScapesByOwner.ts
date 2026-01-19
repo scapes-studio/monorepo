@@ -10,7 +10,7 @@ type ScapesPayload = {
 
 const PAGE_SIZE = 500;
 
-export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
+export const useScapesByOwner = async (owner: Ref<string | null | undefined>) => {
   const client = usePonderClient();
   const scapes = ref<ScapeRecord[]>([]);
   const total = ref<number | null>(null);
@@ -59,13 +59,10 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
   };
 
   const asyncKey = computed(() => `scapes-by-owner-${owner.value?.toLowerCase() ?? "unknown"}`);
-  const { data, pending, error: asyncError } = useAsyncData(asyncKey, fetchInitial, {
-    watch: [owner],
-    server: true,
-  });
+  const { data: initial, pending, error: asyncError } = await useAsyncData(asyncKey, fetchInitial);
 
   watch(
-    data,
+    initial,
     (value) => {
       if (!value) return;
       scapes.value = value.scapes;
@@ -83,12 +80,6 @@ export const useScapesByOwner = (owner: Ref<string | null | undefined>) => {
     },
     { immediate: true },
   );
-
-  watch(owner, (value) => {
-    if (!value) {
-      reset();
-    }
-  });
 
   const loadMore = async () => {
     if (!owner.value || loadMoreLoading.value || pending.value || !hasMore.value) return;

@@ -28,8 +28,7 @@ export const useProfile = async (identifier: Ref<string | null | undefined>) => 
     asyncKey,
     async () => {
       if (!identifier.value) return null;
-      const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
-      return await $fetch<ProfileResponse>(`${baseUrl}/profiles/${identifier.value}`);
+      return await $fetch<ProfileResponse>(`${runtimeConfig.public.apiUrl}/profiles/${identifier.value}`);
     },
   );
 
