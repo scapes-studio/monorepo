@@ -3,3 +3,8 @@
 
 /* Variables */
 @import './variables.css';
+
+/* Override dialog backdrop blur with grayscale */
+.dialog::backdrop {
+  backdrop-filter: contrast(0.4) saturate(0.1) !important;
+}
