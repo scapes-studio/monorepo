@@ -20,6 +20,10 @@ const {
   loadMore,
 } = await useScapesByOwner(resolvedAddress);
 
+const merges = computed(() => scapes.value.filter(s => s.id > 10_000n));
+const regularScapes = computed(() => scapes.value.filter(s => s.id <= 10_000n));
+const showMerges = computed(() => merges.value.length > 0);
+
 const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length);
 
 const ogTitle = computed(() =>
@@ -56,11 +60,6 @@ defineOgImageComponent(
 
 <template>
   <section class="scapes-tab">
-    <header class="scapes-tab__header">
-      <h2>Scapes</h2>
-      <span>{{ scapesOwnedCount }} owned</span>
-    </header>
-
     <div v-if="scapesError" class="scapes-tab__status scapes-tab__status--error">
       Failed to load scapes.
     </div>
@@ -71,7 +70,23 @@ defineOgImageComponent(
       No scapes found for this account.
     </div>
 
-    <ScapesGrid v-else :scapes="scapes" />
+    <template v-else>
+      <!-- Merges Section -->
+      <template v-if="showMerges">
+        <header class="scapes-tab__header">
+          <h2>Merges</h2>
+          <span>{{ merges.length }} owned</span>
+        </header>
+        <ScapesGrid :scapes="merges" />
+      </template>
+
+      <!-- Scapes Section -->
+      <header class="scapes-tab__header">
+        <h2>Scapes</h2>
+        <span>{{ regularScapes.length }} owned</span>
+      </header>
+      <ScapesGrid :scapes="regularScapes" />
+    </template>
 
     <button v-if="hasMore" class="scapes-tab__load-more" type="button" :disabled="scapesLoading" @click="loadMore">
       {{ scapesLoading ? "Loading…" : "Load more" }}
