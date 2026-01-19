@@ -12,13 +12,8 @@ defineProps<{ scapes: ScapeWithPrice[] }>();
 
 <template>
   <div class="scapes-grid">
-    <ScapesGridItem
-      v-for="scape in scapes"
-      :key="`${scape.id}`"
-      :scape="scape"
-      :price="scape.price ?? null"
-      :is-seaport="scape.source === 'seaport'"
-    />
+    <ScapesGridItem v-for="scape in scapes" :key="`${scape.id}`" :scape="scape" :price="scape.price ?? null"
+      :is-seaport="scape.source === 'seaport'" />
   </div>
 </template>
 

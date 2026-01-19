@@ -28,23 +28,30 @@ const formattedPrice = computed(() => {
   display: block;
   text-decoration: none;
   color: inherit;
-}
+  container-type: inline-size;
 
-.scape-link__price {
-  margin-top: var(--spacer-xs);
-  font-size: var(--font-sm);
-  font-weight: var(--font-weight-bold);
-  text-align: center;
-}
+  img {
+    /* border-bottom: calc(100cqw/72) solid beige; */
+    /* border-right: calc(100cqw/72) solid beige; */
+    box-shadow: 0 0 0 calc(100cqw/72) beige;
+  }
 
-.scape-link__badge {
-  display: inline-block;
-  margin-left: var(--spacer-xs);
-  padding: 0 var(--spacer-xs);
-  border-radius: var(--size-2);
-  background: var(--gray-z-2);
-  font-size: var(--font-xs);
-  font-weight: var(--font-weight-normal);
-  color: var(--muted);
+  .scape-link__price {
+    margin-top: var(--spacer-xs);
+    font-size: var(--font-sm);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+  }
+
+  .scape-link__badge {
+    display: inline-block;
+    margin-left: var(--spacer-xs);
+    padding: 0 var(--spacer-xs);
+    border-radius: var(--size-2);
+    background: var(--gray-z-2);
+    font-size: var(--font-xs);
+    font-weight: var(--font-weight-normal);
+    color: var(--muted);
+  }
 }
 </style>
