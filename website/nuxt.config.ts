@@ -12,6 +12,9 @@ export default defineNuxtConfig({
         { property: 'og:type', content: 'website' },
         { name: 'twitter:card', content: 'summary_large_image' },
       ],
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/icon.png' },
+      ],
     },
   },
   site: {
