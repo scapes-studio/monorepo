@@ -26,6 +26,6 @@ defineProps<{ scapes: ScapeWithPrice[] }>();
 .scapes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-  gap: var(--spacer-sm);
+  gap: 0;
 }
 </style>

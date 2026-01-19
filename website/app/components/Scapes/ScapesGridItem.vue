@@ -24,10 +24,6 @@ const formattedPrice = computed(() => {
 </template>
 
 <style scoped>
-img {
-  border-radius: var(--spacer-xs);
-}
-
 .scape-link {
   display: block;
   text-decoration: none;

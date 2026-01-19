@@ -5,7 +5,7 @@ export type ScapeOnMarket = ScapeRecord & {
   price: bigint;
 };
 
-const PAGE_SIZE = 200;
+const PAGE_SIZE = 500;
 
 export const usePreviewScapes = () => {
   const client = usePonderClient();

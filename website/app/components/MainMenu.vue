@@ -65,10 +65,17 @@ const { getAccountDisplay } = useENSResolution()
 
 <style scoped>
 .main-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
   gap: var(--spacer);
   padding: var(--spacer-sm) var(--spacer);
+  background: var(--color-background, #fff);
+  border-top: 1px solid var(--color-border);
 }
 
 .main-menu__nav {

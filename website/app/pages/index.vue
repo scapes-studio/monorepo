@@ -9,8 +9,8 @@ useSeo({
 
 <template>
   <div class="home">
-    <h1>Welcome Home</h1>
-    <p>Composable places stored on the Ethereum Blockchain.</p>
+    <!-- <h1>Welcome Home</h1>
+    <p>Composable places stored on the Ethereum Blockchain.</p> -->
 
     <section class="market-section">
       <p v-if="loading">Loading...</p>
@@ -24,7 +24,6 @@ useSeo({
 .home {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--spacer-lg);
   text-align: center;
 }
 
@@ -33,7 +32,8 @@ useSeo({
 }
 
 .market-section {
-  margin-top: var(--spacer-xl);
   text-align: left;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
 }
 </style>
