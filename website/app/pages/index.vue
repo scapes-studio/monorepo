@@ -1,9 +1,44 @@
 <script setup lang="ts">
-const { scapes, loading, error } = useRandomScapes();
+const { scapes, loading, loadingMore, error, hasMore, loadMore } = useRandomScapes();
 
 useSeo({
   title: 'Home',
   description: 'Composable places stored on the Ethereum Blockchain. Explore 10,000 pixel-art landscapes.',
+});
+
+const checkAndLoadMore = () => {
+  const windowHeight = window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight;
+
+  if (documentHeight <= windowHeight + 200 && hasMore.value && !loadingMore.value) {
+    loadMore();
+  }
+};
+
+const handleScroll = () => {
+  const scrollTop = window.scrollY;
+  const windowHeight = window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight;
+
+  if (scrollTop + windowHeight >= documentHeight - 200) {
+    loadMore();
+  }
+};
+
+watch([loading, loadingMore], () => {
+  if (!loading.value && !loadingMore.value) {
+    nextTick(checkAndLoadMore);
+  }
+});
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('resize', checkAndLoadMore);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('resize', checkAndLoadMore);
 });
 </script>
 
@@ -15,7 +50,10 @@ useSeo({
     <section class="market-section">
       <p v-if="loading">Loading...</p>
       <p v-else-if="error">Failed to load scapes</p>
-      <ScapesGrid v-else :scapes="scapes" />
+      <template v-else>
+        <ScapesGrid :scapes="scapes" />
+        <p v-if="loadingMore" class="loading-more">Loading more...</p>
+      </template>
     </section>
   </div>
 </template>
@@ -35,5 +73,10 @@ useSeo({
   text-align: left;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
+}
+
+.loading-more {
+  text-align: center;
+  padding: var(--spacer);
 }
 </style>

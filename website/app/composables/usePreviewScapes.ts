@@ -43,8 +43,14 @@ export const usePreviewScapes = () => {
 
 export const useRandomScapes = () => {
   const client = usePonderClient();
+  const scapes = ref<ScapeRecord[]>([]);
+  const loading = ref(true);
+  const loadingMore = ref(false);
+  const error = ref<Error | null>(null);
+  const hasMore = ref(true);
+  const offset = ref(0);
 
-  const fetchScapes = async () => {
+  const fetchScapes = async (currentOffset: number) => {
     const result = await client.db
       .select({
         id: schema.scape.id,
@@ -54,21 +60,53 @@ export const useRandomScapes = () => {
       })
       .from(schema.scape)
       .where(lte(schema.scape.id, 10_000n))
-      .orderBy(sql`RANDOM()`)
-      .limit(PAGE_SIZE);
+      .orderBy(schema.scape.id)
+      .limit(PAGE_SIZE)
+      .offset(currentOffset);
 
     return result as ScapeRecord[];
   };
 
-  const { data, pending, error } = useAsyncData("random-scapes", fetchScapes, {
-    server: true,
-  });
+  const loadInitial = async () => {
+    loading.value = true;
+    try {
+      const result = await fetchScapes(0);
+      scapes.value = result;
+      offset.value = result.length;
+      hasMore.value = result.length === PAGE_SIZE;
+    } catch (e) {
+      error.value = e as Error;
+    } finally {
+      loading.value = false;
+    }
+  };
 
-  const scapes = computed(() => data.value ?? []);
+  const loadMore = async () => {
+    if (loadingMore.value || !hasMore.value) return;
+
+    loadingMore.value = true;
+    try {
+      const result = await fetchScapes(offset.value);
+      scapes.value = [...scapes.value, ...result];
+      offset.value += result.length;
+      hasMore.value = result.length === PAGE_SIZE;
+    } catch (e) {
+      error.value = e as Error;
+    } finally {
+      loadingMore.value = false;
+    }
+  };
+
+  onMounted(() => {
+    loadInitial();
+  });
 
   return {
     scapes,
-    loading: pending,
+    loading,
+    loadingMore,
     error,
+    hasMore,
+    loadMore,
   };
 };
