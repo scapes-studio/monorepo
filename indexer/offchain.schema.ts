@@ -104,3 +104,11 @@ export const twentySevenYearRequest = offchainSchema.table("twenty_seven_year_re
   startedProcessingAt: bigint("started_processing_at", { mode: "number" }),
   completedAt: bigint("completed_at", { mode: "number" }),
 });
+
+// Notification state tracking for bot notifications
+export const notificationState = offchainSchema.table("notification_state", {
+  eventType: text("event_type").primaryKey(),      // merge | offer | sale | g27_bid | g27_claim
+  lastNotifiedTimestamp: integer("last_notified_timestamp").notNull(),
+  lastNotifiedId: text("last_notified_id"),        // For deduplication
+  updatedAt: integer("updated_at").notNull(),
+});

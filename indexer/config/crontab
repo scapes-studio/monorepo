@@ -10,3 +10,6 @@
 
 # Pregenerate AI images for Gallery27 scapes (3 days ahead, daily at midnight UTC)
 0 0 * * * pnpm --dir /app/indexer cli generate:gallery27-image --days-ahead 3 --count 1
+
+# Send bot notifications every minute
+* * * * * pnpm --dir /app/indexer cli notify

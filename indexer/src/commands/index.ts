@@ -6,6 +6,7 @@ import { checkRewardsCommand } from "./check-rewards";
 import { processMergeImagesCommand } from "./process-merge-images";
 import { generateGallery27ImageCommand } from "./generate-gallery27-image";
 import { organizeGallery27ImagesCommand } from "./organize-gallery27-images";
+import { notifyCommand } from "./notify";
 
 export function loadCommands(program: Command): void {
   program.addCommand(importSalesCommand);
@@ -15,4 +16,5 @@ export function loadCommands(program: Command): void {
   program.addCommand(processMergeImagesCommand);
   program.addCommand(generateGallery27ImageCommand);
   program.addCommand(organizeGallery27ImagesCommand);
+  program.addCommand(notifyCommand);
 }
