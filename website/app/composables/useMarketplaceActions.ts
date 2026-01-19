@@ -36,5 +36,14 @@ export const useMarketplaceActions = (scapeId: MaybeRefOrGetter<string>) => {
     });
   };
 
-  return { makeOffer, cancelOffer, buy };
+  const purge = (): Promise<Hash> => {
+    return writeContract($wagmi as Config, {
+      address: SCAPES_CONTRACT,
+      abi: scapesABI,
+      functionName: "purge",
+      args: [BigInt(toValue(scapeId))],
+    });
+  };
+
+  return { makeOffer, cancelOffer, buy, purge };
 };

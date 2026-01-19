@@ -3,6 +3,7 @@ import { useAccount } from "@wagmi/vue";
 import { parseEther } from "viem";
 import type { Hash } from "viem";
 import type { ListingData } from "~/composables/useScapeListing";
+import { isMergeTokenId } from "~/utils/merges";
 
 const props = defineProps<{
   scapeId: string;
@@ -15,12 +16,14 @@ const emit = defineEmits<{
 }>();
 
 const { address, isConnected } = useAccount();
-const { makeOffer, cancelOffer, buy } = useMarketplaceActions(() => props.scapeId);
+const { makeOffer, cancelOffer, buy, purge } = useMarketplaceActions(() => props.scapeId);
 
 const isOwner = computed(() => {
   if (!address.value || !props.owner) return false;
   return address.value.toLowerCase() === props.owner.toLowerCase();
 });
+
+const isMerge = computed(() => isMergeTokenId(BigInt(props.scapeId)));
 
 const hasOnchainListing = computed(() => props.listing?.source === "onchain");
 const hasSeaportListing = computed(() => props.listing?.source === "seaport");
@@ -45,6 +48,7 @@ const listPrice = computed(() => {
 const transactionFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
 const cancelFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
 const buyFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
+const purgeFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
 
 const listRequest = async (): Promise<Hash> => {
   const priceWei = parseEther(String(listPriceInput.value));
@@ -60,6 +64,10 @@ const buyRequest = async (): Promise<Hash> => {
   return buy(price);
 };
 
+const purgeRequest = async (): Promise<Hash> => {
+  return purge();
+};
+
 const handleListComplete = () => {
   showListForm.value = false;
   listPriceInput.value = "";
@@ -71,6 +79,10 @@ const handleCancelComplete = () => {
 };
 
 const handleBuyComplete = () => {
+  emit("listingChange");
+};
+
+const handlePurgeComplete = () => {
   emit("listingChange");
 };
 
@@ -130,6 +142,25 @@ const buyText = computed(() => ({
     error: "Try Again",
   },
 }));
+
+const purgeText = {
+  title: {
+    confirm: "Unmerge",
+    requesting: "Confirm in Wallet",
+    waiting: "Unmerging",
+    complete: "Unmerged!",
+  },
+  lead: {
+    confirm: `Unmerge this merge and return the component Scapes.`,
+    requesting: "Please confirm the transaction in your wallet.",
+    waiting: "Your merge is being unmerged on-chain.",
+    complete: "The merge has been unmerged. Your Scapes are back!",
+  },
+  action: {
+    confirm: "Unmerge",
+    error: "Try Again",
+  },
+};
 </script>
 
 <template>
@@ -219,6 +250,26 @@ const buyText = computed(() => ({
         >
           Manage on OpenSea
         </a>
+      </template>
+
+      <!-- Owner with merge: show unmerge button -->
+      <template v-if="isMerge">
+        <EvmTransactionFlow
+          ref="purgeFlowRef"
+          :text="purgeText"
+          :request="purgeRequest"
+          @complete="handlePurgeComplete"
+        >
+          <template #start="{ start }">
+            <button
+              type="button"
+              class="scapes-actions__btn scapes-actions__btn--secondary"
+              @click="start"
+            >
+              Unmerge
+            </button>
+          </template>
+        </EvmTransactionFlow>
       </template>
     </template>
 
