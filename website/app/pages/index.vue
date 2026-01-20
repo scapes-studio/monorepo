@@ -10,21 +10,13 @@ useSeo({
 <template>
   <div class="home">
     <ClientOnly>
-      <section class="market-section">
-        <ScapesVirtualGrid :scapes="scapes" />
-      </section>
+      <ScapesVirtualGrid :scapes="scapes" />
     </ClientOnly>
   </div>
 </template>
 
 <style scoped>
-.home {
-  max-width: var(--content-width);
-  margin: 0 auto;
-}
-
 .market-section {
   width: 100vw;
-  margin-left: calc(-50vw + 50%);
 }
 </style>
