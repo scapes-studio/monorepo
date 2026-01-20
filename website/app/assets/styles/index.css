@@ -18,3 +18,10 @@ html {
 .dialog::backdrop {
   backdrop-filter: contrast(0.4) saturate(0.1) !important;
 }
+
+/* Reusable border treatment with offset shadow */
+.bordered {
+  box-shadow:
+    var(--border-width) var(--border-width) 0 calc(var(--border-width)) #000,
+    0 0 0 var(--border-width) #000;
+}

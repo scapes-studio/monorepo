@@ -17,8 +17,4 @@
     var(--page-inner-width),
     calc(var(--scape-width) * var(--content-columns, 5) + var(--grid-gutter) * (var(--content-columns, 5) - 1))
   );
-  --content-width-wide: min(
-    var(--page-inner-width),
-    calc(var(--scape-width) * var(--content-columns-wide, 8) + var(--grid-gutter) * (var(--content-columns-wide, 8) - 1));
-  );
 }

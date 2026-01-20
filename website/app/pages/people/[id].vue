@@ -85,7 +85,7 @@ useSeo(seoOptions);
 
 <style scoped>
 .account-page {
-  max-width: var(--content-width-wide);
+  max-width: var(--content-width);
   margin: 0 auto;
   padding: var(--spacer-lg) var(--spacer);
   display: grid;

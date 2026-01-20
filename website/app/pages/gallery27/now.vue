@@ -44,7 +44,7 @@ useSeo({
 
 <style scoped>
 .gallery27-now {
-  max-width: var(--content-width-wide);
+  max-width: var(--content-width);
   margin: 0 auto;
   padding: var(--spacer-lg) var(--spacer);
 }

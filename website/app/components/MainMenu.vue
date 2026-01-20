@@ -4,7 +4,7 @@ const { getAccountDisplay } = useENSResolution()
 </script>
 
 <template>
-  <nav class="main-menu">
+  <nav class="main-menu bordered">
     <div class="main-menu__brand">
       <NuxtLink to="/">
         <slot name="logo">Scapes</slot>
@@ -18,21 +18,21 @@ const { getAccountDisplay } = useENSResolution()
             Home
           </NuxtLink>
         </li>
-        <li>
-          <NuxtLink to="/scapes" :class="{ active: route.path.startsWith('/scapes') }">
-            Scapes
-          </NuxtLink>
-        </li>
+        <!-- <li> -->
+        <!--   <NuxtLink to="/scapes" :class="{ active: route.path.startsWith('/scapes') }"> -->
+        <!--     Scapes -->
+        <!--   </NuxtLink> -->
+        <!-- </li> -->
         <li>
           <NuxtLink to="/people" :class="{ active: route.path.startsWith('/people') }">
             Owners
           </NuxtLink>
         </li>
-        <li>
-          <NuxtLink to="/market" :class="{ active: route.path.startsWith('/market') }">
-            Market
-          </NuxtLink>
-        </li>
+        <!-- <li> -->
+        <!--   <NuxtLink to="/market" :class="{ active: route.path.startsWith('/market') }"> -->
+        <!--     Market -->
+        <!--   </NuxtLink> -->
+        <!-- </li> -->
         <li>
           <NuxtLink to="/activity" :class="{ active: route.path.startsWith('/activity') }">
             Activity
@@ -77,9 +77,6 @@ const { getAccountDisplay } = useENSResolution()
   height: var(--scape-height);
   padding: 0 var(--spacer);
   background: var(--color-background, #fff);
-  box-shadow:
-    var(--border-width) var(--border-width) 0 calc(var(--border-width)) #000,
-    0 0 0 var(--border-width) #000;
 }
 
 .main-menu__nav {

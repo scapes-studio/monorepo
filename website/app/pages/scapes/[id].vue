@@ -174,7 +174,7 @@ const sesModalOpen = ref(false);
 
 <template>
   <section class="scape-detail">
-    <div class="scape-detail__image">
+    <div class="scape-detail__image ">
       <ScapeImage :id="scapeId" />
     </div>
     <header class="scape-detail__header">
@@ -221,6 +221,10 @@ const sesModalOpen = ref(false);
   display: grid;
   gap: var(--scape-height);
   container-type: inline-size;
+
+  @media (min-width: 720px) {
+    padding: var(--scape-height-gutter) 0;
+  }
 }
 
 .scape-detail__image {
@@ -231,7 +235,7 @@ const sesModalOpen = ref(false);
   background: var(--background);
   width: 100%;
 
-  height: calc(var(--scape-height) * var(--detail-columns, 5) * 5 + var(--grid-gutter) * (var(--detail-columns, 5) * 5 - 1));
+  height: calc(var(--scape-height) * var(--content-columns, 5) * 3 + var(--grid-gutter) * (var(--content-columns, 5) * 3 - 1));
 
   img {
     width: calc(var(--scape-width) * var(--detail-columns, 3));
