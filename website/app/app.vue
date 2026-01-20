@@ -19,8 +19,8 @@ useScapeGrid()
 body {
   background-color: white;
   background-image:
-    linear-gradient(to right, var(--gray-z-0) var(--grid-gutter), transparent var(--grid-gutter)),
-    linear-gradient(to bottom, var(--gray-z-0) var(--grid-gutter), transparent var(--grid-gutter));
+    linear-gradient(to right, var(--gray-z-1) var(--grid-gutter), transparent var(--grid-gutter)),
+    linear-gradient(to bottom, var(--gray-z-1) var(--grid-gutter), transparent var(--grid-gutter));
   background-size:
     calc(var(--scape-width) + var(--grid-gutter)) calc(var(--scape-height) + var(--grid-gutter));
   background-position: 0 0;
