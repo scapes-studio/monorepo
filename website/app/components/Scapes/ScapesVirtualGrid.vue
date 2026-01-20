@@ -31,7 +31,7 @@ const {
   items: scapesRef,
   columns,
   rowHeight,
-  overscan: 5,
+  overscan: 20,
 })
 
 // Trigger load more when near the bottom
@@ -59,15 +59,10 @@ defineExpose({ scrollToTop })
 
 <template>
   <div class="scapes-virtual-grid" :style="{ height: `${totalHeight + gutter}px` }">
-    <div
-      v-for="virtualRow in virtualRows"
-      :key="virtualRow.index"
-      class="scapes-virtual-grid__row"
-      :style="{
-        height: `${virtualRow.size}px`,
-        transform: `translateY(${virtualRow.start + gutter}px)`,
-      }"
-    >
+    <div v-for="virtualRow in virtualRows" :key="virtualRow.index" class="scapes-virtual-grid__row" :style="{
+      height: `${virtualRow.size}px`,
+      transform: `translateY(${virtualRow.start + gutter}px)`,
+    }">
       <ScapesGridRow :items="getRowItems(virtualRow.index)" />
     </div>
   </div>
