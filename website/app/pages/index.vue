@@ -9,6 +9,11 @@ useSeo({
 
 <template>
   <div class="home">
+    <header class="home__header">
+      <h1>Welcome Home</h1>
+      <p>Composable places stored on the Ethereum Blockchain.</p>
+    </header>
+
     <ClientOnly>
       <ScapesVirtualGrid :scapes="scapes" />
     </ClientOnly>
@@ -16,7 +21,26 @@ useSeo({
 </template>
 
 <style scoped>
-.market-section {
-  width: 100vw;
+.home {
+  display: grid;
+  gap: var(--grid-gutter);
+}
+
+.home__header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(3 * var(--scape-height-gutter) - var(--grid-gutter));
+  text-align: center;
+  background: var(--background);
+}
+
+.home__header h1 {
+  margin: 0;
+}
+
+.home__header p {
+  margin: var(--grid-gutter) 0 0;
 }
 </style>

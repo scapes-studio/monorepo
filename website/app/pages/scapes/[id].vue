@@ -174,7 +174,7 @@ const sesModalOpen = ref(false);
 
 <template>
   <section class="scape-detail">
-    <div class="scape-detail__image ">
+    <div class="scape-detail__image">
       <ScapeImage :id="scapeId" />
     </div>
     <header class="scape-detail__header">
