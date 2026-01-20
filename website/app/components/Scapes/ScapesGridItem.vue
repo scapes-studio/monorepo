@@ -15,7 +15,7 @@ const formattedPrice = computed(() => {
 
 <template>
   <NuxtLink class="scape-link" :to="`/scapes/${scape.id}`">
-    <ScapesImage :id="scape.id" />
+    <ScapeImage :id="scape.id" />
     <div v-if="formattedPrice" class="scape-link__price">
       {{ formattedPrice }} ETH
       <span v-if="isSeaport" class="scape-link__badge">OpenSea</span>

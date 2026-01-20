@@ -22,7 +22,7 @@ type GalleryPayload = {
   scapes: GalleryScape[]
 }
 
-const PAGE_SIZE = 100
+const PAGE_SIZE = 200
 
 const buildTraitConditions = (traits: string[]) => {
   if (traits.length === 0) return undefined

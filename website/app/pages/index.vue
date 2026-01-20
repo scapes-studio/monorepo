@@ -11,7 +11,7 @@ useSeo({
   <div class="home">
     <ClientOnly>
       <section class="market-section">
-        <ScapesGrid :scapes="scapes" />
+        <ScapesVirtualGrid :scapes="scapes" />
       </section>
     </ClientOnly>
   </div>

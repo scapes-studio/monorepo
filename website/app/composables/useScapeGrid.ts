@@ -22,6 +22,7 @@ export function useScapeGrid() {
 
   const gutter = computed(() => scapeWidth.value / 72)
   const scapeHeight = computed(() => scapeWidth.value / 3)
+  const rowHeight = computed(() => scapeHeight.value + gutter.value)
 
   watchEffect(() => {
     scapeWidthVar.value = `${scapeWidth.value}px`
@@ -35,5 +36,6 @@ export function useScapeGrid() {
     scapeWidth,
     scapeHeight,
     gutter,
+    rowHeight,
   }
 }

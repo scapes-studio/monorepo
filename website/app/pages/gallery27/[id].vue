@@ -143,7 +143,7 @@ useSeo(seoOptions);
         <div class="gallery27-page__main">
           <Gallery27Painting v-if="displayedImage" :image="displayedImage" :alt="`Day ${tokenId}`" />
           <div v-else-if="showFallbackScape" class="gallery27-page__fallback">
-            <ScapesImage :id="fallbackScapeId!" />
+            <ScapeImage :id="fallbackScapeId!" />
           </div>
           <div v-else class="gallery27-page__placeholder">
             No image available

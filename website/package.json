@@ -21,6 +21,8 @@
     "@scapes-studio/abis": "workspace:^",
     "@scapes-studio/indexer": "workspace:^",
     "@scapes-studio/scape-renderer": "^1.1.0",
+    "@tanstack/vue-virtual": "^3.13.18",
+    "@vueuse/core": "^12.8.2",
     "@wagmi/core": "^2.16.4",
     "@wagmi/vue": "^0.4.3",
     "nuxt": "^4.2.2",

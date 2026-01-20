@@ -76,7 +76,7 @@ const handleSearchSelect = () => {
 
     <button v-if="searchedId" type="button" class="merge-selector__search-result" :disabled="isFull"
       @click="handleSearchSelect">
-      <ScapesImage :id="searchedId" />
+      <ScapeImage :id="searchedId" />
       <span class="merge-selector__id">#{{ searchedId }}</span>
     </button>
 
@@ -101,7 +101,7 @@ const handleSearchSelect = () => {
     <div v-else class="merge-selector__grid">
       <button v-for="scape in scapes" :key="`${scape.id}`" type="button" class="merge-selector__item" :disabled="isFull"
         @click="handleSelect(scape)">
-        <ScapesImage :id="scape.id" />
+        <ScapeImage :id="scape.id" />
         <span class="merge-selector__id">#{{ scape.id }}</span>
       </button>
     </div>

@@ -99,7 +99,12 @@ useSeo({
         </div>
 
         <template v-else>
-          <ScapesGrid :scapes="scapes" />
+          <ScapesVirtualGrid
+            :scapes="scapes"
+            :has-more="hasMore"
+            :loading="loading"
+            @load-more="loadMore"
+          />
 
           <button v-if="hasMore" type="button" class="gallery__load-more" :disabled="loading" @click="loadMore">
             {{ loading ? "Loading..." : "Load more" }}

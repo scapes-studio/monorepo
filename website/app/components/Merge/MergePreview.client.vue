@@ -40,7 +40,7 @@ const hasPreview = computed(() => props.scapes.length >= 2);
         :key="String(scape[0])"
         class="merge-preview__scape"
       >
-        <ScapesImage :id="scape[0]" />
+        <ScapeImage :id="scape[0]" />
         <div class="merge-preview__controls">
           <button
             type="button"

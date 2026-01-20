@@ -176,7 +176,7 @@ const sesModalOpen = ref(false);
   <section class="scape-detail">
     <header class="scape-detail__header">
       <div class="scape-detail__image">
-        <ScapesImage :id="scapeId" />
+        <ScapeImage :id="scapeId" />
       </div>
       <div class="scape-detail__meta">
         <h1>Scape #{{ scapeId }}</h1>
