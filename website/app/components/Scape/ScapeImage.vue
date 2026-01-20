@@ -20,7 +20,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <img ref="imgRef" class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`" loading="lazy" @load="loaded = true" />
+  <img ref="imgRef" class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`"
+    @load="loaded = true" />
 </template>
 
 <style scoped>
