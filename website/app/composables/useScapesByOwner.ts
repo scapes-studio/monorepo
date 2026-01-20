@@ -1,6 +1,6 @@
 export type ScapeRecord = {
   id: bigint;
-  rarity: number | null;
+  rarity?: number | null;
 };
 
 type ScapesPayload = {
