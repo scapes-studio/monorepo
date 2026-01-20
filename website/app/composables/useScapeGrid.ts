@@ -3,14 +3,14 @@ import { computed, watchEffect } from 'vue'
 
 const MIN_SCAPE_WIDTH = 144
 const MIN_SCAPE_WIDTH_MOBILE = 120
-const BREAKPOINT_SM = 480
-const BREAKPOINT_LG = 720
+const BREAKPOINT_SM = MIN_SCAPE_WIDTH * 4
+const BREAKPOINT_LG = MIN_SCAPE_WIDTH * 8
 
 const COLUMNS = {
   SM: {
     DETAIL: {
       EVEN: 2,
-      ODD: 3,
+      ODD: 1.5,
     },
     CONTENT: {
       EVEN: 4,
@@ -23,7 +23,7 @@ const COLUMNS = {
       ODD: 3,
     },
     CONTENT: {
-      EVEN: 6,
+      EVEN: 4,
       ODD: 5,
     },
   },
@@ -33,8 +33,8 @@ const COLUMNS = {
       ODD: 3,
     },
     CONTENT: {
-      EVEN: 10,
-      ODD: 11,
+      EVEN: 4,
+      ODD: 5,
     },
   },
 }
@@ -58,8 +58,24 @@ export function useScapeGrid() {
   })
 
   const isEven = computed(() => columns.value % 2 === 0)
-  const contentColumns = computed(() => Math.min(columns.value, isEven.value ? 6 : 5))
-  const detailColumns = computed(() => Math.min(columns.value, isEven.value ? 2 : 3))
+
+  const breakpoint = computed(() => {
+    if (windowWidth.value < BREAKPOINT_SM) return 'SM'
+    if (windowWidth.value < BREAKPOINT_LG) return 'MD'
+    return 'LG'
+  })
+
+  const contentColumns = computed(() => {
+    const config = COLUMNS[breakpoint.value].CONTENT
+    const max = isEven.value ? config.EVEN : config.ODD
+    return Math.min(columns.value, max)
+  })
+
+  const detailColumns = computed(() => {
+    const config = COLUMNS[breakpoint.value].DETAIL
+    const max = isEven.value ? config.EVEN : config.ODD
+    return Math.min(columns.value, max)
+  })
 
   const scapeWidth = computed(() => {
     const n = columns.value

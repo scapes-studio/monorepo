@@ -238,7 +238,7 @@ const sesModalOpen = ref(false);
   height: calc(var(--scape-height) * var(--content-columns, 5) * 3 + var(--grid-gutter) * (var(--content-columns, 5) * 3 - 1));
 
   img {
-    width: calc(var(--scape-width) * var(--detail-columns, 3));
+    width: calc(var(--scape-width-gutter) * var(--detail-columns, 3));
     height: auto;
     aspect-ratio: 3/1;
   }
