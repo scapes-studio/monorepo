@@ -2,7 +2,7 @@ import { useCssVar, useWindowSize } from '@vueuse/core'
 import { computed, watchEffect } from 'vue'
 
 const MIN_SCAPE_WIDTH = 144
-const MIN_SCAPE_WIDTH_MOBILE = 120
+const MIN_SCAPE_WIDTH_MOBILE = 144
 const BREAKPOINT_SM = MIN_SCAPE_WIDTH * 4
 const BREAKPOINT_LG = MIN_SCAPE_WIDTH * 8
 
@@ -81,7 +81,7 @@ export function useScapeGrid() {
   const scapeWidth = computed(() => {
     const n = columns.value
     const raw = (windowWidth.value * 72) / (73 * n + 1)
-    const rounded = Math.floor(raw / 3) * 3
+    const rounded = Math.floor(raw / 72) * 72
     return Math.max(minScapeWidth.value, rounded)
   })
 

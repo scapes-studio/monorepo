@@ -17,7 +17,7 @@ useScapeGrid()
 }
 
 body {
-  --grid-color: red;
+  --grid-color: var(--gray-z-1);
 
   background-color: white;
   background-image:
