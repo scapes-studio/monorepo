@@ -26,5 +26,6 @@ body {
   background-position: 0 0;
 
   min-height: 100dvh;
+  padding: var(--grid-gutter);
 }
 </style>

@@ -12,13 +12,8 @@ defineProps<{ items: ScapeWithPrice[] }>()
 
 <template>
   <div class="scapes-grid-row">
-    <ScapesGridItem
-      v-for="scape in items"
-      :key="`${scape.id}`"
-      :scape="scape"
-      :price="scape.price ?? null"
-      :is-seaport="scape.source === 'seaport'"
-    />
+    <ScapesGridItem v-for="scape in items" :key="`${scape.id}`" :scape="scape" :price="scape.price ?? null"
+      :is-seaport="scape.source === 'seaport'" />
   </div>
 </template>
 
@@ -27,6 +22,6 @@ defineProps<{ items: ScapeWithPrice[] }>()
   display: grid;
   grid-template-columns: repeat(var(--grid-columns), var(--scape-width));
   gap: var(--grid-gutter);
-  padding: 0 var(--grid-gutter);
+  padding: 0;
 }
 </style>

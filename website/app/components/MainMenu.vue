@@ -67,9 +67,9 @@ const { getAccountDisplay } = useENSResolution()
 <style scoped>
 .main-menu {
   position: fixed;
-  bottom: var(--spacer-md);
-  left: var(--spacer-md);
-  right: var(--spacer-md);
+  bottom: var(--scape-height);
+  left: var(--scape-height);
+  right: var(--scape-height);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -78,7 +78,7 @@ const { getAccountDisplay } = useENSResolution()
   padding: 0 var(--spacer);
   background: var(--color-background, #fff);
   box-shadow:
-    var(--border-width-lg) var(--border-width-lg) 0 0 #000,
+    var(--border-width) var(--border-width) 0 calc(var(--border-width)) #000,
     0 0 0 var(--border-width) #000;
 }
 

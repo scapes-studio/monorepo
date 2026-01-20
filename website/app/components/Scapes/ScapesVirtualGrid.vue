@@ -61,7 +61,7 @@ defineExpose({ scrollToTop })
   <div class="scapes-virtual-grid" :style="{ height: `${totalHeight + gutter}px` }">
     <div v-for="virtualRow in virtualRows" :key="virtualRow.index" class="scapes-virtual-grid__row" :style="{
       height: `${virtualRow.size}px`,
-      transform: `translateY(${virtualRow.start + gutter}px)`,
+      transform: `translateY(${virtualRow.start}px)`,
     }">
       <ScapesGridRow :items="getRowItems(virtualRow.index)" />
     </div>
