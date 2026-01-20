@@ -10,10 +10,17 @@ const props = defineProps({
 
 const imageUrl = computed(() => `https://cdn.scapes.xyz/scapes/sm/${props.id}.png`);
 const loaded = ref(false);
+const imgRef = ref<HTMLImageElement>();
+
+onMounted(() => {
+  if (imgRef.value?.complete) {
+    loaded.value = true;
+  }
+});
 </script>
 
 <template>
-  <img class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`" loading="lazy" @load="loaded = true" />
+  <img ref="imgRef" class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`" loading="lazy" @load="loaded = true" />
 </template>
 
 <style scoped>
