@@ -221,10 +221,6 @@ const sesModalOpen = ref(false);
   display: grid;
   gap: var(--scape-height);
   container-type: inline-size;
-
-  @media (min-width: 720px) {
-    padding: var(--scape-height-gutter) 0;
-  }
 }
 
 .scape-detail__image {
