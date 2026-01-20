@@ -74,9 +74,12 @@ const { getAccountDisplay } = useENSResolution()
   display: flex;
   align-items: center;
   gap: var(--spacer);
-  padding: var(--spacer-sm) var(--spacer);
+  height: var(--scape-height);
+  padding: 0 var(--spacer);
   background: var(--color-background, #fff);
-  border: 3px solid #000;
+  border: var(--border-width) solid #000;
+  border-bottom-width: var(--border-width-lg);
+  border-right-width: var(--border-width-lg);
 }
 
 .main-menu__nav {
