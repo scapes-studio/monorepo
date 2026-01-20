@@ -18,8 +18,9 @@ useScapeGrid()
 
 body {
   --grid-color: var(--gray-z-1);
+  --grid-padding: calc(var(--grid-gutter) + var(--grid-margin-offset, 0px));
 
-  background-color: white;
+  background-color: var(--background);
   background-image:
     linear-gradient(to right, var(--grid-color) var(--grid-gutter), transparent var(--grid-gutter)),
     linear-gradient(to bottom, var(--grid-color) var(--grid-gutter), transparent var(--grid-gutter));
@@ -29,6 +30,7 @@ body {
 
   width: 100vw;
   min-height: 100dvh;
-  padding: calc(var(--grid-gutter) + var(--grid-margin-offset, 0px));
+  padding: var(--grid-padding);
+  padding-bottom: calc(var(--grid-padding) + var(--scape-height-gutter));
 }
 </style>
