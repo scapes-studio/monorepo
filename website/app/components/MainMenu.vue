@@ -77,9 +77,9 @@ const { getAccountDisplay } = useENSResolution()
   height: var(--scape-height);
   padding: 0 var(--spacer);
   background: var(--color-background, #fff);
-  border: var(--border-width) solid #000;
-  border-bottom-width: var(--border-width-lg);
-  border-right-width: var(--border-width-lg);
+  box-shadow:
+    var(--border-width-lg) var(--border-width-lg) 0 0 #000,
+    0 0 0 var(--border-width) #000;
 }
 
 .main-menu__nav {
