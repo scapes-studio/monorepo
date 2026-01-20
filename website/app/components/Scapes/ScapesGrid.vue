@@ -22,6 +22,5 @@ defineProps<{ scapes: ScapeWithPrice[] }>();
   display: grid;
   grid-template-columns: repeat(var(--grid-columns), var(--scape-width));
   gap: var(--grid-gutter);
-  padding: var(--grid-gutter);
 }
 </style>
