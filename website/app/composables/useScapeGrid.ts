@@ -12,6 +12,9 @@ export function useScapeGrid() {
   const scapeHeightVar = useCssVar('--scape-height')
   const gridGutterVar = useCssVar('--grid-gutter')
   const gridColumnsVar = useCssVar('--grid-columns')
+  const contentColumnsVar = useCssVar('--content-columns')
+  const contentColumnsWideVar = useCssVar('--content-columns-wide')
+  const detailColumnsVar = useCssVar('--detail-columns')
 
   const minScapeWidth = computed(() =>
     windowWidth.value < MOBILE_BREAKPOINT ? MIN_SCAPE_WIDTH_MOBILE : MIN_SCAPE_WIDTH
@@ -20,6 +23,11 @@ export function useScapeGrid() {
   const columns = computed(() => {
     return Math.max(1, Math.floor((windowWidth.value - 2) / (minScapeWidth.value + 2)))
   })
+
+  const isEven = computed(() => columns.value % 2 === 0)
+  const contentColumns = computed(() => isEven.value ? 6 : 5)
+  const contentColumnsWide = computed(() => isEven.value ? 8 : 7)
+  const detailColumns = computed(() => isEven.value ? 2 : 3)
 
   const scapeWidth = computed(() => {
     const n = columns.value
@@ -35,6 +43,9 @@ export function useScapeGrid() {
     scapeHeightVar.value = `${scapeHeight.value}px`
     gridGutterVar.value = `${gutter.value}px`
     gridColumnsVar.value = `${columns.value}`
+    contentColumnsVar.value = `${contentColumns.value}`
+    contentColumnsWideVar.value = `${contentColumnsWide.value}`
+    detailColumnsVar.value = `${detailColumns.value}`
   })
 
   return {
@@ -43,5 +54,9 @@ export function useScapeGrid() {
     scapeHeight,
     gutter,
     rowHeight,
+    isEven,
+    contentColumns,
+    contentColumnsWide,
+    detailColumns,
   }
 }

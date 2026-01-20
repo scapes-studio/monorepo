@@ -4,4 +4,21 @@
 
   --border-width: var(--grid-gutter, 1px);
   --border-width-lg: calc(2 * var(--grid-gutter, 1px));
+
+  --scape-width-gutter: calc(var(--scape-width) + var(--grid-gutter));
+  --scape-height-gutter: calc(var(--scape-height) + var(--grid-gutter));
+
+  --page-inner-width: calc(100vw - var(--grid-gutter) * 2);
+  --content-width-small: min(
+    var(--page-inner-width),
+    calc(var(--scape-width) * var(--content-columns, 3) + var(--grid-gutter) * (var(--content-columns, 3) - 1))
+  );
+  --content-width: min(
+    var(--page-inner-width),
+    calc(var(--scape-width) * var(--content-columns, 5) + var(--grid-gutter) * (var(--content-columns, 5) - 1))
+  );
+  --content-width-wide: min(
+    var(--page-inner-width),
+    calc(var(--scape-width) * var(--content-columns-wide, 8) + var(--grid-gutter) * (var(--content-columns-wide, 8) - 1));
+  );
 }

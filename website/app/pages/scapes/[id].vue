@@ -174,10 +174,10 @@ const sesModalOpen = ref(false);
 
 <template>
   <section class="scape-detail">
+    <div class="scape-detail__image">
+      <ScapeImage :id="scapeId" />
+    </div>
     <header class="scape-detail__header">
-      <div class="scape-detail__image">
-        <ScapeImage :id="scapeId" />
-      </div>
       <div class="scape-detail__meta">
         <h1>Scape #{{ scapeId }}</h1>
         <div class="scape-detail__stats">
@@ -216,22 +216,33 @@ const sesModalOpen = ref(false);
 
 <style scoped>
 .scape-detail {
-  max-width: var(--content-width-wide);
+  max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--spacer-lg) var(--spacer);
   display: grid;
-  gap: var(--spacer-lg);
-}
-
-.scape-detail__header {
-  display: grid;
-  grid-template-columns: var(--size-10) minmax(0, 1fr);
-  gap: var(--spacer-lg);
-  align-items: center;
+  gap: var(--scape-height);
+  container-type: inline-size;
 }
 
 .scape-detail__image {
-  width: var(--size-10);
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--background);
+  width: 100%;
+
+  height: calc(var(--scape-height) * var(--detail-columns, 5) * 5 + var(--grid-gutter) * (var(--detail-columns, 5) * 5 - 1));
+
+  img {
+    width: calc(var(--scape-width) * var(--detail-columns, 3));
+    height: auto;
+    aspect-ratio: 3/1;
+  }
+}
+
+.scape-detail__header {
+  justify-self: center;
+  text-align: center;
 }
 
 .scape-detail__meta h1 {
@@ -240,6 +251,7 @@ const sesModalOpen = ref(false);
 
 .scape-detail__stats {
   display: flex;
+  justify-content: center;
   gap: var(--spacer);
   font-weight: var(--font-weight-bold);
 }
@@ -293,15 +305,5 @@ const sesModalOpen = ref(false);
 
 .scape-detail__ses-button:hover {
   opacity: 0.9;
-}
-
-@media (max-width: 40rem) {
-  .scape-detail__header {
-    grid-template-columns: 1fr;
-  }
-
-  .scape-detail__image {
-    width: var(--size-9);
-  }
 }
 </style>
