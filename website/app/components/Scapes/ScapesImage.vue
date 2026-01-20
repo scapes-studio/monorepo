@@ -18,6 +18,7 @@ const imageUrl = computed(() => `https://cdn.scapes.xyz/scapes/sm/${props.id}.pn
 <style scoped>
 .scape-image {
   width: 100%;
+  aspect-ratio: 3/1;
   display: block;
   background: var(--gray-z-1);
   image-rendering: pixelated;
