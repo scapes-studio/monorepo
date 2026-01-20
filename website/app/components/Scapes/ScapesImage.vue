@@ -13,7 +13,7 @@ const loaded = ref(false);
 </script>
 
 <template>
-  <img class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`" @load="loaded = true" />
+  <img class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`" loading="lazy" @load="loaded = true" />
 </template>
 
 <style scoped>
