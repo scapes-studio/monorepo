@@ -9,9 +9,11 @@ useSeo({
 
 <template>
   <div class="home">
-    <section class="market-section">
-      <ScapesGrid :scapes="scapes" />
-    </section>
+    <ClientOnly>
+      <section class="market-section">
+        <ScapesGrid :scapes="scapes" />
+      </section>
+    </ClientOnly>
   </div>
 </template>
 

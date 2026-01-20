@@ -20,7 +20,8 @@ defineProps<{ scapes: ScapeWithPrice[] }>();
 <style scoped>
 .scapes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-  gap: 0;
+  grid-template-columns: repeat(var(--grid-columns), var(--scape-width));
+  gap: var(--grid-gutter);
+  padding: var(--grid-gutter);
 }
 </style>
