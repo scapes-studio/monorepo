@@ -1,3 +1,7 @@
+<script setup lang="ts">
+useScapeGrid()
+</script>
+
 <template>
   <div>
     <MainMenu />
