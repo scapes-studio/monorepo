@@ -9,10 +9,11 @@ const props = defineProps({
 });
 
 const imageUrl = computed(() => `https://cdn.scapes.xyz/scapes/sm/${props.id}.png`);
+const loaded = ref(false);
 </script>
 
 <template>
-  <img class="scape-image" :src="imageUrl" :alt="`Scape ${id}`" />
+  <img class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`" @load="loaded = true" />
 </template>
 
 <style scoped>
@@ -22,5 +23,11 @@ const imageUrl = computed(() => `https://cdn.scapes.xyz/scapes/sm/${props.id}.pn
   display: block;
   background: var(--gray-z-1);
   image-rendering: pixelated;
+  opacity: 0;
+  transition: opacity var(--speed) ease;
+}
+
+.scape-image.loaded {
+  opacity: 1;
 }
 </style>
