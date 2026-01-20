@@ -67,9 +67,9 @@ const { getAccountDisplay } = useENSResolution()
 <style scoped>
 .main-menu {
   position: fixed;
-  bottom: var(--scape-height);
-  left: var(--scape-height);
-  right: var(--scape-height);
+  bottom: max(calc(var(--scape-height) / 3), env(safe-area-inset-bottom));
+  left: max(calc(var(--scape-height) / 3), env(safe-area-inset-left));
+  right: max(calc(var(--scape-height) / 3), env(safe-area-inset-right));
   z-index: 100;
   display: flex;
   align-items: center;
