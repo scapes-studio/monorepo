@@ -48,6 +48,7 @@ export function useScapeGrid() {
   const gridColumnsVar = useCssVar('--grid-columns')
   const contentColumnsVar = useCssVar('--content-columns')
   const detailColumnsVar = useCssVar('--detail-columns')
+  const marginOffsetVar = useCssVar('--grid-margin-offset')
 
   const minScapeWidth = computed(() =>
     windowWidth.value < BREAKPOINT_SM ? MIN_SCAPE_WIDTH_MOBILE : MIN_SCAPE_WIDTH
@@ -79,12 +80,21 @@ export function useScapeGrid() {
 
   const scapeWidth = computed(() => {
     const n = columns.value
-    return (windowWidth.value * 72) / (73 * n + 1)
+    const raw = (windowWidth.value * 72) / (73 * n + 1)
+    const rounded = Math.floor(raw / 3) * 3
+    return Math.max(minScapeWidth.value, rounded)
   })
 
   const gutter = computed(() => scapeWidth.value / 72)
   const scapeHeight = computed(() => scapeWidth.value / 3)
-  const rowHeight = computed(() => scapeHeight.value + gutter.value)
+  const rowHeight = computed(() => Math.round(scapeHeight.value + gutter.value))
+
+  const gridWidth = computed(() => {
+    const n = columns.value
+    return n * scapeWidth.value + (n + 1) * gutter.value
+  })
+
+  const marginOffset = computed(() => (windowWidth.value - gridWidth.value) / 2)
 
   watchEffect(() => {
     scapeWidthVar.value = `${scapeWidth.value}px`
@@ -93,6 +103,7 @@ export function useScapeGrid() {
     gridColumnsVar.value = `${columns.value}`
     contentColumnsVar.value = `${contentColumns.value}`
     detailColumnsVar.value = `${detailColumns.value}`
+    marginOffsetVar.value = `${marginOffset.value}px`
   })
 
   return {
@@ -104,5 +115,6 @@ export function useScapeGrid() {
     isEven,
     contentColumns,
     detailColumns,
+    marginOffset,
   }
 }
