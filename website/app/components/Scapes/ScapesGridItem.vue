@@ -29,6 +29,7 @@ const formattedPrice = computed(() => {
   text-decoration: none;
   color: inherit;
   container-type: inline-size;
+  content-visibility: auto;
 
   img {
     /* border-bottom: calc(100cqw/72) solid beige; */
