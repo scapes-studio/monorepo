@@ -147,6 +147,35 @@
 - Do not introduce new hardcoded colors, spacing, or sizing values.
 - Keep styles scoped in components unless shared.
 
+### Scape grid system
+All UI elements in the main content flow should conform to the scape grid. The grid is managed by `useScapeGrid()` in `app/composables/useScapeGrid.ts` and sets CSS variables on the document root.
+
+**Core CSS variables (set by `useScapeGrid`):**
+- `--scape-width` — width of one scape tile (minimum 144px, snaps to multiples of 72).
+- `--scape-height` — height of one scape tile (`--scape-width / 3`, 3:1 aspect ratio).
+- `--grid-gutter` — gap between tiles (`--scape-width / 72`).
+- `--grid-columns` — total columns that fit in the viewport.
+- `--content-columns` — columns for main content areas (3–5 depending on breakpoint/parity).
+- `--detail-columns` — columns for detail panels (1.5–3 depending on breakpoint/parity).
+- `--grid-margin-offset` — horizontal offset to center the grid in the viewport.
+
+**Helper variables (defined in `assets/styles/variables.css`):**
+- `--scape-width-gutter` — `calc(var(--scape-width) + var(--grid-gutter))`.
+- `--scape-height-gutter` — `calc(var(--scape-height) + var(--grid-gutter))`.
+- `--content-width` — max width for content blocks (scape-based).
+- `--content-width-small` — narrower variant using `--content-columns`.
+
+**Breakpoints:**
+- SM: < 576px (4 × 144).
+- MD: 576px – 1151px (4–7 × 144).
+- LG: ≥ 1152px (8 × 144).
+
+**Usage guidelines:**
+- Size and position UI elements using `--scape-width`, `--scape-height`, and `--grid-gutter`.
+- Use `--content-width` or `--content-width-small` for constraining content blocks.
+- Avoid hardcoded pixel values; derive sizes from grid variables.
+- The background grid pattern in `app.vue` visualizes the grid for alignment reference.
+
 ## Suggested validation flow
 - Indexer changes: `pnpm lint` and `pnpm typecheck` in `indexer/`.
 - Website changes: `pnpm typecheck` (and `pnpm build` for build-only edits).
