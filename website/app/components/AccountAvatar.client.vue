@@ -22,7 +22,7 @@ const { data: profile } = useAsyncData(
   },
 )
 
-const avatarSrc = computed(() => profile.value?.data?.avatar || "/scapepe-square.png")
+const avatarSrc = computed(() => profile.value?.data?.avatar || "/oneday-profile.png")
 </script>
 
 <template>
@@ -34,5 +34,6 @@ const avatarSrc = computed(() => profile.value?.data?.avatar || "/scapepe-square
   width: var(--scape-height);
   height: var(--scape-height);
   object-fit: cover;
+  image-rendering: pixelated;
 }
 </style>
