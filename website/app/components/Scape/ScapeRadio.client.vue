@@ -1,344 +1,252 @@
 <script setup lang="ts">
+const route = useRoute()
 const {
   isPlaying,
   isLoading,
   currentScape,
-  mode,
-  progress,
-  isExpanded,
-  hasStarted,
-  toggle,
-  skip,
-  toggleExpanded,
-  collapse,
-} = useScapeRadio();
+  volume,
+  play,
+  pause,
+  setVolume,
+} = useScapeRadio()
 
-const handleClickOutside = (event: MouseEvent) => {
-  const target = event.target as HTMLElement;
-  if (!target.closest(".scape-radio")) {
-    collapse();
+const isHovered = ref(false)
+
+// Check if currently on the scape's detail page
+const isOnScapePage = computed(() => {
+  if (!currentScape.value) return false
+  return route.path === `/scapes/${currentScape.value.id}`
+})
+
+// Auto-pause when volume reaches 0
+watch(volume, (newVolume) => {
+  if (newVolume === 0 && isPlaying.value) {
+    pause()
   }
-};
+})
 
-onMounted(() => {
-  document.addEventListener("click", handleClickOutside);
-});
+const onHover = (hovered: boolean) => {
+  isHovered.value = hovered
+}
 
-onUnmounted(() => {
-  document.removeEventListener("click", handleClickOutside);
-});
+const handlePlayPause = async () => {
+  if (isPlaying.value) {
+    await pause()
+  } else {
+    await play()
+  }
+}
+
+const handleVolumeChange = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  setVolume(parseFloat(input.value))
+}
 </script>
 
 <template>
-  <Teleport to="body">
-    <div class="scape-radio" :class="{ 'scape-radio--expanded': isExpanded }">
-      <!-- Collapsed state: floating button -->
-      <button v-if="!isExpanded" type="button" class="scape-radio__trigger" @click.stop="toggleExpanded">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="2" />
-          <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
-        </svg>
-        <span class="scape-radio__trigger-label">Radio</span>
-      </button>
-
-      <!-- Expanded state: player panel -->
-      <div v-else class="scape-radio__panel" @click.stop>
-        <!-- Progress ring around cover -->
-        <div class="scape-radio__cover-wrapper">
-          <svg class="scape-radio__progress-ring" viewBox="0 0 100 100">
-            <circle class="scape-radio__progress-ring-bg" cx="50" cy="50" r="45" />
-            <circle
-              class="scape-radio__progress-ring-fill"
-              cx="50"
-              cy="50"
-              r="45"
-              :style="{ strokeDashoffset: 283 - (283 * progress) / 100 }"
-            />
-          </svg>
-          <NuxtLink
-            v-if="currentScape"
-            :to="`/scapes/${currentScape.id}`"
-            class="scape-radio__cover"
-            @click="collapse"
+  <div
+    class="scape-radio-inline"
+    @mouseenter="onHover(true)"
+    @mouseleave="onHover(false)"
+  >
+    <!-- Hover popover (only when playing) -->
+    <Transition name="fade-up">
+      <div v-if="isHovered && isPlaying" class="scape-radio-inline__popover">
+        <!-- Link to scape (only if not on that page) -->
+        <NuxtLink
+          v-if="currentScape && !isOnScapePage"
+          :to="`/scapes/${currentScape.id}`"
+          class="scape-radio-inline__link border"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            <img :src="currentScape.coverUrl" :alt="currentScape.title" />
-          </NuxtLink>
-          <div v-else class="scape-radio__cover scape-radio__cover--empty" />
-        </div>
-
-        <!-- Info and controls -->
-        <div class="scape-radio__content">
-          <NuxtLink
-            v-if="currentScape"
-            :to="`/scapes/${currentScape.id}`"
-            class="scape-radio__title"
-            @click="collapse"
-          >
-            {{ currentScape.title }}
-          </NuxtLink>
-          <span v-else class="scape-radio__title scape-radio__title--empty">
-            Scape Radio
-          </span>
-
-          <span v-if="mode === 'fixed'" class="scape-radio__mode">
-            Playing this scape
-          </span>
-
-          <div class="scape-radio__controls">
-            <button
-              type="button"
-              class="scape-radio__btn scape-radio__btn--play"
-              :disabled="isLoading"
-              @click="toggle"
-            >
-              <span v-if="isLoading">...</span>
-              <svg v-else-if="isPlaying" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                fill="currentColor">
-                <rect x="6" y="4" width="4" height="16" />
-                <rect x="14" y="4" width="4" height="16" />
-              </svg>
-              <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                fill="currentColor">
-                <polygon points="5,3 19,12 5,21" />
-              </svg>
-            </button>
-
-            <button
-              v-if="mode === 'random' && hasStarted"
-              type="button"
-              class="scape-radio__btn scape-radio__btn--skip"
-              :disabled="isLoading || !isPlaying"
-              @click="skip"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <polygon points="5,4 15,12 5,20" />
-                <rect x="15" y="4" width="4" height="16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Close button -->
-        <button type="button" class="scape-radio__close" @click="collapse">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
           </svg>
-        </button>
+        </NuxtLink>
+
+        <!-- Volume slider -->
+        <div class="scape-radio-inline__volume border">
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            :value="volume"
+            class="scape-radio-inline__slider"
+            @input="handleVolumeChange"
+          />
+        </div>
       </div>
-    </div>
-  </Teleport>
+    </Transition>
+
+    <!-- Main button -->
+    <button
+      type="button"
+      class="scape-radio-inline__btn border"
+      :disabled="isLoading"
+      @click.stop="handlePlayPause"
+    >
+      <!-- Background image (when playing) -->
+      <img
+        v-if="isPlaying && currentScape"
+        :src="currentScape.coverUrl"
+        :alt="currentScape.title"
+        class="scape-radio-inline__cover"
+      />
+
+      <!-- Play/pause icon -->
+      <span class="scape-radio-inline__icon">
+        <span v-if="isLoading" class="scape-radio-inline__loading">...</span>
+        <svg
+          v-else-if="isPlaying"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <rect x="6" y="4" width="4" height="16" />
+          <rect x="14" y="4" width="4" height="16" />
+        </svg>
+        <svg
+          v-else
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <polygon points="5,3 19,12 5,21" />
+        </svg>
+      </span>
+    </button>
+  </div>
 </template>
 
 <style scoped>
-.scape-radio {
-  position: fixed;
-  bottom: var(--spacer);
-  right: var(--spacer);
-  z-index: 1000;
-}
-
-/* Trigger button (collapsed) */
-.scape-radio__trigger {
-  display: flex;
-  align-items: center;
-  gap: var(--spacer-xs);
-  padding: var(--spacer-sm) var(--spacer);
-  background: var(--color-bg);
-  border: 1px solid var(--gray-z-3);
-  border-radius: var(--size-4);
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.scape-radio__trigger:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.scape-radio__trigger-label {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-sm);
-}
-
-/* Expanded panel */
-.scape-radio__panel {
-  display: flex;
-  align-items: center;
-  gap: var(--spacer);
-  padding: var(--spacer-sm);
-  background: var(--color-bg);
-  border: 1px solid var(--gray-z-3);
-  border-radius: var(--spacer);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  min-width: 280px;
-}
-
-/* Cover with progress ring */
-.scape-radio__cover-wrapper {
+.scape-radio-inline {
   position: relative;
-  width: var(--size-6);
-  height: var(--size-6);
-  flex-shrink: 0;
+  width: var(--scape-height);
+  height: var(--scape-height);
 }
 
-.scape-radio__progress-ring {
-  position: absolute;
-  inset: -4px;
-  width: calc(100% + 8px);
-  height: calc(100% + 8px);
-  transform: rotate(-90deg);
-}
-
-.scape-radio__progress-ring-bg {
-  fill: none;
-  stroke: var(--gray-z-2);
-  stroke-width: 3;
-}
-
-.scape-radio__progress-ring-fill {
-  fill: none;
-  stroke: var(--color-accent);
-  stroke-width: 3;
-  stroke-dasharray: 283;
-  stroke-dashoffset: 283;
-  transition: stroke-dashoffset 0.1s linear;
-}
-
-.scape-radio__cover {
-  display: block;
+.scape-radio-inline__btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  border-radius: var(--spacer-xs);
+  padding: 0;
   overflow: hidden;
-  background: var(--gray-z-1);
+  cursor: pointer;
+  background: var(--color-background);
 }
 
-.scape-radio__cover img {
+.scape-radio-inline__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.scape-radio-inline__cover {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   image-rendering: pixelated;
 }
 
-.scape-radio__cover--empty {
+.scape-radio-inline__icon {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--muted);
+  color: white;
+  filter: drop-shadow(1px 0 0 black) drop-shadow(-1px 0 0 black)
+    drop-shadow(0 1px 0 black) drop-shadow(0 -1px 0 black);
 }
 
-/* Content */
-.scape-radio__content {
-  flex: 1;
-  min-width: 0;
+.scape-radio-inline__loading {
+  font-size: var(--font-size-sm);
+}
+
+.scape-radio-inline__popover {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacer-xs);
+  gap: var(--grid-gutter);
+  padding-bottom: var(--grid-gutter);
 }
 
-.scape-radio__title {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-sm);
-  color: inherit;
-  text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.scape-radio__title:hover {
-  text-decoration: underline;
-}
-
-.scape-radio__title--empty {
-  color: var(--muted);
-}
-
-.scape-radio__mode {
-  font-size: var(--font-size-xs);
-  color: var(--muted);
-}
-
-/* Controls */
-.scape-radio__controls {
-  display: flex;
-  gap: var(--spacer-xs);
-}
-
-.scape-radio__btn {
+.scape-radio-inline__link {
+  width: var(--scape-height);
+  height: var(--scape-height);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--size-5);
-  height: var(--size-5);
-  padding: 0;
-  background: var(--gray-z-1);
-  border: 1px solid var(--gray-z-3);
-  border-radius: var(--spacer-xs);
+  background: var(--color-background);
+}
+
+.scape-radio-inline__volume {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacer-sm);
+  background: var(--color-background);
+}
+
+.scape-radio-inline__slider {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 8px;
+  height: 80px;
+  appearance: none;
+  background: var(--gray-z-2, #e5e5e5);
   cursor: pointer;
-  transition: background 0.2s;
 }
 
-.scape-radio__btn:hover:not(:disabled) {
-  background: var(--gray-z-2);
+.scape-radio-inline__slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--color-accent, #000);
+  border-radius: 0;
+  cursor: pointer;
 }
 
-.scape-radio__btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.scape-radio__btn--play {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-bg);
-}
-
-.scape-radio__btn--play:hover:not(:disabled) {
-  opacity: 0.9;
-  background: var(--color-accent);
-}
-
-/* Close button */
-.scape-radio__close {
-  position: absolute;
-  top: var(--spacer-xs);
-  right: var(--spacer-xs);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--size-4);
-  height: var(--size-4);
-  padding: 0;
-  background: transparent;
+.scape-radio-inline__slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--color-accent, #000);
   border: none;
+  border-radius: 0;
   cursor: pointer;
-  color: var(--muted);
-  opacity: 0.6;
-  transition: opacity 0.2s;
 }
 
-.scape-radio__close:hover {
-  opacity: 1;
+/* Fade-up transition */
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
-/* Make panel position relative for close button */
-.scape-radio__panel {
-  position: relative;
-  padding-right: var(--size-5);
-}
-
-@media (max-width: 400px) {
-  .scape-radio__panel {
-    min-width: auto;
-  }
-
-  .scape-radio__trigger-label {
-    display: none;
-  }
+.fade-up-enter-from,
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
 }
 </style>
