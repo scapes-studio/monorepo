@@ -7,7 +7,7 @@ const { getAccountDisplay } = useENSResolution()
   <nav class="main-menu bordered">
     <div class="main-menu__brand">
       <NuxtLink to="/">
-        <slot name="logo">Scapes</slot>
+        <img src="/icon.png" alt="Scapes Logo" />
       </NuxtLink>
     </div>
 
@@ -56,7 +56,7 @@ const { getAccountDisplay } = useENSResolution()
       <EvmConnect>
         <template #connected="{ address }">
           <NuxtLink :to="getAccountDisplay(address).url">
-            <EvmAccount :address="address" />
+            <AccountAvatar :address="address" />
           </NuxtLink>
         </template>
       </EvmConnect>
@@ -66,17 +66,24 @@ const { getAccountDisplay } = useENSResolution()
 
 <style scoped>
 .main-menu {
+  --offset-min: calc(var(--grid-margin-offset) / 2 + var(--grid-gutter));
+
   position: fixed;
-  bottom: max(calc(var(--scape-height) / 3), env(safe-area-inset-bottom));
-  left: max(calc(var(--scape-height) / 3), env(safe-area-inset-left));
-  right: max(calc(var(--scape-height) / 3), env(safe-area-inset-right));
+  bottom: max(var(--offset-min), env(safe-area-inset-bottom));
+  left: max(var(--offset-min), env(safe-area-inset-left));
+  right: max(var(--offset-min), env(safe-area-inset-right));
   z-index: 100;
   display: flex;
   align-items: center;
   gap: var(--spacer);
   height: var(--scape-height);
-  padding: 0 var(--spacer);
+  padding: 0;
   background: var(--color-background, #fff);
+}
+
+.main-menu__brand {
+  width: var(--scape-height);
+  height: var(--scape-height);
 }
 
 .main-menu__nav {
