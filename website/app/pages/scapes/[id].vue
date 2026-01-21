@@ -219,7 +219,7 @@ const sesModalOpen = ref(false);
   max-width: var(--content-width);
   margin: 0 auto;
   display: grid;
-  gap: var(--scape-height);
+  gap: var(--scape-height-gutter);
   container-type: inline-size;
 }
 

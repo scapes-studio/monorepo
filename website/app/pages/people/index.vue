@@ -131,21 +131,23 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
 .accounts-page {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--spacer-lg) var(--spacer);
+  padding: var(--grid-gutter);
+  padding-top: 0;
   display: grid;
-  gap: var(--spacer-lg);
+  gap: var(--grid-gutter);
 }
 
 .accounts-page__header {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacer);
+  gap: var(--grid-gutter);
   justify-content: space-between;
   align-items: center;
+  min-height: calc(var(--scape-height-gutter) - var(--grid-gutter));
 }
 
 .accounts-page__header h1 {
-  margin: 0 0 var(--spacer-xs);
+  margin: 0;
 }
 
 .accounts-page__subtitle {
@@ -155,13 +157,13 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
 
 .accounts-page__stats {
   display: flex;
-  gap: var(--spacer);
+  gap: var(--grid-gutter);
   font-weight: var(--font-weight-bold);
 }
 
 .accounts-page__status {
-  padding: var(--spacer);
-  border-radius: var(--size-3);
+  padding: var(--grid-gutter);
+  border-radius: var(--grid-gutter);
   background: var(--gray-z-1);
 }
 
@@ -171,7 +173,7 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
 
 .accounts-page__results {
   display: grid;
-  gap: var(--spacer);
+  gap: var(--grid-gutter);
 }
 
 .accounts-page__list {
@@ -179,23 +181,23 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
   padding: 0;
   margin: 0;
   display: grid;
-  gap: var(--size-3);
+  gap: var(--grid-gutter);
 }
 
 .accounts-page__row {
   display: grid;
-  grid-template-columns: var(--spacer-lg) minmax(0, 1fr) auto;
-  gap: var(--spacer);
+  grid-template-columns: calc(2 * var(--grid-gutter)) minmax(0, 1fr) auto;
+  gap: var(--grid-gutter);
   align-items: center;
-  padding: var(--spacer);
-  border-radius: var(--spacer);
+  padding: var(--grid-gutter);
+  border-radius: var(--grid-gutter);
   border: var(--border);
 }
 
 .accounts-page__load-more {
   justify-self: center;
-  padding: var(--spacer-sm) var(--spacer-md);
-  border-radius: var(--size-10);
+  padding: calc(var(--grid-gutter) / 2) var(--grid-gutter);
+  border-radius: var(--grid-gutter);
   border: none;
   background: var(--color);
   color: var(--background);

@@ -32,8 +32,12 @@ useSeo({
   justify-content: center;
   align-items: center;
   height: calc(3 * var(--scape-height-gutter) - var(--grid-gutter));
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
   text-align: center;
   background: var(--background);
+  padding: var(--scape-height);
 }
 
 .home__header h1 {
