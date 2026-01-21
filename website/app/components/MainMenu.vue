@@ -81,6 +81,7 @@ const { getAccountDisplay } = useENSResolution()
 }
 
 .main-menu__brand {
+  flex-shrink: 0;
   width: var(--scape-height);
   height: var(--scape-height);
 }
