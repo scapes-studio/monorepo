@@ -9,5 +9,9 @@
   & .close {
     min-height: auto;
   }
+
+  & .choose-connector {
+    min-height: auto;
+  }
 }
 

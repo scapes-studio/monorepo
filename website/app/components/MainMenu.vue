@@ -168,8 +168,10 @@ onUnmounted(() => {
 
 .main-menu__nav {
   display: flex;
-  gap: var(--spacer-sm);
+  gap: calc(var(--scape-height)/2);
   flex: 1;
+  justify-content: center;
+  padding: 0 var(--scape-height);
 }
 
 .main-menu__actions {
