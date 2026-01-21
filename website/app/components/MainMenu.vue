@@ -4,8 +4,8 @@ const { getAccountDisplay } = useENSResolution()
 </script>
 
 <template>
-  <nav class="main-menu bordered">
-    <div class="main-menu__brand">
+  <nav class="main-menu border-drop">
+    <div class="main-menu__brand border">
       <NuxtLink to="/">
         <img src="/icon.png" alt="Scapes Logo" />
       </NuxtLink>
@@ -55,7 +55,7 @@ const { getAccountDisplay } = useENSResolution()
       <ScapeRadioInline />
       <EvmConnect>
         <template #connected="{ address }">
-          <NuxtLink :to="getAccountDisplay(address).url">
+          <NuxtLink :to="getAccountDisplay(address).url" class="border">
             <AccountAvatar :address="address" />
           </NuxtLink>
         </template>
@@ -75,7 +75,6 @@ const { getAccountDisplay } = useENSResolution()
   z-index: 100;
   display: flex;
   align-items: center;
-  gap: var(--spacer);
   height: var(--scape-height);
   padding: 0;
   background: var(--color-background, #fff);
@@ -95,6 +94,5 @@ const { getAccountDisplay } = useENSResolution()
 .main-menu__actions {
   display: flex;
   align-items: center;
-  gap: var(--spacer);
 }
 </style>

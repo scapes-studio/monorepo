@@ -20,7 +20,10 @@ html {
 }
 
 /* Reusable border treatment with offset shadow */
-.bordered {
+.border {
+  box-shadow: 0 0 0 var(--border-width) #000;
+}
+.border-drop {
   box-shadow:
     var(--border-width) var(--border-width) 0 calc(var(--border-width)) #000,
     0 0 0 var(--border-width) #000;
