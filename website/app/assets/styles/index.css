@@ -4,6 +4,9 @@
 /* Variables */
 @import './variables.css';
 
+/* Components */
+@import './buttons.css';
+
 
 html {
   -ms-overflow-style: none;  /* IE and Edge */

@@ -19,4 +19,9 @@
     var(--page-inner-width),
     calc(var(--scape-width) * var(--content-columns, 5) + var(--grid-gutter) * (var(--content-columns, 5) - 1))
   );
+
+  --border-color: var(--color);
+  --border-color-highlight: var(--color);
+  --button-color-highlight: var(--color);
 }
+

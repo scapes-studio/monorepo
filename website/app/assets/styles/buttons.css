@@ -1,0 +1,11 @@
+@layer components {
+  button,
+  a.button {
+    background: var(--background);
+    min-height: var(--scape-height);
+
+    &:not(.unstyled) {
+    }
+  }
+}
+
