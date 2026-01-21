@@ -1,0 +1,8 @@
+.border {
+  box-shadow: var(--box-shadow);
+}
+
+.border-drop {
+  box-shadow: var(--box-shadow-drop);
+}
+

@@ -1,0 +1,13 @@
+.dialog::backdrop {
+  backdrop-filter: contrast(0.4) saturate(0.1) !important;
+}
+
+.dialog {
+  box-shadow: var(--box-shadow-drop);
+  border: none;
+
+  & .close {
+    min-height: auto;
+  }
+}
+

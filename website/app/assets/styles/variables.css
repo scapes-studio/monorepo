@@ -7,6 +7,11 @@
   --border-width: var(--grid-gutter, 1px);
   --border-width-lg: calc(2 * var(--grid-gutter, 1px));
 
+  --box-shadow: 0 0 0 var(--border-width) #000;
+  --box-shadow-drop:
+    var(--border-width) var(--border-width) 0 calc(var(--border-width)) #000,
+    var(--box-shadow);
+
   --scape-width-gutter: calc(var(--scape-width) + var(--grid-gutter));
   --scape-height-gutter: calc(var(--scape-height) + var(--grid-gutter));
 
