@@ -3,7 +3,7 @@ const { scapes } = useRandomScapes();
 
 useSeo({
   title: 'Home',
-  description: 'Composable places stored on the Ethereum Blockchain. Explore 10,000 pixel-art landscapes.',
+  description: 'Composable places stored on Ethereum. Explore 10,000 pixel-art landscapes.',
 });
 </script>
 
@@ -11,7 +11,7 @@ useSeo({
   <div class="home">
     <header class="home__header">
       <h1>Welcome Home</h1>
-      <p>Composable places stored on the Ethereum Blockchain.</p>
+      <p>Composable places stored on Ethereum.</p>
     </header>
 
     <ClientOnly>
@@ -46,5 +46,6 @@ useSeo({
 
 .home__header p {
   margin: var(--grid-gutter) 0 0;
+  color: var(--muted);
 }
 </style>
