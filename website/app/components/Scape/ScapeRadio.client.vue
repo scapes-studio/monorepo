@@ -18,13 +18,6 @@ const isOnScapePage = computed(() => {
   return route.path === `/scapes/${currentScape.value.id}`
 })
 
-// Auto-pause when volume reaches 0
-watch(volume, (newVolume) => {
-  if (newVolume === 0 && isPlaying.value) {
-    pause()
-  }
-})
-
 const onHover = (hovered: boolean) => {
   isHovered.value = hovered
 }
@@ -44,31 +37,15 @@ const handleVolumeChange = (event: Event) => {
 </script>
 
 <template>
-  <div
-    class="scape-radio-inline"
-    @mouseenter="onHover(true)"
-    @mouseleave="onHover(false)"
-  >
+  <div class="scape-radio-inline" @mouseenter="onHover(true)" @mouseleave="onHover(false)">
     <!-- Hover popover (only when playing) -->
     <Transition name="fade-up">
       <div v-if="isHovered && isPlaying" class="scape-radio-inline__popover">
         <!-- Link to scape (only if not on that page) -->
-        <NuxtLink
-          v-if="currentScape && !isOnScapePage"
-          :to="`/scapes/${currentScape.id}`"
-          class="scape-radio-inline__link border"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
+        <NuxtLink v-if="currentScape && !isOnScapePage" :to="`/scapes/${currentScape.id}`"
+          class="scape-radio-inline__link border">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
             <polyline points="15 3 21 3 21 9" />
             <line x1="10" y1="14" x2="21" y2="3" />
@@ -77,57 +54,28 @@ const handleVolumeChange = (event: Event) => {
 
         <!-- Volume slider -->
         <div class="scape-radio-inline__volume border">
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            :value="volume"
-            class="scape-radio-inline__slider"
-            @input="handleVolumeChange"
-          />
+          <input type="range" min="0" max="1" step="0.01" :value="volume" class="scape-radio-inline__slider"
+            @input="handleVolumeChange" />
         </div>
       </div>
     </Transition>
 
     <!-- Main button -->
-    <button
-      type="button"
-      class="scape-radio-inline__btn border"
-      :disabled="isLoading"
-      @click.stop="handlePlayPause"
-    >
+    <button type="button" class="scape-radio-inline__btn border" :disabled="isLoading" @click.stop="handlePlayPause">
       <!-- Background image (when playing) -->
-      <img
-        v-if="isPlaying && currentScape"
-        :src="currentScape.coverUrl"
-        :alt="currentScape.title"
-        class="scape-radio-inline__cover"
-      />
+      <img v-if="isPlaying && currentScape" :src="currentScape.coverUrl" :alt="currentScape.title"
+        class="scape-radio-inline__cover" />
 
       <!-- Play/pause icon -->
       <span class="scape-radio-inline__icon">
         <span v-if="isLoading" class="scape-radio-inline__loading">...</span>
-        <svg
-          v-else-if="isPlaying"
-          xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-        >
-          <rect x="6" y="4" width="4" height="16" />
-          <rect x="14" y="4" width="4" height="16" />
+        <svg v-else-if="isPlaying" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+          fill="currentColor" stroke="var(--border-color)" stroke-width="var(--grid-gutter)">
+          <rect x="4" y="4" width="6" height="16" />
+          <rect x="14" y="4" width="6" height="16" />
         </svg>
-        <svg
-          v-else
-          xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-        >
-          <polygon points="5,3 19,12 5,21" />
+        <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5,3 19,12 5,21" stroke="var(--border-color)" stroke-width="var(--grid-gutter)" />
         </svg>
       </span>
     </button>
@@ -175,8 +123,6 @@ const handleVolumeChange = (event: Event) => {
   align-items: center;
   justify-content: center;
   color: white;
-  filter: drop-shadow(1px 0 0 black) drop-shadow(-1px 0 0 black)
-    drop-shadow(0 1px 0 black) drop-shadow(0 -1px 0 black);
 }
 
 .scape-radio-inline__loading {
@@ -191,6 +137,7 @@ const handleVolumeChange = (event: Event) => {
   flex-direction: column;
   gap: var(--grid-gutter);
   padding-bottom: var(--grid-gutter);
+  background: var(--background);
 }
 
 .scape-radio-inline__link {
@@ -206,15 +153,17 @@ const handleVolumeChange = (event: Event) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--spacer-sm);
+  padding: calc(var(--scape-height) / 4) 0;
   background: var(--color-background);
+  height: calc(2 * var(--scape-height-gutter));
+  width: var(--scape-height);
 }
 
 .scape-radio-inline__slider {
   writing-mode: vertical-lr;
   direction: rtl;
-  width: 8px;
-  height: 80px;
+  width: calc(var(--scape-height) / 4);
+  height: calc(100%);
   appearance: none;
   background: var(--gray-z-2, #e5e5e5);
   cursor: pointer;
