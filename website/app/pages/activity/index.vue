@@ -43,6 +43,11 @@ watch(
 );
 
 const { activity, total, loading, error, hasMore, loadMore } = useActivity(filters);
+
+const loadMoreRef = ref<HTMLElement | null>(null);
+useIntersectionObserver(loadMoreRef, ([entry]) => {
+  if (entry?.isIntersecting) loadMore();
+});
 </script>
 
 <template>
@@ -77,6 +82,7 @@ const { activity, total, loading, error, hasMore, loadMore } = useActivity(filte
 
       <button
         v-if="hasMore"
+        ref="loadMoreRef"
         class="activity-page__load-more"
         type="button"
         :disabled="loading"

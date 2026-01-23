@@ -89,6 +89,11 @@ const loadMore = async () => {
 
 const totalOwners = computed(() => totalsData.value?.owners ?? 0);
 const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
+
+const loadMoreRef = ref<HTMLElement | null>(null);
+useIntersectionObserver(loadMoreRef, ([entry]) => {
+  if (entry?.isIntersecting) loadMore();
+});
 </script>
 
 <template>
@@ -118,7 +123,7 @@ const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
           <span class="accounts-page__count">{{ entry.count }} scapes</span>
         </li>
       </ol>
-      <button v-if="hasMore" class="accounts-page__load-more" type="button" :disabled="isLoadingMore" @click="loadMore">
+      <button v-if="hasMore" ref="loadMoreRef" class="accounts-page__load-more" type="button" :disabled="isLoadingMore" @click="loadMore">
         <span v-if="isLoadingMore">Loading more…</span>
         <span v-else>Load more</span>
       </button>

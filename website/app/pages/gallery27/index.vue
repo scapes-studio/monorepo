@@ -5,6 +5,11 @@ useSeo({
 });
 
 const { scapes, total, loading, error, hasMore, loadMore } = useGallery27List();
+
+const loadMoreRef = ref<HTMLElement | null>(null);
+useIntersectionObserver(loadMoreRef, ([entry]) => {
+  if (entry?.isIntersecting) loadMore();
+});
 </script>
 
 <template>
@@ -39,6 +44,7 @@ const { scapes, total, loading, error, hasMore, loadMore } = useGallery27List();
 
       <button
         v-if="hasMore"
+        ref="loadMoreRef"
         class="gallery27-page__load-more"
         type="button"
         :disabled="loading"

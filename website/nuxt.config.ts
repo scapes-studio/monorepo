@@ -33,6 +33,10 @@ export default defineNuxtConfig({
         from: '@ponder/client',
         imports: ['createClient', 'asc', 'desc', 'eq', 'ne', 'sql', 'and', 'gt', 'lte'],
       },
+      {
+        from: '@vueuse/core',
+        imports: ['useIntersectionObserver'],
+      },
     ],
   },
   extends: [
