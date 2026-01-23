@@ -1,36 +1,10 @@
 <script setup lang="ts">
-const route = useRoute()
 const { getAccountDisplay } = useENSResolution()
 
 const isLoaded = ref(false)
-const navRef = ref<HTMLElement | null>(null)
-const indicatorStyle = ref({ left: '0px', width: '0px' })
-
-const updateIndicator = () => {
-  if (!navRef.value) return
-
-  const activeLink = navRef.value.querySelector('.router-link-active')
-  if (!activeLink) {
-    indicatorStyle.value = { left: '0px', width: '0px' }
-    return
-  }
-
-  const navRect = navRef.value.getBoundingClientRect()
-  const linkRect = activeLink.getBoundingClientRect()
-
-  indicatorStyle.value = {
-    left: `${linkRect.left - navRect.left + navRef.value.scrollLeft}px`,
-    width: `${linkRect.width}px`,
-  }
-}
-
-watch(() => route.path, () => {
-  nextTick(updateIndicator)
-})
 
 onMounted(() => {
   isLoaded.value = true
-  nextTick(updateIndicator)
 })
 </script>
 
@@ -42,7 +16,7 @@ onMounted(() => {
       </NuxtLink>
     </div>
 
-    <ul ref="navRef" class="main-menu__nav">
+    <NavIndicator class="main-menu__nav">
       <slot name="nav">
         <li><NuxtLink to="/scapes">Scapes</NuxtLink></li>
         <li><NuxtLink to="/people">Owners</NuxtLink></li>
@@ -50,8 +24,7 @@ onMounted(() => {
         <li><NuxtLink to="/gallery27">Gallery27</NuxtLink></li>
         <li><NuxtLink to="/merge">Merge</NuxtLink></li>
       </slot>
-      <span class="main-menu__indicator" :style="indicatorStyle" />
-    </ul>
+    </NavIndicator>
 
     <div class="main-menu__actions">
       <ScapeRadio />
@@ -104,34 +77,6 @@ onMounted(() => {
   height: var(--scape-height);
 }
 
-.main-menu__nav {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: calc(var(--scape-height)/2);
-  flex: 1;
-  height: 100%;
-  justify-content: center;
-  padding: 0 calc(var(--scape-height)/2);
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.main-menu__indicator {
-  position: absolute;
-  bottom: 0;
-  height: calc(var(--grid-gutter) * 2);
-  background: black;
-  border-radius: var(--grid-gutter) var(--grid-gutter) 0 0;
-  transition: left 0.3s ease, width 0.3s ease;
-  pointer-events: none;
-}
-
 .main-menu__actions {
   margin-left: auto;
   display: flex;
@@ -157,16 +102,4 @@ onMounted(() => {
   object-fit: contain;
 }
 
-/* Mobile styles */
-@media (max-width: 48rem) {
-  .main-menu__nav {
-    justify-content: flex-start;
-    padding: 0 var(--spacer-md);
-    gap: var(--spacer-md);
-  }
-
-  .main-menu__nav li a {
-    white-space: nowrap;
-  }
-}
 </style>
