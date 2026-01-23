@@ -145,7 +145,7 @@ onUnmounted(() => {
 
 <style scoped>
 .main-menu {
-  --offset-min: calc(var(--grid-margin-offset) / 2 + var(--grid-gutter));
+  --offset-min: max(calc(var(--grid-margin-offset) / 2 + var(--grid-gutter)), calc(var(--scape-height)/2));
 
   position: fixed;
   bottom: max(var(--offset-min), env(safe-area-inset-bottom));
