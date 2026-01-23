@@ -85,11 +85,11 @@ importers:
   website:
     dependencies:
       '@1001-digital/layers.base':
-        specifier: ^0.0.8
-        version: 0.0.8(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+        specifier: ^0.0.9
+        version: 0.0.9(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@1001-digital/layers.evm':
         specifier: ^0.0.4
-        version: 0.0.4(e85185de8227f79d04d3f79dd82e3ff3)
+        version: 0.0.4(57c652a21776a66da6b98126f7a5ba71)
       '@ponder/client':
         specifier: ^0.16.1
         version: 0.16.1(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)(typescript@5.9.3)
@@ -135,8 +135,8 @@ importers:
 
 packages:
 
-  '@1001-digital/layers.base@0.0.8':
-    resolution: {integrity: sha512-sC56CkCc4Y7mtskh12fjeQAMXdZXNjRymQOXUIB2pKVhms+v9EB5y4/61OqTC33OC0oz3d/h5MdQ5GHr3F0XXg==}
+  '@1001-digital/layers.base@0.0.9':
+    resolution: {integrity: sha512-KY9FmcpeDPqCH1ReXRjDGXBSbJNXtlcqD73KRHMvs4po/Mn5wR3q1/W4YIhwz+54azgkQ1it3U8Nrnmpdaq3/Q==}
 
   '@1001-digital/layers.evm@0.0.4':
     resolution: {integrity: sha512-czGh4O3Sk13YPvD8HtHvuxVUG7JLYZuUKF2Pgg0xcdzYKApIiTtbIagIJYQdYgSjW8WfN/6TlpuAarbFAbMofA==}
@@ -6730,7 +6730,7 @@ packages:
 
 snapshots:
 
-  '@1001-digital/layers.base@0.0.8(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@1001-digital/layers.base@0.0.9(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
     dependencies:
       '@nuxt/icon': 1.15.0(magicast@0.5.1)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@types/luxon': 3.7.1
@@ -6745,9 +6745,9 @@ snapshots:
       - vite
       - vue
 
-  '@1001-digital/layers.evm@0.0.4(e85185de8227f79d04d3f79dd82e3ff3)':
+  '@1001-digital/layers.evm@0.0.4(57c652a21776a66da6b98126f7a5ba71)':
     dependencies:
-      '@1001-digital/layers.base': 0.0.8(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      '@1001-digital/layers.base': 0.0.9(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@metamask/sdk': 0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@tanstack/vue-query': 5.92.5(vue@3.5.26(typescript@5.9.3))
       '@types/qrcode': 1.5.6
