@@ -49,20 +49,13 @@ const fetchOwners = async (startOffset: number) => client.db.select({
 
 const { data: ownersData, pending, error } = await useAsyncData("scape-owners-leaderboard", () => fetchOwners(0));
 const { data: totalsData } = await useAsyncData("scape-owners-totals", async () => {
-  const [ownersCount, scapesCount] = await Promise.all([
-    client.db
-      .select({ total: sql<number>`count(distinct ${schema.scape.owner})::int` })
-      .from(schema.scape)
-      .where(excludeScapeCollection),
-    client.db
-      .select({ total: sql<number>`count(*)::int` })
-      .from(schema.scape)
-      .where(excludeScapeCollection),
-  ]);
+  const ownersCount = await client.db
+    .select({ total: sql<number>`count(distinct ${schema.scape.owner})::int` })
+    .from(schema.scape)
+    .where(excludeScapeCollection)
 
   return {
     owners: ownersCount[0]?.total ?? 0,
-    scapes: scapesCount[0]?.total ?? 0,
   };
 });
 
@@ -88,7 +81,6 @@ const loadMore = async () => {
 };
 
 const totalOwners = computed(() => totalsData.value?.owners ?? 0);
-const totalScapes = computed(() => totalsData.value?.scapes ?? 0);
 
 const loadMoreRef = ref<HTMLElement | null>(null);
 useIntersectionObserver(loadMoreRef, ([entry]) => {
@@ -100,12 +92,8 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   <section class="accounts-page">
     <header class="accounts-page__header">
       <div>
-        <h1>Scape Owners</h1>
+        <h1>{{ formatNumber(totalOwners) }} Scape Owners</h1>
         <p class="accounts-page__subtitle">Leaderboard by total scapes owned.</p>
-      </div>
-      <div class="accounts-page__stats">
-        <span>{{ totalOwners }} owners</span>
-        <span>{{ totalScapes }} total scapes</span>
       </div>
     </header>
 
@@ -123,7 +111,8 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
           <span class="accounts-page__count">{{ entry.count }} scapes</span>
         </li>
       </ol>
-      <button v-if="hasMore" ref="loadMoreRef" class="accounts-page__load-more" type="button" :disabled="isLoadingMore" @click="loadMore">
+      <button v-if="hasMore" ref="loadMoreRef" class="accounts-page__load-more" type="button" :disabled="isLoadingMore"
+        @click="loadMore">
         <span v-if="isLoadingMore">Loading more…</span>
         <span v-else>Load more</span>
       </button>
@@ -136,34 +125,35 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 .accounts-page {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--grid-gutter);
-  padding-top: 0;
   display: grid;
   gap: var(--grid-gutter);
 }
 
 .accounts-page__header {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: var(--grid-gutter);
-  justify-content: space-between;
   align-items: center;
-  min-height: calc(var(--scape-height-gutter) - var(--grid-gutter));
+  height: calc(2 * var(--scape-height-gutter) - var(--grid-gutter));
+  padding-inline: calc(var(--scape-height) / 2);
+  width: 100%;
+  background: var(--background);
+
+  &>div {
+    width: 100%;
+  }
 }
 
 .accounts-page__header h1 {
   margin: 0;
+  width: 100%;
+  text-align: center;
 }
 
 .accounts-page__subtitle {
   margin: 0;
+  width: 100%;
   color: var(--muted);
-}
-
-.accounts-page__stats {
-  display: flex;
-  gap: var(--grid-gutter);
-  font-weight: var(--font-weight-bold);
+  text-align: center;
 }
 
 .accounts-page__status {
@@ -191,12 +181,12 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 
 .accounts-page__row {
   display: grid;
-  grid-template-columns: calc(2 * var(--grid-gutter)) minmax(0, 1fr) auto;
-  gap: var(--grid-gutter);
+  grid-template-columns: calc(var(--scape-height)/2) minmax(0, 1fr) auto;
+  gap: var(--spacer);
   align-items: center;
-  padding: var(--grid-gutter);
-  border-radius: var(--grid-gutter);
-  border: var(--border);
+  height: var(--scape-height);
+  padding-inline: calc(var(--scape-height)/2);
+  background: var(--background);
 }
 
 .accounts-page__load-more {
@@ -216,12 +206,10 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 }
 
 .accounts-page__rank {
-  font-weight: var(--font-weight-bold);
   color: var(--muted);
 }
 
 .accounts-page__owner {
-  font-weight: var(--font-weight-bold);
   color: inherit;
   text-decoration: none;
   word-break: break-all;
@@ -232,6 +220,6 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 }
 
 .accounts-page__count {
-  font-weight: var(--font-weight-bold);
+  color: var(--muted);
 }
 </style>
