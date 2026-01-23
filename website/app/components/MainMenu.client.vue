@@ -1,10 +1,36 @@
 <script setup lang="ts">
+const route = useRoute()
 const { getAccountDisplay } = useENSResolution()
 
 const isLoaded = ref(false)
+const navRef = ref<HTMLElement | null>(null)
+const indicatorStyle = ref({ left: '0px', width: '0px' })
+
+const updateIndicator = () => {
+  if (!navRef.value) return
+
+  const activeLink = navRef.value.querySelector('.router-link-active')
+  if (!activeLink) {
+    indicatorStyle.value = { left: '0px', width: '0px' }
+    return
+  }
+
+  const navRect = navRef.value.getBoundingClientRect()
+  const linkRect = activeLink.getBoundingClientRect()
+
+  indicatorStyle.value = {
+    left: `${linkRect.left - navRect.left + navRef.value.scrollLeft}px`,
+    width: `${linkRect.width}px`,
+  }
+}
+
+watch(() => route.path, () => {
+  nextTick(updateIndicator)
+})
 
 onMounted(() => {
   isLoaded.value = true
+  nextTick(updateIndicator)
 })
 </script>
 
@@ -16,7 +42,7 @@ onMounted(() => {
       </NuxtLink>
     </div>
 
-    <ul class="main-menu__nav">
+    <ul ref="navRef" class="main-menu__nav">
       <slot name="nav">
         <li><NuxtLink to="/scapes">Scapes</NuxtLink></li>
         <li><NuxtLink to="/people">Owners</NuxtLink></li>
@@ -24,6 +50,7 @@ onMounted(() => {
         <li><NuxtLink to="/gallery27">Gallery27</NuxtLink></li>
         <li><NuxtLink to="/merge">Merge</NuxtLink></li>
       </slot>
+      <span class="main-menu__indicator" :style="indicatorStyle" />
     </ul>
 
     <div class="main-menu__actions">
@@ -78,6 +105,7 @@ onMounted(() => {
 }
 
 .main-menu__nav {
+  position: relative;
   display: flex;
   align-items: center;
   gap: calc(var(--scape-height)/2);
@@ -92,6 +120,16 @@ onMounted(() => {
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.main-menu__indicator {
+  position: absolute;
+  bottom: 0;
+  height: calc(var(--grid-gutter) * 2);
+  background: black;
+  border-radius: var(--grid-gutter) var(--grid-gutter) 0 0;
+  transition: left 0.3s ease, width 0.3s ease;
+  pointer-events: none;
 }
 
 .main-menu__actions {
