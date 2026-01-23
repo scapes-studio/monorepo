@@ -12,9 +12,6 @@
     var(--border-width) var(--border-width) 0 calc(var(--border-width)) #000,
     var(--box-shadow);
 
-  --scape-width-gutter: calc(var(--scape-width) + var(--grid-gutter));
-  --scape-height-gutter: calc(var(--scape-height) + var(--grid-gutter));
-
   --page-inner-width: calc(100vw - var(--grid-gutter) * 2);
   --content-width-small: min(
     var(--page-inner-width),
@@ -28,5 +25,17 @@
   --border-color: var(--color);
   --border-color-highlight: var(--color);
   --button-color-highlight: var(--color);
+
+  /* FIXME: Find way to set default sizes */
+  --scape-width: 144px;
+  --scape-height: 48px;
+  --grid-gutter: 2px;
+  --grid-columns: 5;
+  --content-columns: 4;
+  --detail-columns: 3;
+  --grid-margin-offset: 0.5rem;
+
+  --scape-width-gutter: calc(var(--scape-width) + var(--grid-gutter));
+  --scape-height-gutter: calc(var(--scape-height) + var(--grid-gutter));
 }
 
