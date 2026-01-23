@@ -107,7 +107,7 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
       <ol class="accounts-page__list">
         <li v-for="(entry, index) in owners" :key="entry.owner" class="accounts-page__row">
           <span class="accounts-page__rank">{{ index + 1 }}</span>
-          <AccountLink :address="entry.owner" class="accounts-page__owner" />
+          <AccountLink :address="entry.owner" class="accounts-page__owner" shorten-ens />
           <span class="accounts-page__count">{{ entry.count }} scapes</span>
         </li>
       </ol>
@@ -190,14 +190,14 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 }
 
 .accounts-page__load-more {
-  justify-self: center;
-  padding: calc(var(--grid-gutter) / 2) var(--grid-gutter);
-  border-radius: var(--grid-gutter);
-  border: none;
-  background: var(--color);
-  color: var(--background);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
+  text-align: center;
+
+  &>span {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .accounts-page__load-more:disabled {

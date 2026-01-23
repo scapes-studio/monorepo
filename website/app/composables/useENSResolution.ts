@@ -14,6 +14,17 @@ export const shortenAddress = (value: string, start = 6, end = 4): string => {
   return `${value.slice(0, start)}…${value.slice(-end)}`;
 };
 
+// Utility to shorten ENS names (e.g. "unbothered.moisturized.happy.eth" -> "unbothered.mois…hing.eth")
+export const shortenENS = (value: string, maxLength = 40): string => {
+  if (!value || value.length <= maxLength) return value;
+
+  const charsToShow = maxLength - 1; // 1 for "…"
+  const start = Math.ceil(charsToShow / 2);
+  const end = Math.floor(charsToShow / 2);
+
+  return `${value.slice(0, start)}…${value.slice(-end)}`;
+};
+
 /**
  * SSR-compatible composable for resolving a single address to ENS.
  * Uses useAsyncData to properly transfer data from server to client.
