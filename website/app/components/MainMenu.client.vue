@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const route = useRoute()
 const { getAccountDisplay } = useENSResolution()
 
 const isLoaded = ref(false)
@@ -19,31 +18,11 @@ onMounted(() => {
 
     <ul class="main-menu__nav">
       <slot name="nav">
-        <li>
-          <NuxtLink to="/scapes" :class="{ active: route.path.startsWith('/scapes') }">
-            Scapes
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/people" :class="{ active: route.path.startsWith('/people') }">
-            Owners
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/activity" :class="{ active: route.path.startsWith('/activity') }">
-            Activity
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/gallery27" :class="{ active: route.path.startsWith('/gallery27') }">
-            Gallery27
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/merge" :class="{ active: route.path.startsWith('/merge') }">
-            Merge
-          </NuxtLink>
-        </li>
+        <li><NuxtLink to="/scapes">Scapes</NuxtLink></li>
+        <li><NuxtLink to="/people">Owners</NuxtLink></li>
+        <li><NuxtLink to="/activity">Activity</NuxtLink></li>
+        <li><NuxtLink to="/gallery27">Gallery27</NuxtLink></li>
+        <li><NuxtLink to="/merge">Merge</NuxtLink></li>
       </slot>
     </ul>
 
