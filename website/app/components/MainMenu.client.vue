@@ -2,6 +2,7 @@
 const route = useRoute()
 const { getAccountDisplay } = useENSResolution()
 
+const isLoaded = ref(false)
 const isMenuOpen = ref(false)
 
 const navItems = [
@@ -34,6 +35,7 @@ const handleClickOutside = (event: MouseEvent) => {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  isLoaded.value = true
 })
 
 onUnmounted(() => {
@@ -42,7 +44,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <nav class="main-menu border-drop">
+  <nav class="main-menu border-drop" :class="{ 'is-loaded': isLoaded }">
     <!-- Mobile menu panel -->
     <Transition name="slide-up-menu">
       <div v-if="isMenuOpen" class="main-menu__mobile-panel border-drop">
@@ -158,6 +160,18 @@ onUnmounted(() => {
   height: var(--scape-height);
   padding: 0;
   background: var(--color-background, #fff);
+  display: none;
+  opacity: 0;
+}
+
+.main-menu.is-loaded {
+  display: flex;
+  opacity: 1;
+  transition: opacity var(--speed) ease, display var(--speed) ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+  }
 }
 
 .main-menu__brand {
