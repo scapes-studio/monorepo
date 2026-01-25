@@ -37,14 +37,13 @@ const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
 
 <style scoped>
 .profile-header {
-  border: var(--border);
-  border-radius: var(--spacer);
-  overflow: hidden;
+  height: calc((2 + var(--content-columns)) * var(--scape-height-gutter) - var(--grid-gutter));
+  background: var(--background);
 }
 
 .profile-header__banner {
   width: 100%;
-  height: var(--size-11);
+  height: calc(var(--content-columns) * var(--scape-height-gutter) - var(--grid-gutter));
   background: var(--gray-z-1);
 }
 
@@ -59,6 +58,8 @@ const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
   gap: var(--spacer);
   align-items: center;
   padding: var(--spacer);
+  height: calc(2 * var(--scape-height-gutter) - var(--grid-gutter));
+  background: var(--background);
 }
 
 .profile-header__avatar {
@@ -81,7 +82,6 @@ const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
 
 .profile-header__avatar-fallback {
   font-size: var(--font-xl);
-  font-weight: var(--font-weight-bold);
 }
 
 .profile-header__meta h1 {
@@ -90,8 +90,9 @@ const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
 
 .profile-header__address {
   margin: 0;
-  font-size: var(--font-sm);
+  font-size: var(--font-xs);
   color: var(--muted);
   word-break: break-all;
+  line-height: 1;
 }
 </style>

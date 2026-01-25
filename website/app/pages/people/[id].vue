@@ -87,28 +87,23 @@ useSeo(seoOptions);
 .account-page {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--spacer-lg) var(--spacer);
   display: grid;
-  gap: var(--spacer-lg);
+  gap: var(--grid-gutter);
 }
 
 .account-page__profile {
   display: grid;
-  gap: var(--spacer);
+  gap: var(--grid-gutter);
 }
 
 .account-page__tabs {
   display: flex;
   gap: var(--spacer);
-  border-bottom: var(--border);
 }
 
 .account-page__tab {
-  padding: var(--spacer-sm) var(--spacer);
   text-decoration: none;
   color: var(--muted);
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
 }
 
 .account-page__tab--active {
@@ -116,34 +111,7 @@ useSeo(seoOptions);
   border-bottom-color: currentColor;
 }
 
-.account-page__status {
-  padding: var(--spacer);
-  border-radius: var(--size-3);
-  background: var(--gray-z-1);
-}
-
-.account-page__status--error {
-  background: oklch(from var(--error) l c h / 0.1);
-}
-
 .account-page__refresh {
-  justify-self: start;
-  padding: var(--spacer-xs) var(--spacer-sm);
-  font-size: var(--font-sm);
-  color: var(--muted);
-  background: transparent;
-  border: var(--border);
-  border-radius: var(--size-2);
-  cursor: pointer;
-}
-
-.account-page__refresh:hover:not(:disabled) {
-  color: inherit;
-  border-color: currentColor;
-}
-
-.account-page__refresh:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  display: none;
 }
 </style>

@@ -4,7 +4,6 @@ defineProps<{ description: string | null | undefined }>();
 
 <template>
   <section class="profile-bio">
-    <h2>About</h2>
     <p v-if="description">{{ description }}</p>
     <p v-else class="profile-bio__empty">No description available.</p>
   </section>
@@ -13,8 +12,10 @@ defineProps<{ description: string | null | undefined }>();
 <style scoped>
 .profile-bio {
   padding: var(--spacer);
-  border: var(--border);
-  border-radius: var(--spacer);
+  height: calc(2 * var(--scape-height-gutter) - var(--grid-gutter));
+  background: var(--background);
+  display: flex;
+  align-items: center;
 }
 
 .profile-bio h2 {
