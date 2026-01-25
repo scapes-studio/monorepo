@@ -3,9 +3,8 @@ defineProps<{ description: string | null | undefined }>();
 </script>
 
 <template>
-  <section class="profile-bio">
-    <p v-if="description">{{ description }}</p>
-    <p v-else class="profile-bio__empty">No description available.</p>
+  <section v-if="description" class="profile-bio">
+    <p>{{ description }}</p>
   </section>
 </template>
 

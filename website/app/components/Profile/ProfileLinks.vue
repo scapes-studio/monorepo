@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import type { ProfileLinks as Links } from "~/composables/useProfile";
 
-defineProps<{ links: Links | null | undefined }>();
+const props = defineProps<{ links: Links | null | undefined }>();
+
+const linkCount = computed(() => props.links
+  ? Object.values(props.links).filter(l => !!l)?.length
+  : 0
+)
 
 const labelMap: Record<keyof Links, string> = {
   url: "Website",
   email: "Email",
-  twitter: "𝕏",
+  twitter: "X",
   github: "GitHub",
 };
 
@@ -25,48 +30,39 @@ function buildUrl(key: keyof Links, value: string): string {
 </script>
 
 <template>
-  <section class="profile-links">
-    <h2>Links</h2>
-    <ul v-if="links" class="profile-links__list">
+  <section v-if="linkCount" class="profile-links">
+    <ul class="profile-links__list">
       <li v-for="(value, key) in links" :key="key">
         <template v-if="value">
-          <span class="profile-links__label">{{ labelMap[key] }}</span>
-          <NuxtLink :to="buildUrl(key, value)" rel="noopener noreferrer">
-            {{ value }}
+          <NuxtLink :to="buildUrl(key, value)" rel="noopener noreferrer" target="_blank">
+            {{ labelMap[key] }}
           </NuxtLink>
         </template>
         <span v-else class="profile-links__empty">{{ labelMap[key] }}: none</span>
       </li>
     </ul>
-    <p v-else class="profile-links__empty">No links available.</p>
   </section>
 </template>
 
 <style scoped>
-.profile-links {
-  padding: var(--spacer);
-  border: var(--border);
-  border-radius: var(--spacer);
-}
-
-.profile-links h2 {
-  margin-top: 0;
-}
-
 .profile-links__list {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: grid;
-  gap: var(--spacer-sm);
+  display: flex;
+  gap: var(--grid-gutter);
 }
 
-.profile-links__label {
-  font-weight: var(--font-weight-bold);
-  margin-right: var(--spacer-sm);
-}
+.profile-links__list li a {
+  display: flex;
+  width: var(--scape-width);
+  height: var(--scape-height);
+  align-items: center;
+  justify-content: center;
 
-.profile-links__empty {
-  color: var(--muted);
+  &:hover,
+  &:focus {
+    background: var(--gray-z-1);
+  }
 }
 </style>

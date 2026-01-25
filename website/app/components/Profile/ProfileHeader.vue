@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { shortenAddress } from "~/composables/useENSResolution";
+
 const props = defineProps<{
   address: string;
   ens: string | null;
@@ -11,6 +13,7 @@ const { resolveIpfsUrl } = useIpfs();
 const displayName = computed(() => props.ens || props.address);
 const resolvedAvatar = computed(() => resolveIpfsUrl(props.avatar));
 const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
+const etherscanUrl = computed(() => `https://etherscan.io/address/${props.address}`);
 </script>
 
 <template>
@@ -29,7 +32,7 @@ const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
 
       <div class="profile-header__meta">
         <h1>{{ displayName }}</h1>
-        <p class="profile-header__address">{{ address }}</p>
+        <a :href="etherscanUrl" target="_blank" class="profile-header__address">{{ shortenAddress(address) }}</a>
       </div>
     </div>
   </section>
@@ -37,8 +40,9 @@ const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
 
 <style scoped>
 .profile-header {
-  height: calc((2 + var(--content-columns)) * var(--scape-height-gutter) - var(--grid-gutter));
   background: var(--background);
+  display: grid;
+  gap: var(--grid-gutter);
 }
 
 .profile-header__banner {
@@ -89,10 +93,13 @@ const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
 }
 
 .profile-header__address {
-  margin: 0;
   font-size: var(--font-xs);
   color: var(--muted);
-  word-break: break-all;
   line-height: 1;
+  text-decoration: none;
+}
+
+.profile-header__address:hover {
+  text-decoration: underline;
 }
 </style>
