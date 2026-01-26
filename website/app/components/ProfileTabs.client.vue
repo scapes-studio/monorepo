@@ -4,6 +4,7 @@ const props = defineProps<{
 }>()
 
 const route = useRoute()
+const { scapeWidth, gutter } = useScapeGrid()
 
 const navRef = ref<HTMLElement | null>(null)
 const indicatorStyle = ref({ transform: 'translateX(0)', width: '0px', opacity: '0' })
@@ -13,6 +14,33 @@ const currentTab = computed(() => {
   if (path.endsWith('/twenty-seven-year-scapes')) return 'gallery27'
   return 'scapes'
 })
+
+const snapToGrid = (naturalWidth: number) => {
+  const unit = scapeWidth.value + gutter.value
+  const n = Math.max(1, Math.ceil((naturalWidth + gutter.value) / unit))
+  return n * unit - gutter.value
+}
+
+const snapTabWidths = () => {
+  if (!navRef.value) return
+
+  const tabs = navRef.value.querySelectorAll<HTMLElement>('.profile-tabs__tab')
+
+  // Reset to measure natural content width
+  tabs.forEach((tab) => {
+    tab.style.width = 'auto'
+    tab.style.minWidth = '0'
+  })
+
+  // Read natural widths in one batch
+  const widths = Array.from(tabs).map(tab => tab.scrollWidth)
+
+  // Apply grid-snapped widths
+  tabs.forEach((tab, i) => {
+    tab.style.minWidth = ''
+    tab.style.width = `${snapToGrid(widths[i]!)}px`
+  })
+}
 
 const updateIndicator = () => {
   if (!navRef.value) return
@@ -34,29 +62,26 @@ const updateIndicator = () => {
   }
 }
 
-watch(() => route.path, () => {
-  nextTick(updateIndicator)
-})
+const refresh = () => {
+  nextTick(() => {
+    snapTabWidths()
+    updateIndicator()
+  })
+}
 
-onMounted(() => {
-  nextTick(updateIndicator)
-})
+watch(() => route.path, refresh)
+watch([scapeWidth, gutter], refresh)
+onMounted(refresh)
 </script>
 
 <template>
   <nav ref="navRef" class="profile-tabs">
-    <NuxtLink
-      :to="`/people/${props.accountId}`"
-      class="profile-tabs__tab"
-      :class="{ 'profile-tabs__tab--active': currentTab === 'scapes' }"
-    >
+    <NuxtLink :to="`/people/${props.accountId}`" class="profile-tabs__tab"
+      :class="{ 'profile-tabs__tab--active': currentTab === 'scapes' }">
       Scapes
     </NuxtLink>
-    <NuxtLink
-      :to="`/people/${props.accountId}/twenty-seven-year-scapes`"
-      class="profile-tabs__tab"
-      :class="{ 'profile-tabs__tab--active': currentTab === 'gallery27' }"
-    >
+    <NuxtLink :to="`/people/${props.accountId}/twenty-seven-year-scapes`" class="profile-tabs__tab"
+      :class="{ 'profile-tabs__tab--active': currentTab === 'gallery27' }">
       Twenty Seven Year Scapes
     </NuxtLink>
     <span class="profile-tabs__indicator" :style="indicatorStyle" />
@@ -76,10 +101,10 @@ onMounted(() => {
   text-decoration: none;
   color: var(--muted);
   min-width: var(--scape-width);
-  padding: var(--spacer);
   display: flex;
   justify-content: center;
   align-items: center;
+  background: var(--background);
 }
 
 .profile-tabs__tab--active {
@@ -91,7 +116,7 @@ onMounted(() => {
   bottom: 0;
   left: 0;
   height: calc(var(--grid-gutter) * 2);
-  background: black;
+  background: var(--color);
   border-radius: var(--grid-gutter) var(--grid-gutter) 0 0;
   transition: transform 0.3s ease, width 0.3s ease, opacity 0.3s ease;
   pointer-events: none;
