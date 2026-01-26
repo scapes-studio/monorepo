@@ -82,7 +82,6 @@ defineOgImageComponent(
 
       <!-- Scapes Section -->
       <header class="scapes-tab__header">
-        <h2>Scapes</h2>
         <span>{{ regularScapes.length }} owned</span>
       </header>
       <ScapesGrid :scapes="regularScapes" />
@@ -97,13 +96,14 @@ defineOgImageComponent(
 <style scoped>
 .scapes-tab {
   display: grid;
-  gap: var(--spacer);
+  gap: var(--grid-gutter);
 }
 
 .scapes-tab__header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  height: var(--scape-height);
 }
 
 .scapes-tab__header h2 {

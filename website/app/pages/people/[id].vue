@@ -67,16 +67,7 @@ useSeo(seoOptions);
         </button>
       </div>
 
-      <nav class="account-page__tabs">
-        <NuxtLink :to="`/people/${accountId}`" class="account-page__tab"
-          :class="{ 'account-page__tab--active': currentTab === 'scapes' }">
-          Scapes
-        </NuxtLink>
-        <NuxtLink :to="`/people/${accountId}/twenty-seven-year-scapes`" class="account-page__tab"
-          :class="{ 'account-page__tab--active': currentTab === 'gallery27' }">
-          Twenty Seven Year Scapes
-        </NuxtLink>
-      </nav>
+      <ProfileTabs :account-id="accountId ?? ''" />
 
       <NuxtPage />
     </template>
@@ -94,21 +85,6 @@ useSeo(seoOptions);
 .account-page__profile {
   display: grid;
   gap: var(--grid-gutter);
-}
-
-.account-page__tabs {
-  display: flex;
-  gap: var(--spacer);
-}
-
-.account-page__tab {
-  text-decoration: none;
-  color: var(--muted);
-}
-
-.account-page__tab--active {
-  color: inherit;
-  border-bottom-color: currentColor;
 }
 
 .account-page__refresh {
