@@ -59,7 +59,7 @@ defineOgImageComponent(
 </script>
 
 <template>
-  <section class="scapes-tab">
+  <section class="scapes-tab" :class="{ 'has-merges': showMerges }">
     <div v-if="scapesError" class="scapes-tab__status scapes-tab__status--error">
       Failed to load scapes.
     </div>
@@ -81,7 +81,8 @@ defineOgImageComponent(
       </template>
 
       <!-- Scapes Section -->
-      <header class="scapes-tab__header">
+      <header v-if="showMerges" class="scapes-tab__header">
+        <h2>Scapes</h2>
         <span>{{ regularScapes.length }} owned</span>
       </header>
       <ScapesGrid :scapes="regularScapes" />
@@ -95,6 +96,8 @@ defineOgImageComponent(
 
 <style scoped>
 .scapes-tab {
+  --grid-columns: var(--content-columns);
+
   display: grid;
   gap: var(--grid-gutter);
 }
@@ -104,6 +107,13 @@ defineOgImageComponent(
   justify-content: space-between;
   align-items: center;
   height: var(--scape-height);
+  margin: var(--scape-height-gutter) 0 0;
+  background: var(--background);
+  padding: var(--spacer);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
 }
 
 .scapes-tab__header h2 {
