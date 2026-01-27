@@ -233,7 +233,7 @@ const sesModalOpen = ref(false);
   background: var(--background);
   width: 100%;
 
-  height: calc(var(--scape-height) * var(--content-columns, 5) * 3 + var(--grid-gutter) * (var(--content-columns, 5) * 3 - 1));
+  height: calc(var(--scape-height) * var(--content-columns, 5) * 2 + var(--grid-gutter) * (var(--content-columns, 5) * 2 - 1));
 
   padding: 16%;
 
