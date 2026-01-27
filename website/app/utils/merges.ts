@@ -38,3 +38,8 @@ export function mergeIdToScapeIds(id: bigint): bigint[] {
 export function isMergeTokenId(tokenId: bigint): boolean {
   return tokenId > 10_000n
 }
+
+export function mergeScapeCount(tokenId: bigint): number {
+  if (tokenId <= 10_000n) return 1
+  return mergeIdToScapeIds(tokenId).length
+}

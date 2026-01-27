@@ -5,17 +5,24 @@ const props = defineProps<{
   scape: ScapeRecord;
   price?: bigint | null;
   isSeaport?: boolean;
+  columns?: number;
+  scapeCount?: number;
 }>();
 
 const formattedPrice = computed(() => {
   if (!props.price) return null;
   return formatETH(Number(props.price) / 1e18);
 });
+
+const spanStyle = computed(() => {
+  const cols = props.columns ?? 1;
+  return cols > 1 ? { gridColumn: `span ${cols}` } : undefined;
+});
 </script>
 
 <template>
-  <NuxtLink class="scape-link" :to="`/scapes/${scape.id}`">
-    <ScapeImage :id="scape.id" />
+  <NuxtLink class="scape-link" :to="`/scapes/${scape.id}`" :style="spanStyle">
+    <ScapeImage :id="scape.id" :scape-count="scapeCount ?? 1" />
     <div v-if="formattedPrice" class="scape-link__price">
       {{ formattedPrice }} ETH
       <span v-if="isSeaport" class="scape-link__badge">OpenSea</span>

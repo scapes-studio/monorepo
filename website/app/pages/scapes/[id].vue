@@ -169,13 +169,15 @@ defineOgImageComponent(
   },
 );
 
+const scapeCount = computed(() => mergeScapeCount(BigInt(scapeId.value)));
+
 const sesModalOpen = ref(false);
 </script>
 
 <template>
-  <section class="scape-detail">
+  <section class="scape-detail" :style="{ '--scape-count': scapeCount }">
     <div class="scape-detail__image">
-      <ScapeImage :id="scapeId" />
+      <ScapeImage :id="scapeId" :scape-count="scapeCount" />
     </div>
     <header class="scape-detail__header">
       <div class="scape-detail__meta">
@@ -234,9 +236,9 @@ const sesModalOpen = ref(false);
   height: calc(var(--scape-height) * var(--content-columns, 5) * 3 + var(--grid-gutter) * (var(--content-columns, 5) * 3 - 1));
 
   img {
-    width: calc(var(--scape-width-gutter) * var(--detail-columns, 3));
+    width: calc(var(--scape-width-gutter) * var(--detail-columns, 3) * var(--scape-count, 1));
+    max-width: 100%;
     height: auto;
-    aspect-ratio: 3/1;
   }
 }
 

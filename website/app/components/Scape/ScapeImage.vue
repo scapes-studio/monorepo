@@ -6,9 +6,14 @@ const props = defineProps({
     type: [String, Number, BigInt] as PropType<string | number | bigint>,
     required: true,
   },
+  scapeCount: {
+    type: Number,
+    default: 1,
+  },
 });
 
 const imageUrl = computed(() => `https://cdn.scapes.xyz/scapes/sm/${props.id}.png`);
+const aspectRatio = computed(() => `${3 * props.scapeCount}/1`);
 const loaded = ref(false);
 const imgRef = ref<HTMLImageElement>();
 
@@ -21,7 +26,7 @@ onMounted(() => {
 
 <template>
   <img ref="imgRef" class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`"
-    @load="loaded = true" />
+    :style="{ aspectRatio }" @load="loaded = true" />
 </template>
 
 <style scoped>

@@ -26,6 +26,8 @@ const showMerges = computed(() => merges.value.length > 0);
 
 const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length);
 
+const { contentColumns } = useScapeGrid();
+
 const ogTitle = computed(() =>
   displayAddress.value ? `Profile ${displayAddress.value}` : "Profile",
 );
@@ -77,7 +79,7 @@ defineOgImageComponent(
           <h2>Merges</h2>
           <span>{{ merges.length }} owned</span>
         </header>
-        <ScapesGrid :scapes="merges" />
+        <ScapesGrid :scapes="merges" :columns="contentColumns" />
       </template>
 
       <!-- Scapes Section -->
