@@ -11,7 +11,6 @@ const props = defineProps<{
 const { resolveIpfsUrl } = useIpfs();
 
 const displayName = computed(() => props.ens || props.address);
-const resolvedAvatar = computed(() => resolveIpfsUrl(props.avatar));
 const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
 const etherscanUrl = computed(() => `https://etherscan.io/address/${props.address}`);
 </script>
