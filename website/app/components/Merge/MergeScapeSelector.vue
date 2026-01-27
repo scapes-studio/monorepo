@@ -1,3 +1,51 @@
+<template>
+  <div class="merge-selector">
+    <div class="merge-selector__header">
+      <h3>Select Scapes</h3>
+    </div>
+
+    <input v-model="searchQuery" type="text" inputmode="numeric" placeholder="Search by ID (1-10000)"
+      class="merge-selector__search" />
+
+    <button v-if="searchedId" type="button" class="merge-selector__search-result" :disabled="isFull"
+      @click="handleSearchSelect">
+      <ScapeImage :id="searchedId" />
+      <span class="merge-selector__id">#{{ searchedId }}</span>
+    </button>
+
+    <label v-if="isConnected" class="merge-selector__toggle">
+      <input v-model="onlyOwned" type="checkbox" />
+      <span>Only owned</span>
+    </label>
+
+    <div v-if="loading && scapes.length === 0" class="merge-selector__loading">
+      Loading scapes...
+    </div>
+
+    <div v-else-if="scapes.length === 0" class="merge-selector__empty">
+      <template v-if="onlyOwned">
+        No owned Scapes found
+      </template>
+      <template v-else>
+        No Scapes available
+      </template>
+    </div>
+
+    <div v-else class="merge-selector__grid">
+      <button v-for="scape in scapes" :key="`${scape.id}`" type="button" class="merge-selector__item" :disabled="isFull"
+        @click="handleSelect(scape)">
+        <ScapeImage :id="scape.id" />
+        <span class="merge-selector__id">#{{ scape.id }}</span>
+      </button>
+    </div>
+
+    <button v-if="hasMore && scapes.length > 0" type="button" class="merge-selector__load-more" :disabled="loading"
+      @click="loadMore">
+      {{ loading ? "Loading..." : "Load more" }}
+    </button>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { ScapeRecord } from "~/composables/useScapesByOwner";
 import { useConnection } from '@wagmi/vue'
@@ -64,54 +112,6 @@ const handleSearchSelect = () => {
   searchQuery.value = "";
 };
 </script>
-
-<template>
-  <div class="merge-selector">
-    <div class="merge-selector__header">
-      <h3>Select Scapes</h3>
-    </div>
-
-    <input v-model="searchQuery" type="text" inputmode="numeric" placeholder="Search by ID (1-10000)"
-      class="merge-selector__search" />
-
-    <button v-if="searchedId" type="button" class="merge-selector__search-result" :disabled="isFull"
-      @click="handleSearchSelect">
-      <ScapeImage :id="searchedId" />
-      <span class="merge-selector__id">#{{ searchedId }}</span>
-    </button>
-
-    <label v-if="isConnected" class="merge-selector__toggle">
-      <input v-model="onlyOwned" type="checkbox" />
-      <span>Only owned</span>
-    </label>
-
-    <div v-if="loading && scapes.length === 0" class="merge-selector__loading">
-      Loading scapes...
-    </div>
-
-    <div v-else-if="scapes.length === 0" class="merge-selector__empty">
-      <template v-if="onlyOwned">
-        No owned Scapes found
-      </template>
-      <template v-else>
-        No Scapes available
-      </template>
-    </div>
-
-    <div v-else class="merge-selector__grid">
-      <button v-for="scape in scapes" :key="`${scape.id}`" type="button" class="merge-selector__item" :disabled="isFull"
-        @click="handleSelect(scape)">
-        <ScapeImage :id="scape.id" />
-        <span class="merge-selector__id">#{{ scape.id }}</span>
-      </button>
-    </div>
-
-    <button v-if="hasMore && scapes.length > 0" type="button" class="merge-selector__load-more" :disabled="loading"
-      @click="loadMore">
-      {{ loading ? "Loading..." : "Load more" }}
-    </button>
-  </div>
-</template>
 
 <style scoped>
 .merge-selector {

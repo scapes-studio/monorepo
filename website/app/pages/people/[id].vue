@@ -1,3 +1,28 @@
+<template>
+  <section class="account-page">
+    <div v-if="profilePending" class="account-page__status">Loading profile…</div>
+    <div v-else-if="profileError" class="account-page__status account-page__status--error">
+      Unable to load profile. Please check the address or ENS name.
+    </div>
+
+    <template v-else>
+      <div class="account-page__profile">
+        <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null"
+          :header="effectiveHeader" />
+        <ProfileBio :description="profileData?.description ?? null" />
+        <ProfileLinks :links="profileData?.links ?? null" />
+        <button class="account-page__refresh" :disabled="isRefreshing" @click="handleRefresh">
+          {{ isRefreshing ? 'Refreshing...' : 'Refresh from ENS' }}
+        </button>
+      </div>
+
+      <ProfileTabs :account-id="accountId ?? ''" />
+
+      <NuxtPage />
+    </template>
+  </section>
+</template>
+
 <script setup lang="ts">
 import { shortenAddress } from "~/composables/useENSResolution";
 
@@ -51,31 +76,6 @@ const seoOptions = computed(() => {
 });
 useSeo(seoOptions);
 </script>
-
-<template>
-  <section class="account-page">
-    <div v-if="profilePending" class="account-page__status">Loading profile…</div>
-    <div v-else-if="profileError" class="account-page__status account-page__status--error">
-      Unable to load profile. Please check the address or ENS name.
-    </div>
-
-    <template v-else>
-      <div class="account-page__profile">
-        <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null"
-          :header="effectiveHeader" />
-        <ProfileBio :description="profileData?.description ?? null" />
-        <ProfileLinks :links="profileData?.links ?? null" />
-        <button class="account-page__refresh" :disabled="isRefreshing" @click="handleRefresh">
-          {{ isRefreshing ? 'Refreshing...' : 'Refresh from ENS' }}
-        </button>
-      </div>
-
-      <ProfileTabs :account-id="accountId ?? ''" />
-
-      <NuxtPage />
-    </template>
-  </section>
-</template>
 
 <style scoped>
 .account-page {

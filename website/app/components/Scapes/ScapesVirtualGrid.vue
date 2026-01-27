@@ -1,3 +1,17 @@
+<template>
+  <div class="scapes-virtual-grid" :style="{ height: `${totalHeight + gutter}px` }">
+    <div v-for="virtualRow in virtualRows" :key="virtualRow.index" class="scapes-virtual-grid__row" :style="{
+      height: `${virtualRow.size}px`,
+      transform: `translateY(${virtualRow.start}px)`,
+    }">
+      <ScapesGridRow :items="getRowItems(virtualRow.index)" />
+    </div>
+  </div>
+  <div v-if="loading && scapes.length > 0" class="scapes-virtual-grid__loading">
+    Loading more...
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { ScapeRecord } from '~/composables/useScapesByOwner'
 import type { ListingSource } from '~/composables/useListedScapes'
@@ -56,20 +70,6 @@ watch(() => props.scapes, (newScapes, oldScapes) => {
 
 defineExpose({ scrollToTop })
 </script>
-
-<template>
-  <div class="scapes-virtual-grid" :style="{ height: `${totalHeight + gutter}px` }">
-    <div v-for="virtualRow in virtualRows" :key="virtualRow.index" class="scapes-virtual-grid__row" :style="{
-      height: `${virtualRow.size}px`,
-      transform: `translateY(${virtualRow.start}px)`,
-    }">
-      <ScapesGridRow :items="getRowItems(virtualRow.index)" />
-    </div>
-  </div>
-  <div v-if="loading && scapes.length > 0" class="scapes-virtual-grid__loading">
-    Loading more...
-  </div>
-</template>
 
 <style scoped>
 .scapes-virtual-grid {

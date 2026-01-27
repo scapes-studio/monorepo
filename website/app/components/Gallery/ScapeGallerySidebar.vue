@@ -1,3 +1,19 @@
+<template>
+  <aside class="sidebar">
+    <div class="sidebar__scroll">
+      <GalleryTraitGroup
+        v-for="group in TRAITS"
+        :key="group.name"
+        :group="group"
+        :counts="traitCounts[group.name]"
+        :loading="countsLoading"
+        :selected-traits="selectedTraits"
+        @select="handleTraitSelect"
+      />
+    </div>
+  </aside>
+</template>
+
 <script setup lang="ts">
 import { TRAITS, type TraitCounts } from "~/data/traits"
 
@@ -27,22 +43,6 @@ const handleTraitSelect = (trait: string) => {
   emit("update-traits", newTraits)
 }
 </script>
-
-<template>
-  <aside class="sidebar">
-    <div class="sidebar__scroll">
-      <GalleryTraitGroup
-        v-for="group in TRAITS"
-        :key="group.name"
-        :group="group"
-        :counts="traitCounts[group.name]"
-        :loading="countsLoading"
-        :selected-traits="selectedTraits"
-        @select="handleTraitSelect"
-      />
-    </div>
-  </aside>
-</template>
 
 <style scoped>
 .sidebar {

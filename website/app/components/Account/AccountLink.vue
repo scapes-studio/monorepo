@@ -1,3 +1,9 @@
+<template>
+  <NuxtLink :to="account.url" class="account-link" :title="account.displayName">
+    {{ displayName }}
+  </NuxtLink>
+</template>
+
 <script setup lang="ts">
 import { shortenENS } from "~/composables/useENSResolution";
 
@@ -19,12 +25,6 @@ const displayName = computed(() => {
   return shortenENS(name, maxLength);
 });
 </script>
-
-<template>
-  <NuxtLink :to="account.url" class="account-link" :title="account.displayName">
-    {{ displayName }}
-  </NuxtLink>
-</template>
 
 <style scoped>
 .account-link {

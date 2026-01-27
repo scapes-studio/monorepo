@@ -1,3 +1,31 @@
+<template>
+  <div v-if="selectedTraits.length > 0" class="filter-tags">
+    <button
+      v-for="trait in parsedTraits"
+      :key="trait.key"
+      type="button"
+      class="filter-tags__tag"
+      @click="removeTrait(trait.key)"
+    >
+      <img
+        :src="getTraitIconUrl(trait.category, trait.value)"
+        :alt="trait.value"
+        class="filter-tags__icon"
+      />
+      <span>{{ trait.value }}</span>
+      <span class="filter-tags__remove" aria-label="Remove filter">x</span>
+    </button>
+    <button
+      v-if="selectedTraits.length > 1"
+      type="button"
+      class="filter-tags__clear"
+      @click="clearAll"
+    >
+      Clear all
+    </button>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { getTraitIconUrl } from "~/data/traits"
 
@@ -29,34 +57,6 @@ const clearAll = () => {
   emit("update", [])
 }
 </script>
-
-<template>
-  <div v-if="selectedTraits.length > 0" class="filter-tags">
-    <button
-      v-for="trait in parsedTraits"
-      :key="trait.key"
-      type="button"
-      class="filter-tags__tag"
-      @click="removeTrait(trait.key)"
-    >
-      <img
-        :src="getTraitIconUrl(trait.category, trait.value)"
-        :alt="trait.value"
-        class="filter-tags__icon"
-      />
-      <span>{{ trait.value }}</span>
-      <span class="filter-tags__remove" aria-label="Remove filter">x</span>
-    </button>
-    <button
-      v-if="selectedTraits.length > 1"
-      type="button"
-      class="filter-tags__clear"
-      @click="clearAll"
-    >
-      Clear all
-    </button>
-  </div>
-</template>
 
 <style scoped>
 .filter-tags {

@@ -1,3 +1,46 @@
+<template>
+  <div class="gallery27-page">
+    <div v-if="scapePending" class="gallery27-page__loading">
+      Loading...
+    </div>
+
+    <div v-else-if="scapeError" class="gallery27-page__error">
+      Failed to load scape. Please check the day number.
+    </div>
+
+    <template v-else-if="scape && tokenId">
+      <Gallery27Header :token-id="tokenId" :date="scape.date" />
+
+      <div class="gallery27-page__content">
+        <div class="gallery27-page__main">
+          <Gallery27Painting v-if="displayedImage" :image="displayedImage" :alt="`Day ${tokenId}`" />
+          <div v-else-if="showFallbackScape" class="gallery27-page__fallback">
+            <ScapeImage :id="fallbackScapeId!" />
+          </div>
+          <div v-else class="gallery27-page__placeholder">
+            No image available
+          </div>
+        </div>
+
+        <aside class="gallery27-page__sidebar">
+          <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" />
+
+          <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId"
+            :auction="auction ?? null" :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner"
+            :is-active="isActive" :is-minted="scape.isMinted" :selected-image="selectedImage"
+            @action-complete="handleActionComplete" />
+
+          <Gallery27Description :token-id="tokenId" :scape-id="scape.scapeId" :description="scape.description"
+            :is-on-chain="scape.isMinted" />
+
+          <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids"
+            :initial-render="bidsData.initialRender" :accepted-image="bidsData.acceptedImage" />
+        </aside>
+      </div>
+    </template>
+  </div>
+</template>
+
 <script setup lang="ts">
 const route = useRoute();
 
@@ -125,49 +168,6 @@ const seoOptions = computed(() => ({
 }));
 useSeo(seoOptions);
 </script>
-
-<template>
-  <div class="gallery27-page">
-    <div v-if="scapePending" class="gallery27-page__loading">
-      Loading...
-    </div>
-
-    <div v-else-if="scapeError" class="gallery27-page__error">
-      Failed to load scape. Please check the day number.
-    </div>
-
-    <template v-else-if="scape && tokenId">
-      <Gallery27Header :token-id="tokenId" :date="scape.date" />
-
-      <div class="gallery27-page__content">
-        <div class="gallery27-page__main">
-          <Gallery27Painting v-if="displayedImage" :image="displayedImage" :alt="`Day ${tokenId}`" />
-          <div v-else-if="showFallbackScape" class="gallery27-page__fallback">
-            <ScapeImage :id="fallbackScapeId!" />
-          </div>
-          <div v-else class="gallery27-page__placeholder">
-            No image available
-          </div>
-        </div>
-
-        <aside class="gallery27-page__sidebar">
-          <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" />
-
-          <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId"
-            :auction="auction ?? null" :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner"
-            :is-active="isActive" :is-minted="scape.isMinted" :selected-image="selectedImage"
-            @action-complete="handleActionComplete" />
-
-          <Gallery27Description :token-id="tokenId" :scape-id="scape.scapeId" :description="scape.description"
-            :is-on-chain="scape.isMinted" />
-
-          <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids"
-            :initial-render="bidsData.initialRender" :accepted-image="bidsData.acceptedImage" />
-        </aside>
-      </div>
-    </template>
-  </div>
-</template>
 
 <style scoped>
 .gallery27-page {

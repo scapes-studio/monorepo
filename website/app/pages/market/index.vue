@@ -1,47 +1,3 @@
-<script setup lang="ts">
-import type { SortOption } from "~/composables/useListedScapes";
-
-const ogTitle = "Market";
-const ogSubtitle = "Browse Scapes currently listed for sale on the marketplace.";
-const ogImage = "https://scapes.xyz/og-default.png";
-
-useSeo({
-  title: ogTitle,
-  description: ogSubtitle,
-  image: null,
-  imageAlt: null,
-});
-
-defineOgImageComponent(
-  "MarketIndex",
-  {
-    title: ogTitle,
-    subtitle: ogSubtitle,
-    image: ogImage,
-  },
-
-);
-
-const sortOptions = [
-  { value: "price-asc", label: "Price: Low to High" },
-  { value: "price-desc", label: "Price: High to Low" },
-  { value: "recent", label: "Recently Listed" },
-] as const;
-
-const selectedSort = ref<SortOption>("price-asc");
-const includeSeaport = ref(true);
-
-const { scapes, total, loading, error, hasMore, loadMore } = useListedScapes(
-  selectedSort,
-  includeSeaport,
-);
-
-const loadMoreRef = ref<HTMLElement | null>(null);
-useIntersectionObserver(loadMoreRef, ([entry]) => {
-  if (entry?.isIntersecting) loadMore();
-});
-</script>
-
 <template>
   <section class="market-page">
     <header class="market-page__header">
@@ -102,6 +58,50 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
     </template>
   </section>
 </template>
+
+<script setup lang="ts">
+import type { SortOption } from "~/composables/useListedScapes";
+
+const ogTitle = "Market";
+const ogSubtitle = "Browse Scapes currently listed for sale on the marketplace.";
+const ogImage = "https://scapes.xyz/og-default.png";
+
+useSeo({
+  title: ogTitle,
+  description: ogSubtitle,
+  image: null,
+  imageAlt: null,
+});
+
+defineOgImageComponent(
+  "MarketIndex",
+  {
+    title: ogTitle,
+    subtitle: ogSubtitle,
+    image: ogImage,
+  },
+
+);
+
+const sortOptions = [
+  { value: "price-asc", label: "Price: Low to High" },
+  { value: "price-desc", label: "Price: High to Low" },
+  { value: "recent", label: "Recently Listed" },
+] as const;
+
+const selectedSort = ref<SortOption>("price-asc");
+const includeSeaport = ref(true);
+
+const { scapes, total, loading, error, hasMore, loadMore } = useListedScapes(
+  selectedSort,
+  includeSeaport,
+);
+
+const loadMoreRef = ref<HTMLElement | null>(null);
+useIntersectionObserver(loadMoreRef, ([entry]) => {
+  if (entry?.isIntersecting) loadMore();
+});
+</script>
 
 <style scoped>
 .market-page {

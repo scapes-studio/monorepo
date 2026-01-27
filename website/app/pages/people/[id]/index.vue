@@ -1,3 +1,39 @@
+<template>
+  <section class="scapes-tab" :class="{ 'has-merges': showMerges }">
+    <div v-if="scapesError" class="scapes-tab__status scapes-tab__status--error">
+      Failed to load scapes.
+    </div>
+    <div v-else-if="scapesLoading && scapes.length === 0" class="scapes-tab__status">
+      Loading scapes…
+    </div>
+    <div v-else-if="scapes.length === 0" class="scapes-tab__status">
+      No scapes found for this account.
+    </div>
+
+    <template v-else>
+      <!-- Merges Section -->
+      <template v-if="showMerges">
+        <header class="scapes-tab__header">
+          <h2>Merges</h2>
+          <span>{{ merges.length }} owned</span>
+        </header>
+        <ScapesGrid :scapes="merges" :columns="contentColumns" />
+      </template>
+
+      <!-- Scapes Section -->
+      <header v-if="showMerges" class="scapes-tab__header">
+        <h2>Scapes</h2>
+        <span>{{ regularScapes.length }} owned</span>
+      </header>
+      <ScapesGrid :scapes="regularScapes" />
+    </template>
+
+    <button v-if="hasMore" class="scapes-tab__load-more" type="button" :disabled="scapesLoading" @click="loadMore">
+      {{ scapesLoading ? "Loading…" : "Load more" }}
+    </button>
+  </section>
+</template>
+
 <script setup lang="ts">
 import type { ProfileResponse } from "~/composables/useProfile";
 
@@ -59,42 +95,6 @@ defineOgImageComponent(
 
 );
 </script>
-
-<template>
-  <section class="scapes-tab" :class="{ 'has-merges': showMerges }">
-    <div v-if="scapesError" class="scapes-tab__status scapes-tab__status--error">
-      Failed to load scapes.
-    </div>
-    <div v-else-if="scapesLoading && scapes.length === 0" class="scapes-tab__status">
-      Loading scapes…
-    </div>
-    <div v-else-if="scapes.length === 0" class="scapes-tab__status">
-      No scapes found for this account.
-    </div>
-
-    <template v-else>
-      <!-- Merges Section -->
-      <template v-if="showMerges">
-        <header class="scapes-tab__header">
-          <h2>Merges</h2>
-          <span>{{ merges.length }} owned</span>
-        </header>
-        <ScapesGrid :scapes="merges" :columns="contentColumns" />
-      </template>
-
-      <!-- Scapes Section -->
-      <header v-if="showMerges" class="scapes-tab__header">
-        <h2>Scapes</h2>
-        <span>{{ regularScapes.length }} owned</span>
-      </header>
-      <ScapesGrid :scapes="regularScapes" />
-    </template>
-
-    <button v-if="hasMore" class="scapes-tab__load-more" type="button" :disabled="scapesLoading" @click="loadMore">
-      {{ scapesLoading ? "Loading…" : "Load more" }}
-    </button>
-  </section>
-</template>
 
 <style scoped>
 .scapes-tab {

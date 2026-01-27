@@ -1,20 +1,3 @@
-<script setup lang="ts">
-import { shortenAddress } from "~/composables/useENSResolution";
-
-const props = defineProps<{
-  address: string;
-  ens: string | null;
-  avatar: string | null;
-  header: string | null;
-}>();
-
-const { resolveIpfsUrl } = useIpfs();
-
-const displayName = computed(() => props.ens || props.address);
-const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
-const etherscanUrl = computed(() => `https://etherscan.io/address/${props.address}`);
-</script>
-
 <template>
   <section class="profile-header">
     <div v-if="resolvedHeader" class="profile-header__banner">
@@ -33,6 +16,23 @@ const etherscanUrl = computed(() => `https://etherscan.io/address/${props.addres
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+import { shortenAddress } from "~/composables/useENSResolution";
+
+const props = defineProps<{
+  address: string;
+  ens: string | null;
+  avatar: string | null;
+  header: string | null;
+}>();
+
+const { resolveIpfsUrl } = useIpfs();
+
+const displayName = computed(() => props.ens || props.address);
+const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
+const etherscanUrl = computed(() => `https://etherscan.io/address/${props.address}`);
+</script>
 
 <style scoped>
 .profile-header {

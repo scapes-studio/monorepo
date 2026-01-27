@@ -1,3 +1,61 @@
+<template>
+  <section class="gallery">
+    <header class="gallery__header">
+      <div>
+        <h1>Scapes</h1>
+        <p class="gallery__subtitle">10,000 pixel-art landscapes</p>
+      </div>
+      <div class="gallery__controls">
+        <span v-if="total !== null" class="gallery__count">
+          {{ total.toLocaleString() }} scapes
+        </span>
+        <label class="gallery__toggle">
+          <input v-model="showPrices" type="checkbox" />
+          Show prices
+        </label>
+        <select v-model="selectedSort" class="gallery__sort" aria-label="Sort scapes">
+          <option v-for="option in sortOptions" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+    </header>
+
+    <GalleryFilterTags v-if="selectedTraits.length > 0" :selected-traits="selectedTraits"
+      @update="updateSelectedTraits" />
+
+    <div class="gallery__layout">
+      <GalleryScapeGallerySidebar :selected-traits="selectedTraits" :trait-counts="traitCounts"
+        :counts-loading="countsLoading" @update-traits="updateSelectedTraits" />
+
+      <main class="gallery__main">
+        <div v-if="loading && scapes.length === 0" class="gallery__status">
+          Loading scapes...
+        </div>
+        <div v-else-if="error" class="gallery__status gallery__status--error">
+          Unable to load scapes right now.
+        </div>
+        <div v-else-if="scapes.length === 0" class="gallery__status">
+          No matching scapes found.
+        </div>
+
+        <template v-else>
+          <ScapesVirtualGrid
+            :scapes="scapes"
+            :has-more="hasMore"
+            :loading="loading"
+            @load-more="loadMore"
+          />
+
+          <button v-if="hasMore" type="button" class="gallery__load-more" :disabled="loading" @click="loadMore">
+            {{ loading ? "Loading..." : "Load more" }}
+          </button>
+        </template>
+      </main>
+    </div>
+  </section>
+</template>
+
 <script setup lang="ts">
 import type { GallerySortOption } from "~/composables/useScapesGallery"
 
@@ -56,64 +114,6 @@ useSeo({
   description: 'Explore all 10,000 Scapes - pixel-art landscapes from September 2021.',
 })
 </script>
-
-<template>
-  <section class="gallery">
-    <header class="gallery__header">
-      <div>
-        <h1>Scapes</h1>
-        <p class="gallery__subtitle">10,000 pixel-art landscapes</p>
-      </div>
-      <div class="gallery__controls">
-        <span v-if="total !== null" class="gallery__count">
-          {{ total.toLocaleString() }} scapes
-        </span>
-        <label class="gallery__toggle">
-          <input v-model="showPrices" type="checkbox" />
-          Show prices
-        </label>
-        <select v-model="selectedSort" class="gallery__sort" aria-label="Sort scapes">
-          <option v-for="option in sortOptions" :key="option.value" :value="option.value">
-            {{ option.label }}
-          </option>
-        </select>
-      </div>
-    </header>
-
-    <GalleryFilterTags v-if="selectedTraits.length > 0" :selected-traits="selectedTraits"
-      @update="updateSelectedTraits" />
-
-    <div class="gallery__layout">
-      <GalleryScapeGallerySidebar :selected-traits="selectedTraits" :trait-counts="traitCounts"
-        :counts-loading="countsLoading" @update-traits="updateSelectedTraits" />
-
-      <main class="gallery__main">
-        <div v-if="loading && scapes.length === 0" class="gallery__status">
-          Loading scapes...
-        </div>
-        <div v-else-if="error" class="gallery__status gallery__status--error">
-          Unable to load scapes right now.
-        </div>
-        <div v-else-if="scapes.length === 0" class="gallery__status">
-          No matching scapes found.
-        </div>
-
-        <template v-else>
-          <ScapesVirtualGrid
-            :scapes="scapes"
-            :has-more="hasMore"
-            :loading="loading"
-            @load-more="loadMore"
-          />
-
-          <button v-if="hasMore" type="button" class="gallery__load-more" :disabled="loading" @click="loadMore">
-            {{ loading ? "Loading..." : "Load more" }}
-          </button>
-        </template>
-      </main>
-    </div>
-  </section>
-</template>
 
 <style scoped>
 .gallery {

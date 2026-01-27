@@ -1,3 +1,22 @@
+<template>
+  <div class="marketplace-data">
+    <span v-if="isPending">Checking listings…</span>
+    <span v-else-if="hasError">Listing status unavailable</span>
+    <template v-else>
+      <span
+        v-if="isListed"
+        class="marketplace-data__badge"
+        :class="{ 'marketplace-data__badge--seaport': source === 'seaport' }"
+      >
+        {{ sourceLabel }}: {{ formattedPrice }} ETH
+      </span>
+      <span v-else class="marketplace-data__badge marketplace-data__badge--muted">
+        Not listed
+      </span>
+    </template>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { ListingData } from "~/composables/useScapeListing";
 
@@ -27,25 +46,6 @@ const sourceLabel = computed(() => {
   return null;
 });
 </script>
-
-<template>
-  <div class="marketplace-data">
-    <span v-if="isPending">Checking listings…</span>
-    <span v-else-if="hasError">Listing status unavailable</span>
-    <template v-else>
-      <span
-        v-if="isListed"
-        class="marketplace-data__badge"
-        :class="{ 'marketplace-data__badge--seaport': source === 'seaport' }"
-      >
-        {{ sourceLabel }}: {{ formattedPrice }} ETH
-      </span>
-      <span v-else class="marketplace-data__badge marketplace-data__badge--muted">
-        Not listed
-      </span>
-    </template>
-  </div>
-</template>
 
 <style scoped>
 .marketplace-data {

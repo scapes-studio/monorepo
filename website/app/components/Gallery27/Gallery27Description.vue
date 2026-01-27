@@ -1,12 +1,3 @@
-<script setup lang="ts">
-const props = defineProps<{
-  tokenId: number;
-  scapeId: number | null;
-  description: string | null;
-  isOnChain: boolean;
-}>();
-</script>
-
 <template>
   <div class="gallery27-description">
     <p v-if="description" class="gallery27-description__text">
@@ -28,6 +19,15 @@ const props = defineProps<{
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+const props = defineProps<{
+  tokenId: number;
+  scapeId: number | null;
+  description: string | null;
+  isOnChain: boolean;
+}>();
+</script>
 
 <style scoped>
 .gallery27-description {

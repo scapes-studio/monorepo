@@ -1,12 +1,3 @@
-<script setup lang="ts">
-const { scapes } = useRandomScapes();
-
-useSeo({
-  title: 'Home',
-  description: 'Composable places stored on Ethereum. Explore 10,000 pixel-art landscapes.',
-});
-</script>
-
 <template>
   <div class="home">
     <header class="home__header">
@@ -19,6 +10,15 @@ useSeo({
     </ClientOnly>
   </div>
 </template>
+
+<script setup lang="ts">
+const { scapes } = useRandomScapes();
+
+useSeo({
+  title: 'Home',
+  description: 'Composable places stored on Ethereum. Explore 10,000 pixel-art landscapes.',
+});
+</script>
 
 <style scoped>
 .home {

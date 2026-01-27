@@ -1,3 +1,8 @@
+<template>
+  <img ref="imgRef" class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`"
+    :style="{ aspectRatio }" @load="loaded = true" />
+</template>
+
 <script setup lang="ts">
 import type { PropType } from "vue";
 
@@ -23,11 +28,6 @@ onMounted(() => {
   }
 });
 </script>
-
-<template>
-  <img ref="imgRef" class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`"
-    :style="{ aspectRatio }" @load="loaded = true" />
-</template>
 
 <style scoped>
 .scape-image {

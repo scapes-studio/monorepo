@@ -1,3 +1,90 @@
+<template>
+  <div v-if="isConnected" class="gallery27-actions">
+    <!-- Active auction: bid form -->
+    <template v-if="isActive">
+      <div v-if="!showBidForm" class="gallery27-actions__cta">
+        <button type="button" class="gallery27-actions__btn" @click="showBidForm = true">
+          Place Bid
+        </button>
+        <p v-if="!isFirstBid" class="gallery27-actions__hint">
+          Minimum bid: {{ minimumBid }} ETH
+        </p>
+      </div>
+
+      <div v-else class="gallery27-actions__form">
+        <textarea
+          v-model="bidMessage"
+          placeholder="Your message for the AI..."
+          class="gallery27-actions__textarea"
+          rows="3"
+        />
+        <div class="gallery27-actions__input-group">
+          <input
+            v-model="bidAmount"
+            type="number"
+            step="0.001"
+            :min="minimumBid"
+            :placeholder="`Min ${minimumBid}`"
+            class="gallery27-actions__input"
+          />
+          <span class="gallery27-actions__input-suffix">ETH</span>
+        </div>
+
+        <EvmTransactionFlow
+          ref="bidFlowRef"
+          :text="bidText"
+          :request="bidRequest"
+          @complete="handleBidComplete"
+        >
+          <template #start="{ start }">
+            <div class="gallery27-actions__form-actions">
+              <button
+                type="button"
+                class="gallery27-actions__btn gallery27-actions__btn--secondary"
+                @click="showBidForm = false"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="gallery27-actions__btn"
+                :disabled="!bidAmount || Number(bidAmount) < Number(minimumBid)"
+                @click="start"
+              >
+                Place Bid
+              </button>
+            </div>
+          </template>
+        </EvmTransactionFlow>
+      </div>
+    </template>
+
+    <!-- Auction ended, winner can claim -->
+    <template v-else-if="canClaim">
+      <EvmTransactionFlow
+        ref="claimFlowRef"
+        :text="claimText"
+        :request="claimRequest"
+        @complete="emit('actionComplete')"
+      >
+        <template #start="{ start }">
+          <button
+            type="button"
+            class="gallery27-actions__btn gallery27-actions__btn--primary"
+            :disabled="!selectedImage"
+            @click="start"
+          >
+            Claim Your Scape
+          </button>
+        </template>
+      </EvmTransactionFlow>
+      <p v-if="!selectedImage" class="gallery27-actions__hint">
+        Select an image above to claim
+      </p>
+    </template>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { useAccount } from "@wagmi/vue";
 import { parseEther, formatEther } from "viem";
@@ -150,93 +237,6 @@ const withdrawText = {
   },
 };
 </script>
-
-<template>
-  <div v-if="isConnected" class="gallery27-actions">
-    <!-- Active auction: bid form -->
-    <template v-if="isActive">
-      <div v-if="!showBidForm" class="gallery27-actions__cta">
-        <button type="button" class="gallery27-actions__btn" @click="showBidForm = true">
-          Place Bid
-        </button>
-        <p v-if="!isFirstBid" class="gallery27-actions__hint">
-          Minimum bid: {{ minimumBid }} ETH
-        </p>
-      </div>
-
-      <div v-else class="gallery27-actions__form">
-        <textarea
-          v-model="bidMessage"
-          placeholder="Your message for the AI..."
-          class="gallery27-actions__textarea"
-          rows="3"
-        />
-        <div class="gallery27-actions__input-group">
-          <input
-            v-model="bidAmount"
-            type="number"
-            step="0.001"
-            :min="minimumBid"
-            :placeholder="`Min ${minimumBid}`"
-            class="gallery27-actions__input"
-          />
-          <span class="gallery27-actions__input-suffix">ETH</span>
-        </div>
-
-        <EvmTransactionFlow
-          ref="bidFlowRef"
-          :text="bidText"
-          :request="bidRequest"
-          @complete="handleBidComplete"
-        >
-          <template #start="{ start }">
-            <div class="gallery27-actions__form-actions">
-              <button
-                type="button"
-                class="gallery27-actions__btn gallery27-actions__btn--secondary"
-                @click="showBidForm = false"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                class="gallery27-actions__btn"
-                :disabled="!bidAmount || Number(bidAmount) < Number(minimumBid)"
-                @click="start"
-              >
-                Place Bid
-              </button>
-            </div>
-          </template>
-        </EvmTransactionFlow>
-      </div>
-    </template>
-
-    <!-- Auction ended, winner can claim -->
-    <template v-else-if="canClaim">
-      <EvmTransactionFlow
-        ref="claimFlowRef"
-        :text="claimText"
-        :request="claimRequest"
-        @complete="emit('actionComplete')"
-      >
-        <template #start="{ start }">
-          <button
-            type="button"
-            class="gallery27-actions__btn gallery27-actions__btn--primary"
-            :disabled="!selectedImage"
-            @click="start"
-          >
-            Claim Your Scape
-          </button>
-        </template>
-      </EvmTransactionFlow>
-      <p v-if="!selectedImage" class="gallery27-actions__hint">
-        Select an image above to claim
-      </p>
-    </template>
-  </div>
-</template>
 
 <style scoped>
 .gallery27-actions {

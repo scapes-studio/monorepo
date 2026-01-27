@@ -1,3 +1,37 @@
+<template>
+  <section class="gallery27-tab">
+    <!-- Claimable Section (only shown on own profile) -->
+    <template v-if="showClaimable">
+      <header class="gallery27-tab__header">
+        <h2>Claimable</h2>
+        <span>{{ claimableScapes.length }} to claim</span>
+      </header>
+      <Gallery27Grid :scapes="claimableScapes" />
+    </template>
+    <div v-else-if="isOwnProfile && claimablePending" class="gallery27-tab__status">
+      Checking for claimable scapes…
+    </div>
+
+    <!-- Owned Section -->
+    <header class="gallery27-tab__header">
+      <h2>Owned</h2>
+      <span>{{ scapes.length }} owned</span>
+    </header>
+
+    <div v-if="error" class="gallery27-tab__status gallery27-tab__status--error">
+      Failed to load scapes.
+    </div>
+    <div v-else-if="pending" class="gallery27-tab__status">
+      Loading scapes…
+    </div>
+    <div v-else-if="scapes.length === 0" class="gallery27-tab__status">
+      No Twenty Seven Year Scapes found for this account.
+    </div>
+
+    <Gallery27Grid v-else :scapes="scapes" />
+  </section>
+</template>
+
 <script setup lang="ts">
 import { useAccount } from "@wagmi/vue";
 import type { ProfileResponse } from "~/composables/useProfile";
@@ -60,40 +94,6 @@ defineOgImageComponent(
   { cacheMaxAgeSeconds: 0 },
 );
 </script>
-
-<template>
-  <section class="gallery27-tab">
-    <!-- Claimable Section (only shown on own profile) -->
-    <template v-if="showClaimable">
-      <header class="gallery27-tab__header">
-        <h2>Claimable</h2>
-        <span>{{ claimableScapes.length }} to claim</span>
-      </header>
-      <Gallery27Grid :scapes="claimableScapes" />
-    </template>
-    <div v-else-if="isOwnProfile && claimablePending" class="gallery27-tab__status">
-      Checking for claimable scapes…
-    </div>
-
-    <!-- Owned Section -->
-    <header class="gallery27-tab__header">
-      <h2>Owned</h2>
-      <span>{{ scapes.length }} owned</span>
-    </header>
-
-    <div v-if="error" class="gallery27-tab__status gallery27-tab__status--error">
-      Failed to load scapes.
-    </div>
-    <div v-else-if="pending" class="gallery27-tab__status">
-      Loading scapes…
-    </div>
-    <div v-else-if="scapes.length === 0" class="gallery27-tab__status">
-      No Twenty Seven Year Scapes found for this account.
-    </div>
-
-    <Gallery27Grid v-else :scapes="scapes" />
-  </section>
-</template>
 
 <style scoped>
 .gallery27-tab {

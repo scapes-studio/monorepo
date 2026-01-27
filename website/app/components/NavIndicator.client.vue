@@ -1,3 +1,10 @@
+<template>
+  <ul ref="navRef" class="nav-indicator">
+    <slot />
+    <span class="nav-indicator__bar" :style="indicatorStyle" />
+  </ul>
+</template>
+
 <script setup lang="ts">
 const route = useRoute()
 
@@ -34,13 +41,6 @@ onMounted(() => {
 
 defineExpose({ navRef })
 </script>
-
-<template>
-  <ul ref="navRef" class="nav-indicator">
-    <slot />
-    <span class="nav-indicator__bar" :style="indicatorStyle" />
-  </ul>
-</template>
 
 <style scoped>
 .nav-indicator {

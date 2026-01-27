@@ -1,3 +1,13 @@
+<template>
+  <NuxtLink class="scape-link" :to="`/scapes/${scape.id}`" :style="spanStyle">
+    <ScapeImage :id="scape.id" :scape-count="scapeCount ?? 1" />
+    <div v-if="formattedPrice" class="scape-link__price">
+      {{ formattedPrice }} ETH
+      <span v-if="isSeaport" class="scape-link__badge">OpenSea</span>
+    </div>
+  </NuxtLink>
+</template>
+
 <script setup lang="ts">
 import type { ScapeRecord } from "~/composables/useScapesByOwner";
 
@@ -19,16 +29,6 @@ const spanStyle = computed(() => {
   return cols > 1 ? { gridColumn: `span ${cols}` } : undefined;
 });
 </script>
-
-<template>
-  <NuxtLink class="scape-link" :to="`/scapes/${scape.id}`" :style="spanStyle">
-    <ScapeImage :id="scape.id" :scape-count="scapeCount ?? 1" />
-    <div v-if="formattedPrice" class="scape-link__price">
-      {{ formattedPrice }} ETH
-      <span v-if="isSeaport" class="scape-link__badge">OpenSea</span>
-    </div>
-  </NuxtLink>
-</template>
 
 <style scoped>
 .scape-link {

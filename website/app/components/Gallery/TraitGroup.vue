@@ -1,23 +1,3 @@
-<script setup lang="ts">
-import type { TraitGroup } from "~/data/traits"
-
-const props = defineProps<{
-  group: TraitGroup
-  counts: { count: number; values: Record<string, number> } | undefined
-  loading: boolean
-  selectedTraits: string[]
-}>()
-
-const emit = defineEmits<{
-  select: [trait: string]
-}>()
-
-const isSelected = (value: string) =>
-  props.selectedTraits.includes(`${props.group.name}=${value}`)
-
-const getCount = (value: string) => props.counts?.values[value] ?? 0
-</script>
-
 <template>
   <div class="trait-group">
     <h2 class="trait-group__header">
@@ -38,6 +18,26 @@ const getCount = (value: string) => props.counts?.values[value] ?? 0
     </ul>
   </div>
 </template>
+
+<script setup lang="ts">
+import type { TraitGroup } from "~/data/traits"
+
+const props = defineProps<{
+  group: TraitGroup
+  counts: { count: number; values: Record<string, number> } | undefined
+  loading: boolean
+  selectedTraits: string[]
+}>()
+
+const emit = defineEmits<{
+  select: [trait: string]
+}>()
+
+const isSelected = (value: string) =>
+  props.selectedTraits.includes(`${props.group.name}=${value}`)
+
+const getCount = (value: string) => props.counts?.values[value] ?? 0
+</script>
 
 <style scoped>
 .trait-group {

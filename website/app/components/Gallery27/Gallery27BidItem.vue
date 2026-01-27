@@ -1,3 +1,25 @@
+<template>
+  <div class="gallery27-bid-item" :class="{ 'gallery27-bid-item--selected': selected }" @click="$emit('select')">
+    <div v-if="thumbnailUrl" class="gallery27-bid-item__thumbnail">
+      <img :src="thumbnailUrl" :alt="`Bid by ${bid.bidderEns || bid.bidder}`" />
+    </div>
+
+    <div class="gallery27-bid-item__content">
+      <div class="gallery27-bid-item__header">
+        <AccountLink :address="bid.bidder" :ens="bid.bidderEns" />
+        <span class="gallery27-bid-item__amount">{{ formattedAmount }} ETH</span>
+      </div>
+
+      <p v-if="bid.message" class="gallery27-bid-item__message">{{ bid.message }}</p>
+
+      <div class="gallery27-bid-item__footer">
+        <time :datetime="new Date(bid.timestamp * 1000).toISOString()">{{ formattedTime }}</time>
+        <a :href="etherscanUrl" target="_blank" rel="noopener">View tx</a>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { Gallery27Bid } from "~/types/gallery27";
 
@@ -31,28 +53,6 @@ const thumbnailUrl = computed(() => {
   return `${CDN_BASE}/${props.bid.image.path}`;
 });
 </script>
-
-<template>
-  <div class="gallery27-bid-item" :class="{ 'gallery27-bid-item--selected': selected }" @click="$emit('select')">
-    <div v-if="thumbnailUrl" class="gallery27-bid-item__thumbnail">
-      <img :src="thumbnailUrl" :alt="`Bid by ${bid.bidderEns || bid.bidder}`" />
-    </div>
-
-    <div class="gallery27-bid-item__content">
-      <div class="gallery27-bid-item__header">
-        <AccountLink :address="bid.bidder" :ens="bid.bidderEns" />
-        <span class="gallery27-bid-item__amount">{{ formattedAmount }} ETH</span>
-      </div>
-
-      <p v-if="bid.message" class="gallery27-bid-item__message">{{ bid.message }}</p>
-
-      <div class="gallery27-bid-item__footer">
-        <time :datetime="new Date(bid.timestamp * 1000).toISOString()">{{ formattedTime }}</time>
-        <a :href="etherscanUrl" target="_blank" rel="noopener">View tx</a>
-      </div>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .gallery27-bid-item {

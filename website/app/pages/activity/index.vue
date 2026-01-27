@@ -1,3 +1,48 @@
+<template>
+  <section class="activity-page">
+    <header class="activity-page__header">
+      <div>
+        <h1>Activity</h1>
+        <p class="activity-page__subtitle">Recent activity across all collections.</p>
+      </div>
+      <div class="activity-page__controls">
+        <span v-if="total !== null" class="activity-page__count">
+          {{ total }} events
+        </span>
+        <ActivityFilters v-model="filters" />
+      </div>
+    </header>
+
+    <div v-if="loading && activity.length === 0" class="activity-page__status">
+      Loading activity...
+    </div>
+    <div v-else-if="error" class="activity-page__status activity-page__status--error">
+      Unable to load activity right now.
+    </div>
+    <div v-else-if="activity.length === 0" class="activity-page__status">
+      No activity found.
+    </div>
+
+    <template v-else>
+      <ul class="activity-page__list">
+        <ActivityItem v-for="item in activity" :key="item.id" :item="item" />
+      </ul>
+
+      <button
+        v-if="hasMore"
+        ref="loadMoreRef"
+        class="activity-page__load-more"
+        type="button"
+        :disabled="loading"
+        @click="loadMore"
+      >
+        {{ loading ? "Loading..." : "Load more" }}
+      </button>
+      <div v-else class="activity-page__status">All activity loaded.</div>
+    </template>
+  </section>
+</template>
+
 <script setup lang="ts">
 import type { ActivityFilters } from "~/types/activity";
 
@@ -49,51 +94,6 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   if (entry?.isIntersecting) loadMore();
 });
 </script>
-
-<template>
-  <section class="activity-page">
-    <header class="activity-page__header">
-      <div>
-        <h1>Activity</h1>
-        <p class="activity-page__subtitle">Recent activity across all collections.</p>
-      </div>
-      <div class="activity-page__controls">
-        <span v-if="total !== null" class="activity-page__count">
-          {{ total }} events
-        </span>
-        <ActivityFilters v-model="filters" />
-      </div>
-    </header>
-
-    <div v-if="loading && activity.length === 0" class="activity-page__status">
-      Loading activity...
-    </div>
-    <div v-else-if="error" class="activity-page__status activity-page__status--error">
-      Unable to load activity right now.
-    </div>
-    <div v-else-if="activity.length === 0" class="activity-page__status">
-      No activity found.
-    </div>
-
-    <template v-else>
-      <ul class="activity-page__list">
-        <ActivityItem v-for="item in activity" :key="item.id" :item="item" />
-      </ul>
-
-      <button
-        v-if="hasMore"
-        ref="loadMoreRef"
-        class="activity-page__load-more"
-        type="button"
-        :disabled="loading"
-        @click="loadMore"
-      >
-        {{ loading ? "Loading..." : "Load more" }}
-      </button>
-      <div v-else class="activity-page__status">All activity loaded.</div>
-    </template>
-  </section>
-</template>
 
 <style scoped>
 .activity-page {

@@ -1,3 +1,18 @@
+<template>
+  <section v-if="linkCount" class="profile-links">
+    <ul class="profile-links__list">
+      <li v-for="(value, key) in links" :key="key">
+        <template v-if="value">
+          <NuxtLink :to="buildUrl(key, value)" rel="noopener noreferrer" target="_blank">
+            {{ labelMap[key] }}
+          </NuxtLink>
+        </template>
+        <span v-else class="profile-links__empty">{{ labelMap[key] }}: none</span>
+      </li>
+    </ul>
+  </section>
+</template>
+
 <script setup lang="ts">
 import type { ProfileLinks as Links } from "~/composables/useProfile";
 
@@ -28,21 +43,6 @@ function buildUrl(key: keyof Links, value: string): string {
   return prefix + cleanValue;
 }
 </script>
-
-<template>
-  <section v-if="linkCount" class="profile-links">
-    <ul class="profile-links__list">
-      <li v-for="(value, key) in links" :key="key">
-        <template v-if="value">
-          <NuxtLink :to="buildUrl(key, value)" rel="noopener noreferrer" target="_blank">
-            {{ labelMap[key] }}
-          </NuxtLink>
-        </template>
-        <span v-else class="profile-links__empty">{{ labelMap[key] }}: none</span>
-      </li>
-    </ul>
-  </section>
-</template>
 
 <style scoped>
 .profile-links__list {

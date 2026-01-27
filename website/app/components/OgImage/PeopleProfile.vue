@@ -1,11 +1,3 @@
-<script setup lang="ts">
-defineProps<{
-  title: string;
-  subtitle: string;
-  image?: string | null;
-}>();
-</script>
-
 <template>
   <div style="
       width: 1200px;
@@ -40,3 +32,11 @@ defineProps<{
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+defineProps<{
+  title: string;
+  subtitle: string;
+  image?: string | null;
+}>();
+</script>

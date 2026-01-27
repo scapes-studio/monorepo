@@ -1,3 +1,7 @@
+<template>
+  <span class="gallery27-countdown">{{ timeLeft }}</span>
+</template>
+
 <script setup lang="ts">
 const props = defineProps<{
   endTimestamp: number | null;
@@ -30,10 +34,6 @@ watch(diff, (value) => {
   }
 });
 </script>
-
-<template>
-  <span class="gallery27-countdown">{{ timeLeft }}</span>
-</template>
 
 <style scoped>
 .gallery27-countdown {

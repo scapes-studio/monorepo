@@ -1,3 +1,150 @@
+<template>
+  <div v-if="isConnected" class="scapes-actions">
+    <!-- Owner actions -->
+    <template v-if="isOwner">
+      <!-- Owner with no listing: show list button -->
+      <template v-if="!listing">
+        <button
+          v-if="!showListForm"
+          type="button"
+          class="scapes-actions__btn"
+          @click="showListForm = true"
+        >
+          List for Sale
+        </button>
+
+        <div v-else class="scapes-actions__list-form">
+          <div class="scapes-actions__input-group">
+            <input
+              v-model="listPriceInput"
+              type="number"
+              step="0.001"
+              min="0"
+              placeholder="Price in ETH"
+              class="scapes-actions__input"
+            />
+            <span class="scapes-actions__input-suffix">ETH</span>
+          </div>
+
+          <EvmTransactionFlow
+            ref="transactionFlowRef"
+            :text="listText"
+            :request="listRequest"
+            @complete="handleListComplete"
+          >
+            <template #start="{ start }">
+              <div class="scapes-actions__form-actions">
+                <button
+                  type="button"
+                  class="scapes-actions__btn scapes-actions__btn--secondary"
+                  @click="showListForm = false"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="scapes-actions__btn"
+                  :disabled="!listPriceInput || Number(listPriceInput) <= 0"
+                  @click="start"
+                >
+                  List for Sale
+                </button>
+              </div>
+            </template>
+          </EvmTransactionFlow>
+        </div>
+      </template>
+
+      <!-- Owner with onchain listing: show cancel button -->
+      <template v-else-if="hasOnchainListing">
+        <EvmTransactionFlow
+          ref="cancelFlowRef"
+          :text="cancelText"
+          :request="cancelRequest"
+          @complete="handleCancelComplete"
+        >
+          <template #start="{ start }">
+            <button
+              type="button"
+              class="scapes-actions__btn scapes-actions__btn--secondary"
+              @click="start"
+            >
+              Cancel Listing
+            </button>
+          </template>
+        </EvmTransactionFlow>
+      </template>
+
+      <!-- Owner with seaport listing: link to OpenSea -->
+      <template v-else-if="hasSeaportListing">
+        <a
+          :href="openseaUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="scapes-actions__link"
+        >
+          Manage on OpenSea
+        </a>
+      </template>
+
+      <!-- Owner with merge: show unmerge button -->
+      <template v-if="isMerge">
+        <EvmTransactionFlow
+          ref="purgeFlowRef"
+          :text="purgeText"
+          :request="purgeRequest"
+          @complete="handlePurgeComplete"
+        >
+          <template #start="{ start }">
+            <button
+              type="button"
+              class="scapes-actions__btn scapes-actions__btn--secondary"
+              @click="start"
+            >
+              Unmerge
+            </button>
+          </template>
+        </EvmTransactionFlow>
+      </template>
+    </template>
+
+    <!-- Non-owner actions -->
+    <template v-else>
+      <!-- Non-owner with onchain listing: show buy button -->
+      <template v-if="hasOnchainListing && listPrice">
+        <EvmTransactionFlow
+          ref="buyFlowRef"
+          :text="buyText"
+          :request="buyRequest"
+          @complete="handleBuyComplete"
+        >
+          <template #start="{ start }">
+            <button
+              type="button"
+              class="scapes-actions__btn scapes-actions__btn--primary"
+              @click="start"
+            >
+              Buy for {{ listPrice }} ETH
+            </button>
+          </template>
+        </EvmTransactionFlow>
+      </template>
+
+      <!-- Non-owner with seaport listing: link to OpenSea -->
+      <template v-else-if="hasSeaportListing && listPrice">
+        <a
+          :href="openseaUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="scapes-actions__btn scapes-actions__link"
+        >
+          Buy on OpenSea for {{ listPrice }} ETH
+        </a>
+      </template>
+    </template>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { useAccount } from "@wagmi/vue";
 import { parseEther } from "viem";
@@ -162,153 +309,6 @@ const purgeText = {
   },
 };
 </script>
-
-<template>
-  <div v-if="isConnected" class="scapes-actions">
-    <!-- Owner actions -->
-    <template v-if="isOwner">
-      <!-- Owner with no listing: show list button -->
-      <template v-if="!listing">
-        <button
-          v-if="!showListForm"
-          type="button"
-          class="scapes-actions__btn"
-          @click="showListForm = true"
-        >
-          List for Sale
-        </button>
-
-        <div v-else class="scapes-actions__list-form">
-          <div class="scapes-actions__input-group">
-            <input
-              v-model="listPriceInput"
-              type="number"
-              step="0.001"
-              min="0"
-              placeholder="Price in ETH"
-              class="scapes-actions__input"
-            />
-            <span class="scapes-actions__input-suffix">ETH</span>
-          </div>
-
-          <EvmTransactionFlow
-            ref="transactionFlowRef"
-            :text="listText"
-            :request="listRequest"
-            @complete="handleListComplete"
-          >
-            <template #start="{ start }">
-              <div class="scapes-actions__form-actions">
-                <button
-                  type="button"
-                  class="scapes-actions__btn scapes-actions__btn--secondary"
-                  @click="showListForm = false"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  class="scapes-actions__btn"
-                  :disabled="!listPriceInput || Number(listPriceInput) <= 0"
-                  @click="start"
-                >
-                  List for Sale
-                </button>
-              </div>
-            </template>
-          </EvmTransactionFlow>
-        </div>
-      </template>
-
-      <!-- Owner with onchain listing: show cancel button -->
-      <template v-else-if="hasOnchainListing">
-        <EvmTransactionFlow
-          ref="cancelFlowRef"
-          :text="cancelText"
-          :request="cancelRequest"
-          @complete="handleCancelComplete"
-        >
-          <template #start="{ start }">
-            <button
-              type="button"
-              class="scapes-actions__btn scapes-actions__btn--secondary"
-              @click="start"
-            >
-              Cancel Listing
-            </button>
-          </template>
-        </EvmTransactionFlow>
-      </template>
-
-      <!-- Owner with seaport listing: link to OpenSea -->
-      <template v-else-if="hasSeaportListing">
-        <a
-          :href="openseaUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="scapes-actions__link"
-        >
-          Manage on OpenSea
-        </a>
-      </template>
-
-      <!-- Owner with merge: show unmerge button -->
-      <template v-if="isMerge">
-        <EvmTransactionFlow
-          ref="purgeFlowRef"
-          :text="purgeText"
-          :request="purgeRequest"
-          @complete="handlePurgeComplete"
-        >
-          <template #start="{ start }">
-            <button
-              type="button"
-              class="scapes-actions__btn scapes-actions__btn--secondary"
-              @click="start"
-            >
-              Unmerge
-            </button>
-          </template>
-        </EvmTransactionFlow>
-      </template>
-    </template>
-
-    <!-- Non-owner actions -->
-    <template v-else>
-      <!-- Non-owner with onchain listing: show buy button -->
-      <template v-if="hasOnchainListing && listPrice">
-        <EvmTransactionFlow
-          ref="buyFlowRef"
-          :text="buyText"
-          :request="buyRequest"
-          @complete="handleBuyComplete"
-        >
-          <template #start="{ start }">
-            <button
-              type="button"
-              class="scapes-actions__btn scapes-actions__btn--primary"
-              @click="start"
-            >
-              Buy for {{ listPrice }} ETH
-            </button>
-          </template>
-        </EvmTransactionFlow>
-      </template>
-
-      <!-- Non-owner with seaport listing: link to OpenSea -->
-      <template v-else-if="hasSeaportListing && listPrice">
-        <a
-          :href="openseaUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="scapes-actions__btn scapes-actions__link"
-        >
-          Buy on OpenSea for {{ listPrice }} ETH
-        </a>
-      </template>
-    </template>
-  </div>
-</template>
 
 <style scoped>
 .scapes-actions {

@@ -1,3 +1,15 @@
+<template>
+  <section v-if="hasAttributes" class="attributes">
+    <h2 class="attributes__title">Attributes</h2>
+    <ul class="attributes__list">
+      <li v-for="attr in attributeList" :key="attr.trait_type" class="attributes__item">
+        <span class="attributes__trait">{{ attr.trait_type }}</span>
+        <span class="attributes__value">{{ attr.value }}</span>
+      </li>
+    </ul>
+  </section>
+</template>
+
 <script setup lang="ts">
 const props = defineProps<{
   attributes: unknown;
@@ -17,18 +29,6 @@ const attributeList = computed(() => {
 
 const hasAttributes = computed(() => attributeList.value.length > 0);
 </script>
-
-<template>
-  <section v-if="hasAttributes" class="attributes">
-    <h2 class="attributes__title">Attributes</h2>
-    <ul class="attributes__list">
-      <li v-for="attr in attributeList" :key="attr.trait_type" class="attributes__item">
-        <span class="attributes__trait">{{ attr.trait_type }}</span>
-        <span class="attributes__value">{{ attr.value }}</span>
-      </li>
-    </ul>
-  </section>
-</template>
 
 <style scoped>
 .attributes {

@@ -1,3 +1,7 @@
+<template>
+  <img class="account-avatar" :src="avatarSrc" alt="Avatar" />
+</template>
+
 <script setup lang="ts">
 const props = defineProps<{
   address?: `0x${string}`
@@ -24,10 +28,6 @@ const { data: profile } = useAsyncData(
 
 const avatarSrc = computed(() => profile.value?.data?.avatar || "/oneday-profile.png")
 </script>
-
-<template>
-  <img class="account-avatar" :src="avatarSrc" alt="Avatar" />
-</template>
 
 <style scoped>
 .account-avatar {

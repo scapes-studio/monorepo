@@ -1,3 +1,16 @@
+<template>
+  <NuxtLink class="gallery27-grid-item" :to="`/gallery27/${scape.tokenId}`">
+    <div class="gallery27-grid-item__image">
+      <img v-if="imageUrl" :src="imageUrl" :alt="`Day ${scape.tokenId}`" />
+      <div v-else class="gallery27-grid-item__placeholder">No image</div>
+    </div>
+    <div class="gallery27-grid-item__info">
+      <span class="gallery27-grid-item__day">Day {{ scape.tokenId }}</span>
+      <span v-if="formattedDate" class="gallery27-grid-item__date">{{ formattedDate }}</span>
+    </div>
+  </NuxtLink>
+</template>
+
 <script setup lang="ts">
 import type { Gallery27OwnedScape, Gallery27ListItem, Gallery27ClaimableScape } from "~/types/gallery27";
 
@@ -35,19 +48,6 @@ const imageUrl = computed(() => {
   return null;
 });
 </script>
-
-<template>
-  <NuxtLink class="gallery27-grid-item" :to="`/gallery27/${scape.tokenId}`">
-    <div class="gallery27-grid-item__image">
-      <img v-if="imageUrl" :src="imageUrl" :alt="`Day ${scape.tokenId}`" />
-      <div v-else class="gallery27-grid-item__placeholder">No image</div>
-    </div>
-    <div class="gallery27-grid-item__info">
-      <span class="gallery27-grid-item__day">Day {{ scape.tokenId }}</span>
-      <span v-if="formattedDate" class="gallery27-grid-item__date">{{ formattedDate }}</span>
-    </div>
-  </NuxtLink>
-</template>
 
 <style scoped>
 .gallery27-grid-item {

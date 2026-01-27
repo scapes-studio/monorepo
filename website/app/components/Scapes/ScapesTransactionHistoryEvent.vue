@@ -1,3 +1,55 @@
+<template>
+  <li class="scape-detail__history-item">
+    <div class="scape-detail__history-header">
+      <span class="scape-detail__history-type">{{ label }}</span>
+      <span class="scape-detail__history-time">{{ formattedTimestamp }}</span>
+    </div>
+
+    <!-- Listing event -->
+    <template v-if="isListing && entry.type === 'listing'">
+      <div class="scape-detail__history-addresses">
+        <div>
+          <span class="scape-detail__history-label">Listed by</span>
+          <AccountLink :address="entry.lister" class="scape-detail__history-link" />
+        </div>
+      </div>
+      <div class="scape-detail__history-meta">
+        <a
+          :href="txUrl(entry.txHash)"
+          class="scape-detail__history-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Tx {{ shortenHex(entry.txHash, 10, 6) }}
+        </a>
+        <span v-if="price">{{ price }}</span>
+      </div>
+    </template>
+
+    <!-- Transfer/Sale event -->
+    <template v-else-if="entry.type !== 'listing'">
+      <div v-if="!migration" class="scape-detail__history-addresses">
+        <div v-if="!mint">
+          <span class="scape-detail__history-label">From</span>
+          <AccountLink :address="entry.from" class="scape-detail__history-link" />
+        </div>
+        <div>
+          <span class="scape-detail__history-label">To</span>
+          <AccountLink :address="entry.to" class="scape-detail__history-link" />
+        </div>
+      </div>
+
+      <div class="scape-detail__history-meta">
+        <a :href="txUrl(entry.txHash)" class="scape-detail__history-link" target="_blank" rel="noopener noreferrer">
+          Tx {{ shortenHex(entry.txHash, 10, 6) }}
+        </a>
+        <span v-if="price">Price {{ price }}</span>
+        <span v-if="entry.sale?.source" class="scape-detail__history-source">via {{ entry.sale.source }}</span>
+      </div>
+    </template>
+  </li>
+</template>
+
 <script setup lang="ts">
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const MIGRATION_CUTOFF = 1671404400;
@@ -107,58 +159,6 @@ const price = computed(() => {
   return salePrice(props.entry);
 });
 </script>
-
-<template>
-  <li class="scape-detail__history-item">
-    <div class="scape-detail__history-header">
-      <span class="scape-detail__history-type">{{ label }}</span>
-      <span class="scape-detail__history-time">{{ formattedTimestamp }}</span>
-    </div>
-
-    <!-- Listing event -->
-    <template v-if="isListing && entry.type === 'listing'">
-      <div class="scape-detail__history-addresses">
-        <div>
-          <span class="scape-detail__history-label">Listed by</span>
-          <AccountLink :address="entry.lister" class="scape-detail__history-link" />
-        </div>
-      </div>
-      <div class="scape-detail__history-meta">
-        <a
-          :href="txUrl(entry.txHash)"
-          class="scape-detail__history-link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Tx {{ shortenHex(entry.txHash, 10, 6) }}
-        </a>
-        <span v-if="price">{{ price }}</span>
-      </div>
-    </template>
-
-    <!-- Transfer/Sale event -->
-    <template v-else-if="entry.type !== 'listing'">
-      <div v-if="!migration" class="scape-detail__history-addresses">
-        <div v-if="!mint">
-          <span class="scape-detail__history-label">From</span>
-          <AccountLink :address="entry.from" class="scape-detail__history-link" />
-        </div>
-        <div>
-          <span class="scape-detail__history-label">To</span>
-          <AccountLink :address="entry.to" class="scape-detail__history-link" />
-        </div>
-      </div>
-
-      <div class="scape-detail__history-meta">
-        <a :href="txUrl(entry.txHash)" class="scape-detail__history-link" target="_blank" rel="noopener noreferrer">
-          Tx {{ shortenHex(entry.txHash, 10, 6) }}
-        </a>
-        <span v-if="price">Price {{ price }}</span>
-        <span v-if="entry.sale?.source" class="scape-detail__history-source">via {{ entry.sale.source }}</span>
-      </div>
-    </template>
-  </li>
-</template>
 
 <style scoped>
 .scape-detail__history-item {

@@ -1,3 +1,11 @@
+<template>
+  <div class="scapes-grid">
+    <ScapesGridItem v-for="scape in scapes" :key="`${scape.id}`" :scape="scape" :price="scape.price ?? null"
+      :is-seaport="scape.source === 'seaport'" :columns="scapeSpan(scape).columnSpan"
+      :scape-count="scapeSpan(scape).scapeCount" />
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { ScapeRecord } from "~/composables/useScapesByOwner";
 import type { ListingSource } from "~/composables/useListedScapes";
@@ -21,14 +29,6 @@ function scapeSpan(scape: ScapeWithPrice) {
   };
 }
 </script>
-
-<template>
-  <div class="scapes-grid">
-    <ScapesGridItem v-for="scape in scapes" :key="`${scape.id}`" :scape="scape" :price="scape.price ?? null"
-      :is-seaport="scape.source === 'seaport'" :columns="scapeSpan(scape).columnSpan"
-      :scape-count="scapeSpan(scape).scapeCount" />
-  </div>
-</template>
 
 <style scoped>
 .scapes-grid {

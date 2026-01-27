@@ -1,41 +1,3 @@
-<script setup lang="ts">
-const route = useRoute()
-const {
-  isPlaying,
-  isLoading,
-  currentScape,
-  volume,
-  play,
-  pause,
-  setVolume,
-} = useScapeRadio()
-
-const isHovered = ref(false)
-
-// Check if currently on the scape's detail page
-const isOnScapePage = computed(() => {
-  if (!currentScape.value) return false
-  return route.path === `/scapes/${currentScape.value.id}`
-})
-
-const onHover = (hovered: boolean) => {
-  isHovered.value = hovered
-}
-
-const handlePlayPause = async () => {
-  if (isPlaying.value) {
-    await pause()
-  } else {
-    await play()
-  }
-}
-
-const handleVolumeChange = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  setVolume(parseFloat(input.value))
-}
-</script>
-
 <template>
   <div class="scape-radio-inline" @mouseenter="onHover(true)" @mouseleave="onHover(false)">
     <!-- Hover popover (only when playing) -->
@@ -81,6 +43,44 @@ const handleVolumeChange = (event: Event) => {
     </button>
   </div>
 </template>
+
+<script setup lang="ts">
+const route = useRoute()
+const {
+  isPlaying,
+  isLoading,
+  currentScape,
+  volume,
+  play,
+  pause,
+  setVolume,
+} = useScapeRadio()
+
+const isHovered = ref(false)
+
+// Check if currently on the scape's detail page
+const isOnScapePage = computed(() => {
+  if (!currentScape.value) return false
+  return route.path === `/scapes/${currentScape.value.id}`
+})
+
+const onHover = (hovered: boolean) => {
+  isHovered.value = hovered
+}
+
+const handlePlayPause = async () => {
+  if (isPlaying.value) {
+    await pause()
+  } else {
+    await play()
+  }
+}
+
+const handleVolumeChange = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  setVolume(parseFloat(input.value))
+}
+</script>
 
 <style scoped>
 .scape-radio-inline {

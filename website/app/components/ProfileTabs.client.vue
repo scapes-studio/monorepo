@@ -1,3 +1,17 @@
+<template>
+  <nav ref="navRef" class="profile-tabs">
+    <NuxtLink :to="`/people/${props.accountId}`" class="profile-tabs__tab"
+      :class="{ 'profile-tabs__tab--active': currentTab === 'scapes' }">
+      Scapes
+    </NuxtLink>
+    <NuxtLink :to="`/people/${props.accountId}/twenty-seven-year-scapes`" class="profile-tabs__tab"
+      :class="{ 'profile-tabs__tab--active': currentTab === 'gallery27' }">
+      Twenty Seven Year Scapes
+    </NuxtLink>
+    <span class="profile-tabs__indicator" :style="indicatorStyle" />
+  </nav>
+</template>
+
 <script setup lang="ts">
 const props = defineProps<{
   accountId: string
@@ -73,20 +87,6 @@ watch(() => route.path, refresh)
 watch([scapeWidth, gutter], refresh)
 onMounted(refresh)
 </script>
-
-<template>
-  <nav ref="navRef" class="profile-tabs">
-    <NuxtLink :to="`/people/${props.accountId}`" class="profile-tabs__tab"
-      :class="{ 'profile-tabs__tab--active': currentTab === 'scapes' }">
-      Scapes
-    </NuxtLink>
-    <NuxtLink :to="`/people/${props.accountId}/twenty-seven-year-scapes`" class="profile-tabs__tab"
-      :class="{ 'profile-tabs__tab--active': currentTab === 'gallery27' }">
-      Twenty Seven Year Scapes
-    </NuxtLink>
-    <span class="profile-tabs__indicator" :style="indicatorStyle" />
-  </nav>
-</template>
 
 <style scoped>
 .profile-tabs {

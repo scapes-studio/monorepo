@@ -1,3 +1,18 @@
+<template>
+  <header class="gallery27-header">
+    <NuxtLink v-if="tokenId > 1" :to="`/gallery27/${tokenId - 1}`" class="gallery27-header__nav">
+      Previous
+    </NuxtLink>
+    <div class="gallery27-header__title">
+      <h1>Day {{ tokenId }}</h1>
+      <p v-if="formattedDate">{{ formattedDate }}</p>
+    </div>
+    <NuxtLink v-if="tokenId < 10000" :to="`/gallery27/${tokenId + 1}`" class="gallery27-header__nav">
+      Next
+    </NuxtLink>
+  </header>
+</template>
+
 <script setup lang="ts">
 const props = defineProps<{
   tokenId: number;
@@ -14,21 +29,6 @@ const formattedDate = computed(() => {
   });
 });
 </script>
-
-<template>
-  <header class="gallery27-header">
-    <NuxtLink v-if="tokenId > 1" :to="`/gallery27/${tokenId - 1}`" class="gallery27-header__nav">
-      Previous
-    </NuxtLink>
-    <div class="gallery27-header__title">
-      <h1>Day {{ tokenId }}</h1>
-      <p v-if="formattedDate">{{ formattedDate }}</p>
-    </div>
-    <NuxtLink v-if="tokenId < 10000" :to="`/gallery27/${tokenId + 1}`" class="gallery27-header__nav">
-      Next
-    </NuxtLink>
-  </header>
-</template>
 
 <style scoped>
 .gallery27-header {

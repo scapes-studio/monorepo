@@ -1,64 +1,3 @@
-<script setup lang="ts">
-import { writeContract } from "@wagmi/core";
-import type { Config } from "@wagmi/vue";
-import type { Hash } from "viem";
-import { scapesABI } from "@scapes-studio/abis";
-
-const SCAPES_CONTRACT = "0xb7def63a9040ad5dc431aff79045617922f4023a" as const;
-
-const { $wagmi } = useNuxtApp();
-const router = useRouter();
-
-const {
-  scapes,
-  fadeMode,
-  tokenId,
-  canMerge,
-  isFull,
-  selectedIds,
-  addScape,
-  removeScape,
-  toggleFlipX,
-  clear,
-} = useMergeCreator();
-
-const { previewUrl, isLoading: previewLoading, error: previewError } = useMergePreview(tokenId);
-
-const transactionFlow = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
-
-const mergeRequest = async (): Promise<Hash> => {
-  return writeContract($wagmi as Config, {
-    address: SCAPES_CONTRACT,
-    abi: scapesABI,
-    functionName: "merge",
-    args: [tokenId.value],
-  });
-};
-
-const handleMergeComplete = () => {
-  router.push(`/scapes/${tokenId.value}`);
-};
-
-const transactionText = computed(() => ({
-  title: {
-    confirm: "Create Merge",
-    requesting: "Confirm in Wallet",
-    waiting: "Creating Merge",
-    complete: "Merge Created!",
-  },
-  lead: {
-    confirm: `Merge ${scapes.value.length} Scapes into a new unique artwork.`,
-    requesting: "Please confirm the transaction in your wallet.",
-    waiting: "Your merge is being created on-chain.",
-    complete: "Your merge has been created successfully!",
-  },
-  action: {
-    confirm: "Create Merge",
-    error: "Try Again",
-  },
-}));
-</script>
-
 <template>
   <div class="merge-creator">
     <header class="merge-creator__header">
@@ -125,6 +64,67 @@ const transactionText = computed(() => ({
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { writeContract } from "@wagmi/core";
+import type { Config } from "@wagmi/vue";
+import type { Hash } from "viem";
+import { scapesABI } from "@scapes-studio/abis";
+
+const SCAPES_CONTRACT = "0xb7def63a9040ad5dc431aff79045617922f4023a" as const;
+
+const { $wagmi } = useNuxtApp();
+const router = useRouter();
+
+const {
+  scapes,
+  fadeMode,
+  tokenId,
+  canMerge,
+  isFull,
+  selectedIds,
+  addScape,
+  removeScape,
+  toggleFlipX,
+  clear,
+} = useMergeCreator();
+
+const { previewUrl, isLoading: previewLoading, error: previewError } = useMergePreview(tokenId);
+
+const transactionFlow = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
+
+const mergeRequest = async (): Promise<Hash> => {
+  return writeContract($wagmi as Config, {
+    address: SCAPES_CONTRACT,
+    abi: scapesABI,
+    functionName: "merge",
+    args: [tokenId.value],
+  });
+};
+
+const handleMergeComplete = () => {
+  router.push(`/scapes/${tokenId.value}`);
+};
+
+const transactionText = computed(() => ({
+  title: {
+    confirm: "Create Merge",
+    requesting: "Confirm in Wallet",
+    waiting: "Creating Merge",
+    complete: "Merge Created!",
+  },
+  lead: {
+    confirm: `Merge ${scapes.value.length} Scapes into a new unique artwork.`,
+    requesting: "Please confirm the transaction in your wallet.",
+    waiting: "Your merge is being created on-chain.",
+    complete: "Your merge has been created successfully!",
+  },
+  action: {
+    confirm: "Create Merge",
+    error: "Try Again",
+  },
+}));
+</script>
 
 <style scoped>
 .merge-creator {

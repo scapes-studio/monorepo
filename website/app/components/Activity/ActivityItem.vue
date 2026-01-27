@@ -1,57 +1,3 @@
-<script setup lang="ts">
-import type { ActivityItem } from "~/types/activity";
-
-const props = defineProps<{ item: ActivityItem }>();
-
-const formatTimestamp = (timestamp: number) =>
-  new Intl.DateTimeFormat("en-US", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(timestamp * 1000));
-
-const shortenHex = (value: string, start = 6, end = 4) => {
-  if (!value) return "";
-  if (value.length <= start + end) return value;
-  return `${value.slice(0, start)}…${value.slice(-end)}`;
-};
-
-const collectionLabel = (collection: string) => {
-  switch (collection) {
-    case "scapes":
-      return "Scapes";
-    case "punkscapes":
-      return "PunkScapes";
-    case "twenty-seven-year-scapes":
-      return "27Y Scapes";
-    default:
-      return collection;
-  }
-};
-
-const typeLabel = (type: string) => {
-  switch (type) {
-    case "transfer":
-      return "Transfer";
-    case "sale":
-      return "Sale";
-    case "listing":
-      return "Listing";
-    default:
-      return type;
-  }
-};
-
-const scapeUrl = (tokenId: string, collection: string) => {
-  if (collection === "twenty-seven-year-scapes") {
-    return `/twenty-seven-year-scapes/${tokenId}`;
-  }
-  return `/scapes/${tokenId}`;
-};
-const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
-
-const formattedTimestamp = computed(() => formatTimestamp(props.item.timestamp));
-</script>
-
 <template>
   <li class="activity-item">
     <div class="activity-item__header">
@@ -111,6 +57,60 @@ const formattedTimestamp = computed(() => formatTimestamp(props.item.timestamp))
     </div>
   </li>
 </template>
+
+<script setup lang="ts">
+import type { ActivityItem } from "~/types/activity";
+
+const props = defineProps<{ item: ActivityItem }>();
+
+const formatTimestamp = (timestamp: number) =>
+  new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(timestamp * 1000));
+
+const shortenHex = (value: string, start = 6, end = 4) => {
+  if (!value) return "";
+  if (value.length <= start + end) return value;
+  return `${value.slice(0, start)}…${value.slice(-end)}`;
+};
+
+const collectionLabel = (collection: string) => {
+  switch (collection) {
+    case "scapes":
+      return "Scapes";
+    case "punkscapes":
+      return "PunkScapes";
+    case "twenty-seven-year-scapes":
+      return "27Y Scapes";
+    default:
+      return collection;
+  }
+};
+
+const typeLabel = (type: string) => {
+  switch (type) {
+    case "transfer":
+      return "Transfer";
+    case "sale":
+      return "Sale";
+    case "listing":
+      return "Listing";
+    default:
+      return type;
+  }
+};
+
+const scapeUrl = (tokenId: string, collection: string) => {
+  if (collection === "twenty-seven-year-scapes") {
+    return `/twenty-seven-year-scapes/${tokenId}`;
+  }
+  return `/scapes/${tokenId}`;
+};
+const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
+
+const formattedTimestamp = computed(() => formatTimestamp(props.item.timestamp));
+</script>
 
 <style scoped>
 .activity-item {

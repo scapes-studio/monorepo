@@ -1,13 +1,3 @@
-<script setup lang="ts">
-const { getAccountDisplay } = useENSResolution()
-
-const isLoaded = ref(false)
-
-onMounted(() => {
-  isLoaded.value = true
-})
-</script>
-
 <template>
   <nav class="main-menu border-drop" :class="{ 'is-loaded': isLoaded }">
     <div class="main-menu__brand border">
@@ -41,6 +31,16 @@ onMounted(() => {
     </div>
   </nav>
 </template>
+
+<script setup lang="ts">
+const { getAccountDisplay } = useENSResolution()
+
+const isLoaded = ref(false)
+
+onMounted(() => {
+  isLoaded.value = true
+})
+</script>
 
 <style scoped>
 .main-menu {

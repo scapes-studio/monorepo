@@ -1,3 +1,20 @@
+<template>
+  <li
+    class="trait-value"
+    :class="{ 'trait-value--selected': selected, 'trait-value--loading': loading }"
+    @click="emit('toggle')"
+  >
+    <div class="trait-value__icon">
+      <img :src="iconUrl" :alt="value" />
+    </div>
+    <span class="trait-value__label">{{ value }}</span>
+    <span class="trait-value__count">{{ count }}</span>
+    <span class="trait-value__check" aria-hidden="true">
+      {{ selected ? "✓" : "" }}
+    </span>
+  </li>
+</template>
+
 <script setup lang="ts">
 import { getTraitIconUrl } from "~/data/traits"
 
@@ -15,23 +32,6 @@ const emit = defineEmits<{
 
 const iconUrl = computed(() => getTraitIconUrl(props.category, props.value))
 </script>
-
-<template>
-  <li
-    class="trait-value"
-    :class="{ 'trait-value--selected': selected, 'trait-value--loading': loading }"
-    @click="emit('toggle')"
-  >
-    <div class="trait-value__icon">
-      <img :src="iconUrl" :alt="value" />
-    </div>
-    <span class="trait-value__label">{{ value }}</span>
-    <span class="trait-value__count">{{ count }}</span>
-    <span class="trait-value__check" aria-hidden="true">
-      {{ selected ? "✓" : "" }}
-    </span>
-  </li>
-</template>
 
 <style scoped>
 .trait-value {

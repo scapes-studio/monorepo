@@ -1,3 +1,36 @@
+<template>
+  <section class="accounts-page">
+    <header class="accounts-page__header">
+      <div>
+        <h1>{{ formatNumber(totalOwners) }} Scape Owners</h1>
+        <p class="accounts-page__subtitle">Leaderboard by total scapes owned.</p>
+      </div>
+    </header>
+
+    <div v-if="pending" class="accounts-page__status">Loading owners…</div>
+    <div v-else-if="error" class="accounts-page__status accounts-page__status--error">
+      Unable to load scape owners right now.
+    </div>
+    <div v-else-if="owners?.length === 0" class="accounts-page__status">No owners found.</div>
+
+    <div v-else class="accounts-page__results">
+      <ol class="accounts-page__list">
+        <li v-for="(entry, index) in owners" :key="entry.owner" class="accounts-page__row">
+          <span class="accounts-page__rank">{{ index + 1 }}</span>
+          <AccountLink :address="entry.owner" class="accounts-page__owner" shorten-ens />
+          <span class="accounts-page__count">{{ entry.count }} scapes</span>
+        </li>
+      </ol>
+      <button v-if="hasMore" ref="loadMoreRef" class="accounts-page__load-more" type="button" :disabled="isLoadingMore"
+        @click="loadMore">
+        <span v-if="isLoadingMore">Loading more…</span>
+        <span v-else>Load more</span>
+      </button>
+      <div v-else class="accounts-page__status">All owners loaded.</div>
+    </div>
+  </section>
+</template>
+
 <script setup lang="ts">
 const ogTitle = "Scape Owners";
 const ogSubtitle = "Leaderboard of Scape owners ranked by total scapes owned.";
@@ -87,39 +120,6 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   if (entry?.isIntersecting) loadMore();
 });
 </script>
-
-<template>
-  <section class="accounts-page">
-    <header class="accounts-page__header">
-      <div>
-        <h1>{{ formatNumber(totalOwners) }} Scape Owners</h1>
-        <p class="accounts-page__subtitle">Leaderboard by total scapes owned.</p>
-      </div>
-    </header>
-
-    <div v-if="pending" class="accounts-page__status">Loading owners…</div>
-    <div v-else-if="error" class="accounts-page__status accounts-page__status--error">
-      Unable to load scape owners right now.
-    </div>
-    <div v-else-if="owners?.length === 0" class="accounts-page__status">No owners found.</div>
-
-    <div v-else class="accounts-page__results">
-      <ol class="accounts-page__list">
-        <li v-for="(entry, index) in owners" :key="entry.owner" class="accounts-page__row">
-          <span class="accounts-page__rank">{{ index + 1 }}</span>
-          <AccountLink :address="entry.owner" class="accounts-page__owner" shorten-ens />
-          <span class="accounts-page__count">{{ entry.count }} scapes</span>
-        </li>
-      </ol>
-      <button v-if="hasMore" ref="loadMoreRef" class="accounts-page__load-more" type="button" :disabled="isLoadingMore"
-        @click="loadMore">
-        <span v-if="isLoadingMore">Loading more…</span>
-        <span v-else>Load more</span>
-      </button>
-      <div v-else class="accounts-page__status">All owners loaded.</div>
-    </div>
-  </section>
-</template>
 
 <style scoped>
 .accounts-page {

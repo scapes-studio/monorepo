@@ -1,3 +1,17 @@
+<template>
+  <div class="gallery27-now">
+    <div v-if="pending" class="gallery27-now__status">
+      Loading current auction...
+    </div>
+    <div v-else-if="error || !scape" class="gallery27-now__status gallery27-now__status--empty">
+      <p>No active auction right now.</p>
+      <NuxtLink to="/gallery27" class="gallery27-now__link">
+        Browse all scapes
+      </NuxtLink>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { Gallery27ScapeDetail } from "~/types/gallery27";
 
@@ -27,20 +41,6 @@ useSeo({
   description: 'View the current Gallery27 auction. Daily AI-generated scapes for 27 years.',
 });
 </script>
-
-<template>
-  <div class="gallery27-now">
-    <div v-if="pending" class="gallery27-now__status">
-      Loading current auction...
-    </div>
-    <div v-else-if="error || !scape" class="gallery27-now__status gallery27-now__status--empty">
-      <p>No active auction right now.</p>
-      <NuxtLink to="/gallery27" class="gallery27-now__link">
-        Browse all scapes
-      </NuxtLink>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .gallery27-now {

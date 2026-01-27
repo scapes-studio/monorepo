@@ -1,3 +1,45 @@
+<template>
+  <section class="scape-detail" :style="{ '--scape-count': scapeCount }">
+    <div class="scape-detail__image">
+      <ScapeImage :id="scapeId" :scape-count="scapeCount" />
+    </div>
+    <header class="scape-detail__header">
+      <div class="scape-detail__meta">
+        <h1>Scape #{{ scapeId }}</h1>
+        <div class="scape-detail__stats">
+          <span>{{ totalTransfers }} transfers</span>
+          <span>{{ totalSales }} sales</span>
+        </div>
+        <div class="scape-detail__owner">
+          <span v-if="scapePending">Loading owner…</span>
+          <template v-else-if="owner">
+            Owned by
+            <AccountLink :address="owner" class="scape-detail__owner-link" />
+          </template>
+        </div>
+        <NuxtLink v-if="gallery27TokenId" :to="`/gallery27/${gallery27TokenId}`" class="scape-detail__gallery27-link">
+          View Gallery27 Day {{ gallery27TokenId }}
+        </NuxtLink>
+        <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
+          class="scape-detail__listings" />
+        <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
+          @listing-change="refreshListing" />
+        <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true">
+          Play SES
+        </button>
+      </div>
+    </header>
+
+    <ScapesAttributes :attributes="attributes" />
+
+    <ScapesTransactionHistory :history="history" :pending="pending" :error="error" />
+
+    <ClientOnly>
+      <ScapesSESModal v-model:open="sesModalOpen" :token-id="scapeId" />
+    </ClientOnly>
+  </section>
+</template>
+
 <script setup lang="ts">
 import { eq } from "@ponder/client";
 
@@ -173,48 +215,6 @@ const scapeCount = computed(() => mergeScapeCount(BigInt(scapeId.value)));
 
 const sesModalOpen = ref(false);
 </script>
-
-<template>
-  <section class="scape-detail" :style="{ '--scape-count': scapeCount }">
-    <div class="scape-detail__image">
-      <ScapeImage :id="scapeId" :scape-count="scapeCount" />
-    </div>
-    <header class="scape-detail__header">
-      <div class="scape-detail__meta">
-        <h1>Scape #{{ scapeId }}</h1>
-        <div class="scape-detail__stats">
-          <span>{{ totalTransfers }} transfers</span>
-          <span>{{ totalSales }} sales</span>
-        </div>
-        <div class="scape-detail__owner">
-          <span v-if="scapePending">Loading owner…</span>
-          <template v-else-if="owner">
-            Owned by
-            <AccountLink :address="owner" class="scape-detail__owner-link" />
-          </template>
-        </div>
-        <NuxtLink v-if="gallery27TokenId" :to="`/gallery27/${gallery27TokenId}`" class="scape-detail__gallery27-link">
-          View Gallery27 Day {{ gallery27TokenId }}
-        </NuxtLink>
-        <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
-          class="scape-detail__listings" />
-        <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
-          @listing-change="refreshListing" />
-        <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true">
-          Play SES
-        </button>
-      </div>
-    </header>
-
-    <ScapesAttributes :attributes="attributes" />
-
-    <ScapesTransactionHistory :history="history" :pending="pending" :error="error" />
-
-    <ClientOnly>
-      <ScapesSESModal v-model:open="sesModalOpen" :token-id="scapeId" />
-    </ClientOnly>
-  </section>
-</template>
 
 <style scoped>
 .scape-detail {

@@ -1,3 +1,21 @@
+<template>
+  <section class="scape-detail__history">
+    <header class="scape-detail__section-title">
+      <h2>Transfer History</h2>
+    </header>
+
+    <div v-if="pending" class="scape-detail__status">Loading scape history…</div>
+    <div v-else-if="error" class="scape-detail__status scape-detail__status--error">
+      Unable to load scape history right now.
+    </div>
+    <div v-else-if="history.length === 0" class="scape-detail__status">No transfers yet.</div>
+
+    <ul v-else class="scape-detail__history-list">
+      <ScapesTransactionHistoryEvent v-for="entry in history" :key="entry.id" :entry="entry" />
+    </ul>
+  </section>
+</template>
+
 <script setup lang="ts">
 type SalePrice = {
   wei?: string;
@@ -46,24 +64,6 @@ const history = computed(() => props.history ?? []);
 const pending = computed(() => props.pending ?? false);
 const error = computed(() => props.error ?? null);
 </script>
-
-<template>
-  <section class="scape-detail__history">
-    <header class="scape-detail__section-title">
-      <h2>Transfer History</h2>
-    </header>
-
-    <div v-if="pending" class="scape-detail__status">Loading scape history…</div>
-    <div v-else-if="error" class="scape-detail__status scape-detail__status--error">
-      Unable to load scape history right now.
-    </div>
-    <div v-else-if="history.length === 0" class="scape-detail__status">No transfers yet.</div>
-
-    <ul v-else class="scape-detail__history-list">
-      <ScapesTransactionHistoryEvent v-for="entry in history" :key="entry.id" :entry="entry" />
-    </ul>
-  </section>
-</template>
 
 <style scoped>
 .scape-detail__history {

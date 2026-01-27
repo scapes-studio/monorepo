@@ -1,34 +1,3 @@
-<script setup lang="ts">
-import type { Gallery27AuctionState } from "~/types/gallery27";
-
-const props = defineProps<{
-  auction: Gallery27AuctionState | null;
-  isOnChain: boolean
-}>();
-
-const formattedBid = computed(() => {
-  if (!props.auction?.latestBid) return null;
-  const eth = Number(props.auction.latestBid) / 1e18;
-  return formatETH(eth);
-});
-
-const auctionStatus = computed(() => {
-  if (!props.auction) return "loading";
-  if (props.auction.settled) return "settled";
-
-  const now = Math.floor(Date.now() / 1000);
-
-  // Check if auction has started
-  if (props.auction.startTimestamp && now < props.auction.startTimestamp) {
-    return "not-started";
-  }
-
-  if (!props.auction.endTimestamp) return "not-started";
-  if (props.isOnChain || (now >= props.auction.endTimestamp)) return "ended";
-  return "active";
-});
-</script>
-
 <template>
   <div class="gallery27-meta">
     <div v-if="!auction" class="gallery27-meta__loading">
@@ -84,6 +53,37 @@ const auctionStatus = computed(() => {
     </template>
   </div>
 </template>
+
+<script setup lang="ts">
+import type { Gallery27AuctionState } from "~/types/gallery27";
+
+const props = defineProps<{
+  auction: Gallery27AuctionState | null;
+  isOnChain: boolean
+}>();
+
+const formattedBid = computed(() => {
+  if (!props.auction?.latestBid) return null;
+  const eth = Number(props.auction.latestBid) / 1e18;
+  return formatETH(eth);
+});
+
+const auctionStatus = computed(() => {
+  if (!props.auction) return "loading";
+  if (props.auction.settled) return "settled";
+
+  const now = Math.floor(Date.now() / 1000);
+
+  // Check if auction has started
+  if (props.auction.startTimestamp && now < props.auction.startTimestamp) {
+    return "not-started";
+  }
+
+  if (!props.auction.endTimestamp) return "not-started";
+  if (props.isOnChain || (now >= props.auction.endTimestamp)) return "ended";
+  return "active";
+});
+</script>
 
 <style scoped>
 .gallery27-meta {

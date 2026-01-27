@@ -1,22 +1,3 @@
-<script setup lang="ts">
-import type { MergePart } from "~/utils/merges";
-
-const props = defineProps<{
-  scapes: MergePart[];
-  previewUrl: string | null;
-  isLoading: boolean;
-  error: Error | null;
-}>();
-
-const emit = defineEmits<{
-  toggleFlipX: [index: number];
-  remove: [index: number];
-}>();
-
-const hasScapes = computed(() => props.scapes.length > 0);
-const hasPreview = computed(() => props.scapes.length >= 2);
-</script>
-
 <template>
   <div class="merge-preview">
     <div class="merge-preview__canvas">
@@ -64,6 +45,25 @@ const hasPreview = computed(() => props.scapes.length >= 2);
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import type { MergePart } from "~/utils/merges";
+
+const props = defineProps<{
+  scapes: MergePart[];
+  previewUrl: string | null;
+  isLoading: boolean;
+  error: Error | null;
+}>();
+
+const emit = defineEmits<{
+  toggleFlipX: [index: number];
+  remove: [index: number];
+}>();
+
+const hasScapes = computed(() => props.scapes.length > 0);
+const hasPreview = computed(() => props.scapes.length >= 2);
+</script>
 
 <style scoped>
 .merge-preview {

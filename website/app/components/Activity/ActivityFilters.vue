@@ -1,9 +1,3 @@
-<script setup lang="ts">
-import type { ActivityFilters } from "~/types/activity";
-
-const filters = defineModel<ActivityFilters>({ required: true });
-</script>
-
 <template>
   <div class="activity-filters">
     <label class="activity-filters__toggle">
@@ -20,6 +14,12 @@ const filters = defineModel<ActivityFilters>({ required: true });
     </label>
   </div>
 </template>
+
+<script setup lang="ts">
+import type { ActivityFilters } from "~/types/activity";
+
+const filters = defineModel<ActivityFilters>({ required: true });
+</script>
 
 <style scoped>
 .activity-filters {

@@ -1,3 +1,12 @@
+<template>
+  <div class="gallery27-painting">
+    <img v-if="imageUrl" :src="imageUrl" :alt="alt || 'Gallery27 Painting'" class="gallery27-painting__image" @error="onImageError" />
+    <div v-else class="gallery27-painting__placeholder">
+      No image available
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { Gallery27Image } from "~/types/gallery27";
 
@@ -28,15 +37,6 @@ watch(() => props.image?.path, () => {
   useBasePath.value = false;
 });
 </script>
-
-<template>
-  <div class="gallery27-painting">
-    <img v-if="imageUrl" :src="imageUrl" :alt="alt || 'Gallery27 Painting'" class="gallery27-painting__image" @error="onImageError" />
-    <div v-else class="gallery27-painting__placeholder">
-      No image available
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .gallery27-painting {

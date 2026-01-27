@@ -1,3 +1,11 @@
+<template>
+  <Dialog v-model:open="open" title="Scape Entertainment System" class="ses-modal large">
+    <div class="ses-modal__iframe-wrapper">
+      <iframe v-if="open" :src="animationUrl" class="ses-modal__iframe" allow="autoplay" frameborder="0" />
+    </div>
+  </Dialog>
+</template>
+
 <script setup lang="ts">
 const props = defineProps<{
   tokenId: string;
@@ -20,14 +28,6 @@ const animationUrl = computed(() => {
   return `${SES_APP_URL}/#${props.tokenId}`;
 });
 </script>
-
-<template>
-  <Dialog v-model:open="open" title="Scape Entertainment System" class="ses-modal large">
-    <div class="ses-modal__iframe-wrapper">
-      <iframe v-if="open" :src="animationUrl" class="ses-modal__iframe" allow="autoplay" frameborder="0" />
-    </div>
-  </Dialog>
-</template>
 
 <style>
 .ses-modal__iframe-wrapper {

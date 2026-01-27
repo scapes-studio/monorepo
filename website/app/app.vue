@@ -1,7 +1,3 @@
-<script setup lang="ts">
-useScapeGrid()
-</script>
-
 <template>
   <div>
     <MainMenu />
@@ -10,6 +6,10 @@ useScapeGrid()
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+useScapeGrid()
+</script>
 
 <style>
 :root {

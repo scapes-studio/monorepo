@@ -1,3 +1,35 @@
+<template>
+  <div class="gallery27-bid-history">
+    <h3>Bid History ({{ bids.length }})</h3>
+
+    <div
+      v-if="initialRender"
+      class="gallery27-bid-history__initial"
+      :class="{ 'gallery27-bid-history__initial--selected': activeBidId === 'initial' }"
+      @click="selectedBidId = 'initial'"
+    >
+      <div v-if="initialRenderThumbnail" class="gallery27-bid-history__initial-thumbnail">
+        <img :src="initialRenderThumbnail" alt="Initial Render" />
+      </div>
+      <div class="gallery27-bid-history__initial-label">Initial Render</div>
+    </div>
+
+    <div v-if="bids.length === 0" class="gallery27-bid-history__empty">
+      No bids yet
+    </div>
+
+    <div v-else class="gallery27-bid-history__list">
+      <Gallery27BidItem
+        v-for="bid in bids"
+        :key="bid.id"
+        :bid="bid"
+        :selected="activeBidId === bid.id"
+        @select="selectedBidId = bid.id"
+      />
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { Gallery27Bid, Gallery27Image } from "~/types/gallery27";
 
@@ -42,38 +74,6 @@ const selectedImage = computed(() => {
 
 defineExpose({ selectedImage });
 </script>
-
-<template>
-  <div class="gallery27-bid-history">
-    <h3>Bid History ({{ bids.length }})</h3>
-
-    <div
-      v-if="initialRender"
-      class="gallery27-bid-history__initial"
-      :class="{ 'gallery27-bid-history__initial--selected': activeBidId === 'initial' }"
-      @click="selectedBidId = 'initial'"
-    >
-      <div v-if="initialRenderThumbnail" class="gallery27-bid-history__initial-thumbnail">
-        <img :src="initialRenderThumbnail" alt="Initial Render" />
-      </div>
-      <div class="gallery27-bid-history__initial-label">Initial Render</div>
-    </div>
-
-    <div v-if="bids.length === 0" class="gallery27-bid-history__empty">
-      No bids yet
-    </div>
-
-    <div v-else class="gallery27-bid-history__list">
-      <Gallery27BidItem
-        v-for="bid in bids"
-        :key="bid.id"
-        :bid="bid"
-        :selected="activeBidId === bid.id"
-        @select="selectedBidId = bid.id"
-      />
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .gallery27-bid-history {
