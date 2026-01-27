@@ -114,6 +114,7 @@
 - Keep API response shapes stable; add fields instead of renaming.
 
 ## Vue/Nuxt conventions
+- SFC block order: `<template>`, then `<script>`, then `<style>`.
 - Use `<script setup lang="ts">` in SFCs.
 - Use Nuxt auto-imports (`useRoute`, `useRuntimeConfig`, etc.).
 - Keep composables in `app/composables/` and name them `useX`.
