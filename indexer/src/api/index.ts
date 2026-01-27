@@ -10,6 +10,7 @@ import { getScapeHistory, getTwentySevenYearScapeHistory } from "./history";
 import { getAttributeCounts } from "./attributes";
 import { getActivity } from "./activity";
 import { getListings, getListingByTokenId } from "./listings";
+import { getFeaturedScape } from "./featuredScape";
 import { getScapeImage } from "./images";
 import {
   getGallery27Scape,
@@ -100,6 +101,9 @@ app.get("/gallery27/:tokenId/metadata.json", getGallery27Metadata);
 // Profile Gallery27 scapes routes
 app.get("/profiles/:address/gallery27-scapes", getGallery27ScapesByOwner);
 app.get("/profiles/:address/gallery27-claimable", getGallery27ClaimableByAddress);
+
+// Featured scape route
+app.get("/profiles/:address/featured-scape", getFeaturedScape);
 
 // Webhooks
 app.post("/webhooks/leonardo", handleLeonardoWebhook);

@@ -11,6 +11,9 @@ const profileData = computed(() => profile.value?.data ?? null);
 const resolvedAddress = computed(() => profile.value?.address ?? null);
 const displayAddress = computed(() => profile.value?.address ?? accountId.value ?? "");
 
+const { bannerImageUrl } = useFeaturedScape(resolvedAddress);
+const effectiveHeader = computed(() => profileData.value?.header || bannerImageUrl.value || null);
+
 const isRefreshing = ref(false);
 const handleRefresh = async () => {
   isRefreshing.value = true;
@@ -59,7 +62,7 @@ useSeo(seoOptions);
     <template v-else>
       <div class="account-page__profile">
         <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null"
-          :header="profileData?.header ?? null" />
+          :header="effectiveHeader" />
         <ProfileBio :description="profileData?.description ?? null" />
         <ProfileLinks :links="profileData?.links ?? null" />
         <button class="account-page__refresh" :disabled="isRefreshing" @click="handleRefresh">
