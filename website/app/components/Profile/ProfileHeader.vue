@@ -25,10 +25,6 @@ const etherscanUrl = computed(() => `https://etherscan.io/address/${props.addres
     <div class="profile-header__content">
       <div class="profile-header__avatar">
         <AccountAvatar :address="address as `0x${string}`" />
-        <!-- <img v-if="resolvedAvatar" :src="resolvedAvatar" alt="Profile avatar" /> -->
-        <!-- <div v-else class="profile-header__avatar-fallback"> -->
-        <!--   {{ displayName.slice(0, 2).toUpperCase() }} -->
-        <!-- </div> -->
       </div>
 
       <div class="profile-header__meta">
@@ -41,7 +37,6 @@ const etherscanUrl = computed(() => `https://etherscan.io/address/${props.addres
 
 <style scoped>
 .profile-header {
-  background: var(--background);
   display: grid;
   gap: var(--grid-gutter);
 }
