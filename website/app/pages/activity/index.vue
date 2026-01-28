@@ -1,17 +1,13 @@
 <template>
   <section class="activity-page">
     <header class="activity-page__header">
-      <div>
-        <h1>Activity</h1>
-        <p class="activity-page__subtitle">Recent activity across all collections.</p>
-      </div>
-      <div class="activity-page__controls">
-        <span v-if="total !== null" class="activity-page__count">
-          {{ total }} events
-        </span>
-        <ActivityFilters v-model="filters" />
-      </div>
+      <h1>Activity</h1>
+      <p class="activity-page__subtitle">
+        <span>Recent activity </span>
+        <span v-if="total !== null" class="activity-page__count">({{ formatNumber(total) }} total events)</span>
+      </p>
     </header>
+    <ActivityFilters v-model="filters" />
 
     <div v-if="loading && activity.length === 0" class="activity-page__status">
       Loading activity...
@@ -28,15 +24,10 @@
         <ActivityItem v-for="item in activity" :key="item.id" :item="item" />
       </ul>
 
-      <button
-        v-if="hasMore"
-        ref="loadMoreRef"
-        class="activity-page__load-more"
-        type="button"
-        :disabled="loading"
-        @click="loadMore"
-      >
-        {{ loading ? "Loading..." : "Load more" }}
+      <button v-if="hasMore" ref="loadMoreRef" class="activity-page__load-more" type="button" :disabled="loading"
+        @click="loadMore">
+        <span v-if="loading">Loading...</span>
+        <span v-else>Load more</span>
       </button>
       <div v-else class="activity-page__status">All activity loaded.</div>
     </template>
@@ -99,33 +90,44 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 .activity-page {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--spacer-lg) var(--spacer);
   display: grid;
-  gap: var(--spacer-lg);
+  gap: var(--grid-gutter);
 }
 
 .activity-page__header {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacer);
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--grid-gutter);
+  align-items: center;
+  justify-content: center;
+  height: calc(2 * var(--scape-height-gutter) - var(--grid-gutter));
+  padding-inline: calc(var(--scape-height) / 2);
+  width: 100%;
+  background: var(--background);
 }
 
 .activity-page__header h1 {
-  margin: 0 0 var(--spacer-xs);
+  margin: 0;
+  width: 100%;
+  text-align: center;
 }
 
 .activity-page__subtitle {
   margin: 0;
+  width: 100%;
   color: var(--muted);
+  text-align: center;
 }
 
 .activity-page__controls {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacer-sm);
-  align-items: flex-end;
+  margin: 0;
+  padding: 0;
+  height: var(--scape-height);
+
+  >* {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .activity-page__count {
@@ -133,8 +135,8 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 }
 
 .activity-page__status {
-  padding: var(--spacer);
-  border-radius: var(--size-3);
+  padding: var(--grid-gutter);
+  border-radius: var(--grid-gutter);
   background: var(--gray-z-1);
 }
 
@@ -147,18 +149,18 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   padding: 0;
   margin: 0;
   display: grid;
-  gap: var(--spacer);
+  gap: var(--grid-gutter);
 }
 
 .activity-page__load-more {
-  justify-self: center;
-  padding: var(--spacer-sm) var(--spacer-md);
-  border-radius: var(--size-10);
-  border: none;
-  background: var(--color);
-  color: var(--background);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
+  text-align: center;
+
+  &>span {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .activity-page__load-more:disabled {

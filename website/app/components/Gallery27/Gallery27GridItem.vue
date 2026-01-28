@@ -57,8 +57,7 @@ const imageUrl = computed(() => {
 }
 
 .gallery27-grid-item__image {
-  aspect-ratio: 1;
-  border-radius: var(--spacer-xs);
+  aspect-ratio: 3/2;
   overflow: hidden;
   background: var(--gray-z-1);
 }
