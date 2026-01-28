@@ -4,7 +4,7 @@
       <img v-if="imageUrl" :src="imageUrl" :alt="`Day ${scape.tokenId}`" />
       <div v-else class="gallery27-grid-item__placeholder">No image</div>
     </div>
-    <div class="gallery27-grid-item__info">
+    <div v-if="!minimal" class="gallery27-grid-item__info">
       <span class="gallery27-grid-item__day">Day {{ scape.tokenId }}</span>
       <span v-if="formattedDate" class="gallery27-grid-item__date">{{ formattedDate }}</span>
     </div>
@@ -18,6 +18,7 @@ type ScapeItem = Gallery27OwnedScape | Gallery27ListItem | Gallery27ClaimableSca
 
 const props = defineProps<{
   scape: ScapeItem;
+  minimal?: boolean;
 }>();
 
 const formattedDate = computed(() => {

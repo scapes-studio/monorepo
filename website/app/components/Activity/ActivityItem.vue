@@ -6,7 +6,7 @@
         <ActivityGallery27Image v-else-if="item.collection === 'twenty-seven-year-scapes'" :token-id="item.tokenId" />
       </div>
       <span class="activity-item__type">
-        <span>{{ typeLabel(item.type) }} </span>
+        <span>{{ typeLabel }} </span>
         <template v-if="item.type === 'sale'">
           <span>
             (<span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>
@@ -20,23 +20,39 @@
             (<span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>)
           </span>
         </template>
+        <a v-if="item.txHash" :href="txUrl(item.txHash)" class="activity-item__time" target="_blank"
+          rel="noopener noreferrer">{{ timeAgo }}</a>
+        <span v-else class="activity-item__time">{{ timeAgo }}</span>
       </span>
-      <a v-if="item.txHash" :href="txUrl(item.txHash)" class="activity-item__time" target="_blank"
-        rel="noopener noreferrer">{{ timeAgo }}</a>
-      <span v-else class="activity-item__time">{{ timeAgo }}</span>
     </div>
 
     <div class="activity-item__content">
       <template v-if="item.type === 'transfer'">
         <div class="activity-item__addresses">
-          <div>
-            <span class="activity-item__label">From</span>
-            <AccountLink :address="item.from" class="activity-item__link" />
-          </div>
-          <div>
-            <span class="activity-item__label">To</span>
-            <AccountLink :address="item.to" class="activity-item__link" />
-          </div>
+          <template v-if="isMint">
+            <div></div>
+            <div>
+              <span class="activity-item__label">To</span>
+              <AccountLink :address="item.to" class="activity-item__link" />
+            </div>
+          </template>
+          <template v-else-if="isBurn">
+            <div></div>
+            <div>
+              <span class="activity-item__label">From</span>
+              <AccountLink :address="item.from" class="activity-item__link" />
+            </div>
+          </template>
+          <template v-else>
+            <div>
+              <span class="activity-item__label">From</span>
+              <AccountLink :address="item.from" class="activity-item__link" />
+            </div>
+            <div>
+              <span class="activity-item__label">To</span>
+              <AccountLink :address="item.to" class="activity-item__link" />
+            </div>
+          </template>
         </div>
       </template>
 
@@ -71,10 +87,22 @@ import type { ActivityItem } from "~/types/activity"
 
 const props = defineProps<{ item: ActivityItem }>();
 
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
 const timeAgo = useTimeAgo(() => new Date(props.item.timestamp * 1000));
 
-const typeLabel = (type: string) => {
-  switch (type) {
+const isMint = computed(() =>
+  props.item.type === "transfer" && props.item.from.toLowerCase() === ZERO_ADDRESS
+);
+
+const isBurn = computed(() =>
+  props.item.type === "transfer" && props.item.to.toLowerCase() === ZERO_ADDRESS
+);
+
+const typeLabel = computed(() => {
+  if (isMint.value) return "Mint";
+  if (isBurn.value) return "Burn";
+  switch (props.item.type) {
     case "transfer":
       return "Transfer";
     case "sale":
@@ -82,9 +110,9 @@ const typeLabel = (type: string) => {
     case "listing":
       return "Listing";
     default:
-      return type;
+      return props.item.type;
   }
-};
+});
 
 const scapeUrl = (tokenId: string, collection: string) => {
   if (collection === "twenty-seven-year-scapes") {
@@ -117,14 +145,19 @@ const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
 
 .activity-item__type {
   display: flex;
-  gap: var(--spacer-sm);
+  flex-wrap: wrap;
+  column-gap: var(--spacer-sm);
+  flex: 1;
 }
 
 .activity-item__time {
   color: var(--muted);
-  margin-left: auto;
   text-decoration: none;
   padding-right: var(--spacer);
+
+  @media (min-width: 576px) {
+    margin-left: auto;
+  }
 }
 
 a.activity-item__time:hover {
@@ -138,6 +171,10 @@ a.activity-item__time:hover {
   justify-content: space-between;
   padding-inline: var(--spacer);
   height: var(--scape-height);
+
+  @media (min-width: 576px) {
+    padding-left: calc(var(--scape-width) + var(--spacer));
+  }
 }
 
 .activity-item__addresses {
@@ -145,12 +182,18 @@ a.activity-item__time:hover {
   justify-content: space-between;
   width: 100%;
   gap: var(--spacer);
+
+
+  &>*:last-child {
+    text-align: right;
+  }
 }
 
 .activity-item__label {
   display: block;
   text-transform: uppercase;
   color: var(--muted);
+
 }
 
 .activity-item__link {

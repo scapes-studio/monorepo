@@ -1,5 +1,5 @@
 <template>
-  <Gallery27GridItem v-if="scape" :scape="scape" />
+  <Gallery27GridItem v-if="scape" :scape="scape" minimal />
   <div v-else class="activity-gallery27-image__placeholder" />
 </template>
 
