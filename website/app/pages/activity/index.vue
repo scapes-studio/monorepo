@@ -147,9 +147,10 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 .activity-page__list {
   list-style: none;
   padding: 0;
+  padding-top: var(--scape-height-gutter);
   margin: 0;
   display: grid;
-  gap: var(--grid-gutter);
+  gap: calc(var(--scape-height) + 2 * var(--grid-gutter));
 }
 
 .activity-page__load-more {

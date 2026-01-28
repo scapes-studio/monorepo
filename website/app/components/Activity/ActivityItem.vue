@@ -1,25 +1,27 @@
 <template>
   <li class="activity-item">
     <div class="activity-item__header">
-      <div class="image">
-        <ScapesGridItem v-if="item.collection === 'scapes'" :scape="{ id: BigInt(item.tokenId) }" />
-        <ActivityGallery27Image v-else-if="item.collection === 'twenty-seven-year-scapes'" :token-id="item.tokenId" />
-      </div>
       <span class="activity-item__type">
-        <span>{{ typeLabel }} </span>
-        <template v-if="item.type === 'sale'">
-          <span>
-            (<span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>
-            <span class="activity-item__source" v-if="item.source === 'seaport'">
-              via {{ item.source }}
-            </span>)
-          </span>
-        </template>
-        <template v-if="item.type === 'listing'">
-          <span>
-            (<span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>)
-          </span>
-        </template>
+        <NuxtLink :to="scapeUrl(item.tokenId, item.collection)">
+          <span>{{ typeLabel }} <span class="muted">#{{ item.tokenId }}</span></span>
+          <template v-if="item.type === 'sale'">
+            <span class="muted">
+              (<span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>
+              <span class="activity-item__source" v-if="item.source === 'seaport'">
+                via {{ item.source }}
+              </span>)
+            </span>
+          </template>
+          <template v-if="item.type === 'listing'">
+            <span>
+              (<span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>)
+            </span>
+          </template>
+        </NuxtLink>
+        <span class="image">
+          <ScapesGridItem v-if="item.collection === 'scapes'" :scape="{ id: BigInt(item.tokenId) }" />
+          <ActivityGallery27Image v-else-if="item.collection === 'twenty-seven-year-scapes'" :token-id="item.tokenId" />
+        </span>
         <a v-if="item.txHash" :href="txUrl(item.txHash)" class="activity-item__time" target="_blank"
           rel="noopener noreferrer">{{ timeAgo }}</a>
         <span v-else class="activity-item__time">{{ timeAgo }}</span>
@@ -75,6 +77,7 @@
             <span class="activity-item__label">By</span>
             <AccountLink :address="item.lister" class="activity-item__link" />
           </div>
+          <div></div>
         </div>
       </template>
     </div>
@@ -127,8 +130,8 @@ const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
 .activity-item {
   display: grid;
   gap: var(--grid-gutter);
-  background: var(--background);
   font-size: var(--font-sm);
+  background: var(--background);
 }
 
 .activity-item__header {
@@ -137,23 +140,32 @@ const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
   gap: var(--spacer);
   flex-wrap: wrap;
   height: var(--scape-height);
-
-  &>.image {
-    width: var(--scape-width);
-  }
+  padding: var(--spacer);
 }
 
 .activity-item__type {
   display: flex;
   flex-wrap: wrap;
-  column-gap: var(--spacer-sm);
+  align-items: center;
+  column-gap: var(--spacer);
   flex: 1;
+
+  & .image {
+    height: 1.4em;
+    width: 4.2em;
+    display: inline-block;
+    border-radius: 0.2em;
+    overflow: hidden;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 .activity-item__time {
   color: var(--muted);
   text-decoration: none;
-  padding-right: var(--spacer);
 
   @media (min-width: 576px) {
     margin-left: auto;
@@ -171,10 +183,6 @@ a.activity-item__time:hover {
   justify-content: space-between;
   padding-inline: var(--spacer);
   height: var(--scape-height);
-
-  @media (min-width: 576px) {
-    padding-left: calc(var(--scape-width) + var(--spacer));
-  }
 }
 
 .activity-item__addresses {
@@ -208,6 +216,7 @@ a.activity-item__time:hover {
 .activity-item__price {
   font-weight: var(--font-weight-bold);
   white-space: nowrap;
+  color: var(--muted);
 }
 
 .activity-item__source {
