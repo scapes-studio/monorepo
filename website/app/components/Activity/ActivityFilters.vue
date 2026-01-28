@@ -1,17 +1,14 @@
 <template>
   <div class="activity-filters">
-    <label class="activity-filters__toggle">
-      <input v-model="filters.transfers" type="checkbox" />
+    <FormCheckbox v-model="filters.transfers">
       Transfers
-    </label>
-    <label class="activity-filters__toggle">
-      <input v-model="filters.sales" type="checkbox" />
+    </FormCheckbox>
+    <FormCheckbox v-model="filters.sales">
       Sales
-    </label>
-    <label class="activity-filters__toggle">
-      <input v-model="filters.listings" type="checkbox" />
+    </FormCheckbox>
+    <FormCheckbox v-model="filters.listings">
       Listings
-    </label>
+    </FormCheckbox>
   </div>
 </template>
 
@@ -26,17 +23,9 @@ const filters = defineModel<ActivityFilters>({ required: true });
   display: flex;
   gap: var(--spacer);
   flex-wrap: wrap;
+  height: var(--scape-height);
+  justify-content: space-evenly;
+  background: var(--background);
 }
 
-.activity-filters__toggle {
-  display: flex;
-  gap: var(--spacer-xs);
-  align-items: center;
-  font-size: var(--font-sm);
-  cursor: pointer;
-}
-
-.activity-filters__toggle input {
-  cursor: pointer;
-}
 </style>
