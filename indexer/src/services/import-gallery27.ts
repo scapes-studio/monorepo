@@ -1,4 +1,5 @@
 import pg from "pg";
+import { sql } from "drizzle-orm";
 import { getOffchainDb, getOffchainPool } from "./database";
 import {
   twentySevenYearScapeDetail,
@@ -124,7 +125,25 @@ export class ImportGallery27Service {
         await db
           .insert(twentySevenYearScapeDetail)
           .values(values)
-          .onConflictDoNothing();
+          .onConflictDoUpdate({
+            target: twentySevenYearScapeDetail.tokenId,
+            set: {
+              scapeId: sql`excluded.scape_id`,
+              date: sql`excluded.date`,
+              auctionEndsAt: sql`excluded.auction_ends_at`,
+              description: sql`excluded.description`,
+              requestId: sql`excluded.request_id`,
+              imagePath: sql`excluded.image_path`,
+              step: sql`excluded.step`,
+              imageCid: sql`excluded.image_cid`,
+              metadataCid: sql`excluded.metadata_cid`,
+              data: sql`excluded.data`,
+              owner: sql`excluded.owner`,
+              initialRenderId: sql`excluded.initial_render_id`,
+              createdAt: sql`excluded.created_at`,
+              updatedAt: sql`excluded.updated_at`,
+            },
+          });
 
         totalInserted += batch.length;
         options.onProgress?.(batch.length);
@@ -197,7 +216,23 @@ export class ImportGallery27Service {
         await db
           .insert(twentySevenYearRequest)
           .values(values)
-          .onConflictDoNothing();
+          .onConflictDoUpdate({
+            target: twentySevenYearRequest.id,
+            set: {
+              tokenId: sql`excluded.token_id`,
+              from: sql`excluded."from"`,
+              transactionHash: sql`excluded.transaction_hash`,
+              value: sql`excluded.value`,
+              description: sql`excluded.description`,
+              imagePath: sql`excluded.image_path`,
+              imageInput: sql`excluded.image_input`,
+              imageSteps: sql`excluded.image_steps`,
+              imageTaskId: sql`excluded.image_task_id`,
+              createdAt: sql`excluded.created_at`,
+              startedProcessingAt: sql`excluded.started_processing_at`,
+              completedAt: sql`excluded.completed_at`,
+            },
+          });
 
         totalInserted += batch.length;
         options.onProgress?.(batch.length);
