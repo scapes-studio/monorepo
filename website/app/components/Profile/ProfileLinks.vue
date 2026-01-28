@@ -1,13 +1,10 @@
 <template>
-  <section v-if="linkCount" class="profile-links">
+  <section v-if="activeLinks.length" class="profile-links">
     <ul class="profile-links__list">
-      <li v-for="(value, key) in links" :key="key">
-        <template v-if="value">
-          <NuxtLink :to="buildUrl(key, value)" rel="noopener noreferrer" target="_blank">
-            {{ labelMap[key] }}
-          </NuxtLink>
-        </template>
-        <span v-else class="profile-links__empty">{{ labelMap[key] }}: none</span>
+      <li v-for="{ key, value } in activeLinks" :key="key">
+        <NuxtLink :to="buildUrl(key, value)" rel="noopener noreferrer" target="_blank">
+          {{ labelMap[key] }}
+        </NuxtLink>
       </li>
     </ul>
   </section>
@@ -18,10 +15,12 @@ import type { ProfileLinks as Links } from "~/composables/useProfile";
 
 const props = defineProps<{ links: Links | null | undefined }>();
 
-const linkCount = computed(() => props.links
-  ? Object.values(props.links).filter(l => !!l)?.length
-  : 0
-)
+const activeLinks = computed(() => props.links
+  ? (Object.entries(props.links) as [keyof Links, string | undefined][])
+      .filter((entry): entry is [keyof Links, string] => !!entry[1])
+      .map(([key, value]) => ({ key, value }))
+  : []
+);
 
 const labelMap: Record<keyof Links, string> = {
   url: "Website",
