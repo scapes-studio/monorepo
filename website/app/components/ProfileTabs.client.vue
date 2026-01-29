@@ -95,6 +95,8 @@ onMounted(refresh)
   gap: var(--grid-gutter);
   margin-block: var(--scape-height-gutter);
   height: var(--scape-height);
+  max-width: var(--content-width);
+  text-align: center;
 }
 
 .profile-tabs__tab {
