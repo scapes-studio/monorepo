@@ -57,7 +57,7 @@ const handleRefresh = async () => {
 
 .profile-header__refresh {
   position: absolute;
-  bottom: 0;
+  top: 0;
   right: 0;
   min-width: calc(var(--scape-height) / 2 - var(--grid-gutter));
   min-height: calc(var(--scape-height) / 2 - var(--grid-gutter));
@@ -71,10 +71,12 @@ const handleRefresh = async () => {
   color: inherit;
   z-index: 1;
   box-shadow: none;
+  background: var(--color);
+  color: var(--background);
 }
 
 .profile-header__refresh:hover {
-  background: var(--gray-z-1);
+  background: var(--gray-z-8);
 }
 
 .profile-header__refresh:disabled {
@@ -144,6 +146,7 @@ const handleRefresh = async () => {
 
 .profile-header__meta h1 {
   margin: 0 0 var(--spacer-xs);
+  word-break: break-all;
 }
 
 .profile-header__address {
