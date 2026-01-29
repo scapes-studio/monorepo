@@ -8,7 +8,13 @@
 </template>
 
 <script setup lang="ts">
-useScapeGrid()
+const { isInitialized } = useScapeGrid()
+
+useHead({
+  bodyAttrs: {
+    class: computed(() => isInitialized.value ? 'grid-ready' : ''),
+  },
+})
 </script>
 
 <style>
@@ -21,16 +27,35 @@ body {
   --grid-padding: calc(var(--grid-gutter) + var(--grid-margin-offset, 0px));
 
   background-color: var(--background);
+  width: 100vw;
+  min-height: 100dvh;
+  padding: var(--grid-padding);
+  padding-bottom: calc(var(--grid-padding) + var(--scape-height-gutter));
   background-image:
     linear-gradient(to right, var(--grid-color) var(--grid-gutter), transparent var(--grid-gutter)),
     linear-gradient(to bottom, var(--grid-color) var(--grid-gutter), transparent var(--grid-gutter));
   background-size:
     calc(var(--scape-width) + var(--grid-gutter)) calc(var(--scape-height) + var(--grid-gutter));
   background-position: var(--grid-margin-offset, 0px) var(--grid-margin-offset, 0px);
+  opacity: 0;
+  transition: opacity var(--speed-slow);
 
-  width: 100vw;
-  min-height: 100dvh;
-  padding: var(--grid-padding);
-  padding-bottom: calc(var(--grid-padding) + var(--scape-height-gutter));
+  &.grid-ready {
+    opacity: 1;
+  }
+}
+
+main {
+  transform: translateY(1rem);
+  transition: transform var(--speed);
+}
+
+body.grid-ready main {
+  transform: translateY(0);
+}
+
+body.grid-ready nav.main-menu {
+  display: flex;
+  opacity: 1;
 }
 </style>

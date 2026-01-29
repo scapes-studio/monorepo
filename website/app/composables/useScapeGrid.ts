@@ -1,5 +1,5 @@
 import { useCssVar, useWindowSize } from '@vueuse/core'
-import { computed, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 
 const MIN_SCAPE_WIDTH = 144
 const MIN_SCAPE_WIDTH_MOBILE = 144
@@ -41,6 +41,7 @@ const COLUMNS = {
 
 export function useScapeGrid() {
   const { width: windowWidth } = useWindowSize()
+  const isInitialized = ref(false)
 
   const scapeWidthVar = useCssVar('--scape-width')
   const scapeHeightVar = useCssVar('--scape-height')
@@ -106,7 +107,12 @@ export function useScapeGrid() {
     marginOffsetVar.value = `${marginOffset.value}px`
   })
 
+  onMounted(() => {
+    isInitialized.value = true
+  })
+
   return {
+    isInitialized,
     columns,
     scapeWidth,
     scapeHeight,

@@ -1,5 +1,5 @@
 <template>
-  <nav class="main-menu border-drop" :class="{ 'is-loaded': isLoaded }">
+  <nav class="main-menu border-drop">
     <div class="main-menu__brand border">
       <NuxtLink to="/">
         <img src="/icon.png" alt="Scapes Logo" />
@@ -8,11 +8,21 @@
 
     <NavIndicator class="main-menu__nav">
       <slot name="nav">
-        <li><NuxtLink to="/scapes">Scapes</NuxtLink></li>
-        <li><NuxtLink to="/people">Owners</NuxtLink></li>
-        <li><NuxtLink to="/activity">Activity</NuxtLink></li>
-        <li><NuxtLink to="/gallery27">Gallery27</NuxtLink></li>
-        <li><NuxtLink to="/merge">Merge</NuxtLink></li>
+        <li>
+          <NuxtLink to="/scapes">Scapes</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/people">Owners</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/activity">Activity</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/gallery27">Gallery27</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/merge">Merge</NuxtLink>
+        </li>
       </slot>
     </NavIndicator>
 
@@ -34,12 +44,6 @@
 
 <script setup lang="ts">
 const { getAccountDisplay } = useENSResolution()
-
-const isLoaded = ref(false)
-
-onMounted(() => {
-  isLoaded.value = true
-})
 </script>
 
 <style scoped>
@@ -59,16 +63,6 @@ onMounted(() => {
   background: var(--color-background, #fff);
   display: none;
   opacity: 0;
-}
-
-.main-menu.is-loaded {
-  display: flex;
-  opacity: 1;
-  transition: opacity var(--speed) ease, display var(--speed) ease allow-discrete;
-
-  @starting-style {
-    opacity: 0;
-  }
 }
 
 .main-menu__brand {
@@ -101,5 +95,4 @@ onMounted(() => {
   height: 100%;
   object-fit: contain;
 }
-
 </style>
