@@ -135,9 +135,12 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 }
 
 .activity-page__status {
-  padding: var(--grid-gutter);
-  border-radius: var(--grid-gutter);
-  background: var(--gray-z-1);
+  height: var(--scape-height);
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin: var(--scape-height-gutter);
 }
 
 .activity-page__status--error {
