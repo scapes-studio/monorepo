@@ -8,12 +8,9 @@
     <template v-else>
       <div class="account-page__profile">
         <ProfileHeader :address="displayAddress" :ens="profile?.ens ?? null" :avatar="profileData?.avatar ?? null"
-          :header="effectiveHeader" />
+          :header="effectiveHeader" :on-refresh="forceRefresh" />
         <ProfileBio :description="profileData?.description ?? null" />
         <ProfileLinks :links="profileData?.links ?? null" />
-        <button class="account-page__refresh" :disabled="isRefreshing" @click="handleRefresh">
-          {{ isRefreshing ? 'Refreshing...' : 'Refresh from ENS' }}
-        </button>
       </div>
 
       <ProfileTabs :account-id="accountId ?? ''" />
@@ -38,16 +35,6 @@ const displayAddress = computed(() => profile.value?.address ?? accountId.value 
 
 const { bannerImageUrl } = useFeaturedScape(resolvedAddress);
 const effectiveHeader = computed(() => profileData.value?.header || bannerImageUrl.value || null);
-
-const isRefreshing = ref(false);
-const handleRefresh = async () => {
-  isRefreshing.value = true;
-  try {
-    await forceRefresh();
-  } finally {
-    isRefreshing.value = false;
-  }
-};
 
 // Provide profile data to child pages
 provide("profile", { profile, resolvedAddress, displayAddress });
@@ -88,9 +75,5 @@ useSeo(seoOptions);
 .account-page__profile {
   display: grid;
   gap: var(--grid-gutter);
-}
-
-.account-page__refresh {
-  display: none;
 }
 </style>
