@@ -6,7 +6,8 @@
     </NuxtLink>
     <NuxtLink :to="`/people/${props.accountId}/twenty-seven-year-scapes`" class="profile-tabs__tab"
       :class="{ 'profile-tabs__tab--active': currentTab === 'gallery27' }">
-      Twenty Seven Year Scapes
+      <span class="profile-tabs__text--mobile">27y Scapes</span>
+      <span class="profile-tabs__text--desktop">Twenty Seven Year Scapes</span>
     </NuxtLink>
     <span class="profile-tabs__indicator" :style="indicatorStyle" />
   </nav>
@@ -111,6 +112,19 @@ onMounted(refresh)
 
 .profile-tabs__tab--active {
   color: inherit;
+}
+
+.profile-tabs__text--mobile {
+  display: none;
+}
+
+@media (max-width: 575px) {
+  .profile-tabs__text--mobile {
+    display: inline;
+  }
+  .profile-tabs__text--desktop {
+    display: none;
+  }
 }
 
 .profile-tabs__indicator {
