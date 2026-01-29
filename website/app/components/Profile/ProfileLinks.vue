@@ -17,8 +17,8 @@ const props = defineProps<{ links: Links | null | undefined }>();
 
 const activeLinks = computed(() => props.links
   ? (Object.entries(props.links) as [keyof Links, string | undefined][])
-      .filter((entry): entry is [keyof Links, string] => !!entry[1])
-      .map(([key, value]) => ({ key, value }))
+    .filter((entry): entry is [keyof Links, string] => !!entry[1])
+    .map(([key, value]) => ({ key, value }))
   : []
 );
 
@@ -49,6 +49,7 @@ function buildUrl(key: keyof Links, value: string): string {
   padding: 0;
   margin: 0;
   display: flex;
+  flex-wrap: wrap;
   gap: var(--grid-gutter);
 }
 
