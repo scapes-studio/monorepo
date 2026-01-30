@@ -4,13 +4,15 @@
       <GridArea v-for="attr in attributeList" :key="attr.trait_type" :rows="1" :width="1" tag="li"
         class="attributes__item">
         <span class="attributes__trait">{{ attr.trait_type }}</span>
-        <span class="attributes__value">{{ attr.value }}</span>
+        <span class="attributes__value">{{ formatValue(attr) }}</span>
       </GridArea>
     </ul>
   </section>
 </template>
 
 <script setup lang="ts">
+import { DateTime } from 'luxon'
+
 const props = defineProps<{
   attributes: unknown;
 }>();
@@ -28,6 +30,13 @@ const attributeList = computed(() => {
 });
 
 const hasAttributes = computed(() => attributeList.value.length > 0);
+
+function formatValue(attr: AttributeEntry): string | number {
+  if (attr.trait_type === 'date' && typeof attr.value === 'number') {
+    return DateTime.fromSeconds(attr.value).toLocaleString(DateTime.DATE_MED);
+  }
+  return attr.value;
+}
 </script>
 
 <style scoped>
