@@ -1,6 +1,6 @@
 <template>
   <li class="activity-item">
-    <div class="activity-item__header">
+    <GridArea :rows="1" background width="full" class="activity-item__header">
       <span class="activity-item__type">
         <NuxtLink :to="scapeUrl(item.tokenId, item.collection)">
           <span>{{ typeLabel }} <span class="muted">#{{ item.tokenId }}</span></span>
@@ -26,9 +26,9 @@
           rel="noopener noreferrer">{{ timeAgo }}</a>
         <span v-else class="activity-item__time">{{ timeAgo }}</span>
       </span>
-    </div>
+    </GridArea>
 
-    <div class="activity-item__content">
+    <GridArea :rows="1" width="full" class="activity-item__content" background>
       <template v-if="item.type === 'transfer'">
         <div class="activity-item__addresses">
           <template v-if="isMint">
@@ -80,7 +80,7 @@
           <div></div>
         </div>
       </template>
-    </div>
+    </GridArea>
   </li>
 </template>
 
@@ -131,7 +131,6 @@ const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
   display: grid;
   gap: var(--grid-gutter);
   font-size: var(--font-sm);
-  background: var(--background);
 }
 
 .activity-item__header {
@@ -139,7 +138,6 @@ const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
   align-items: center;
   gap: var(--spacer);
   flex-wrap: wrap;
-  height: var(--scape-height);
   padding: var(--spacer);
 }
 
@@ -182,7 +180,6 @@ a.activity-item__time:hover {
   align-items: center;
   justify-content: space-between;
   padding-inline: var(--spacer);
-  height: var(--scape-height);
 }
 
 .activity-item__addresses {

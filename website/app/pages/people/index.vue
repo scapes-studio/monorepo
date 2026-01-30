@@ -1,11 +1,9 @@
 <template>
   <section class="accounts-page">
-    <header class="accounts-page__header">
-      <div>
-        <h1>{{ formatNumber(totalOwners) }} Scape Owners</h1>
-        <p class="accounts-page__subtitle">Leaderboard by total scapes owned.</p>
-      </div>
-    </header>
+    <GridArea :rows="2" background center>
+      <h1>{{ formatNumber(totalOwners) }} Scape Owners</h1>
+      <p class="accounts-page__subtitle">Leaderboard by total scapes owned.</p>
+    </GridArea>
 
     <div v-if="pending" class="accounts-page__status">Loading owners…</div>
     <div v-else-if="error" class="accounts-page__status accounts-page__status--error">
@@ -129,31 +127,13 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   gap: var(--grid-gutter);
 }
 
-.accounts-page__header {
-  display: grid;
-  gap: var(--grid-gutter);
-  align-items: center;
-  height: calc(2 * var(--scape-height-gutter) - var(--grid-gutter));
-  padding-inline: calc(var(--scape-height) / 2);
-  width: 100%;
-  background: var(--background);
-
-  &>div {
-    width: 100%;
-  }
-}
-
-.accounts-page__header h1 {
+.accounts-page h1 {
   margin: 0;
-  width: 100%;
-  text-align: center;
 }
 
 .accounts-page__subtitle {
-  margin: 0;
-  width: 100%;
+  margin: var(--grid-gutter) 0 0;
   color: var(--muted);
-  text-align: center;
 }
 
 .accounts-page__status {
