@@ -3,6 +3,7 @@
     <div class="scape-detail__image">
       <ScapeImage :id="scapeId" :scape-count="scapeCount" />
     </div>
+
     <header class="scape-detail__header">
       <div class="scape-detail__meta">
         <h1>Scape #{{ scapeId }}</h1>
@@ -24,9 +25,9 @@
           class="scape-detail__listings" />
         <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
           @listing-change="refreshListing" />
-        <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true">
-          Play SES
-        </button>
+        <!-- <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true"> -->
+        <!--   Play SES -->
+        <!-- </button> -->
       </div>
     </header>
 
@@ -221,7 +222,7 @@ const sesModalOpen = ref(false);
   max-width: var(--content-width);
   margin: 0 auto;
   display: grid;
-  gap: var(--scape-height-gutter);
+  gap: var(--grid-gutter);
   container-type: inline-size;
 }
 
