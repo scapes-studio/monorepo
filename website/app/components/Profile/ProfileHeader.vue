@@ -1,14 +1,14 @@
 <template>
   <section class="profile-header">
-    <div v-if="resolvedHeader" class="profile-header__banner">
+    <GridArea v-if="resolvedHeader" rows="var(--content-columns)" width="full" class="profile-header__banner">
       <img :src="resolvedHeader" alt="Profile header" />
       <Button v-if="onRefresh" class="profile-header__refresh" :disabled="isRefreshing"
         :title="isRefreshing ? 'Refreshing...' : 'Refresh from ENS'" @click="handleRefresh">
         <Icon type="lucide:refresh-cw" />
       </Button>
-    </div>
+    </GridArea>
 
-    <div class="profile-header__content">
+    <GridArea :rows="2" background width="full" class="profile-header__content">
       <div class="profile-header__avatar">
         <AccountAvatar :address="address as `0x${string}`" />
       </div>
@@ -17,7 +17,7 @@
         <h1>{{ displayName }}</h1>
         <a :href="etherscanUrl" target="_blank" class="profile-header__address">{{ shortenAddress(address) }}</a>
       </div>
-    </div>
+    </GridArea>
   </section>
 </template>
 
@@ -99,8 +99,6 @@ const handleRefresh = async () => {
 }
 
 .profile-header__banner {
-  width: 100%;
-  height: calc(var(--content-columns) * var(--scape-height-gutter) - var(--grid-gutter));
   background: var(--gray-z-1);
   position: relative;
 }
@@ -117,8 +115,6 @@ const handleRefresh = async () => {
   gap: var(--spacer);
   align-items: center;
   padding: var(--spacer);
-  height: calc(2 * var(--scape-height-gutter) - var(--grid-gutter));
-  background: var(--background);
   position: relative;
 }
 

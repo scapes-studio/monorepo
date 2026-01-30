@@ -1,12 +1,12 @@
 <template>
   <section class="activity-page">
-    <header class="activity-page__header">
+    <GridArea :rows="2" background center>
       <h1>Activity</h1>
-      <p class="activity-page__subtitle">
+      <p class="muted">
         <span>Recent activity </span>
         <span v-if="total !== null" class="activity-page__count">({{ formatNumber(total) }} total events)</span>
       </p>
-    </header>
+    </GridArea>
     <ActivityFilters v-model="filters" />
 
     <div v-if="loading && activity.length === 0" class="activity-page__status">
@@ -94,35 +94,9 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   gap: var(--grid-gutter);
 }
 
-.activity-page__header {
-  display: flex;
-  flex-direction: column;
-  gap: var(--grid-gutter);
-  align-items: center;
-  justify-content: center;
-  height: calc(2 * var(--scape-height-gutter) - var(--grid-gutter));
-  padding-inline: calc(var(--scape-height) / 2);
-  width: 100%;
-  background: var(--background);
-}
-
-.activity-page__header h1 {
-  margin: 0;
-  width: 100%;
-  text-align: center;
-}
-
-.activity-page__subtitle {
-  margin: 0;
-  width: 100%;
-  color: var(--muted);
-  text-align: center;
-}
-
 .activity-page__controls {
   margin: 0;
   padding: 0;
-  height: var(--scape-height);
 
   >* {
     display: flex;

@@ -1,9 +1,9 @@
 <template>
   <div class="home">
-    <header class="home__header">
+    <GridArea :rows="3" background center>
       <h1>Welcome Home</h1>
       <p>Composable places stored on Ethereum.</p>
-    </header>
+    </GridArea>
 
     <ClientOnly>
       <ScapesVirtualGrid :scapes="scapes" />
@@ -26,25 +26,11 @@ useSeo({
   gap: var(--grid-gutter);
 }
 
-.home__header {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: calc(3 * var(--scape-height-gutter) - var(--grid-gutter));
-  width: 100%;
-  max-width: var(--content-width);
-  margin: 0 auto;
-  text-align: center;
-  background: var(--background);
-  padding: var(--scape-height);
-}
-
-.home__header h1 {
+.home h1 {
   margin: 0;
 }
 
-.home__header p {
+.home p {
   margin: var(--grid-gutter) 0 0;
   color: var(--muted);
 }
