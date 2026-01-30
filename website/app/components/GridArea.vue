@@ -1,25 +1,29 @@
 <template>
-  <div class="grid-area" :class="classes" :style="styles">
+  <component :is="tag" class="grid-area" :class="classes" :style="styles">
     <slot />
-  </div>
+  </component>
 </template>
 
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
+  tag?: string;
   rows?: number | string;
   width?: 'content' | 'content-small' | 'full' | number;
   background?: boolean | string;
   center?: boolean;
+  padding?: boolean | string;
 }>(), {
+  tag: 'div',
   rows: 1,
   width: 'content',
-  background: false,
+  background: true,
   center: false,
 });
 
 const classes = computed(() => ({
-  'grid-area--centered': props.center,
-  [`grid-area--width-${props.width}`]: typeof props.width === 'string',
+  'centered': props.center,
+  [`width-${props.width}`]: typeof props.width === 'string',
+  padded: !!props.padding,
 }));
 
 const styles = computed(() => {
@@ -50,25 +54,29 @@ const styles = computed(() => {
   width: 100%;
 }
 
-.grid-area--width-content {
+.width-content {
   max-width: var(--content-width);
   margin-inline: auto;
 }
 
-.grid-area--width-content-small {
+.width-content-small {
   max-width: var(--content-width-small);
   margin-inline: auto;
 }
 
-.grid-area--width-full {
+.width-full {
   max-width: none;
 }
 
-.grid-area--centered {
+.centered {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+.padded {
+  padding: var(--spacer);
 }
 </style>

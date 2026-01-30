@@ -1,6 +1,6 @@
 <template>
   <li class="activity-item">
-    <GridArea :rows="1" background width="full" class="activity-item__header">
+    <GridArea :rows="1" width="full" class="activity-item__header">
       <span class="activity-item__type">
         <NuxtLink :to="scapeUrl(item.tokenId, item.collection)">
           <span>{{ typeLabel }} <span class="muted">#{{ item.tokenId }}</span></span>
@@ -28,7 +28,7 @@
       </span>
     </GridArea>
 
-    <GridArea :rows="1" width="full" class="activity-item__content" background>
+    <GridArea :rows="1" width="full" class="activity-item__content">
       <template v-if="item.type === 'transfer'">
         <div class="activity-item__addresses">
           <template v-if="isMint">

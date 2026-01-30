@@ -1,6 +1,6 @@
 <template>
   <section class="accounts-page">
-    <GridArea :rows="2" background center>
+    <GridArea :rows="2" center>
       <h1>{{ formatNumber(totalOwners) }} Scape Owners</h1>
       <p class="accounts-page__subtitle">Leaderboard by total scapes owned.</p>
     </GridArea>

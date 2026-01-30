@@ -1,6 +1,6 @@
 <template>
   <section class="activity-page">
-    <GridArea :rows="2" background center>
+    <GridArea :rows="2" center>
       <h1>Activity</h1>
       <p class="muted">
         <span>Recent activity </span>

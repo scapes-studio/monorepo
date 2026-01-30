@@ -1,16 +1,20 @@
 <template>
-  <section class="scape-detail__history">
-    <header class="scape-detail__section-title">
+  <section class="history">
+    <GridArea :rows="1" width="full" center class="history__title">
       <h2>Transfer History</h2>
-    </header>
+    </GridArea>
 
-    <div v-if="pending" class="scape-detail__status">Loading scape history…</div>
-    <div v-else-if="error" class="scape-detail__status scape-detail__status--error">
+    <GridArea v-if="pending" :rows="1" width="full" center :background="false" class="history__status">
+      Loading scape history…
+    </GridArea>
+    <GridArea v-else-if="error" :rows="1" width="full" center :background="false" class="history__status history__status--error">
       Unable to load scape history right now.
-    </div>
-    <div v-else-if="history.length === 0" class="scape-detail__status">No transfers yet.</div>
+    </GridArea>
+    <GridArea v-else-if="history.length === 0" :rows="1" width="full" center :background="false" class="history__status">
+      No transfers yet.
+    </GridArea>
 
-    <ul v-else class="scape-detail__history-list">
+    <ul v-else class="history__list">
       <ScapesTransactionHistoryEvent v-for="entry in history" :key="entry.id" :entry="entry" />
     </ul>
   </section>
@@ -66,30 +70,28 @@ const error = computed(() => props.error ?? null);
 </script>
 
 <style scoped>
-.scape-detail__history {
+.history {
   display: grid;
-  gap: var(--spacer);
+  gap: var(--grid-gutter);
 }
 
-.scape-detail__section-title h2 {
+.history__title h2 {
   margin: 0;
 }
 
-.scape-detail__status {
-  padding: var(--spacer);
-  border-radius: var(--size-3);
+.history__status {
   background: var(--gray-z-1);
 }
 
-.scape-detail__status--error {
+.history__status--error {
   background: oklch(from var(--error) l c h / 0.1);
 }
 
-.scape-detail__history-list {
+.history__list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
-  gap: var(--spacer);
+  gap: var(--grid-gutter);
 }
 </style>

@@ -1,37 +1,38 @@
 <template>
   <section class="scape-detail" :style="{ '--scape-count': scapeCount }">
-    <div class="scape-detail__image">
+    <GridArea rows="calc(var(--content-columns, 5) * 2)" width="full" class="scape-detail__image">
       <ScapeImage :id="scapeId" :scape-count="scapeCount" />
-    </div>
+    </GridArea>
 
-    <header class="scape-detail__header">
-      <div class="scape-detail__meta">
-        <h1>Scape #{{ scapeId }}</h1>
-        <div class="scape-detail__stats">
-          <span>{{ totalTransfers }} transfers</span>
-          <span>{{ totalSales }} sales</span>
-        </div>
-        <div class="scape-detail__owner">
-          <span v-if="scapePending">Loading owner…</span>
-          <template v-else-if="owner">
-            Owned by
-            <AccountLink :address="owner" class="scape-detail__owner-link" />
-          </template>
-        </div>
-        <NuxtLink v-if="gallery27TokenId" :to="`/gallery27/${gallery27TokenId}`" class="scape-detail__gallery27-link">
-          View Gallery27 Day {{ gallery27TokenId }}
-        </NuxtLink>
-        <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
-          class="scape-detail__listings" />
-        <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
-          @listing-change="refreshListing" />
-        <!-- <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true"> -->
-        <!--   Play SES -->
-        <!-- </button> -->
+    <GridArea rows="1" width="full" class="scape-detail__header" padding>
+      <h1>Scape #{{ scapeId }}</h1>
+      <div class="scape-detail__owner">
+        <span v-if="scapePending">Loading owner…</span>
+        <template v-else-if="owner">
+          Owned by
+          <AccountLink :address="owner" class="scape-detail__owner-link" />
+        </template>
       </div>
-    </header>
+    </GridArea>
 
     <ScapesAttributes :attributes="attributes" />
+
+    <GridArea :rows="2" width="full" center class="scape-detail__header">
+      <!-- <NuxtLink v-if="gallery27TokenId" :to="`/gallery27/${gallery27TokenId}`" class="scape-detail__gallery27-link"> -->
+      <!--   View Gallery27 Day {{ gallery27TokenId }} -->
+      <!-- </NuxtLink> -->
+      <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
+        class="scape-detail__listings" />
+      <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
+        @listing-change="refreshListing" />
+      <div class="scape-detail__stats">
+        <span>{{ totalTransfers }} transfers</span>
+        <span>{{ totalSales }} sales</span>
+      </div>
+      <!-- <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true"> -->
+      <!--   Play SES -->
+      <!-- </button> -->
+    </GridArea>
 
     <ScapesTransactionHistory :history="history" :pending="pending" :error="error" />
 
@@ -231,11 +232,6 @@ const sesModalOpen = ref(false);
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--background);
-  width: 100%;
-
-  height: calc(var(--scape-height) * var(--content-columns, 5) * 2 + var(--grid-gutter) * (var(--content-columns, 5) * 2 - 1));
-
   padding: 16%;
 
   img {
@@ -246,12 +242,13 @@ const sesModalOpen = ref(false);
 }
 
 .scape-detail__header {
-  justify-self: center;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.scape-detail__meta h1 {
-  margin: 0 0 var(--spacer-sm);
+.scape-detail__header h1 {
+  margin: 0;
 }
 
 .scape-detail__stats {
@@ -262,8 +259,8 @@ const sesModalOpen = ref(false);
 }
 
 .scape-detail__owner {
-  margin-top: var(--spacer-sm);
   color: var(--muted);
+  font-size: var(--font-sm);
 }
 
 .scape-detail__owner-link {

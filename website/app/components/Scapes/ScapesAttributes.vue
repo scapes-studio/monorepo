@@ -1,11 +1,11 @@
 <template>
   <section v-if="hasAttributes" class="attributes">
-    <h2 class="attributes__title">Attributes</h2>
     <ul class="attributes__list">
-      <li v-for="attr in attributeList" :key="attr.trait_type" class="attributes__item">
+      <GridArea v-for="attr in attributeList" :key="attr.trait_type" :rows="1" :width="1" tag="li"
+        class="attributes__item">
         <span class="attributes__trait">{{ attr.trait_type }}</span>
         <span class="attributes__value">{{ attr.value }}</span>
-      </li>
+      </GridArea>
     </ul>
   </section>
 </template>
@@ -31,44 +31,29 @@ const hasAttributes = computed(() => attributeList.value.length > 0);
 </script>
 
 <style scoped>
-.attributes {
-  padding: var(--spacer);
-  background: var(--gray-z-1);
-  border-radius: var(--size-2);
-}
-
-.attributes__title {
-  margin: 0 0 var(--spacer);
-  font-size: var(--font-lg);
-}
-
 .attributes__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-  gap: var(--size-3);
   list-style: none;
-  margin: 0;
   padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--grid-gutter);
 }
 
 .attributes__item {
   display: flex;
   flex-direction: column;
-  padding: var(--size-3);
-  background: var(--background);
-  border-radius: var(--size-1);
-  border: var(--border);
+  justify-content: center;
+  padding-inline: var(--spacer);
 }
 
 .attributes__trait {
-  font-size: var(--font-xs);
+  font-size: var(--font-sm);
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing);
 }
 
 .attributes__value {
   font-weight: var(--font-weight-bold);
-  margin-top: var(--spacer-xs);
 }
 </style>

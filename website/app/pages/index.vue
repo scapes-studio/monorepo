@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <GridArea :rows="3" background center>
+    <GridArea :rows="3" center>
       <h1>Welcome Home</h1>
       <p>Composable places stored on Ethereum.</p>
     </GridArea>

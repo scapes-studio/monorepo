@@ -1,6 +1,6 @@
 <template>
   <section class="profile-header">
-    <GridArea v-if="resolvedHeader" rows="var(--content-columns)" width="full" class="profile-header__banner">
+    <GridArea v-if="resolvedHeader" rows="var(--content-columns)" width="full" :background="false" class="profile-header__banner">
       <img :src="resolvedHeader" alt="Profile header" />
       <Button v-if="onRefresh" class="profile-header__refresh" :disabled="isRefreshing"
         :title="isRefreshing ? 'Refreshing...' : 'Refresh from ENS'" @click="handleRefresh">
@@ -8,7 +8,7 @@
       </Button>
     </GridArea>
 
-    <GridArea :rows="2" background width="full" class="profile-header__content">
+    <GridArea :rows="2" width="full" class="profile-header__content">
       <div class="profile-header__avatar">
         <AccountAvatar :address="address as `0x${string}`" />
       </div>
