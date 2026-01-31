@@ -75,6 +75,9 @@ function formatValue(attr: AttributeEntry): string | number {
 
 .attributes__value {
   font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .attributes__value--link {
