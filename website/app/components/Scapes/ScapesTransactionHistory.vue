@@ -1,16 +1,18 @@
 <template>
   <section class="history">
-    <GridArea :rows="1" width="full" center class="history__title">
+    <GridArea width="full" padding class="history__title">
       <h2>Transfer History</h2>
     </GridArea>
 
     <GridArea v-if="pending" :rows="1" width="full" center :background="false" class="history__status">
       Loading scape history…
     </GridArea>
-    <GridArea v-else-if="error" :rows="1" width="full" center :background="false" class="history__status history__status--error">
+    <GridArea v-else-if="error" :rows="1" width="full" center :background="false"
+      class="history__status history__status--error">
       Unable to load scape history right now.
     </GridArea>
-    <GridArea v-else-if="history.length === 0" :rows="1" width="full" center :background="false" class="history__status">
+    <GridArea v-else-if="history.length === 0" :rows="1" width="full" center :background="false"
+      class="history__status">
       No transfers yet.
     </GridArea>
 
@@ -75,8 +77,9 @@ const error = computed(() => props.error ?? null);
   gap: var(--grid-gutter);
 }
 
-.history__title h2 {
-  margin: 0;
+.history__title {
+  display: flex;
+  align-items: center;
 }
 
 .history__status {
