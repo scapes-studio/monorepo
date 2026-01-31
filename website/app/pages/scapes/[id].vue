@@ -13,9 +13,12 @@
           <AccountLink :address="owner" class="scape-detail__owner-link" />
         </template>
       </div>
+      <!-- <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true"> -->
+      <!--   Play SES -->
+      <!-- </button> -->
     </GridArea>
 
-    <ScapesAttributes :attributes="attributes" />
+    <ScapesAttributes :attributes="attributes" :gallery27-token-id="gallery27TokenId" />
 
     <GridArea :rows="2" width="full" center class="scape-detail__header">
       <!-- <NuxtLink v-if="gallery27TokenId" :to="`/gallery27/${gallery27TokenId}`" class="scape-detail__gallery27-link"> -->
@@ -25,13 +28,12 @@
         class="scape-detail__listings" />
       <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
         @listing-change="refreshListing" />
+    </GridArea>
+    <GridArea width="full" center class="scape-detail__header">
       <div class="scape-detail__stats">
         <span>{{ totalTransfers }} transfers</span>
         <span>{{ totalSales }} sales</span>
       </div>
-      <!-- <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true"> -->
-      <!--   Play SES -->
-      <!-- </button> -->
     </GridArea>
 
     <ScapesTransactionHistory :history="history" :pending="pending" :error="error" />
