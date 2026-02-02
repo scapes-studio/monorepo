@@ -6,11 +6,10 @@
 
     <Dialog v-model:open="open" title="List for Sale" class="scapes-action__dialog">
       <div class="scapes-action__form">
-        <div class="scapes-action__input-group">
-          <input v-model="listPriceInput" type="number" step="0.001" min="0" placeholder="Price in ETH"
-            class="scapes-action__input" />
-          <span class="scapes-action__input-suffix">ETH</span>
-        </div>
+        <FormItem>
+          <input v-model="listPriceInput" type="number" step="0.001" min="0" placeholder="Price in ETH" />
+          <template #suffix>ETH</template>
+        </FormItem>
         <Actions>
           <Button class="small" @click="handleCancel">
             Cancel
@@ -103,30 +102,6 @@ const listText = computed(() => ({
   display: flex;
   flex-direction: column;
   gap: var(--spacer-sm);
-}
-
-.scapes-action__input-group {
-  display: flex;
-  align-items: center;
-  gap: var(--spacer-xs);
-}
-
-.scapes-action__input {
-  flex: 1;
-  padding: var(--spacer-sm);
-  border: 1px solid var(--border);
-  border-radius: var(--spacer-xs);
-  background: var(--background);
-  font-size: var(--font-base);
-}
-
-.scapes-action__input:focus {
-  outline: none;
-  border-color: var(--color);
-}
-
-.scapes-action__input-suffix {
-  color: var(--muted);
 }
 
 .actions {
