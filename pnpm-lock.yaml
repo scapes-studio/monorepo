@@ -85,11 +85,11 @@ importers:
   website:
     dependencies:
       '@1001-digital/layers.base':
-        specifier: ^0.0.9
-        version: 0.0.9(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+        specifier: ^0.0.13
+        version: 0.0.13(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@1001-digital/layers.evm':
-        specifier: ^0.0.4
-        version: 0.0.4(6b4b2da312e620790957ddebff8ee1ae)
+        specifier: ^0.0.6
+        version: 0.0.6(0cd2df2f29cb1ea8c7d9b4c5b3ca79d6)
       '@ponder/client':
         specifier: ^0.16.1
         version: 0.16.1(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)(typescript@5.9.3)
@@ -135,22 +135,19 @@ importers:
 
 packages:
 
-  '@1001-digital/layers.base@0.0.9':
-    resolution: {integrity: sha512-KY9FmcpeDPqCH1ReXRjDGXBSbJNXtlcqD73KRHMvs4po/Mn5wR3q1/W4YIhwz+54azgkQ1it3U8Nrnmpdaq3/Q==}
+  '@1001-digital/layers.base@0.0.13':
+    resolution: {integrity: sha512-TD7e63h3aQSGvhLAe92iRL1+027ra++4ckIRXvCTmNUaQaPlaAwQXbzH93Yn3/SDPjJ07ztPqPM58i/0iDuJ9A==}
 
-  '@1001-digital/layers.evm@0.0.4':
-    resolution: {integrity: sha512-czGh4O3Sk13YPvD8HtHvuxVUG7JLYZuUKF2Pgg0xcdzYKApIiTtbIagIJYQdYgSjW8WfN/6TlpuAarbFAbMofA==}
+  '@1001-digital/layers.evm@0.0.6':
+    resolution: {integrity: sha512-pm2Pa9G4bvpoCp22AigyYn1AcdF7HM5EHP2ltRKl4BJr003XGxpaBlOvGN9DFgHgAYqZN53HmKcjHjYmbNnpoA==}
     peerDependencies:
-      '@1001-digital/layers.base': ^0.0.6
+      '@1001-digital/layers.base': ^0.0.13
 
   '@adraffy/ens-normalize@1.11.1':
     resolution: {integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==}
 
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
-
-  '@antfu/utils@8.1.1':
-    resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
 
   '@aws-crypto/crc32@5.2.0':
     resolution: {integrity: sha512-nLbCWqQNgUiwwtFsen1AdzAtvuLRsQS8rYgMuxCrdKf9kOssamGLuPwyTY9wyYblNr9+1XM8v6zoDTPPSIeANg==}
@@ -1229,14 +1226,14 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
-  '@iconify/collections@1.0.636':
-    resolution: {integrity: sha512-rfHaZuA60MeAbylEGv8lzSYN0x/LvYj7B8h7JYlhSWgozox7VkNO+S/PcLfVcseNSzOzj1GChfUw1xwsh+XFiw==}
+  '@iconify/collections@1.0.645':
+    resolution: {integrity: sha512-N2OBLagQ/xrNFSdRRjzmSjNB610hark+/lMXQ4RZM6773WCOSsQlY8ZuWq2RRvSwLQBcciBuLdx2qhkD5JcS1A==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
-  '@iconify/utils@2.3.0':
-    resolution: {integrity: sha512-GmQ78prtwYW6EtzXRU1rY+KwOKfz32PD7iJh6Iyqw68GiKuoZ2A6pRtzWONz5VQJbp50mEjXh/7NkumtrAgRKA==}
+  '@iconify/utils@3.1.0':
+    resolution: {integrity: sha512-Zlzem1ZXhI1iHeeERabLNzBHdOa4VhQbqAcOQaMKuTuyZCpwKbC2R4Dd0Zo3g9EAc+Y4fiarO8HIHRAth7+skw==}
 
   '@iconify/vue@5.0.0':
     resolution: {integrity: sha512-C+KuEWIF5nSBrobFJhT//JS87OZ++QDORB6f2q2Wm6fl2mueSTpFBeBsveK0KW9hWiZ4mNiPjsh6Zs4jjdROSg==}
@@ -1560,11 +1557,6 @@ packages:
   '@nuxt/devalue@2.0.2':
     resolution: {integrity: sha512-GBzP8zOc7CGWyFQS6dv1lQz8VVpz5C2yRszbXufwG/9zhStTIH50EtD87NmWbTMwXDvZLNg8GIpb1UFdH93JCA==}
 
-  '@nuxt/devtools-kit@2.7.0':
-    resolution: {integrity: sha512-MIJdah6CF6YOW2GhfKnb8Sivu6HpcQheqdjOlZqShBr+1DyjtKQbAKSCAyKPaoIzZP4QOo2SmTFV6aN8jBeEIQ==}
-    peerDependencies:
-      vite: '>=6.0'
-
   '@nuxt/devtools-kit@3.1.1':
     resolution: {integrity: sha512-sjiKFeDCOy1SyqezSgyV4rYNfQewC64k/GhOsuJgRF+wR2qr6KTVhO6u2B+csKs74KrMrnJprQBgud7ejvOXAQ==}
     peerDependencies:
@@ -1584,8 +1576,8 @@ packages:
       '@vitejs/devtools':
         optional: true
 
-  '@nuxt/icon@1.15.0':
-    resolution: {integrity: sha512-kA0rxqr1B601zNJNcOXera8CyYcxUCEcT7dXEC7rwAz71PRCN5emf7G656eKEQgtqrD4JSj6NQqWDgrmFcf/GQ==}
+  '@nuxt/icon@2.2.1':
+    resolution: {integrity: sha512-GI840yYGuvHI0BGDQ63d6rAxGzG96jQcWrnaWIQKlyQo/7sx9PjXkSHckXUXyX1MCr9zY6U25Td6OatfY6Hklw==}
 
   '@nuxt/kit@3.20.2':
     resolution: {integrity: sha512-laqfmMcWWNV1FsVmm1+RQUoGY8NIJvCRl0z0K8ikqPukoEry0LXMqlQ+xaf8xJRvoH2/78OhZmsEEsUBTXipcw==}
@@ -4299,10 +4291,6 @@ packages:
     resolution: {integrity: sha512-AhO5QUcj8llrbG09iWhPU2B204J1xnPeL8kQmVorSsy+Sjj1sk8gIyh6cUocGmH4L0UuhAJy+hJMRA4mgA4mFQ==}
     engines: {node: '>=8'}
 
-  globals@15.15.0:
-    resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
-    engines: {node: '>=18'}
-
   globby@11.1.0:
     resolution: {integrity: sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==}
     engines: {node: '>=10'}
@@ -4650,9 +4638,6 @@ packages:
 
   knitwork@1.3.0:
     resolution: {integrity: sha512-4LqMNoONzR43B1W0ek0fhXMsDNW/zxa1NdFAVMY+k28pgZLovR4G3PB5MrpTxCy1QaZCqNoiaKPr5w5qZHfSNw==}
-
-  kolorist@1.8.0:
-    resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
 
   kysely@0.26.3:
     resolution: {integrity: sha512-yWSgGi9bY13b/W06DD2OCDDHQmq1kwTGYlQ4wpZkMOJqMGCstVCFIvxCCVG4KfY1/3G0MhDAcZsip/Lw8/vJWw==}
@@ -6724,9 +6709,9 @@ packages:
 
 snapshots:
 
-  '@1001-digital/layers.base@0.0.9(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@1001-digital/layers.base@0.0.13(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
     dependencies:
-      '@nuxt/icon': 1.15.0(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      '@nuxt/icon': 2.2.1(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@types/luxon': 3.7.1
       luxon: 3.7.2
       modern-normalize: 3.0.1
@@ -6734,14 +6719,13 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - magicast
-      - supports-color
       - typescript
       - vite
       - vue
 
-  '@1001-digital/layers.evm@0.0.4(6b4b2da312e620790957ddebff8ee1ae)':
+  '@1001-digital/layers.evm@0.0.6(0cd2df2f29cb1ea8c7d9b4c5b3ca79d6)':
     dependencies:
-      '@1001-digital/layers.base': 0.0.9(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      '@1001-digital/layers.base': 0.0.13(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@metamask/sdk': 0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@tanstack/vue-query': 5.92.5(vue@3.5.26(typescript@5.9.3))
       '@types/qrcode': 1.5.6
@@ -6797,8 +6781,6 @@ snapshots:
     dependencies:
       package-manager-detector: 1.6.0
       tinyexec: 1.0.2
-
-  '@antfu/utils@8.1.1': {}
 
   '@aws-crypto/crc32@5.2.0':
     dependencies:
@@ -8003,24 +7985,17 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@iconify/collections@1.0.636':
+  '@iconify/collections@1.0.645':
     dependencies:
       '@iconify/types': 2.0.0
 
   '@iconify/types@2.0.0': {}
 
-  '@iconify/utils@2.3.0':
+  '@iconify/utils@3.1.0':
     dependencies:
       '@antfu/install-pkg': 1.1.0
-      '@antfu/utils': 8.1.1
       '@iconify/types': 2.0.0
-      debug: 4.4.3
-      globals: 15.15.0
-      kolorist: 1.8.0
-      local-pkg: 1.1.2
       mlly: 1.8.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@iconify/vue@5.0.0(vue@3.5.26(typescript@5.9.3))':
     dependencies:
@@ -8427,14 +8402,6 @@ snapshots:
 
   '@nuxt/devalue@2.0.2': {}
 
-  '@nuxt/devtools-kit@2.7.0(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))':
-    dependencies:
-      '@nuxt/kit': 3.20.2(magicast@0.5.1)
-      execa: 8.0.1
-      vite: 7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-    transitivePeerDependencies:
-      - magicast
-
   '@nuxt/devtools-kit@3.1.1(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       '@nuxt/kit': 4.2.2(magicast@0.5.1)
@@ -8495,14 +8462,14 @@ snapshots:
       - utf-8-validate
       - vue
 
-  '@nuxt/icon@1.15.0(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@nuxt/icon@2.2.1(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
     dependencies:
-      '@iconify/collections': 1.0.636
+      '@iconify/collections': 1.0.645
       '@iconify/types': 2.0.0
-      '@iconify/utils': 2.3.0
+      '@iconify/utils': 3.1.0
       '@iconify/vue': 5.0.0(vue@3.5.26(typescript@5.9.3))
-      '@nuxt/devtools-kit': 2.7.0(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
-      '@nuxt/kit': 3.20.2(magicast@0.5.1)
+      '@nuxt/devtools-kit': 3.1.1(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      '@nuxt/kit': 4.2.2(magicast@0.5.1)
       consola: 3.4.2
       local-pkg: 1.1.2
       mlly: 1.8.0
@@ -8513,7 +8480,6 @@ snapshots:
       tinyglobby: 0.2.15
     transitivePeerDependencies:
       - magicast
-      - supports-color
       - vite
       - vue
 
@@ -12121,8 +12087,6 @@ snapshots:
     dependencies:
       type-fest: 0.20.2
 
-  globals@15.15.0: {}
-
   globby@11.1.0:
     dependencies:
       array-union: 2.1.0
@@ -12443,8 +12407,6 @@ snapshots:
   klona@2.0.6: {}
 
   knitwork@1.3.0: {}
-
-  kolorist@1.8.0: {}
 
   kysely@0.26.3: {}
 

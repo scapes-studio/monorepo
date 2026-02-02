@@ -17,6 +17,11 @@ export default defineNuxtConfig({
       ],
     },
   },
+  icon: {
+    aliases: {
+      close: 'ic:baseline-close',
+    }
+  },
   site: {
     url: 'https://scapes.xyz',
     name: 'Scapes',
