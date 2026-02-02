@@ -12,7 +12,7 @@
             <span v-if="scapePending">Loading owner…</span>
             <template v-else-if="owner">
               Owned by
-              <AccountLink :address="owner" class="scape-detail__owner-link" />
+              <AccountLink :address="owner" class="scape-detail__owner-link" shorten-ens />
             </template>
           </div>
         </div>

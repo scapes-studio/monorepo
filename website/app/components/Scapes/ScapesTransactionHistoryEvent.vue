@@ -29,7 +29,7 @@
         <div class="history-item__addresses">
           <div>
             <span class="history-item__label">By</span>
-            <AccountLink :address="entry.lister" class="history-item__link" />
+            <AccountLink :address="entry.lister" class="history-item__link" shorten-ens />
           </div>
           <div></div>
         </div>
@@ -42,7 +42,7 @@
             <div></div>
             <div>
               <span class="history-item__label">To</span>
-              <AccountLink :address="entry.to" class="history-item__link" />
+              <AccountLink :address="entry.to" class="history-item__link" shorten-ens />
             </div>
           </template>
           <template v-else-if="migration">
@@ -52,11 +52,11 @@
           <template v-else>
             <div>
               <span class="history-item__label">From</span>
-              <AccountLink :address="entry.from" class="history-item__link" />
+              <AccountLink :address="entry.from" class="history-item__link" shorten-ens />
             </div>
             <div>
               <span class="history-item__label">To</span>
-              <AccountLink :address="entry.to" class="history-item__link" />
+              <AccountLink :address="entry.to" class="history-item__link" shorten-ens />
             </div>
           </template>
         </div>
