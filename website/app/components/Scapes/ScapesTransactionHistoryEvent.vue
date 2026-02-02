@@ -1,56 +1,73 @@
 <template>
-  <li class="scape-detail__history-item">
-    <div class="scape-detail__history-header">
-      <span class="scape-detail__history-type">{{ label }}</span>
-      <span class="scape-detail__history-time">{{ formattedTimestamp }}</span>
-    </div>
+  <li class="history-item">
+    <GridArea :rows="1" width="full" class="history-item__header">
+      <span class="history-item__type">
+        <span>{{ label }}</span>
+        <template v-if="entry.type === 'sale' && price">
+          <span class="muted">
+            (<span class="history-item__price">{{ price }}</span>
+            <span v-if="entry.sale?.source" class="history-item__source">
+              via {{ entry.sale.source }}
+            </span>)
+          </span>
+        </template>
+        <template v-else-if="entry.type === 'listing' && price">
+          <span class="muted">
+            (<span class="history-item__price">{{ price }}</span>)
+          </span>
+        </template>
+      </span>
+      <a :href="txUrl(entry.txHash)" class="history-item__time" target="_blank" rel="noopener noreferrer">
+        {{ timeAgo }}
+      </a>
+    </GridArea>
 
-    <!-- Listing event -->
-    <template v-if="isListing && entry.type === 'listing'">
-      <div class="scape-detail__history-addresses">
-        <div>
-          <span class="scape-detail__history-label">Listed by</span>
-          <AccountLink :address="entry.lister" class="scape-detail__history-link" />
+    <GridArea v-if="entry.type === 'listing' || !isSingleLine(entry)" :rows="1" width="full"
+      class="history-item__content">
+      <!-- Listing event -->
+      <template v-if="entry.type === 'listing'">
+        <div class="history-item__addresses">
+          <div>
+            <span class="history-item__label">By</span>
+            <AccountLink :address="entry.lister" class="history-item__link" />
+          </div>
+          <div></div>
         </div>
-      </div>
-      <div class="scape-detail__history-meta">
-        <a
-          :href="txUrl(entry.txHash)"
-          class="scape-detail__history-link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Tx {{ shortenHex(entry.txHash, 10, 6) }}
-        </a>
-        <span v-if="price">{{ price }}</span>
-      </div>
-    </template>
+      </template>
 
-    <!-- Transfer/Sale event -->
-    <template v-else-if="entry.type !== 'listing'">
-      <div v-if="!migration" class="scape-detail__history-addresses">
-        <div v-if="!mint">
-          <span class="scape-detail__history-label">From</span>
-          <AccountLink :address="entry.from" class="scape-detail__history-link" />
+      <!-- Transfer/Sale event -->
+      <template v-else>
+        <div class="history-item__addresses">
+          <template v-if="mint">
+            <div></div>
+            <div>
+              <span class="history-item__label">To</span>
+              <AccountLink :address="entry.to" class="history-item__link" />
+            </div>
+          </template>
+          <template v-else-if="migration">
+            <div></div>
+            <div></div>
+          </template>
+          <template v-else>
+            <div>
+              <span class="history-item__label">From</span>
+              <AccountLink :address="entry.from" class="history-item__link" />
+            </div>
+            <div>
+              <span class="history-item__label">To</span>
+              <AccountLink :address="entry.to" class="history-item__link" />
+            </div>
+          </template>
         </div>
-        <div>
-          <span class="scape-detail__history-label">To</span>
-          <AccountLink :address="entry.to" class="scape-detail__history-link" />
-        </div>
-      </div>
-
-      <div class="scape-detail__history-meta">
-        <a :href="txUrl(entry.txHash)" class="scape-detail__history-link" target="_blank" rel="noopener noreferrer">
-          Tx {{ shortenHex(entry.txHash, 10, 6) }}
-        </a>
-        <span v-if="price">Price {{ price }}</span>
-        <span v-if="entry.sale?.source" class="scape-detail__history-source">via {{ entry.sale.source }}</span>
-      </div>
-    </template>
+      </template>
+    </GridArea>
   </li>
 </template>
 
 <script setup lang="ts">
+import { useTimeAgo } from "@vueuse/core";
+
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const MIGRATION_CUTOFF = 1671404400;
 
@@ -95,30 +112,18 @@ type ListingEntry = {
 
 export type ScapeHistoryEntry = TransferEntry | ListingEntry;
 
-const props = defineProps<{ entry: ScapeHistoryEntry }>();
-
-const formatTimestamp = (timestamp: number) =>
-  new Intl.DateTimeFormat("en-US", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(timestamp * 1000));
-
-const shortenHex = (value: string, start = 6, end = 4) => {
-  if (!value) return "";
-  if (value.length <= start + end) return value;
-  return `${value.slice(0, start)}…${value.slice(-end)}`;
-};
+const props = defineProps<{ scapeId: string, entry: ScapeHistoryEntry }>();
 
 const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
 
 const salePrice = (entry: TransferEntry) => {
-  const price = entry.sale?.price;
-  if (!price) return null;
-  if (typeof price.eth === "number") {
-    return `${formatETH(price.eth)} ETH`;
+  const saleData = entry.sale?.price;
+  if (!saleData) return null;
+  if (typeof saleData.eth === "number") {
+    return `${formatETH(saleData.eth)} ETH`;
   }
-  if (price.wei) {
-    const ethValue = Number(price.wei) / 1e18;
+  if (saleData.wei) {
+    const ethValue = Number(saleData.wei) / 1e18;
     if (Number.isFinite(ethValue)) {
       return `${formatETH(ethValue)} ETH`;
     }
@@ -133,7 +138,9 @@ const isMint = (entry: TransferEntry) =>
   entry.from.toLowerCase() === ZERO_ADDRESS && !isMigration(entry);
 
 const isMerge = (entry: TransferEntry) =>
-  entry.from.toLowerCase() === ZERO_ADDRESS && BigInt(entry.id) > 10_000n;
+  entry.from.toLowerCase() === ZERO_ADDRESS && BigInt(props.scapeId || 0) > 10_000n;
+
+const isSingleLine = (entry: TransferEntry) => isMerge(entry) || isMigration(entry)
 
 const transferLabel = (entry: TransferEntry) => {
   if (isMerge(entry)) return "Mint (Merge)";
@@ -142,10 +149,8 @@ const transferLabel = (entry: TransferEntry) => {
   return entry.sale ? "Sale" : "Transfer";
 };
 
-const isListing = computed(() => props.entry.type === "listing");
-const formattedTimestamp = computed(() => formatTimestamp(props.entry.timestamp));
+const timeAgo = useTimeAgo(() => new Date(props.entry.timestamp * 1000));
 
-// Transfer/sale computed values
 const migration = computed(() =>
   props.entry.type !== "listing" ? isMigration(props.entry) : false,
 );
@@ -165,67 +170,88 @@ const price = computed(() => {
 </script>
 
 <style scoped>
-.scape-detail__history-item {
-  padding: var(--spacer);
-  border-radius: var(--spacer);
-  border: var(--border);
+.history-item {
   display: grid;
-  gap: var(--size-3);
-}
-
-.scape-detail__history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: var(--spacer);
-}
-
-.scape-detail__history-type {
-  font-weight: var(--font-weight-bold);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacer-sm);
-}
-
-.scape-detail__history-time {
-  color: var(--muted);
+  gap: var(--grid-gutter);
   font-size: var(--font-sm);
+  background: var(--background);
 }
 
-.scape-detail__history-addresses {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+.history-item__header {
+  display: flex;
+  align-items: center;
   gap: var(--spacer);
+  flex-wrap: wrap;
+  padding: var(--spacer);
 }
 
-.scape-detail__history-label {
-  display: block;
-  font-size: var(--font-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing);
-  color: var(--muted);
-  margin-bottom: var(--spacer-xs);
-}
-
-.scape-detail__history-meta {
+.history-item__type {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacer);
-  font-weight: var(--font-weight-bold);
+  align-items: center;
+  column-gap: var(--spacer);
+  flex: 1;
+
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
-.scape-detail__history-link {
-  color: inherit;
+.history-item__time {
+  color: var(--muted);
   text-decoration: none;
-  font-weight: var(--font-weight-bold);
+
+  @media (min-width: 576px) {
+    margin-left: auto;
+  }
 }
 
-.scape-detail__history-link:hover {
+a.history-item__time:hover {
   text-decoration: underline;
 }
 
-.scape-detail__history-source {
+.history-item__content {
+  display: flex;
+  gap: var(--spacer);
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--spacer);
+}
+
+.history-item__addresses {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--spacer);
+
+  &>*:last-child {
+    text-align: right;
+  }
+}
+
+.history-item__label {
+  display: block;
+  text-transform: uppercase;
   color: var(--muted);
+}
+
+.history-item__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.history-item__link:hover {
+  text-decoration: underline;
+}
+
+.history-item__price {
   font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+.history-item__source {
+  color: var(--muted);
+  font-size: var(--font-sm);
 }
 </style>

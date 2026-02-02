@@ -17,7 +17,7 @@
     </GridArea>
 
     <ul v-else class="history__list">
-      <ScapesTransactionHistoryEvent v-for="entry in history" :key="entry.id" :entry="entry" />
+      <ScapesTransactionHistoryEvent v-for="entry in history" :key="entry.id" :entry="entry" :scape-id="scapeId" />
     </ul>
   </section>
 </template>
@@ -64,7 +64,7 @@ type ListingEntry = {
 
 type ScapeHistoryEntry = TransferEntry | ListingEntry;
 
-const props = defineProps<{ history?: ScapeHistoryEntry[]; pending?: boolean; error?: unknown | null }>();
+const props = defineProps<{ scapeId: string, history?: ScapeHistoryEntry[]; pending?: boolean; error?: unknown | null }>();
 
 const history = computed(() => props.history ?? []);
 const pending = computed(() => props.pending ?? false);
@@ -95,6 +95,7 @@ const error = computed(() => props.error ?? null);
   padding: 0;
   margin: 0;
   display: grid;
+  gap: calc(var(--scape-height-gutter) + var(--grid-gutter));
   gap: var(--grid-gutter);
 }
 </style>

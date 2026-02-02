@@ -36,7 +36,7 @@
       </div>
     </GridArea>
 
-    <ScapesTransactionHistory :history="history" :pending="pending" :error="error" />
+    <ScapesTransactionHistory :scape-id="scapeId" :history="history" :pending="pending" :error="error" />
 
     <ClientOnly>
       <ScapesSESModal v-model:open="sesModalOpen" :token-id="scapeId" />
@@ -226,6 +226,7 @@ const sesModalOpen = ref(false);
   margin: 0 auto;
   display: grid;
   gap: var(--grid-gutter);
+  /* gap: calc(var(--scape-height-gutter) + var(--grid-gutter)); */
   container-type: inline-size;
 }
 
