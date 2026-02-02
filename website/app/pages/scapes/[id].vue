@@ -25,13 +25,9 @@
 
     <ScapesAttributes :attributes="attributes" :gallery27-token-id="gallery27TokenId" />
 
-    <GridArea :rows="2" width="full" center class="scape-detail__header">
-      <!-- <NuxtLink v-if="gallery27TokenId" :to="`/gallery27/${gallery27TokenId}`" class="scape-detail__gallery27-link"> -->
-      <!--   View Gallery27 Day {{ gallery27TokenId }} -->
-      <!-- </NuxtLink> -->
-      <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
-        @listing-change="refreshListing" />
-    </GridArea>
+    <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
+      @listing-change="refreshListing" />
+
     <ScapesTransactionHistory :scape-id="scapeId" :history="history" :pending="pending" :error="error"
       :total-transfers="totalTransfers" :total-sales="totalSales" />
 

@@ -1,5 +1,6 @@
 <template>
-  <div v-if="isConnected" class="scapes-actions">
+  <GridArea v-if="showActions" :rows="2" width="full" center class="scapes-actions__area">
+    <div class="scapes-actions">
     <!-- Owner actions -->
     <template v-if="isOwner">
       <!-- Owner with no listing: show list button -->
@@ -142,11 +143,12 @@
         </a>
       </template>
     </template>
-  </div>
+    </div>
+  </GridArea>
 </template>
 
 <script setup lang="ts">
-import { useAccount } from "@wagmi/vue";
+import { useConnection } from "@wagmi/vue";
 import { parseEther } from "viem";
 import type { Hash } from "viem";
 import type { ListingData } from "~/composables/useScapeListing";
@@ -162,7 +164,7 @@ const emit = defineEmits<{
   listingChange: [];
 }>();
 
-const { address, isConnected } = useAccount();
+const { address, isConnected } = useConnection();
 const { makeOffer, cancelOffer, buy, purge } = useMarketplaceActions(() => props.scapeId);
 
 const isOwner = computed(() => {
@@ -171,6 +173,8 @@ const isOwner = computed(() => {
 });
 
 const isMerge = computed(() => isMergeTokenId(BigInt(props.scapeId)));
+
+const showActions = computed(() => isConnected.value && (Boolean(props.listing) || isOwner.value));
 
 const hasOnchainListing = computed(() => props.listing?.source === "onchain");
 const hasSeaportListing = computed(() => props.listing?.source === "seaport");
