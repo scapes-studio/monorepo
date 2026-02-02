@@ -30,6 +30,8 @@
 </template>
 
 <script setup lang="ts">
+import { zeroAddress } from "viem";
+
 const ogTitle = "Scape Owners";
 const ogSubtitle = "Leaderboard of Scape owners ranked by total scapes owned.";
 const ogImage = "https://scapes.xyz/og-default.png";
@@ -62,7 +64,10 @@ const offset = ref(0);
 const isLoadingMore = ref(false);
 const hasMore = ref(true);
 
-const excludeScapeCollection = ne(schema.scape.owner, normalizedCollectionAddress)
+const excludeScapeCollection = and(
+  ne(schema.scape.owner, normalizedCollectionAddress),
+  ne(schema.scape.owner, zeroAddress),
+)
 
 const fetchOwners = async (startOffset: number) => client.db.select({
   owner: schema.scape.owner,
