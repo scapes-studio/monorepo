@@ -85,11 +85,11 @@ importers:
   website:
     dependencies:
       '@1001-digital/layers.base':
-        specifier: ^0.0.13
-        version: 0.0.13(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+        specifier: ^0.0.15
+        version: 0.0.15(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@1001-digital/layers.evm':
         specifier: ^0.0.6
-        version: 0.0.6(0cd2df2f29cb1ea8c7d9b4c5b3ca79d6)
+        version: 0.0.6(160b4e011d3c08d75034e93d6d4c5251)
       '@ponder/client':
         specifier: ^0.16.1
         version: 0.16.1(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)(typescript@5.9.3)
@@ -135,8 +135,8 @@ importers:
 
 packages:
 
-  '@1001-digital/layers.base@0.0.13':
-    resolution: {integrity: sha512-TD7e63h3aQSGvhLAe92iRL1+027ra++4ckIRXvCTmNUaQaPlaAwQXbzH93Yn3/SDPjJ07ztPqPM58i/0iDuJ9A==}
+  '@1001-digital/layers.base@0.0.15':
+    resolution: {integrity: sha512-aNnCH5iZpNBoqGHT1QeYzVjFStiG1e4Ao2z/bVpL0eQN7lkG/6/v0xWtfIveE5Ik5PYBxWQqarBSDbp6QFwo6A==}
 
   '@1001-digital/layers.evm@0.0.6':
     resolution: {integrity: sha512-pm2Pa9G4bvpoCp22AigyYn1AcdF7HM5EHP2ltRKl4BJr003XGxpaBlOvGN9DFgHgAYqZN53HmKcjHjYmbNnpoA==}
@@ -1225,6 +1225,12 @@ packages:
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
+
+  '@iconify-json/lucide@1.2.87':
+    resolution: {integrity: sha512-wxYIAp0f8Uw0rJa6BMWMaRbiHk3yV4XczA38GKXFlqyZtTdmHM1QOF4NZw5xpMlRDzbh2MnB7wjteLeFnn/ciQ==}
+
+  '@iconify-json/simple-icons@1.2.69':
+    resolution: {integrity: sha512-T/rhy5n7pzE0ZOxQVlF68SNPCYYjRBpddjgjrJO5WWVRG8es5BQmvxIE9kKF+t2hhPGvuGQFpXmUyqbOtnxirQ==}
 
   '@iconify/collections@1.0.645':
     resolution: {integrity: sha512-N2OBLagQ/xrNFSdRRjzmSjNB610hark+/lMXQ4RZM6773WCOSsQlY8ZuWq2RRvSwLQBcciBuLdx2qhkD5JcS1A==}
@@ -2869,11 +2875,24 @@ packages:
   '@vueuse/core@12.8.2':
     resolution: {integrity: sha512-HbvCmZdzAu3VGi/pWYm5Ut+Kd9mn1ZHnn4L5G8kOQTPs/IwIAmJoBrmYk2ckLArgMXZj0AW3n5CAejLUO+PhdQ==}
 
+  '@vueuse/core@14.2.0':
+    resolution: {integrity: sha512-tpjzVl7KCQNVd/qcaCE9XbejL38V6KJAEq/tVXj7mDPtl6JtzmUdnXelSS+ULRkkrDgzYVK7EerQJvd2jR794Q==}
+    peerDependencies:
+      vue: ^3.5.0
+
   '@vueuse/metadata@12.8.2':
     resolution: {integrity: sha512-rAyLGEuoBJ/Il5AmFHiziCPdQzRt88VxR+Y/A/QhJ1EWtWqPBBAxTAFaSkviwEuOEZNtW8pvkPgoCZQ+HxqW1A==}
 
+  '@vueuse/metadata@14.2.0':
+    resolution: {integrity: sha512-i3axTGjU8b13FtyR4Keeama+43iD+BwX9C2TmzBVKqjSHArF03hjkp2SBZ1m72Jk2UtrX0aYCugBq2R1fhkuAQ==}
+
   '@vueuse/shared@12.8.2':
     resolution: {integrity: sha512-dznP38YzxZoNloI0qpEfpkms8knDtaoQ6Y/sfS0L7Yki4zh40LFHEhur0odJC6xTHG5dxWVPiUWBXn+wCG2s5w==}
+
+  '@vueuse/shared@14.2.0':
+    resolution: {integrity: sha512-Z0bmluZTlAXgUcJ4uAFaML16JcD8V0QG00Db3quR642I99JXIDRa2MI2LGxiLVhcBjVnL1jOzIvT5TT2lqJlkA==}
+    peerDependencies:
+      vue: ^3.5.0
 
   '@wagmi/connectors@7.0.7':
     resolution: {integrity: sha512-aJ+Ktjm31htgeIUXWjsomn0KyZUNF3MUT1WSaNKE6h0GZA3zwhiFwk3IbhuYi4qaBnaqEuHkWw6TgRtVqSfCfw==}
@@ -5616,8 +5635,8 @@ packages:
     resolution: {integrity: sha512-iETxpjK6YoRWJG5o6hXLwvjYAoW+FEZn9os0PD/b6AP6xQwsa/Y7lCVgIixBbUPMfhu+i2LtdeAqVTgGlQarfA==}
     hasBin: true
 
-  reka-ui@2.7.0:
-    resolution: {integrity: sha512-m+XmxQN2xtFzBP3OAdIafKq7C8OETo2fqfxcIIxYmNN2Ch3r5oAf6yEYCIJg5tL/yJU2mHqF70dCCekUkrAnXA==}
+  reka-ui@2.8.0:
+    resolution: {integrity: sha512-N4JOyIrmDE7w2i06WytqcV2QICubtS2PsK5Uo8FIMAgmO13KhUAgAByP26cXjjm2oF/w7rTyRs8YaqtvaBT+SA==}
     peerDependencies:
       vue: '>= 3.2.0'
 
@@ -6709,23 +6728,24 @@ packages:
 
 snapshots:
 
-  '@1001-digital/layers.base@0.0.13(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
+  '@1001-digital/layers.base@0.0.15(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
     dependencies:
+      '@iconify-json/lucide': 1.2.87
+      '@iconify-json/simple-icons': 1.2.69
       '@nuxt/icon': 2.2.1(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@types/luxon': 3.7.1
       luxon: 3.7.2
       modern-normalize: 3.0.1
-      reka-ui: 2.7.0(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3))
+      reka-ui: 2.8.0(vue@3.5.26(typescript@5.9.3))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - magicast
-      - typescript
       - vite
       - vue
 
-  '@1001-digital/layers.evm@0.0.6(0cd2df2f29cb1ea8c7d9b4c5b3ca79d6)':
+  '@1001-digital/layers.evm@0.0.6(160b4e011d3c08d75034e93d6d4c5251)':
     dependencies:
-      '@1001-digital/layers.base': 0.0.13(magicast@0.5.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
+      '@1001-digital/layers.base': 0.0.15(magicast@0.5.1)(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@metamask/sdk': 0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@tanstack/vue-query': 5.92.5(vue@3.5.26(typescript@5.9.3))
       '@types/qrcode': 1.5.6
@@ -7984,6 +8004,14 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/object-schema@2.0.3': {}
+
+  '@iconify-json/lucide@1.2.87':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/simple-icons@1.2.69':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify/collections@1.0.645':
     dependencies:
@@ -10224,13 +10252,26 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
+  '@vueuse/core@14.2.0(vue@3.5.26(typescript@5.9.3))':
+    dependencies:
+      '@types/web-bluetooth': 0.0.21
+      '@vueuse/metadata': 14.2.0
+      '@vueuse/shared': 14.2.0(vue@3.5.26(typescript@5.9.3))
+      vue: 3.5.26(typescript@5.9.3)
+
   '@vueuse/metadata@12.8.2': {}
+
+  '@vueuse/metadata@14.2.0': {}
 
   '@vueuse/shared@12.8.2(typescript@5.9.3)':
     dependencies:
       vue: 3.5.26(typescript@5.9.3)
     transitivePeerDependencies:
       - typescript
+
+  '@vueuse/shared@14.2.0(vue@3.5.26(typescript@5.9.3))':
+    dependencies:
+      vue: 3.5.26(typescript@5.9.3)
 
   '@wagmi/connectors@7.0.7(@metamask/sdk@0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10))(@wagmi/core@3.1.0(@tanstack/query-core@5.90.16)(@types/react@19.2.7)(ox@0.11.1(typescript@5.9.3)(zod@3.22.4))(typescript@5.9.3)(viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4)))(@walletconnect/ethereum-provider@2.21.10(@types/react@19.2.7)(bufferutil@4.1.0)(db0@0.3.4(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(kysely@0.26.3)(pg@8.16.3)))(ioredis@5.9.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4))(typescript@5.9.3)(viem@2.42.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.22.4))':
     dependencies:
@@ -13731,22 +13772,21 @@ snapshots:
 
   regexp-tree@0.1.27: {}
 
-  reka-ui@2.7.0(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3)):
+  reka-ui@2.8.0(vue@3.5.26(typescript@5.9.3)):
     dependencies:
       '@floating-ui/dom': 1.7.4
       '@floating-ui/vue': 1.1.9(vue@3.5.26(typescript@5.9.3))
       '@internationalized/date': 3.10.1
       '@internationalized/number': 3.6.5
       '@tanstack/vue-virtual': 3.13.18(vue@3.5.26(typescript@5.9.3))
-      '@vueuse/core': 12.8.2(typescript@5.9.3)
-      '@vueuse/shared': 12.8.2(typescript@5.9.3)
+      '@vueuse/core': 14.2.0(vue@3.5.26(typescript@5.9.3))
+      '@vueuse/shared': 14.2.0(vue@3.5.26(typescript@5.9.3))
       aria-hidden: 1.2.6
       defu: 6.1.4
       ohash: 2.0.11
       vue: 3.5.26(typescript@5.9.3)
     transitivePeerDependencies:
       - '@vue/composition-api'
-      - typescript
 
   remove-accents@0.5.0: {}
 
