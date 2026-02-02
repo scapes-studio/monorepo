@@ -4,7 +4,7 @@
       <h1>Marketplace Status</h1>
       <p v-if="!listing">This scape is not listed for sale.</p>
       <p v-else>This scape is listed for sale for {{ listPrice }} ETH on {{ hasOnchainListing ? `the scapes
-        marketplace` : `seaport(OpenSea)` }}.</p>
+        marketplace` : `Seaport (OpenSea)` }}.</p>
     </header>
     <Actions class="left">
       <!-- Owner actions -->

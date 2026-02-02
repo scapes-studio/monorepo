@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import type { ScapeRecord } from '~/composables/useScapesByOwner'
-import type { ListingSource } from '~/composables/useListedScapes'
+import type { ListingSource } from '~/types/listings'
 
 type ScapeWithPrice = ScapeRecord & {
   price?: bigint | null

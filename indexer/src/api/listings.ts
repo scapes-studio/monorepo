@@ -1,10 +1,27 @@
 import { db } from "ponder:api";
 import { type Context } from "hono";
-import { and, eq, gt, isNull, sql } from "drizzle-orm";
+import { and, eq, gt, isNull, sql, type SQL } from "drizzle-orm";
 import { seaportListing } from "../../offchain.schema";
 import { offer, scape } from "../../ponder.schema";
 
 type ListingSource = "onchain" | "seaport";
+
+const buildTraitConditions = (traits: string[]) => {
+  if (traits.length === 0) return null;
+
+  const conditions = traits
+    .map((trait) => {
+      const [category, value] = trait.split("=");
+      if (!category || !value) return null;
+      return sql`${sql.raw("s.attributes")}::jsonb @> ${JSON.stringify([
+        { trait_type: category, value },
+      ])}::jsonb`;
+    })
+    .filter(Boolean) as SQL[];
+
+  if (conditions.length === 0) return null;
+  return conditions.length === 1 ? conditions[0] : and(...conditions);
+};
 
 /**
  * GET /listings
@@ -16,10 +33,25 @@ export const getListings = async (c: Context) => {
   const sort = c.req.query("sort") || "price";
   const order = c.req.query("order") || "asc";
   const includeSeaport = c.req.query("includeSeaport") !== "false";
+  const traitsParam = c.req.query("traits") || "";
+  const traits = traitsParam ? decodeURIComponent(traitsParam).split("&&") : [];
+  const traitConditions = buildTraitConditions(traits);
+  const rarityExclusion = sort === "rarity" ? sql`AND s.id <= 10000` : sql``;
   const now = Math.floor(Date.now() / 1000);
 
-  const sortColumn = sort === "price" ? "price" : "source";
-  const sortDir = order === "desc" ? "DESC" : "ASC";
+  const sortColumn = (() => {
+    switch (sort) {
+      case "id":
+        return sql.raw("id");
+      case "rarity":
+        return sql.raw("rarity");
+      case "price":
+      default:
+        return sql.raw("price::numeric");
+    }
+  })();
+  const sortDir = order === "desc" ? sql.raw("DESC") : sql.raw("ASC");
+  const traitClause = traitConditions ? sql`AND ${traitConditions}` : sql``;
 
   // Single UNION query across both schemas
   const unionQuery = includeSeaport
@@ -35,6 +67,8 @@ export const getListings = async (c: Context) => {
           FROM offer o
           JOIN scape s ON o.token_id = s.id
           WHERE o.is_active = true AND o.specific_buyer IS NULL
+            ${traitClause}
+            ${rarityExclusion}
 
           UNION ALL
 
@@ -50,6 +84,8 @@ export const getListings = async (c: Context) => {
           WHERE l.slug = 'scapes'
             AND l.is_private_listing = false
             AND l.expiration_date > ${now}
+            ${traitClause}
+            ${rarityExclusion}
         ) combined
         ORDER BY id, price::numeric ASC
       `
@@ -64,13 +100,15 @@ export const getListings = async (c: Context) => {
         FROM offer o
         JOIN scape s ON o.token_id = s.id
         WHERE o.is_active = true AND o.specific_buyer IS NULL
+          ${traitClause}
+          ${rarityExclusion}
       `;
 
   // Wrap with final sort and pagination
   const finalQuery = sql`
     WITH listings AS (${unionQuery})
     SELECT * FROM listings
-    ORDER BY ${sql.raw(sortColumn === "price" ? "price::numeric" : sortColumn)} ${sql.raw(sortDir)}
+    ORDER BY ${sortColumn} ${sortDir}
     LIMIT ${limit} OFFSET ${offset}
   `;
 

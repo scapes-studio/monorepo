@@ -7,11 +7,15 @@
       </div>
       <div class="gallery__controls">
         <span v-if="total !== null" class="gallery__count">
-          {{ total.toLocaleString() }} scapes
+          {{ total.toLocaleString() }} {{ isMarketMode ? "listed" : "scapes" }}
         </span>
         <label class="gallery__toggle">
           <input v-model="showPrices" type="checkbox" />
           Show prices
+        </label>
+        <label v-if="isMarketMode" class="gallery__toggle">
+          <input v-model="includeSeaport" type="checkbox" />
+          Include OpenSea
         </label>
         <select v-model="selectedSort" class="gallery__sort" aria-label="Sort scapes">
           <option v-for="option in sortOptions" :key="option.value" :value="option.value">
@@ -83,10 +87,14 @@ const selectedTraits = ref<string[]>(
 )
 
 const showPrices = ref(route.query.prices === "true")
+const includeSeaport = ref(route.query.seaport !== "false")
+const isMarketMode = computed(
+  () => showPrices.value || selectedSort.value.startsWith("price"),
+)
 
 // Sync state to URL
 watch(
-  [selectedSort, selectedTraits, showPrices],
+  [selectedSort, selectedTraits, showPrices, includeSeaport],
   () => {
     router.replace({
       query: {
@@ -96,6 +104,7 @@ watch(
           ? encodeURIComponent(selectedTraits.value.join("&&"))
           : undefined,
         prices: showPrices.value ? "true" : undefined,
+        seaport: includeSeaport.value ? undefined : "false",
       },
     })
   },
@@ -103,7 +112,7 @@ watch(
 )
 
 const { scapes, total, loading, error, hasMore, loadMore, traitCounts, countsLoading } =
-  useScapesGallery(selectedTraits, selectedSort, showPrices)
+  useScapesGallery(selectedTraits, selectedSort, showPrices, includeSeaport)
 
 const updateSelectedTraits = (newTraits: string[]) => {
   selectedTraits.value = newTraits

@@ -1,4 +1,4 @@
-import type { ListingSource } from "./useListedScapes";
+import type { ListingSource } from "~/types/listings";
 
 export type ListingData = {
   price: string;

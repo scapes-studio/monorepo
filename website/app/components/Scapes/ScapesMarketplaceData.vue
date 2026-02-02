@@ -58,6 +58,7 @@ const sourceLabel = computed(() => {
   border-radius: var(--size-10);
   background: var(--gray-z-2);
   font-size: var(--font-sm);
+  white-space: nowrap;
 }
 
 .marketplace-data__badge--seaport {

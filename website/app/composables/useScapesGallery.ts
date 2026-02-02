@@ -1,8 +1,8 @@
-import { and, asc, desc, eq, isNull, ne, sql } from "@ponder/client"
+import { and, asc, desc, ne, sql } from "@ponder/client"
 import type { TraitCounts } from "~/data/traits"
 import { SCAPE_TRAIT_COUNTS, TRAITS } from "~/data/traits"
 import type { ScapeRecord } from "~/composables/useScapesByOwner"
-import type { ListingSource } from "~/composables/useListedScapes"
+import type { ListingSource } from "~/types/listings"
 
 export type GallerySortOption =
   | "id-asc"
@@ -20,6 +20,21 @@ export type GalleryScape = ScapeRecord & {
 type GalleryPayload = {
   total: number
   scapes: GalleryScape[]
+}
+
+type ListingsResponse = {
+  data: Array<{
+    id: string
+    rarity: number | null
+    price: string
+    source: ListingSource
+  }>
+  meta: {
+    total: number
+    limit: number
+    offset: number
+    hasMore: boolean
+  }
 }
 
 const PAGE_SIZE = 200
@@ -55,14 +70,39 @@ const getSortOrder = (sortBy: GallerySortOption) => {
   }
 }
 
+const isRaritySort = (sortBy: GallerySortOption) =>
+  sortBy === "rarity-asc" || sortBy === "rarity-desc"
+
+const getListingSort = (sortBy: GallerySortOption) => {
+  switch (sortBy) {
+    case "price-desc":
+      return { sort: "price", order: "desc" }
+    case "price-asc":
+      return { sort: "price", order: "asc" }
+    case "rarity-desc":
+      return { sort: "rarity", order: "desc" }
+    case "rarity-asc":
+      return { sort: "rarity", order: "asc" }
+    case "id-desc":
+      return { sort: "id", order: "desc" }
+    case "id-asc":
+    default:
+      return { sort: "id", order: "asc" }
+  }
+}
+
 export const useScapesGallery = (
   selectedTraits: Ref<string[]>,
   sortBy: Ref<GallerySortOption> = ref("id-asc"),
   showPrices: Ref<boolean> = ref(false),
+  includeSeaport: Ref<boolean> = ref(true),
 ) => {
   const client = usePonderClient()
   const { public: { scapeCollectionAddress } } = useRuntimeConfig()
   const normalizedCollectionAddress = scapeCollectionAddress.toLowerCase() as `0x${string}`
+  const isMarketMode = computed(
+    () => showPrices.value || sortBy.value.startsWith("price"),
+  )
 
   // Exclude scapes owned by contract (merged scapes)
   const excludeMergedScapes = ne(schema.scape.owner, normalizedCollectionAddress)
@@ -72,6 +112,7 @@ export const useScapesGallery = (
   const loadMoreLoading = ref(false)
   const loadMoreError = ref<Error | null>(null)
   const loadMoreHasMore = ref<boolean | null>(null)
+  const initialHasMore = ref<boolean | null>(null)
 
   // Trait counts (client-side only feature)
   const traitCounts = ref<TraitCounts>({ ...SCAPE_TRAIT_COUNTS })
@@ -82,6 +123,7 @@ export const useScapesGallery = (
     loadMoreError.value = null
     loadMoreHasMore.value = null
     loadMoreLoading.value = false
+    initialHasMore.value = null
   }
 
   // Fetch dynamic trait counts from API
@@ -148,60 +190,48 @@ export const useScapesGallery = (
   // Watch selectedTraits and refresh counts
   watch(selectedTraits, refreshTraitCounts, { deep: true })
 
-  const activeOfferConditions = and(
-    eq(schema.offer.isActive, true),
-    isNull(schema.offer.specificBuyer),
-  )
+  const fetchListings = async (startOffset: number) => {
+    const { sort, order } = getListingSort(sortBy.value)
+    const traitsParam = selectedTraits.value.length
+      ? selectedTraits.value.join("&&")
+      : undefined
 
-  const fetchScapesWithPrices = async (
-    traitConditions: ReturnType<typeof buildTraitConditions>,
-    startOffset: number,
-    sort: GallerySortOption,
-  ) => {
-    const isPriceSorted = sort.startsWith("price")
-    const baseConditions = traitConditions
-      ? and(excludeMergedScapes, traitConditions)
-      : excludeMergedScapes
+    const response = await $fetch<ListingsResponse>(
+      `${runtimeConfig.public.apiUrl}/listings`,
+      {
+        query: {
+          limit: PAGE_SIZE,
+          offset: startOffset,
+          sort,
+          order,
+          includeSeaport: includeSeaport.value,
+          traits: traitsParam,
+        },
+      },
+    )
 
-    if (isPriceSorted) {
-      // For price sorting, inner join to only show listed scapes
-      const results = await client.db
-        .select({
-          id: schema.scape.id,
-          rarity: schema.scape.rarity,
-          price: schema.offer.price,
-        })
-        .from(schema.scape)
-        .innerJoin(schema.offer, eq(schema.offer.tokenId, schema.scape.id))
-        .where(and(baseConditions, activeOfferConditions))
-        .orderBy(...getSortOrder(sort))
-        .limit(PAGE_SIZE)
-        .offset(startOffset)
+    const scapes = response.data.map((listing) => {
+      const base: GalleryScape = {
+        id: BigInt(listing.id),
+        rarity: listing.rarity,
+      }
 
-      return results.map((r) => ({ ...r, source: "onchain" as const }))
+      if (!showPrices.value) {
+        return base
+      }
+
+      return {
+        ...base,
+        price: BigInt(listing.price),
+        source: listing.source,
+      }
+    })
+
+    return {
+      scapes,
+      total: response.meta.total,
+      hasMore: response.meta.hasMore,
     }
-
-    // For other sorts, left join to include all scapes with optional price
-    const results = await client.db
-      .select({
-        id: schema.scape.id,
-        rarity: schema.scape.rarity,
-        price: schema.offer.price,
-      })
-      .from(schema.scape)
-      .leftJoin(
-        schema.offer,
-        and(eq(schema.offer.tokenId, schema.scape.id), activeOfferConditions),
-      )
-      .where(baseConditions)
-      .orderBy(...getSortOrder(sort))
-      .limit(PAGE_SIZE)
-      .offset(startOffset)
-
-    return results.map((r) => ({
-      ...r,
-      source: r.price ? ("onchain" as const) : undefined,
-    }))
   }
 
   const fetchScapesWithoutPrices = async (
@@ -209,9 +239,12 @@ export const useScapesGallery = (
     startOffset: number,
     sort: GallerySortOption,
   ) => {
+    const rarityExclusion = isRaritySort(sort)
+      ? sql`${schema.scape.id} <= 10000`
+      : undefined
     const baseConditions = traitConditions
-      ? and(excludeMergedScapes, traitConditions)
-      : excludeMergedScapes
+      ? and(excludeMergedScapes, traitConditions, rarityExclusion)
+      : and(excludeMergedScapes, rarityExclusion)
 
     return await client.db
       .select({
@@ -226,38 +259,30 @@ export const useScapesGallery = (
   }
 
   const fetchCount = async (traitConditions: ReturnType<typeof buildTraitConditions>) => {
+    const rarityExclusion = isRaritySort(sortBy.value)
+      ? sql`${schema.scape.id} <= 10000`
+      : undefined
     const baseConditions = traitConditions
-      ? and(excludeMergedScapes, traitConditions)
-      : excludeMergedScapes
+      ? and(excludeMergedScapes, traitConditions, rarityExclusion)
+      : and(excludeMergedScapes, rarityExclusion)
 
     return await client.db.$count(schema.scape, baseConditions)
   }
 
-  const fetchListedCount = async (traitConditions: ReturnType<typeof buildTraitConditions>) => {
-    const baseConditions = traitConditions
-      ? and(excludeMergedScapes, traitConditions, activeOfferConditions)
-      : and(excludeMergedScapes, activeOfferConditions)
-
-    const result = await client.db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(schema.scape)
-      .innerJoin(schema.offer, eq(schema.offer.tokenId, schema.scape.id))
-      .where(baseConditions)
-
-    return result[0]?.count ?? 0
-  }
-
   const fetchInitial = async (): Promise<GalleryPayload> => {
     const traitConditions = buildTraitConditions(selectedTraits.value)
-    const isPriceSorted = sortBy.value.startsWith("price")
+    if (isMarketMode.value) {
+      const result = await fetchListings(0)
+      initialHasMore.value = result.hasMore
+      return {
+        total: result.total,
+        scapes: result.scapes,
+      }
+    }
 
     const [countResult, scapesResult] = await Promise.all([
-      isPriceSorted
-        ? fetchListedCount(traitConditions)
-        : fetchCount(traitConditions),
-      showPrices.value || isPriceSorted
-        ? fetchScapesWithPrices(traitConditions, 0, sortBy.value)
-        : fetchScapesWithoutPrices(traitConditions, 0, sortBy.value),
+      fetchCount(traitConditions),
+      fetchScapesWithoutPrices(traitConditions, 0, sortBy.value),
     ])
 
     return {
@@ -268,7 +293,7 @@ export const useScapesGallery = (
 
   const asyncKey = computed(
     () =>
-      `gallery-${selectedTraits.value.join(",")}-${sortBy.value}-${showPrices.value}`,
+      `gallery-${selectedTraits.value.join(",")}-${sortBy.value}-${showPrices.value}-${includeSeaport.value}`,
   )
 
   const {
@@ -276,12 +301,12 @@ export const useScapesGallery = (
     pending,
     error: asyncError,
   } = useAsyncData(asyncKey, fetchInitial, {
-    watch: [selectedTraits, sortBy, showPrices],
+    watch: [selectedTraits, sortBy, showPrices, includeSeaport],
     server: true,
   })
 
   // Reset additional state when filters change
-  watch([selectedTraits, sortBy, showPrices], () => {
+  watch([selectedTraits, sortBy, showPrices, includeSeaport], () => {
     reset()
   })
 
@@ -299,7 +324,9 @@ export const useScapesGallery = (
     if (loadMoreHasMore.value !== null) {
       return loadMoreHasMore.value
     }
-    // Otherwise, derive from initial data
+    if (initialHasMore.value !== null) {
+      return initialHasMore.value
+    }
     const initialCount = data.value?.scapes.length ?? 0
     return initialCount >= PAGE_SIZE
   })
@@ -314,14 +341,16 @@ export const useScapesGallery = (
     try {
       const traitConditions = buildTraitConditions(selectedTraits.value)
       const currentOffset = (data.value?.scapes.length ?? 0) + additionalScapes.value.length
-      const result =
-        showPrices.value || sortBy.value.startsWith("price")
-          ? await fetchScapesWithPrices(traitConditions, currentOffset, sortBy.value)
-          : await fetchScapesWithoutPrices(traitConditions, currentOffset, sortBy.value)
-
-      additionalScapes.value.push(...result)
-      if (result.length < PAGE_SIZE) {
-        loadMoreHasMore.value = false
+      if (isMarketMode.value) {
+        const result = await fetchListings(currentOffset)
+        additionalScapes.value.push(...result.scapes)
+        loadMoreHasMore.value = result.hasMore
+      } else {
+        const result = await fetchScapesWithoutPrices(traitConditions, currentOffset, sortBy.value)
+        additionalScapes.value.push(...result)
+        if (result.length < PAGE_SIZE) {
+          loadMoreHasMore.value = false
+        }
       }
     } catch (err) {
       loadMoreError.value = err instanceof Error ? err : new Error("Failed to load scapes")
