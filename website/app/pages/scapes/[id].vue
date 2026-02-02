@@ -1,35 +1,37 @@
 <template>
   <section class="scape-detail" :style="{ '--scape-count': scapeCount }">
-    <GridArea rows="calc(var(--content-columns, 5) * 2)" width="full" class="scape-detail__image">
+    <GridArea rows="calc(var(--content-columns, 5) * 2)" width="full" class="scape-detail__image border-drop_">
       <ScapeAnimated :id="scapeId" :scape-count="scapeCount" />
     </GridArea>
 
-    <GridArea rows="1" width="full" class="scape-detail__header" padding>
-      <div>
-        <h1>Scape #{{ scapeId }}</h1>
-        <div class="scape-detail__owner">
-          <span v-if="scapePending">Loading owner…</span>
-          <template v-else-if="owner">
-            Owned by
-            <AccountLink :address="owner" class="scape-detail__owner-link" />
-          </template>
+    <header class="border-drop_">
+      <GridArea rows="1" width="full" class="scape-detail__header" padding>
+        <div>
+          <h1>Scape #{{ scapeId }}</h1>
+          <div class="scape-detail__owner">
+            <span v-if="scapePending">Loading owner…</span>
+            <template v-else-if="owner">
+              Owned by
+              <AccountLink :address="owner" class="scape-detail__owner-link" />
+            </template>
+          </div>
         </div>
-      </div>
 
-      <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
-        class="scape-detail__listings" />
-      <!-- <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true"> -->
-      <!--   Play SES -->
-      <!-- </button> -->
-    </GridArea>
+        <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
+          class="scape-detail__listings" />
+        <!-- <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true"> -->
+        <!--   Play SES -->
+        <!-- </button> -->
+      </GridArea>
 
-    <ScapesAttributes :attributes="attributes" :gallery27-token-id="gallery27TokenId" />
+      <ScapesAttributes :attributes="attributes" :gallery27-token-id="gallery27TokenId" />
+    </header>
 
-    <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
+    <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions border-drop_"
       @listing-change="refreshListing" />
 
     <ScapesTransactionHistory :scape-id="scapeId" :history="history" :pending="pending" :error="error"
-      :total-transfers="totalTransfers" :total-sales="totalSales" />
+      :total-transfers="totalTransfers" :total-sales="totalSales" class="border-drop_" />
 
     <ClientOnly>
       <ScapesSESModal v-model:open="sesModalOpen" :token-id="scapeId" />
@@ -219,8 +221,14 @@ const sesModalOpen = ref(false);
   margin: 0 auto;
   display: grid;
   gap: var(--grid-gutter);
-  /* gap: calc(var(--scape-height-gutter) + var(--grid-gutter)); */
+  gap: calc(var(--scape-height-gutter) + var(--grid-gutter));
   container-type: inline-size;
+
+
+  &>header {
+    display: grid;
+    gap: var(--grid-gutter);
+  }
 }
 
 .scape-detail__image {
