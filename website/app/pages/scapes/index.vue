@@ -1,29 +1,16 @@
 <template>
   <section class="gallery">
-    <header class="gallery__header">
-      <div>
-        <h1>Scapes</h1>
-        <p class="gallery__subtitle">10,000 pixel-art landscapes</p>
-      </div>
+    <GridArea width="full" center :rows="2">
+      <h1>Scapes</h1>
+      <p class="gallery__subtitle">{{ formatNumber(10_000) }} pixel-art landscapes</p>
+    </GridArea>
+    <GridArea class="gallery__header" :rows="2" width="full" padding tag="header">
       <div class="gallery__controls">
-        <span v-if="total !== null" class="gallery__count">
-          {{ total.toLocaleString() }} {{ isMarketMode ? "listed" : "scapes" }}
-        </span>
-        <label class="gallery__toggle">
-          <input v-model="showPrices" type="checkbox" />
-          Show prices
-        </label>
-        <label v-if="isMarketMode" class="gallery__toggle">
-          <input v-model="includeSeaport" type="checkbox" />
-          Include OpenSea
-        </label>
-        <select v-model="selectedSort" class="gallery__sort" aria-label="Sort scapes">
-          <option v-for="option in sortOptions" :key="option.value" :value="option.value">
-            {{ option.label }}
-          </option>
-        </select>
+        <FormCheckbox v-model="showPrices" class="small">Show prices</FormCheckbox>
+        <FormCheckbox v-if="isMarketMode" v-model="includeSeaport" class="small">Include OpenSea</FormCheckbox>
+        <FormSelect v-model="selectedSort" :options="sortOptions" class="small" />
       </div>
-    </header>
+    </GridArea>
 
     <GalleryFilterTags v-if="selectedTraits.length > 0" :selected-traits="selectedTraits"
       @update="updateSelectedTraits" />
@@ -71,7 +58,7 @@ const sortOptions = [
   { value: "rarity-asc", label: "Most Common First" },
   { value: "price-asc", label: "Price (Low to High)" },
   { value: "price-desc", label: "Price (High to Low)" },
-] as const
+]
 
 // State from URL query params
 const selectedSort = ref<GallerySortOption>(
@@ -131,7 +118,7 @@ useSeo({
 .gallery {
   margin: 0 auto;
   display: grid;
-  gap: var(--spacer-lg);
+  gap: var(--grid-gutter);
 }
 
 .gallery__header {
@@ -156,29 +143,6 @@ useSeo({
   flex-wrap: wrap;
   gap: var(--spacer);
   align-items: center;
-}
-
-.gallery__count {}
-
-.gallery__toggle {
-  display: flex;
-  gap: var(--spacer-xs);
-  align-items: center;
-  font-size: var(--font-sm);
-  cursor: pointer;
-}
-
-.gallery__toggle input {
-  cursor: pointer;
-}
-
-.gallery__sort {
-  padding: var(--spacer-xs) var(--spacer-sm);
-  border-radius: var(--size-3);
-  border: var(--border);
-  background: var(--background);
-  font-size: var(--font-sm);
-  cursor: pointer;
 }
 
 .gallery__layout {
