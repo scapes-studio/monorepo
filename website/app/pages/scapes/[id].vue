@@ -5,14 +5,19 @@
     </GridArea>
 
     <GridArea rows="1" width="full" class="scape-detail__header" padding>
-      <h1>Scape #{{ scapeId }}</h1>
-      <div class="scape-detail__owner">
-        <span v-if="scapePending">Loading owner…</span>
-        <template v-else-if="owner">
-          Owned by
-          <AccountLink :address="owner" class="scape-detail__owner-link" />
-        </template>
+      <div>
+        <h1>Scape #{{ scapeId }}</h1>
+        <div class="scape-detail__owner">
+          <span v-if="scapePending">Loading owner…</span>
+          <template v-else-if="owner">
+            Owned by
+            <AccountLink :address="owner" class="scape-detail__owner-link" />
+          </template>
+        </div>
       </div>
+
+      <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
+        class="scape-detail__listings" />
       <!-- <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true"> -->
       <!--   Play SES -->
       <!-- </button> -->
@@ -24,19 +29,11 @@
       <!-- <NuxtLink v-if="gallery27TokenId" :to="`/gallery27/${gallery27TokenId}`" class="scape-detail__gallery27-link"> -->
       <!--   View Gallery27 Day {{ gallery27TokenId }} -->
       <!-- </NuxtLink> -->
-      <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
-        class="scape-detail__listings" />
       <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
         @listing-change="refreshListing" />
     </GridArea>
-    <ScapesTransactionHistory
-      :scape-id="scapeId"
-      :history="history"
-      :pending="pending"
-      :error="error"
-      :total-transfers="totalTransfers"
-      :total-sales="totalSales"
-    />
+    <ScapesTransactionHistory :scape-id="scapeId" :history="history" :pending="pending" :error="error"
+      :total-transfers="totalTransfers" :total-sales="totalSales" />
 
     <ClientOnly>
       <ScapesSESModal v-model:open="sesModalOpen" :token-id="scapeId" />
@@ -246,15 +243,21 @@ const sesModalOpen = ref(false);
 
 .scape-detail__header {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+
+  &>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &>h1 {
+      margin: 0;
+    }
+  }
 }
 
-.scape-detail__header h1 {
-  margin: 0;
-}
-
-.scape-detail__owner {
+.scape-detail__header .scape-detail__owner {
   color: var(--muted);
   font-size: var(--font-sm);
 }
@@ -268,40 +271,5 @@ const sesModalOpen = ref(false);
 
 .scape-detail__owner-link:hover {
   text-decoration: underline;
-}
-
-.scape-detail__gallery27-link {
-  display: inline-block;
-  margin-top: var(--spacer-sm);
-  color: var(--color-accent);
-  font-weight: var(--font-weight-bold);
-  text-decoration: none;
-}
-
-.scape-detail__gallery27-link:hover {
-  text-decoration: underline;
-}
-
-.scape-detail__listings {
-  margin-top: var(--size-3);
-}
-
-.scape-detail__actions {
-  margin-top: var(--spacer);
-}
-
-.scape-detail__ses-button {
-  margin-top: var(--spacer);
-  padding: var(--spacer-sm) var(--spacer);
-  background: var(--color-accent);
-  color: var(--color-bg);
-  border: none;
-  cursor: pointer;
-  font-weight: var(--font-weight-bold);
-  transition: opacity 0.2s;
-}
-
-.scape-detail__ses-button:hover {
-  opacity: 0.9;
 }
 </style>
