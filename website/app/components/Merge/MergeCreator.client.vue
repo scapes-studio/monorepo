@@ -203,7 +203,6 @@ const transactionText = computed(() => ({
   background: var(--color);
   color: var(--background);
   font-size: var(--font-lg);
-  font-weight: var(--font-weight-bold);
   cursor: pointer;
 }
 
@@ -225,7 +224,6 @@ const transactionText = computed(() => ({
   border-radius: var(--spacer-xs);
   color: var(--color);
   text-decoration: none;
-  font-weight: var(--font-weight-bold);
 }
 
 .merge-creator__view-link:hover {

@@ -106,6 +106,5 @@ const auctionStatus = computed(() => {
 }
 
 .gallery27-meta__value {
-  font-weight: var(--font-weight-bold);
 }
 </style>

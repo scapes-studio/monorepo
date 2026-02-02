@@ -94,7 +94,6 @@ const thumbnailUrl = computed(() => {
 }
 
 .gallery27-bid-item__amount {
-  font-weight: var(--font-weight-bold);
 }
 
 .gallery27-bid-item__message {

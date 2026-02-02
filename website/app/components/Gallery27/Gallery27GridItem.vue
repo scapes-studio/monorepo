@@ -85,7 +85,6 @@ const imageUrl = computed(() => {
 
 .gallery27-grid-item__day {
   display: block;
-  font-weight: var(--font-weight-bold);
 }
 
 .gallery27-grid-item__date {

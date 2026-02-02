@@ -47,7 +47,6 @@ const spanStyle = computed(() => {
   .scape-link__price {
     margin-top: var(--spacer-xs);
     font-size: var(--font-sm);
-    font-weight: var(--font-weight-bold);
     text-align: center;
   }
 

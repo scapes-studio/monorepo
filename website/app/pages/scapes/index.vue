@@ -149,7 +149,6 @@ useSeo({
 }
 
 .gallery__count {
-  font-weight: var(--font-weight-bold);
 }
 
 .gallery__toggle {
@@ -209,7 +208,6 @@ useSeo({
   border: none;
   background: var(--color);
   color: var(--background);
-  font-weight: var(--font-weight-bold);
   cursor: pointer;
 }
 

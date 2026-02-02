@@ -136,7 +136,6 @@ const hasPreview = computed(() => props.scapes.length >= 2);
   background: var(--background);
   color: var(--color);
   font-size: var(--font-xs);
-  font-weight: var(--font-weight-bold);
   cursor: pointer;
   opacity: 0.8;
 }

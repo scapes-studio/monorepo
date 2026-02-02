@@ -51,7 +51,6 @@ const getCount = (value: string) => props.counts?.values[value] ?? 0
   padding: var(--spacer-xs) 0;
   background: var(--background);
   font-size: var(--font-sm);
-  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }

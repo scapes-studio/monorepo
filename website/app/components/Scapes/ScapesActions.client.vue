@@ -323,7 +323,6 @@ const purgeText = {
   border-radius: var(--spacer-xs);
   background: var(--gray-z-1);
   font-size: var(--font-base);
-  font-weight: var(--font-weight-bold);
   cursor: pointer;
   text-align: center;
   text-decoration: none;
@@ -360,7 +359,6 @@ const purgeText = {
   padding: var(--spacer-sm) var(--spacer);
   border: 1px solid var(--border);
   border-radius: var(--spacer-xs);
-  font-weight: var(--font-weight-bold);
   text-decoration: none;
   color: inherit;
 }
@@ -396,7 +394,6 @@ const purgeText = {
 }
 
 .scapes-actions__input-suffix {
-  font-weight: var(--font-weight-bold);
   color: var(--muted);
 }
 

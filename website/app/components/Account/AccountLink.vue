@@ -30,7 +30,6 @@ const displayName = computed(() => {
 .account-link {
   color: inherit;
   text-decoration: none;
-  font-weight: var(--font-weight-bold);
 }
 
 .account-link:hover {

@@ -105,7 +105,6 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 }
 
 .activity-page__count {
-  font-weight: var(--font-weight-bold);
 }
 
 .activity-page__status {

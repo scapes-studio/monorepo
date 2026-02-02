@@ -49,7 +49,6 @@ const sourceLabel = computed(() => {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacer-sm);
-  font-weight: var(--font-weight-bold);
 }
 
 .marketplace-data__badge {

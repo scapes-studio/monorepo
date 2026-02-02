@@ -245,7 +245,6 @@ a.history-item__time:hover {
 }
 
 .history-item__price {
-  font-weight: var(--font-weight-bold);
   white-space: nowrap;
   color: var(--muted);
 }

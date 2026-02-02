@@ -114,7 +114,6 @@ defineExpose({ selectedImage });
 }
 
 .gallery27-bid-history__initial-label {
-  font-weight: var(--font-weight-bold);
 }
 
 .gallery27-bid-history__empty {

@@ -299,7 +299,6 @@ const withdrawText = {
 }
 
 .gallery27-actions__input-suffix {
-  font-weight: var(--font-weight-bold);
   color: var(--muted);
 }
 
@@ -318,7 +317,6 @@ const withdrawText = {
   border-radius: var(--spacer-xs);
   background: var(--gray-z-1);
   font-size: var(--font-base);
-  font-weight: var(--font-weight-bold);
   cursor: pointer;
   text-align: center;
 }

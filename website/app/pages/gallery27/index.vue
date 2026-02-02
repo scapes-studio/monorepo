@@ -94,12 +94,10 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   border-radius: var(--size-10);
   background: var(--color);
   color: var(--background);
-  font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
 
 .gallery27-page__count {
-  font-weight: var(--font-weight-bold);
 }
 
 .gallery27-page__status {
@@ -119,7 +117,6 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   border: none;
   background: var(--color);
   color: var(--background);
-  font-weight: var(--font-weight-bold);
   cursor: pointer;
 }
 

@@ -136,7 +136,6 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 }
 
 .market-page__count {
-  font-weight: var(--font-weight-bold);
 }
 
 .market-page__toggle {
@@ -177,7 +176,6 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   border: none;
   background: var(--color);
   color: var(--background);
-  font-weight: var(--font-weight-bold);
   cursor: pointer;
 }
 

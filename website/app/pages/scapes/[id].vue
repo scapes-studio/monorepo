@@ -263,7 +263,6 @@ const sesModalOpen = ref(false);
 }
 
 .scape-detail__owner-link {
-  font-weight: var(--font-weight-bold);
   color: inherit;
   text-decoration: none;
   word-break: break-all;

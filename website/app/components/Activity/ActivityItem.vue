@@ -211,7 +211,6 @@ a.activity-item__time:hover {
 }
 
 .activity-item__price {
-  font-weight: var(--font-weight-bold);
   white-space: nowrap;
   color: var(--muted);
 }

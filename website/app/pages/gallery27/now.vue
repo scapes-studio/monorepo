@@ -71,7 +71,6 @@ useSeo({
   border-radius: var(--size-10);
   background: var(--color);
   color: var(--background);
-  font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
 </style>
