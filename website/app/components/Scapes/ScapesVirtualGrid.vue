@@ -25,6 +25,7 @@ const props = defineProps<{
   scapes: ScapeWithPrice[]
   hasMore?: boolean
   loading?: boolean
+  columns?: number
 }>()
 
 const emit = defineEmits<{
@@ -32,6 +33,7 @@ const emit = defineEmits<{
 }>()
 
 const { columns, rowHeight, gutter } = useScapeGrid()
+const columnCount = computed(() => props.columns ?? columns.value)
 
 const scapesRef = toRef(props, 'scapes')
 
@@ -43,7 +45,7 @@ const {
   scrollToTop,
 } = useVirtualGrid({
   items: scapesRef,
-  columns,
+  columns: columnCount,
   rowHeight,
   overscan: 20,
 })

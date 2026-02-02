@@ -28,11 +28,13 @@
     <GalleryFilterTags v-if="selectedTraits.length > 0" :selected-traits="selectedTraits"
       @update="updateSelectedTraits" />
 
-    <div class="gallery__layout">
-      <GalleryScapeGallerySidebar :selected-traits="selectedTraits" :trait-counts="traitCounts"
-        :counts-loading="countsLoading" @update-traits="updateSelectedTraits" />
+    <div class="gallery__layout" :class="{ 'gallery__layout--with-sidebar': showSidebar }">
+      <aside v-if="showSidebar" class="gallery__sidebar">
+        <GalleryScapeGallerySidebar :selected-traits="selectedTraits" :trait-counts="traitCounts"
+          :counts-loading="countsLoading" @update-traits="updateSelectedTraits" />
+      </aside>
 
-      <main class="gallery__main">
+      <main class="gallery__main" :style="{ '--grid-columns': `${galleryColumns}` }">
         <div v-if="loading && scapes.length === 0" class="gallery__status">
           Loading scapes...
         </div>
@@ -44,12 +46,8 @@
         </div>
 
         <template v-else>
-          <ScapesVirtualGrid
-            :scapes="scapes"
-            :has-more="hasMore"
-            :loading="loading"
-            @load-more="loadMore"
-          />
+          <ScapesVirtualGrid :scapes="scapes" :has-more="hasMore" :loading="loading" :columns="galleryColumns"
+            @load-more="loadMore" />
 
           <button v-if="hasMore" type="button" class="gallery__load-more" :disabled="loading" @click="loadMore">
             {{ loading ? "Loading..." : "Load more" }}
@@ -111,6 +109,11 @@ watch(
   { deep: true },
 )
 
+const { columns } = useScapeGrid()
+
+const showSidebar = computed(() => columns.value > 4)
+const galleryColumns = computed(() => Math.max(1, columns.value - (showSidebar.value ? 2 : 0)))
+
 const { scapes, total, loading, error, hasMore, loadMore, traitCounts, countsLoading } =
   useScapesGallery(selectedTraits, selectedSort, showPrices, includeSeaport)
 
@@ -126,9 +129,7 @@ useSeo({
 
 <style scoped>
 .gallery {
-  max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--spacer-lg) var(--spacer);
   display: grid;
   gap: var(--spacer-lg);
 }
@@ -157,8 +158,7 @@ useSeo({
   align-items: center;
 }
 
-.gallery__count {
-}
+.gallery__count {}
 
 .gallery__toggle {
   display: flex;
@@ -187,10 +187,17 @@ useSeo({
   gap: var(--spacer);
 }
 
-@media (min-width: 48rem) {
-  .gallery__layout {
-    grid-template-columns: min(20vw, 18rem) 1fr;
-  }
+.gallery__layout--with-sidebar {
+  grid-template-columns: repeat(var(--grid-columns), var(--scape-width));
+  gap: var(--grid-gutter);
+}
+
+.gallery__sidebar {
+  grid-column: 1 / span 2;
+}
+
+.gallery__layout--with-sidebar .gallery__main {
+  grid-column: 3 / -1;
 }
 
 .gallery__main {

@@ -25,7 +25,7 @@
         <h2>Scapes</h2>
         <span>{{ regularScapes.length }} owned</span>
       </header>
-      <ScapesGrid :scapes="regularScapes" />
+      <ScapesGrid :scapes="regularScapes" :columns="contentColumns" />
     </template>
 
     <button v-if="hasMore" class="scapes-tab__load-more" type="button" :disabled="scapesLoading" @click="loadMore">
