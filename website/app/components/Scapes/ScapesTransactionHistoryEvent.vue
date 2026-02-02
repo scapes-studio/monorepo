@@ -132,7 +132,11 @@ const isMigration = (entry: TransferEntry) =>
 const isMint = (entry: TransferEntry) =>
   entry.from.toLowerCase() === ZERO_ADDRESS && !isMigration(entry);
 
+const isMerge = (entry: TransferEntry) =>
+  entry.from.toLowerCase() === ZERO_ADDRESS && BigInt(entry.id) > 10_000n;
+
 const transferLabel = (entry: TransferEntry) => {
+  if (isMerge(entry)) return "Mint (Merge)";
   if (isMint(entry)) return "Mint";
   if (isMigration(entry)) return "Onchain Migration";
   return entry.sale ? "Sale" : "Transfer";
