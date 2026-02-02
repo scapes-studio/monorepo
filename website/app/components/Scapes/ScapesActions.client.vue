@@ -1,149 +1,95 @@
 <template>
-  <GridArea v-if="showActions" :rows="2" width="full" center class="scapes-actions__area">
-    <div class="scapes-actions">
-    <!-- Owner actions -->
-    <template v-if="isOwner">
-      <!-- Owner with no listing: show list button -->
-      <template v-if="!listing">
-        <button
-          v-if="!showListForm"
-          type="button"
-          class="scapes-actions__btn"
-          @click="showListForm = true"
-        >
-          List for Sale
-        </button>
+  <GridArea v-if="showActions" :rows="2" width="full" padding class="scapes-actions__area">
+    <header>
+      <h1>Marketplace Status</h1>
+      <p v-if="!listing">This scape is not listed for sale.</p>
+    </header>
+    <Actions class="left">
+      <!-- Owner actions -->
+      <template v-if="isOwner">
+        <!-- Owner with no listing: show list Button -->
+        <template v-if="!listing">
+          <Button v-if="!showListForm" class="small" @click="showListForm = true">
+            List for Sale
+          </Button>
 
-        <div v-else class="scapes-actions__list-form">
-          <div class="scapes-actions__input-group">
-            <input
-              v-model="listPriceInput"
-              type="number"
-              step="0.001"
-              min="0"
-              placeholder="Price in ETH"
-              class="scapes-actions__input"
-            />
-            <span class="scapes-actions__input-suffix">ETH</span>
+          <div v-else class="scapes-actions__list-form">
+            <div class="scapes-actions__input-group">
+              <input v-model="listPriceInput" type="number" step="0.001" min="0" placeholder="Price in ETH"
+                class="scapes-actions__input" />
+              <span class="scapes-actions__input-suffix">ETH</span>
+            </div>
+
+            <EvmTransactionFlow ref="transactionFlowRef" :text="listText" :request="listRequest"
+              @complete="handleListComplete">
+              <template #start="{ start }">
+                <div class="scapes-actions__form-actions">
+                  <Button class="small" @click="showListForm = false">
+                    Cancel
+                  </Button>
+                  <Button class="small" :disabled="!listPriceInput || Number(listPriceInput) <= 0" @click="start">
+                    List for Sale
+                  </Button>
+                </div>
+              </template>
+            </EvmTransactionFlow>
           </div>
+        </template>
 
-          <EvmTransactionFlow
-            ref="transactionFlowRef"
-            :text="listText"
-            :request="listRequest"
-            @complete="handleListComplete"
-          >
+        <!-- Owner with onchain listing: show cancel Button -->
+        <template v-else-if="hasOnchainListing">
+          <EvmTransactionFlow ref="cancelFlowRef" :text="cancelText" :request="cancelRequest"
+            @complete="handleCancelComplete">
             <template #start="{ start }">
-              <div class="scapes-actions__form-actions">
-                <button
-                  type="button"
-                  class="scapes-actions__btn scapes-actions__btn--secondary"
-                  @click="showListForm = false"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  class="scapes-actions__btn"
-                  :disabled="!listPriceInput || Number(listPriceInput) <= 0"
-                  @click="start"
-                >
-                  List for Sale
-                </button>
-              </div>
+              <Button class="small" @click="start">
+                Cancel Listing
+              </Button>
             </template>
           </EvmTransactionFlow>
-        </div>
+        </template>
+
+        <!-- Owner with seaport listing: link to OpenSea -->
+        <template v-else-if="hasSeaportListing">
+          <a :href="openseaUrl" target="_blank" rel="noopener noreferrer" class="scapes-actions__link">
+            Manage on OpenSea
+          </a>
+        </template>
+
+        <!-- Owner with merge: show unmerge Button -->
+        <template v-if="isMerge">
+          <EvmTransactionFlow ref="purgeFlowRef" :text="purgeText" :request="purgeRequest"
+            @complete="handlePurgeComplete">
+            <template #start="{ start }">
+              <Button class="small" @click="start">
+                Unmerge
+              </Button>
+            </template>
+          </EvmTransactionFlow>
+        </template>
       </template>
 
-      <!-- Owner with onchain listing: show cancel button -->
-      <template v-else-if="hasOnchainListing">
-        <EvmTransactionFlow
-          ref="cancelFlowRef"
-          :text="cancelText"
-          :request="cancelRequest"
-          @complete="handleCancelComplete"
-        >
-          <template #start="{ start }">
-            <button
-              type="button"
-              class="scapes-actions__btn scapes-actions__btn--secondary"
-              @click="start"
-            >
-              Cancel Listing
-            </button>
-          </template>
-        </EvmTransactionFlow>
-      </template>
+      <!-- Non-owner actions -->
+      <template v-else>
+        <!-- Non-owner with onchain listing: show buy Button -->
+        <template v-if="hasOnchainListing && listPrice">
+          <EvmTransactionFlow ref="buyFlowRef" :text="buyText" :request="buyRequest" @complete="handleBuyComplete">
+            <template #start="{ start }">
+              <Button class="small" @click="start">
+                Buy for {{ listPrice }} ETH
+              </Button>
+            </template>
+          </EvmTransactionFlow>
+        </template>
 
-      <!-- Owner with seaport listing: link to OpenSea -->
-      <template v-else-if="hasSeaportListing">
-        <a
-          :href="openseaUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="scapes-actions__link"
-        >
-          Manage on OpenSea
-        </a>
+        <!-- Non-owner with seaport listing: link to OpenSea -->
+        <template v-else-if="hasSeaportListing && listPrice">
+          <a :href="openseaUrl" target="_blank" rel="noopener noreferrer"
+            class="scapes-actions__btn scapes-actions__link">
+            Buy on OpenSea for {{ listPrice }} ETH
+          </a>
+        </template>
       </template>
-
-      <!-- Owner with merge: show unmerge button -->
-      <template v-if="isMerge">
-        <EvmTransactionFlow
-          ref="purgeFlowRef"
-          :text="purgeText"
-          :request="purgeRequest"
-          @complete="handlePurgeComplete"
-        >
-          <template #start="{ start }">
-            <button
-              type="button"
-              class="scapes-actions__btn scapes-actions__btn--secondary"
-              @click="start"
-            >
-              Unmerge
-            </button>
-          </template>
-        </EvmTransactionFlow>
-      </template>
-    </template>
-
-    <!-- Non-owner actions -->
-    <template v-else>
-      <!-- Non-owner with onchain listing: show buy button -->
-      <template v-if="hasOnchainListing && listPrice">
-        <EvmTransactionFlow
-          ref="buyFlowRef"
-          :text="buyText"
-          :request="buyRequest"
-          @complete="handleBuyComplete"
-        >
-          <template #start="{ start }">
-            <button
-              type="button"
-              class="scapes-actions__btn scapes-actions__btn--primary"
-              @click="start"
-            >
-              Buy for {{ listPrice }} ETH
-            </button>
-          </template>
-        </EvmTransactionFlow>
-      </template>
-
-      <!-- Non-owner with seaport listing: link to OpenSea -->
-      <template v-else-if="hasSeaportListing && listPrice">
-        <a
-          :href="openseaUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="scapes-actions__btn scapes-actions__link"
-        >
-          Buy on OpenSea for {{ listPrice }} ETH
-        </a>
-      </template>
-    </template>
-    </div>
+    </Actions>
   </GridArea>
 </template>
 
@@ -315,98 +261,22 @@ const purgeText = {
 </script>
 
 <style scoped>
-.scapes-actions {
-  display: flex;
-  flex-direction: column;
+.scapes-actions__area {
+  display: grid;
   gap: var(--spacer-sm);
-}
 
-.scapes-actions__btn {
-  padding: var(--spacer-sm) var(--spacer);
-  border: 1px solid var(--border);
-  border-radius: var(--spacer-xs);
-  background: var(--gray-z-1);
-  font-size: var(--font-base);
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  color: inherit;
-}
+  &>header {
+    & p {
+      color: var(--muted);
+      font-size: var(--font-sm);
+    }
+  }
 
-.scapes-actions__btn:hover {
-  background: var(--gray-z-2);
-}
-
-.scapes-actions__btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.scapes-actions__btn--primary {
-  background: var(--color);
-  color: var(--background);
-  border-color: var(--color);
-}
-
-.scapes-actions__btn--primary:hover {
-  opacity: 0.9;
-}
-
-.scapes-actions__btn--secondary {
-  background: transparent;
-}
-
-.scapes-actions__link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacer-sm) var(--spacer);
-  border: 1px solid var(--border);
-  border-radius: var(--spacer-xs);
-  text-decoration: none;
-  color: inherit;
-}
-
-.scapes-actions__link:hover {
-  background: var(--gray-z-1);
-}
-
-.scapes-actions__list-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacer-sm);
-}
-
-.scapes-actions__input-group {
-  display: flex;
-  align-items: center;
-  gap: var(--spacer-xs);
-}
-
-.scapes-actions__input {
-  flex: 1;
-  padding: var(--spacer-sm);
-  border: 1px solid var(--border);
-  border-radius: var(--spacer-xs);
-  background: var(--background);
-  font-size: var(--font-base);
-}
-
-.scapes-actions__input:focus {
-  outline: none;
-  border-color: var(--color);
-}
-
-.scapes-actions__input-suffix {
-  color: var(--muted);
-}
-
-.scapes-actions__form-actions {
-  display: flex;
-  gap: var(--spacer-sm);
-}
-
-.scapes-actions__form-actions .scapes-actions__btn {
-  flex: 1;
+  &>.actions {
+    display: grid;
+    gap: var(--spacer-sm);
+    padding-inline: var(--grid-gutter);
+    padding-bottom: var(--grid-gutter);
+  }
 }
 </style>
