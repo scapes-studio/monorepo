@@ -7,14 +7,8 @@
     <Dialog v-model:open="open" title="List for Sale" class="scapes-action__dialog">
       <div class="scapes-action__form">
         <div class="scapes-action__input-group">
-          <input
-            v-model="listPriceInput"
-            type="number"
-            step="0.001"
-            min="0"
-            placeholder="Price in ETH"
-            class="scapes-action__input"
-          />
+          <input v-model="listPriceInput" type="number" step="0.001" min="0" placeholder="Price in ETH"
+            class="scapes-action__input" />
           <span class="scapes-action__input-suffix">ETH</span>
         </div>
         <div class="scapes-action__form-actions">
@@ -28,12 +22,8 @@
       </div>
     </Dialog>
 
-    <EvmTransactionFlow
-      ref="transactionFlowRef"
-      :text="listText"
-      :request="listRequest"
-      @complete="handleListComplete"
-    />
+    <EvmTransactionFlow ref="transactionFlowRef" :text="listText" :request="listRequest"
+      @complete="handleListComplete" />
   </div>
 </template>
 
@@ -58,6 +48,10 @@ const isPriceValid = computed(() => Number(listPriceInput.value) > 0);
 
 const transactionFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
 
+const delay = (ms: number) => new Promise<void>((resolve) => {
+  setTimeout(resolve, ms);
+});
+
 const listRequest = async (): Promise<Hash> => {
   const priceWei = parseEther(String(listPriceInput.value));
   return makeOffer(priceWei);
@@ -75,8 +69,12 @@ const handleCancel = () => {
   listPriceInput.value = "";
 };
 
-const handleListComplete = () => {
+const handleListComplete = async () => {
   listPriceInput.value = "";
+
+  await delay(2000);
+  open.value = false;
+
   emit("listingChange");
 };
 

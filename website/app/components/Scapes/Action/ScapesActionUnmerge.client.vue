@@ -44,6 +44,10 @@ const open = ref(false);
 
 const transactionFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
 
+const delay = (ms: number) => new Promise<void>((resolve) => {
+  setTimeout(resolve, ms);
+});
+
 const purgeRequest = async (): Promise<Hash> => {
   return purge();
 };
@@ -54,7 +58,9 @@ const handleContinue = async () => {
   await transactionFlowRef.value?.initializeRequest(purgeRequest);
 };
 
-const handlePurgeComplete = () => {
+const handlePurgeComplete = async () => {
+  await delay(2000);
+  open.value = false;
   emit("listingChange");
 };
 

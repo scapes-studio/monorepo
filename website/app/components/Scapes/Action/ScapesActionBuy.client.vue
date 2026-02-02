@@ -41,6 +41,10 @@ const open = ref(false);
 
 const transactionFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
 
+const delay = (ms: number) => new Promise<void>((resolve) => {
+  setTimeout(resolve, ms);
+});
+
 const buyRequest = async (): Promise<Hash> => {
   return buy(BigInt(props.priceWei));
 };
@@ -51,7 +55,9 @@ const handleContinue = async () => {
   await transactionFlowRef.value?.initializeRequest(buyRequest);
 };
 
-const handleBuyComplete = () => {
+const handleBuyComplete = async () => {
+  await delay(2000);
+  open.value = false;
   emit("listingChange");
 };
 
