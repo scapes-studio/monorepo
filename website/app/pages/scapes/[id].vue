@@ -29,14 +29,14 @@
       <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions"
         @listing-change="refreshListing" />
     </GridArea>
-    <GridArea width="full" center class="scape-detail__header">
-      <div class="scape-detail__stats">
-        <span>{{ totalTransfers }} transfers</span>
-        <span>{{ totalSales }} sales</span>
-      </div>
-    </GridArea>
-
-    <ScapesTransactionHistory :scape-id="scapeId" :history="history" :pending="pending" :error="error" />
+    <ScapesTransactionHistory
+      :scape-id="scapeId"
+      :history="history"
+      :pending="pending"
+      :error="error"
+      :total-transfers="totalTransfers"
+      :total-sales="totalSales"
+    />
 
     <ClientOnly>
       <ScapesSESModal v-model:open="sesModalOpen" :token-id="scapeId" />
@@ -252,13 +252,6 @@ const sesModalOpen = ref(false);
 
 .scape-detail__header h1 {
   margin: 0;
-}
-
-.scape-detail__stats {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacer);
-  font-weight: var(--font-weight-bold);
 }
 
 .scape-detail__owner {

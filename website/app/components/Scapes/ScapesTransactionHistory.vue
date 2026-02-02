@@ -2,6 +2,10 @@
   <section class="history">
     <GridArea width="full" padding class="history__title">
       <h2>Transfer History</h2>
+      <div v-if="history.length > 3" class="history__stats">
+        <span>{{ totalTransfers }} transfers</span>
+        <span>{{ totalSales }} sales</span>
+      </div>
     </GridArea>
 
     <GridArea v-if="pending" :rows="1" width="full" center :background="false" class="history__status">
@@ -64,11 +68,20 @@ type ListingEntry = {
 
 type ScapeHistoryEntry = TransferEntry | ListingEntry;
 
-const props = defineProps<{ scapeId: string, history?: ScapeHistoryEntry[]; pending?: boolean; error?: unknown | null }>();
+const props = defineProps<{
+  scapeId: string;
+  history?: ScapeHistoryEntry[];
+  pending?: boolean;
+  error?: unknown | null;
+  totalTransfers?: number;
+  totalSales?: number;
+}>();
 
 const history = computed(() => props.history ?? []);
 const pending = computed(() => props.pending ?? false);
 const error = computed(() => props.error ?? null);
+const totalTransfers = computed(() => props.totalTransfers ?? 0);
+const totalSales = computed(() => props.totalSales ?? 0);
 </script>
 
 <style scoped>
@@ -80,6 +93,14 @@ const error = computed(() => props.error ?? null);
 .history__title {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.history__stats {
+  display: flex;
+  gap: var(--spacer);
+  color: var(--muted);
+  font-size: var(--font-sm);
 }
 
 .history__status {
