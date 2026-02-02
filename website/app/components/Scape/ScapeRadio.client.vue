@@ -31,14 +31,8 @@
       <!-- Play/pause icon -->
       <span class="scape-radio-inline__icon">
         <span v-if="isLoading" class="scape-radio-inline__loading">...</span>
-        <svg v-else-if="isPlaying" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-          fill="currentColor" stroke="var(--border-color)" stroke-width="var(--grid-gutter)">
-          <rect x="4" y="4" width="6" height="16" />
-          <rect x="14" y="4" width="6" height="16" />
-        </svg>
-        <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <polygon points="5,3 19,12 5,21" stroke="var(--border-color)" stroke-width="var(--grid-gutter)" />
-        </svg>
+        <IconPause v-else-if="isPlaying" />
+        <IconPlay v-else />
       </span>
     </button>
   </div>

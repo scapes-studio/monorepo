@@ -1,7 +1,7 @@
 <template>
   <section class="scape-detail" :style="{ '--scape-count': scapeCount }">
     <GridArea rows="calc(var(--content-columns, 5) * 2)" width="full" class="scape-detail__image">
-      <ScapeImage :id="scapeId" :scape-count="scapeCount" />
+      <ScapeAnimated :id="scapeId" :scape-count="scapeCount" />
     </GridArea>
 
     <GridArea rows="1" width="full" class="scape-detail__header" padding>
@@ -224,6 +224,7 @@ const sesModalOpen = ref(false);
 }
 
 .scape-detail__image {
+  position: relative;
   justify-self: center;
   display: flex;
   justify-content: center;
@@ -236,6 +237,7 @@ const sesModalOpen = ref(false);
     height: auto;
   }
 }
+
 
 .scape-detail__header {
   display: flex;

@@ -1,10 +1,21 @@
 <template>
-  <img ref="imgRef" class="scape-image" :class="{ loaded }" :src="imageUrl" :alt="`Scape ${id}`"
-    :style="{ aspectRatio }" @load="loaded = true" />
+  <img
+    ref="imgRef"
+    class="scape-image"
+    :class="{ loaded }"
+    :src="imageUrl"
+    :alt="`Scape ${id}`"
+    :style="{ aspectRatio }"
+    @load="handleLoad"
+  />
 </template>
 
 <script setup lang="ts">
 import type { PropType } from "vue";
+
+const emit = defineEmits<{
+  (event: "loaded"): void;
+}>();
 
 const props = defineProps({
   id: {
@@ -22,9 +33,14 @@ const aspectRatio = computed(() => `${3 * props.scapeCount}/1`);
 const loaded = ref(false);
 const imgRef = ref<HTMLImageElement>();
 
+const handleLoad = () => {
+  loaded.value = true;
+  emit("loaded");
+};
+
 onMounted(() => {
   if (imgRef.value?.complete) {
-    loaded.value = true;
+    handleLoad();
   }
 });
 </script>
