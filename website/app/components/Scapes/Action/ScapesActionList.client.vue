@@ -11,14 +11,14 @@
             class="scapes-action__input" />
           <span class="scapes-action__input-suffix">ETH</span>
         </div>
-        <div class="scapes-action__form-actions">
+        <Actions>
           <Button class="small" @click="handleCancel">
             Cancel
           </Button>
           <Button class="small" :disabled="!isPriceValid" @click="handleContinue">
             Continue
           </Button>
-        </div>
+        </Actions>
       </div>
     </Dialog>
 
@@ -129,12 +129,7 @@ const listText = computed(() => ({
   color: var(--muted);
 }
 
-.scapes-action__form-actions {
-  display: flex;
-  gap: var(--spacer-sm);
-}
-
-.scapes-action__form-actions :deep(button) {
-  flex: 1;
+.actions {
+  margin-top: var(--spacer);
 }
 </style>

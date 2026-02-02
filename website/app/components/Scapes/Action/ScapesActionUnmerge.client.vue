@@ -7,14 +7,14 @@
     <Dialog v-model:open="open" title="Unmerge" class="scapes-action__dialog">
       <div class="scapes-action__form">
         <p class="scapes-action__copy">Unmerge this merge and return the component Scapes.</p>
-        <div class="scapes-action__form-actions">
+        <Actions>
           <Button class="small" @click="open = false">
             Keep Merge
           </Button>
           <Button class="small" @click="handleContinue">
             Unmerge
           </Button>
-        </div>
+        </Actions>
       </div>
     </Dialog>
 
@@ -97,12 +97,7 @@ const purgeText = {
   font-size: var(--font-sm);
 }
 
-.scapes-action__form-actions {
-  display: flex;
-  gap: var(--spacer-sm);
-}
-
-.scapes-action__form-actions :deep(button) {
-  flex: 1;
+.actions {
+  margin-top: var(--spacer);
 }
 </style>

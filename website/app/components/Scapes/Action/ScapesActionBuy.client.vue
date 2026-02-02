@@ -7,14 +7,14 @@
     <Dialog v-model:open="open" title="Buy Scape" class="scapes-action__dialog">
       <div class="scapes-action__form">
         <p class="scapes-action__copy">Buy Scape #{{ scapeId }} for {{ priceEth }} ETH.</p>
-        <div class="scapes-action__form-actions">
+        <Actions>
           <Button class="small" @click="open = false">
             Cancel
           </Button>
           <Button class="small" @click="handleContinue">
             Buy for {{ priceEth }} ETH
           </Button>
-        </div>
+        </Actions>
       </div>
     </Dialog>
 
@@ -94,12 +94,7 @@ const buyText = computed(() => ({
   font-size: var(--font-sm);
 }
 
-.scapes-action__form-actions {
-  display: flex;
-  gap: var(--spacer-sm);
-}
-
-.scapes-action__form-actions :deep(button) {
-  flex: 1;
+.actions {
+  margin-top: var(--spacer);
 }
 </style>
