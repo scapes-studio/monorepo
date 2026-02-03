@@ -13,7 +13,7 @@
         <ProfileLinks :links="profileData?.links ?? null" />
       </div>
 
-      <ProfileTabs :account-id="accountId ?? ''" />
+      <ProfileTabs v-if="showProfileTabs" :account-id="accountId ?? ''" />
 
       <NuxtPage />
     </template>
@@ -35,6 +35,10 @@ const displayAddress = computed(() => profile.value?.address ?? accountId.value 
 
 const { bannerImageUrl } = useFeaturedScape(resolvedAddress);
 const effectiveHeader = computed(() => profileData.value?.header || bannerImageUrl.value || null);
+
+const { data: gallery27Data } = await useGallery27ScapesByOwner(resolvedAddress);
+const hasGallery27Scapes = computed(() => (gallery27Data.value?.scapes?.length ?? 0) > 0);
+const showProfileTabs = computed(() => hasGallery27Scapes.value);
 
 // Provide profile data to child pages
 provide("profile", { profile, resolvedAddress, displayAddress });
