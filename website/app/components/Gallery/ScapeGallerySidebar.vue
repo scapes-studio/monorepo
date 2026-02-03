@@ -56,10 +56,8 @@ const handleTraitSelect = (trait: string) => {
   top: var(--spacer);
   max-height: calc(100vh - 2 * var(--spacer));
   overflow-y: auto;
-  padding-right: var(--spacer-sm);
 
   .trait-group {
-    padding-inline: var(--spacer);
     background: var(--background);
   }
 }

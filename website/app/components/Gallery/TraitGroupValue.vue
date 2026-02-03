@@ -4,11 +4,14 @@
     <div class="trait-value__icon">
       <img :src="iconUrl" :alt="value" />
     </div>
-    <span class="trait-value__label">{{ value }}</span>
-    <span class="trait-value__count">{{ count }}</span>
-    <span class="trait-value__check" aria-hidden="true">
-      {{ selected ? "✓" : "" }}
+    <span class="trait-value__label">
+      <span>
+        {{ value }}
+      </span>
+
+      <Icon v-if="selected" type="check" />
     </span>
+    <span class="trait-value__count">{{ count }}</span>
   </li>
 </template>
 
@@ -36,8 +39,7 @@ const iconUrl = computed(() => getTraitIconUrl(props.category, props.value))
   grid-template-columns: 2rem 1fr auto auto;
   gap: var(--spacer-sm);
   align-items: center;
-  padding: var(--spacer-xs);
-  border-radius: var(--size-2);
+  padding: var(--spacer-sm) var(--spacer);
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -75,6 +77,9 @@ const iconUrl = computed(() => getTraitIconUrl(props.category, props.value))
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: var(--spacer);
 }
 
 .trait-value__count {
