@@ -1,6 +1,6 @@
 <template>
   <li class="activity-item">
-    <GridArea :rows="1" width="full" class="activity-item__header">
+    <GridArea :rows="1" width="full" class="activity-item__header no-shadow">
       <span class="activity-item__type">
         <NuxtLink :to="scapeUrl(item.tokenId, item.collection)">
           <span>{{ typeLabel }} <span class="muted">#{{ item.tokenId }}</span></span>
@@ -28,7 +28,7 @@
       </span>
     </GridArea>
 
-    <GridArea :rows="1" width="full" class="activity-item__content">
+    <GridArea :rows="1" width="full" class="activity-item__content no-shadow">
       <template v-if="item.type === 'transfer'">
         <div class="activity-item__addresses">
           <template v-if="isMint">
@@ -131,6 +131,7 @@ const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
   display: grid;
   gap: var(--grid-gutter);
   font-size: var(--font-sm);
+  background: var(--background);
 }
 
 .activity-item__header {
