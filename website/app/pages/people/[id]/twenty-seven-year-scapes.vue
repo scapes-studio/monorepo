@@ -101,6 +101,7 @@ defineOgImageComponent(
 
   display: grid;
   gap: var(--grid-gutter);
+  margin-top: var(--scape-height-gutter);
 }
 
 .gallery27-tab__header {

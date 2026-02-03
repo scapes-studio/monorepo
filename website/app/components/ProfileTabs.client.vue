@@ -94,7 +94,7 @@ onMounted(refresh)
   position: relative;
   display: flex;
   gap: var(--grid-gutter);
-  margin-block: var(--scape-height-gutter);
+  margin-top: var(--scape-height-gutter);
   height: var(--scape-height);
   max-width: var(--content-width);
   text-align: center;
