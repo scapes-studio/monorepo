@@ -15,7 +15,8 @@ defineProps<{
 <style scoped>
 .gallery27-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: var(--spacer);
+  grid-template-columns: repeat(var(--grid-columns), var(--scape-width));
+  gap: var(--grid-gutter);
+  justify-content: center;
 }
 </style>

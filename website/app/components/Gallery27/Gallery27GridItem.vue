@@ -5,7 +5,7 @@
       <div v-else class="gallery27-grid-item__placeholder">No image</div>
     </div>
     <div v-if="!minimal" class="gallery27-grid-item__info">
-      <span class="gallery27-grid-item__day">Day {{ scape.tokenId }}</span>
+      <span class="gallery27-grid-item__day">#{{ scape.tokenId }}</span>
       <span v-if="formattedDate" class="gallery27-grid-item__date">{{ formattedDate }}</span>
     </div>
   </NuxtLink>
@@ -52,13 +52,20 @@ const imageUrl = computed(() => {
 
 <style scoped>
 .gallery27-grid-item {
+  --height: calc(var(--scape-height)*2 + var(--grid-gutter));
+  --image-height: calc(var(--scape-height) + var(--scape-height)/2);
+
   display: block;
   text-decoration: none;
   color: inherit;
+  width: var(--scape-width);
+  height: var(--height);
+  box-shadow: var(--grid-shadow);
 }
 
 .gallery27-grid-item__image {
-  aspect-ratio: 3/2;
+  width: var(--scape-width);
+  height: var(--image-height);
   overflow: hidden;
   background: var(--gray-z-1);
 }
@@ -79,8 +86,16 @@ const imageUrl = computed(() => {
 }
 
 .gallery27-grid-item__info {
-  margin-top: var(--spacer-xs);
-  text-align: center;
+  display: flex;
+  font-size: var(--font-sm);
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--spacer-sm);
+  height: calc(var(--height) - var(--image-height));
+
+  &>* {
+    display: block;
+  }
 }
 
 .gallery27-grid-item__day {
@@ -89,7 +104,6 @@ const imageUrl = computed(() => {
 
 .gallery27-grid-item__date {
   display: block;
-  font-size: var(--font-sm);
   color: var(--muted);
 }
 </style>
