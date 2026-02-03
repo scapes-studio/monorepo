@@ -42,10 +42,9 @@
 
         <!-- Non-owner with seaport listing: link to OpenSea -->
         <template v-else-if="hasSeaportListing && listPrice">
-          <a :href="openseaUrl" target="_blank" rel="noopener noreferrer"
-            class="scapes-actions__btn scapes-actions__link">
-            Buy on OpenSea for {{ listPrice }} ETH
-          </a>
+          <Button :to="openseaUrl" target="_blank" rel="noopener noreferrer" class="small">
+            Buy on OpenSea ({{ listPrice }} ETH)
+          </Button>
         </template>
       </template>
     </Actions>
