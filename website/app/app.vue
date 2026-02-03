@@ -34,6 +34,7 @@ useHead({
 body {
   --grid-color: var(--gray-z-1);
   --grid-padding: calc(var(--grid-gutter) + var(--grid-margin-offset, 0px));
+  --grid-shadow: 0 0 0 var(--grid-gutter) var(--grid-color);
 
   background-color: var(--background);
   width: 100vw;

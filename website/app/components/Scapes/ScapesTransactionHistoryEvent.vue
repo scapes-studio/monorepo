@@ -1,6 +1,6 @@
 <template>
   <li class="history-item">
-    <GridArea :rows="1" width="full" class="history-item__header">
+    <GridArea :rows="1" width="full" class="history-item__header no-shadow">
       <span class="history-item__type">
         <span>{{ label }}</span>
         <template v-if="entry.type === 'sale' && price">
@@ -23,7 +23,7 @@
     </GridArea>
 
     <GridArea v-if="entry.type === 'listing' || !isSingleLine(entry)" :rows="1" width="full"
-      class="history-item__content">
+      class="history-item__content no-shadow">
       <!-- Listing event -->
       <template v-if="entry.type === 'listing'">
         <div class="history-item__addresses">
@@ -175,6 +175,7 @@ const price = computed(() => {
   gap: var(--grid-gutter);
   font-size: var(--font-sm);
   background: var(--background);
+  box-shadow: var(--grid-shadow);
 }
 
 .history-item__header {
