@@ -1,9 +1,6 @@
 <template>
-  <li
-    class="trait-value"
-    :class="{ 'trait-value--selected': selected, 'trait-value--loading': loading }"
-    @click="emit('toggle')"
-  >
+  <li class="trait-value" :class="{ 'trait-value--selected': selected, 'trait-value--loading': loading }"
+    @click="emit('toggle')">
     <div class="trait-value__icon">
       <img :src="iconUrl" :alt="value" />
     </div>
@@ -37,7 +34,7 @@ const iconUrl = computed(() => getTraitIconUrl(props.category, props.value))
 .trait-value {
   display: grid;
   grid-template-columns: 2rem 1fr auto auto;
-  gap: var(--spacer-xs);
+  gap: var(--spacer-sm);
   align-items: center;
   padding: var(--spacer-xs);
   border-radius: var(--size-2);
@@ -60,7 +57,7 @@ const iconUrl = computed(() => getTraitIconUrl(props.category, props.value))
 .trait-value__icon {
   width: 2rem;
   height: 2rem;
-  border-radius: var(--size-2);
+  border-radius: var(--size-0);
   overflow: hidden;
 }
 
@@ -69,6 +66,8 @@ const iconUrl = computed(() => getTraitIconUrl(props.category, props.value))
   height: 100%;
   object-fit: cover;
   image-rendering: pixelated;
+  border: var(--border);
+  background: var(--color);
 }
 
 .trait-value__label {

@@ -1,29 +1,14 @@
 <template>
-  <div v-if="selectedTraits.length > 0" class="filter-tags">
-    <button
-      v-for="trait in parsedTraits"
-      :key="trait.key"
-      type="button"
-      class="filter-tags__tag"
-      @click="removeTrait(trait.key)"
-    >
-      <img
-        :src="getTraitIconUrl(trait.category, trait.value)"
-        :alt="trait.value"
-        class="filter-tags__icon"
-      />
+  <Tags v-if="selectedTraits.length > 0">
+    <Tag v-for="trait in parsedTraits" :key="trait.key" dismissable @dismiss="removeTrait(trait.key)">
+      <img :src="getTraitIconUrl(trait.category, trait.value)" :alt="trait.value" />
       <span>{{ trait.value }}</span>
-      <span class="filter-tags__remove" aria-label="Remove filter">x</span>
-    </button>
-    <button
-      v-if="selectedTraits.length > 1"
-      type="button"
-      class="filter-tags__clear"
-      @click="clearAll"
-    >
+    </Tag>
+    <Button v-if="selectedTraits.length > 1" type="button" @click="clearAll">
       Clear all
-    </button>
-  </div>
+    </Button>
+    <div></div>
+  </Tags>
 </template>
 
 <script setup lang="ts">
@@ -59,53 +44,47 @@ const clearAll = () => {
 </script>
 
 <style scoped>
-.filter-tags {
+.tags {
+  flex-wrap: nowrap;
+  gap: var(--spacer);
+  padding-right: var(--spacer);
+
+  &>button {
+    font-size: var(--font-sm);
+
+    &+div {
+      content: '';
+      width: var(--spacer-xs);
+      flex-shrink: 0;
+    }
+  }
+}
+
+.tag {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacer-xs);
-  align-items: center;
-}
+  flex-shrink: 0;
+  gap: calc(var(--spacer-sm) + var(--grid-gutter));
 
-.filter-tags__tag {
-  display: flex;
-  gap: var(--spacer-xs);
-  align-items: center;
-  padding: var(--spacer-xs) var(--spacer-sm);
-  border: var(--border);
-  border-radius: var(--size-10);
-  background: var(--background);
-  font-size: var(--font-sm);
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
+  &:deep(>span) {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacer-sm);
+    flex-shrink: 0;
+  }
 
-.filter-tags__tag:hover {
-  background: var(--gray-z-1);
-}
+  &:deep(>button) {
+    padding: 0 !important;
+  }
 
-.filter-tags__icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: var(--size-2);
-  image-rendering: pixelated;
-}
-
-.filter-tags__remove {
-  margin-left: var(--spacer-xs);
-  color: var(--muted);
-}
-
-.filter-tags__clear {
-  padding: var(--spacer-xs) var(--spacer-sm);
-  border: none;
-  border-radius: var(--size-10);
-  background: transparent;
-  font-size: var(--font-sm);
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.filter-tags__clear:hover {
-  color: var(--color);
+  & img {
+    inline-size: fit-content;
+    height: calc(var(--scape-height) - 2 * var(--spacer) + var(--grid-gutter) * 2);
+    aspect-ratio: 1/1;
+    image-rendering: pixelated;
+    background-color: var(--gray-z-8);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
 }
 </style>

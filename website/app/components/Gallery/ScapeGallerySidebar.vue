@@ -1,15 +1,8 @@
 <template>
   <aside class="sidebar">
     <div class="sidebar__scroll">
-      <GalleryTraitGroup
-        v-for="group in TRAITS"
-        :key="group.name"
-        :group="group"
-        :counts="traitCounts[group.name]"
-        :loading="countsLoading"
-        :selected-traits="selectedTraits"
-        @select="handleTraitSelect"
-      />
+      <GalleryTraitGroup v-for="group in TRAITS" :key="group.name" :group="group" :counts="traitCounts[group.name]"
+        :loading="countsLoading" :selected-traits="selectedTraits" @select="handleTraitSelect" />
     </div>
   </aside>
 </template>
@@ -52,6 +45,9 @@ const handleTraitSelect = (trait: string) => {
 @media (min-width: 48rem) {
   .sidebar {
     display: block;
+    position: sticky;
+    top: 0;
+    background: var(--background);
   }
 }
 
@@ -61,5 +57,10 @@ const handleTraitSelect = (trait: string) => {
   max-height: calc(100vh - 2 * var(--spacer));
   overflow-y: auto;
   padding-right: var(--spacer-sm);
+
+  .trait-group {
+    padding-inline: var(--spacer);
+    background: var(--background);
+  }
 }
 </style>
