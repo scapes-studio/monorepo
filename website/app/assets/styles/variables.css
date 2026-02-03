@@ -2,6 +2,7 @@
   --rem: 13px;
 
   --font-family: 'Space Mono', sans-serif;
+  --font-xs: var(--font-sm);
   --text-transform: uppercase;
 
   --border-width: var(--grid-gutter, 1px);
