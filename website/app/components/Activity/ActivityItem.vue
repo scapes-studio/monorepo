@@ -1,5 +1,5 @@
 <template>
-  <li class="activity-item">
+  <li class="activity-item grid-shadow">
     <GridArea :rows="1" width="full" class="activity-item__header no-shadow">
       <span class="activity-item__type">
         <NuxtLink :to="scapeUrl(item.tokenId, item.collection)">

@@ -1,5 +1,5 @@
 <template>
-  <div class="activity-filters">
+  <div class="activity-filters grid-shadow">
     <FormCheckbox v-model="filters.transfers">
       Transfers
     </FormCheckbox>

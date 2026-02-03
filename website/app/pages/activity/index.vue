@@ -104,8 +104,7 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   }
 }
 
-.activity-page__count {
-}
+.activity-page__count {}
 
 .activity-page__status {
   height: var(--scape-height);
@@ -123,10 +122,14 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 .activity-page__list {
   list-style: none;
   padding: 0;
-  padding-top: var(--scape-height-gutter);
   margin: 0;
   display: grid;
-  gap: calc(var(--scape-height) + 2 * var(--grid-gutter));
+  gap: var(--grid-gutter);
+
+  @media (min-width: 800px) {
+    padding-top: var(--scape-height-gutter);
+    gap: calc(var(--scape-height) + 2 * var(--grid-gutter));
+  }
 }
 
 .activity-page__load-more {
