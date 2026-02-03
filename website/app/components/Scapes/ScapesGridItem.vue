@@ -34,16 +34,17 @@ const spanStyle = computed(() => {
 
 <style scoped>
 .scape-link {
-  display: block;
+  display: flex;
+  align-items: center;
   text-decoration: none;
   color: inherit;
-  container-type: inline-size;
-  content-visibility: auto;
   background: var(--background);
+  content-visibility: auto;
+  height: var(--scape-height);
 
   img {
     background: var(--grid-color);
-    box-shadow: 0 0 0 calc(100cqw/72) var(--grid-color);
+    background: var(--background);
     object-fit: contain;
   }
 
