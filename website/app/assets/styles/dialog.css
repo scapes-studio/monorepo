@@ -12,6 +12,10 @@
 
   & .choose-connector {
     min-height: auto;
+
+    & span {
+      border: 0 !important;
+    }
   }
 }
 
