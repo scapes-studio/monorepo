@@ -104,8 +104,6 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   }
 }
 
-.activity-page__count {}
-
 .activity-page__status {
   height: var(--scape-height);
   display: flex;
