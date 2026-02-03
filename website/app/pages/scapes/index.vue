@@ -6,8 +6,7 @@
     </GridArea>
 
     <GridArea class="controls" width="full" padding>
-      <FormCheckbox v-model="showPrices" class="small">Show prices</FormCheckbox>
-      <!-- <FormCheckbox v-if="isMarketMode" v-model="includeSeaport" class="small">Include OpenSea</FormCheckbox> -->
+      <FormCheckbox v-model="showPrices" class="small">For Sale</FormCheckbox>
 
       <div>
         <span>Sort by:</span>
@@ -39,11 +38,11 @@
 
           <template v-else>
             <ScapesVirtualGrid :scapes="scapes" :has-more="hasMore" :loading="loading" :columns="galleryColumns"
-              @load-more="loadMore" />
+              :show-prices="showPrices" @load-more="loadMore" />
 
-            <button v-if="hasMore" type="button" class="gallery__load-more" :disabled="loading" @click="loadMore">
+            <Button v-if="hasMore" class="gallery__load-more" :disabled="loading" @click="loadMore">
               {{ loading ? "Loading..." : "Load more" }}
-            </button>
+            </Button>
           </template>
         </main>
       </div>
@@ -138,7 +137,6 @@ useSeo({
   &>.controls {
     justify-content: flex-end;
     font-size: var(--font-sm);
-    display: none;
 
     &>* {
       white-space: nowrap;
@@ -194,17 +192,6 @@ useSeo({
 }
 
 .gallery__load-more {
-  justify-self: center;
-  padding: var(--spacer-sm) var(--spacer-md);
-  border-radius: var(--size-10);
-  border: none;
-  background: var(--color);
-  color: var(--background);
-  cursor: pointer;
-}
-
-.gallery__load-more:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  opacity: 0.001;
 }
 </style>
