@@ -49,6 +49,12 @@ const { getAccountDisplay } = useENSResolution()
 <style scoped>
 .main-menu {
   --offset-min: max(calc(var(--grid-margin-offset) / 2 + var(--grid-gutter)), calc(var(--scape-height)/2));
+  --main-menu-size: min(3.5rem, var(--scape-height));
+
+  @media (min-width: 680px) {
+    --main-menu-size: var(--scape-height);
+  }
+
 
   position: fixed;
   bottom: max(var(--offset-min), env(safe-area-inset-bottom));
@@ -58,7 +64,7 @@ const { getAccountDisplay } = useENSResolution()
   display: flex;
   align-items: center;
   gap: var(--grid-gutter);
-  height: var(--scape-height);
+  height: var(--main-menu-size);
   padding: 0;
   background: var(--color-background, #fff);
   display: none;
@@ -67,8 +73,8 @@ const { getAccountDisplay } = useENSResolution()
 
 .main-menu__brand {
   flex-shrink: 0;
-  width: var(--scape-height);
-  height: var(--scape-height);
+  width: var(--main-menu-size);
+  height: var(--main-menu-size);
 }
 
 .main-menu__actions {
@@ -76,6 +82,11 @@ const { getAccountDisplay } = useENSResolution()
   display: flex;
   align-items: center;
   gap: var(--grid-gutter);
+
+  &:deep(.account-avatar) {
+    width: var(--main-menu-size);
+    height: var(--main-menu-size);
+  }
 
   &:deep(.main-menu__actions-connect) {
     padding: 0 !important;
