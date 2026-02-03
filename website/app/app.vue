@@ -40,7 +40,7 @@ body {
   width: 100vw;
   min-height: 100dvh;
   padding: var(--grid-padding);
-  padding-bottom: calc(var(--grid-padding) + var(--scape-height-gutter));
+  padding-bottom: calc(var(--grid-padding) + var(--scape-height-gutter) + var(--scape-height-gutter));
   background-image:
     linear-gradient(to right, var(--grid-color) var(--grid-gutter), transparent var(--grid-gutter)),
     linear-gradient(to bottom, var(--grid-color) var(--grid-gutter), transparent var(--grid-gutter));
@@ -59,8 +59,6 @@ body.grid-mobile {
   --grid-padding: var(--grid-gutter);
 
   background: var(--background);
-  padding: var(--grid-padding);
-  padding-bottom: 0;
 }
 
 main {

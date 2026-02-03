@@ -6,7 +6,7 @@
     </GridArea>
 
     <GridArea class="controls" width="full" padding>
-      <FormCheckbox v-model="showPrices" class="small">For Sale</FormCheckbox>
+      <FormCheckbox v-model="showPrices" class="small for-sale-toggle">For Sale</FormCheckbox>
 
       <div>
         <span>Sort by:</span>
@@ -132,11 +132,23 @@ useSeo({
   }
 
   &>.controls {
-    justify-content: flex-end;
+    justify-content: center;
     font-size: var(--font-sm);
+
+    @media (min-width: 800px) {
+      justify-content: flex-end;
+    }
 
     &>* {
       white-space: nowrap;
+    }
+
+    &>.for-sale-toggle {
+      display: none;
+
+      @media (min-width: 800px) {
+        display: flex;
+      }
     }
 
     &>div {
