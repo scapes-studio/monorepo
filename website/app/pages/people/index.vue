@@ -197,7 +197,9 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 .accounts-page__owner {
   color: inherit;
   text-decoration: none;
-  word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .accounts-page__owner:hover {
