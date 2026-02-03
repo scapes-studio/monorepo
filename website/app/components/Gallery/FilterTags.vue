@@ -79,7 +79,7 @@ const clearAll = () => {
 
   & img {
     inline-size: fit-content;
-    height: calc(var(--scape-height) - 2 * var(--spacer) + var(--grid-gutter) * 2);
+    height: 26px;
     aspect-ratio: 1/1;
     image-rendering: pixelated;
     background-color: var(--gray-z-8);
