@@ -26,6 +26,6 @@ const filters = defineModel<ActivityFilters>({ required: true });
   height: var(--scape-height);
   justify-content: space-evenly;
   background: var(--background);
+  font-size: var(--font-sm);
 }
-
 </style>
