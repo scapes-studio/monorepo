@@ -1,7 +1,7 @@
 <template>
   <div class="scapes-grid-row">
     <ScapesGridItem v-for="scape in items" :key="`${scape.id}`" :scape="scape" :price="scape.price ?? null"
-      :is-seaport="scape.source === 'seaport'" />
+      :is-seaport="scape.source === 'seaport'" :double-height="showPrices" />
   </div>
 </template>
 
@@ -14,7 +14,10 @@ type ScapeWithPrice = ScapeRecord & {
   source?: ListingSource
 }
 
-defineProps<{ items: ScapeWithPrice[] }>()
+defineProps<{
+  items: ScapeWithPrice[]
+  showPrices?: boolean
+}>()
 </script>
 
 <style scoped>

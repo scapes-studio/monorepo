@@ -2,7 +2,7 @@
   <div class="scapes-grid">
     <ScapesGridItem v-for="scape in scapes" :key="`${scape.id}`" :scape="scape" :price="scape.price ?? null"
       :is-seaport="scape.source === 'seaport'" :columns="scapeSpan(scape).columnSpan"
-      :scape-count="scapeSpan(scape).scapeCount" />
+      :scape-count="scapeSpan(scape).scapeCount" :double-height="showPrices" />
   </div>
 </template>
 
@@ -18,6 +18,7 @@ type ScapeWithPrice = ScapeRecord & {
 const props = defineProps<{
   scapes: ScapeWithPrice[];
   columns?: number;
+  showPrices?: boolean;
 }>();
 
 function scapeSpan(scape: ScapeWithPrice) {

@@ -4,7 +4,7 @@
       height: `${virtualRow.size}px`,
       transform: `translateY(${virtualRow.start}px)`,
     }">
-      <ScapesGridRow :items="getRowItems(virtualRow.index)" />
+      <ScapesGridRow :items="getRowItems(virtualRow.index)" :show-prices="showPrices" />
     </div>
   </div>
   <div v-if="loading && scapes.length > 0" class="scapes-virtual-grid__loading">
@@ -26,14 +26,18 @@ const props = defineProps<{
   hasMore?: boolean
   loading?: boolean
   columns?: number
+  showPrices?: boolean
 }>()
 
 const emit = defineEmits<{
   loadMore: []
 }>()
 
-const { columns, rowHeight, gutter } = useScapeGrid()
+const { columns, rowHeight, gutter, scapeHeight } = useScapeGrid()
 const columnCount = computed(() => props.columns ?? columns.value)
+const rowHeightWithPrices = computed(() =>
+  props.showPrices ? scapeHeight.value * 2 + gutter.value * 2 : rowHeight.value
+)
 
 const scapesRef = toRef(props, 'scapes')
 
@@ -46,7 +50,7 @@ const {
 } = useVirtualGrid({
   items: scapesRef,
   columns: columnCount,
-  rowHeight,
+  rowHeight: rowHeightWithPrices,
   overscan: 20,
 })
 

@@ -1,5 +1,6 @@
 <template>
-  <NuxtLink class="scape-link" :to="`/scapes/${scape.id}`" :style="spanStyle">
+  <NuxtLink class="scape-link" :class="{ 'scape-link--tall': doubleHeight }" :to="`/scapes/${scape.id}`"
+    :style="spanStyle">
     <ScapeImage :id="scape.id" :scape-count="scapeCount ?? 1" />
     <div v-if="formattedPrice" class="scape-link__price">
       {{ formattedPrice }} ETH
@@ -17,6 +18,7 @@ const props = defineProps<{
   isSeaport?: boolean;
   columns?: number;
   scapeCount?: number;
+  doubleHeight?: boolean;
 }>();
 
 const formattedPrice = computed(() => {
@@ -45,7 +47,7 @@ const spanStyle = computed(() => {
   }
 
   .scape-link__price {
-    margin-top: var(--spacer-xs);
+    margin-top: var(--spacer-sm);
     font-size: var(--font-sm);
     text-align: center;
   }
@@ -59,6 +61,10 @@ const spanStyle = computed(() => {
     font-size: var(--font-xs);
     font-weight: var(--font-weight-normal);
     color: var(--muted);
+  }
+
+  &.scape-link--tall {
+    min-height: calc(var(--scape-height) * 2);
   }
 }
 </style>
