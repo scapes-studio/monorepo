@@ -95,4 +95,12 @@ const { getAccountDisplay } = useENSResolution()
   height: 100%;
   object-fit: contain;
 }
+
+.scape-radio-inline {
+  display: none;
+
+  @media (min-width: 680px) {
+    display: block;
+  }
+}
 </style>
