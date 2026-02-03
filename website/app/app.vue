@@ -8,11 +8,20 @@
 </template>
 
 <script setup lang="ts">
-const { isInitialized } = useScapeGrid()
+const { isInitialized, isMobile } = useScapeGrid()
+
+onMounted(() => {
+  console.log(isMobile)
+})
 
 useHead({
   bodyAttrs: {
-    class: computed(() => isInitialized.value ? 'grid-ready' : ''),
+    class: computed(() => {
+      const classes = []
+      if (isInitialized.value) classes.push('grid-ready')
+      if (isMobile.value) classes.push('grid-mobile')
+      return classes.join(' ')
+    }),
   },
 })
 </script>
@@ -43,6 +52,14 @@ body {
   &.grid-ready {
     opacity: 1;
   }
+}
+
+body.grid-mobile {
+  --grid-padding: var(--grid-gutter);
+
+  background: var(--background);
+  padding: var(--grid-padding);
+  padding-bottom: 0;
 }
 
 main {

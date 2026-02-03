@@ -3,8 +3,9 @@ import { computed, ref, watchEffect } from 'vue'
 
 const MIN_SCAPE_WIDTH = 144
 const MIN_SCAPE_WIDTH_MOBILE = 144
-const BREAKPOINT_SM = MIN_SCAPE_WIDTH * 4
-const BREAKPOINT_LG = MIN_SCAPE_WIDTH * 8
+export const BREAKPOINT_SM = MIN_SCAPE_WIDTH * 4
+export const BREAKPOINT_MD = MIN_SCAPE_WIDTH * 6
+export const BREAKPOINT_LG = MIN_SCAPE_WIDTH * 8
 
 const COLUMNS = {
   SM: {
@@ -51,8 +52,12 @@ export function useScapeGrid() {
   const detailColumnsVar = useCssVar('--detail-columns')
   const marginOffsetVar = useCssVar('--grid-margin-offset')
 
+  const isMobile = computed(() => {
+    return windowWidth.value < BREAKPOINT_MD
+  })
+
   const minScapeWidth = computed(() =>
-    windowWidth.value < BREAKPOINT_SM ? MIN_SCAPE_WIDTH_MOBILE : MIN_SCAPE_WIDTH
+    isMobile.value ? MIN_SCAPE_WIDTH_MOBILE : MIN_SCAPE_WIDTH
   )
 
   const columns = computed(() => {
@@ -83,7 +88,8 @@ export function useScapeGrid() {
     const n = columns.value
     const raw = (windowWidth.value * 72) / (73 * n + 1)
     const rounded = Math.floor(raw / 72) * 72
-    return Math.max(minScapeWidth.value, rounded)
+    const width = isMobile.value ? raw : rounded
+    return Math.max(minScapeWidth.value, width)
   })
 
   const gutter = computed(() => scapeWidth.value / 72)
@@ -95,7 +101,9 @@ export function useScapeGrid() {
     return n * scapeWidth.value + (n + 1) * gutter.value
   })
 
-  const marginOffset = computed(() => (windowWidth.value - gridWidth.value) / 2)
+  const marginOffset = computed(() =>
+    isMobile.value ? 0 : (windowWidth.value - gridWidth.value) / 2
+  )
 
   watchEffect(() => {
     scapeWidthVar.value = `${scapeWidth.value}px`
@@ -113,6 +121,7 @@ export function useScapeGrid() {
 
   return {
     isInitialized,
+    isMobile,
     columns,
     scapeWidth,
     scapeHeight,

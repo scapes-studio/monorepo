@@ -78,9 +78,6 @@ const selectedTraits = ref<string[]>(
 
 const showPrices = ref(route.query.prices === "true")
 const includeSeaport = ref(route.query.seaport !== "false")
-const isMarketMode = computed(
-  () => showPrices.value || selectedSort.value.startsWith("price"),
-)
 
 // Sync state to URL
 watch(
@@ -101,9 +98,9 @@ watch(
   { deep: true },
 )
 
-const { columns } = useScapeGrid()
+const { isMobile, columns } = useScapeGrid()
 
-const showSidebar = computed(() => columns.value > 4)
+const showSidebar = computed(() => !isMobile.value)
 const galleryColumns = computed(() => Math.max(1, columns.value - (showSidebar.value ? 2 : 0)))
 
 const { scapes, total, loading, error, hasMore, loadMore, traitCounts, countsLoading } =

@@ -52,6 +52,7 @@ const styles = computed(() => {
 <style scoped>
 .grid-area {
   width: 100%;
+  box-shadow: 0 0 0 var(--grid-gutter) var(--grid-color);
 }
 
 .width-content {
