@@ -1,5 +1,5 @@
 <template>
-  <nav ref="navRef" class="profile-tabs">
+  <nav ref="navRef" class="profile-tabs grid-shadow">
     <NuxtLink :to="`/people/${props.accountId}`" class="profile-tabs__tab"
       :class="{ 'profile-tabs__tab--active': currentTab === 'scapes' }">
       Scapes
@@ -122,6 +122,7 @@ onMounted(refresh)
   .profile-tabs__text--mobile {
     display: inline;
   }
+
   .profile-tabs__text--desktop {
     display: none;
   }

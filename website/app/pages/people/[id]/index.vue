@@ -1,5 +1,5 @@
 <template>
-  <section class="scapes-tab" :class="{ 'has-merges': showMerges }">
+  <section class="scapes-tab grid-shadow" :class="{ 'has-merges': showMerges }">
     <div v-if="scapesError" class="scapes-tab__status scapes-tab__status--error">
       Failed to load scapes.
     </div>
@@ -13,7 +13,7 @@
     <template v-else>
       <!-- Merges Section -->
       <template v-if="showMerges">
-        <header class="scapes-tab__header">
+        <header class="scapes-tab__header grid-shadow">
           <h2>Merges</h2>
           <span>{{ merges.length }} owned</span>
         </header>
@@ -21,7 +21,7 @@
       </template>
 
       <!-- Scapes Section -->
-      <header v-if="showMerges" class="scapes-tab__header">
+      <header v-if="showMerges" class="scapes-tab__header grid-shadow">
         <h2>Scapes</h2>
         <span>{{ regularScapes.length }} owned</span>
       </header>

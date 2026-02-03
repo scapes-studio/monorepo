@@ -2,6 +2,10 @@
   box-shadow: var(--box-shadow);
 }
 
+.grid-shadow {
+  box-shadow: var(--grid-shadow);
+}
+
 .border-drop {
   box-shadow: var(--box-shadow-drop);
 }

@@ -1,7 +1,7 @@
 <template>
-  <section v-if="activeLinks.length" class="profile-links">
+  <section v-if="activeLinks.length" class="profile-links grid-shadow">
     <ul class="profile-links__list">
-      <li v-for="{ key, value } in activeLinks" :key="key">
+      <li v-for="{ key, value } in activeLinks" :key="key" class="grid-shadow">
         <NuxtLink :to="buildUrl(key, value)" rel="noopener noreferrer" target="_blank">
           {{ labelMap[key] }}
         </NuxtLink>
