@@ -60,13 +60,4 @@ const sourceLabel = computed(() => {
   font-size: var(--font-sm);
   white-space: nowrap;
 }
-
-.marketplace-data__badge--seaport {
-  background: oklch(60% 0.15 250 / 0.14);
-}
-
-.marketplace-data__badge--muted {
-  background: var(--gray-z-1);
-  color: var(--muted);
-}
 </style>
