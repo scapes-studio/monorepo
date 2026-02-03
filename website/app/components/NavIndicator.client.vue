@@ -6,10 +6,13 @@
 </template>
 
 <script setup lang="ts">
+import { useEventListener } from '@vueuse/core'
+
 const route = useRoute()
 
 const navRef = ref<HTMLElement | null>(null)
 const indicatorStyle = ref({ transform: 'translateX(0)', width: '0px', opacity: '0' })
+let resizeFrame: number | null = null
 
 const updateIndicator = () => {
   if (!navRef.value) return
@@ -31,9 +34,19 @@ const updateIndicator = () => {
   }
 }
 
+const onResize = () => {
+  if (resizeFrame !== null) cancelAnimationFrame(resizeFrame)
+  resizeFrame = requestAnimationFrame(() => {
+    updateIndicator()
+    resizeFrame = null
+  })
+}
+
 watch(() => route.path, () => {
   nextTick(updateIndicator)
 })
+
+useEventListener(window, 'resize', onResize, { passive: true })
 
 onMounted(() => {
   nextTick(updateIndicator)
