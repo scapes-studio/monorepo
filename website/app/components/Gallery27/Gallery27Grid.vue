@@ -17,6 +17,5 @@ defineProps<{
   display: grid;
   grid-template-columns: repeat(var(--grid-columns), var(--scape-width));
   gap: var(--grid-gutter);
-  justify-content: center;
 }
 </style>

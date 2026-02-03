@@ -1,8 +1,8 @@
 <template>
-  <section class="gallery27-tab">
+  <section class="gallery27-tab grid-shadow">
     <!-- Claimable Section (only shown on own profile) -->
     <template v-if="showClaimable">
-      <header class="gallery27-tab__header">
+      <header class="gallery27-tab__header grid-shadow">
         <h2>Claimable</h2>
         <span>{{ claimableScapes.length }} to claim</span>
       </header>
@@ -13,7 +13,7 @@
     </div>
 
     <!-- Owned Section -->
-    <header class="gallery27-tab__header">
+    <header class="gallery27-tab__header grid-shadow">
       <h2>Owned</h2>
       <span>{{ scapes.length }} owned</span>
     </header>
@@ -97,14 +97,24 @@ defineOgImageComponent(
 
 <style scoped>
 .gallery27-tab {
+  --grid-columns: var(--content-columns);
+
   display: grid;
-  gap: var(--spacer);
+  gap: var(--grid-gutter);
 }
 
 .gallery27-tab__header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  height: var(--scape-height);
+  margin: var(--scape-height-gutter) 0 0;
+  background: var(--background);
+  padding: var(--spacer);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
 }
 
 .gallery27-tab__header h2 {
