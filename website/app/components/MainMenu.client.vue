@@ -90,6 +90,8 @@ const { getAccountDisplay } = useENSResolution()
 
   &:deep(.main-menu__actions-connect) {
     padding: 0 !important;
+    width: var(--main-menu-size);
+    height: var(--main-menu-size);
   }
 }
 
