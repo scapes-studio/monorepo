@@ -39,11 +39,12 @@ const spanStyle = computed(() => {
   color: inherit;
   container-type: inline-size;
   content-visibility: auto;
+  background: var(--background);
 
   img {
-    /* border-bottom: calc(100cqw/72) solid beige; */
-    /* border-right: calc(100cqw/72) solid beige; */
-    box-shadow: 0 0 0 calc(100cqw/72) beige;
+    background: var(--grid-color);
+    box-shadow: 0 0 0 calc(100cqw/72) var(--grid-color);
+    object-fit: contain;
   }
 
   .scape-link__price {
