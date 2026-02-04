@@ -7,44 +7,47 @@
         marketplace` : `Seaport (OpenSea)` }}.</p>
     </header>
     <Actions class="left">
-      <!-- Owner actions -->
-      <template v-if="isOwner">
-        <!-- Owner with no listing: show list Button -->
-        <template v-if="!listing">
-          <ScapesActionList :scape-id="scapeId" @listing-change="emit('listingChange')" />
-        </template>
-
-        <!-- Owner with onchain listing: show cancel Button -->
-        <template v-else-if="hasOnchainListing">
-          <ScapesActionCancelListing :scape-id="scapeId" @listing-change="emit('listingChange')" />
-        </template>
-
-        <!-- Owner with seaport listing: link to OpenSea -->
-        <template v-else-if="hasSeaportListing">
-          <a :href="openseaUrl" target="_blank" rel="noopener noreferrer" class="scapes-actions__link">
-            Manage on OpenSea
-          </a>
-        </template>
-
-        <!-- Owner with merge: show unmerge Button -->
-        <template v-if="isMerge">
-          <ScapesActionUnmerge :scape-id="scapeId" @listing-change="emit('listingChange')" />
-        </template>
-      </template>
-
-      <!-- Non-owner actions -->
+      <EvmConnect v-if="!isConnected" class-name="small" />
       <template v-else>
-        <!-- Non-owner with onchain listing: show buy Button -->
-        <template v-if="hasOnchainListing && listPrice">
-          <ScapesActionBuy :scape-id="scapeId" :price-wei="listing?.price ?? '0'" :price-eth="listPrice"
-            @listing-change="emit('listingChange')" />
+        <!-- Owner actions -->
+        <template v-if="isOwner">
+          <!-- Owner with no listing: show list Button -->
+          <template v-if="!listing">
+            <ScapesActionList :scape-id="scapeId" @listing-change="emit('listingChange')" />
+          </template>
+
+          <!-- Owner with onchain listing: show cancel Button -->
+          <template v-else-if="hasOnchainListing">
+            <ScapesActionCancelListing :scape-id="scapeId" @listing-change="emit('listingChange')" />
+          </template>
+
+          <!-- Owner with seaport listing: link to OpenSea -->
+          <template v-else-if="hasSeaportListing">
+            <a :href="openseaUrl" target="_blank" rel="noopener noreferrer" class="scapes-actions__link">
+              Manage on OpenSea
+            </a>
+          </template>
+
+          <!-- Owner with merge: show unmerge Button -->
+          <template v-if="isMerge">
+            <ScapesActionUnmerge :scape-id="scapeId" @listing-change="emit('listingChange')" />
+          </template>
         </template>
 
-        <!-- Non-owner with seaport listing: link to OpenSea -->
-        <template v-else-if="hasSeaportListing && listPrice">
-          <Button :to="openseaUrl" target="_blank" rel="noopener noreferrer" class="small">
-            Buy on OpenSea ({{ listPrice }} ETH)
-          </Button>
+        <!-- Non-owner actions -->
+        <template v-else>
+          <!-- Non-owner with onchain listing: show buy Button -->
+          <template v-if="hasOnchainListing && listPrice">
+            <ScapesActionBuy :scape-id="scapeId" :price-wei="listing?.price ?? '0'" :price-eth="listPrice"
+              @listing-change="emit('listingChange')" />
+          </template>
+
+          <!-- Non-owner with seaport listing: link to OpenSea -->
+          <template v-else-if="hasSeaportListing && listPrice">
+            <Button :to="openseaUrl" target="_blank" rel="noopener noreferrer" class="small">
+              Buy on OpenSea ({{ listPrice }} ETH)
+            </Button>
+          </template>
         </template>
       </template>
     </Actions>
