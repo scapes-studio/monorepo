@@ -20,9 +20,9 @@
         <li>
           <NuxtLink to="/activity">Activity</NuxtLink>
         </li>
-        <li>
-          <NuxtLink to="/gallery27">Gallery27</NuxtLink>
-        </li>
+        <!-- <li> -->
+        <!--   <NuxtLink to="/gallery27">Gallery27</NuxtLink> -->
+        <!-- </li> -->
       </slot>
     </NavIndicator>
 

@@ -13,7 +13,7 @@
         <ProfileLinks :links="profileData?.links ?? null" />
       </div>
 
-      <ProfileTabs v-if="showProfileTabs" :account-id="accountId ?? ''" />
+      <!-- <ProfileTabs v-if="showProfileTabs" :account-id="accountId ?? ''" /> -->
 
       <NuxtPage />
     </template>
