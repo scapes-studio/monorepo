@@ -1,170 +1,110 @@
 <template>
-  <div class="merge-creator">
-    <GridArea class="merge-creator__preview" width="full" padding rows="calc(var(--content-columns, 5) * 2)">
-      <div class="merge-creator__preview-layout">
-        <div class="merge-creator__canvas">
-          <div v-if="previewLoading" class="merge-creator__placeholder">
-            Loading preview...
-          </div>
-          <div v-else-if="previewError" class="merge-creator__error">
-            {{ previewError.message }}
-          </div>
-          <img
-            v-else-if="previewUrl && scapes.length >= 2"
-            class="merge-creator__image"
-            :src="previewUrl"
-            alt="Merge preview"
-          />
-          <div v-else-if="scapes.length > 0" class="merge-creator__placeholder">
-            Select at least 2 Scapes to preview
-          </div>
-          <div v-else class="merge-creator__placeholder">
-            Select Scapes to merge
-          </div>
-        </div>
-
-        <div class="merge-creator__actions">
-          <div class="merge-creator__mode">
-            <label class="merge-creator__toggle">
-              <input v-model="fadeMode" type="checkbox" />
-              <span>{{ fadeMode ? "Fade" : "Merge" }}</span>
-            </label>
-            <button
-              v-if="scapes.length > 0"
-              type="button"
-              class="merge-creator__clear"
-              @click="clear"
-            >
-              Clear
-            </button>
-          </div>
-
-          <EvmTransactionFlow
-            :text="transactionText"
-            :request="mergeRequest"
-            @complete="handleMergeComplete"
-          >
-            <template #start="{ start }">
-              <button
-                type="button"
-                class="merge-creator__merge-btn"
-                :disabled="!canMerge"
-                @click="start"
-              >
-                {{ canMerge ? `Merge ${scapes.length} Scapes` : "Select at least 2 Scapes" }}
-              </button>
-            </template>
-
-            <template #complete>
-              <NuxtLink :to="`/scapes/${tokenId}`" class="merge-creator__view-link">
-                View your Merge
-              </NuxtLink>
-            </template>
-          </EvmTransactionFlow>
-        </div>
-      </div>
-    </GridArea>
-
-    <GridArea class="merge-creator__selected" width="full" padding :rows="2">
-      <div class="merge-creator__selected-header">
-        <h3>Selected Scapes</h3>
-        <span class="merge-creator__selected-count">{{ scapes.length }}/8</span>
-      </div>
-
-      <div v-if="scapes.length === 0" class="merge-creator__status">
-        No Scapes selected yet.
-      </div>
-
-      <div v-else class="merge-creator__selected-grid">
-        <div v-for="(scape, index) in scapes" :key="String(scape[0])" class="merge-creator__selected-item">
-          <ScapeImage :id="scape[0]" />
-          <div class="merge-creator__selected-controls">
-            <button
-              type="button"
-              class="merge-creator__selected-btn"
-              :class="{ active: scape[1] }"
-              title="Flip horizontal"
-              @click="toggleFlipX(index)"
-            >
-              Flip
-            </button>
-            <button
-              type="button"
-              class="merge-creator__selected-btn merge-creator__selected-btn--remove"
-              title="Remove"
-              @click="removeScape(index)"
-            >
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-    </GridArea>
-
-    <div class="merge-creator__catalog">
-      <div class="merge-creator__catalog-header">
-        <h3>Select Scapes</h3>
-        <div class="merge-creator__catalog-controls">
-          <input
-            v-model="searchQuery"
-            type="text"
-            inputmode="numeric"
-            placeholder="Search by ID (1-10000)"
-            class="merge-creator__search"
-          />
-          <label v-if="isConnected" class="merge-creator__toggle">
-            <input v-model="onlyOwned" type="checkbox" />
-            <span>Only owned</span>
-          </label>
-        </div>
-      </div>
-
-      <button
-        v-if="searchedId"
-        type="button"
-        class="merge-creator__search-result"
-        :disabled="isFull"
-        @click="handleSearchSelect"
-      >
-        <ScapeImage :id="searchedId" />
-        <span class="merge-creator__scape-id">#{{ searchedId }}</span>
-      </button>
-
-      <div v-if="loading && availableScapes.length === 0" class="merge-creator__status">
-        Loading scapes...
-      </div>
-      <div v-else-if="scapeError" class="merge-creator__status merge-creator__status--error">
-        Unable to load scapes right now.
-      </div>
-      <div v-else-if="availableScapes.length === 0" class="merge-creator__status">
-        No Scapes available.
-      </div>
-
-      <ScapesGrid v-else :scapes="availableScapes" :columns="gridColumns">
-        <template #item="{ scape, scapeCount }">
-          <button
-            type="button"
-            class="merge-creator__scape"
-            :disabled="isFull"
-            @click="handleSelect(scape)"
-          >
-            <ScapeImage :id="scape.id" :scape-count="scapeCount" />
-            <span class="merge-creator__scape-id">#{{ scape.id }}</span>
-          </button>
-        </template>
-      </ScapesGrid>
-
-      <button
-        v-if="hasMore && availableScapes.length > 0"
-        type="button"
-        class="merge-creator__load-more"
-        :disabled="loading"
-        @click="loadMore"
-      >
-        {{ loading ? "Loading..." : "Load more" }}
-      </button>
+  <section class="merge-creator">
+    <!-- Preview -->
+    <div class="merge-creator__canvas">
+      <Loading v-if="previewLoading" txt="Loading preview..." />
+      <Alert v-else-if="previewError" type="error">
+        {{ previewError.message }}
+      </Alert>
+      <img v-else-if="previewUrl && scapes.length >= 2" class="merge-creator__image" :src="previewUrl"
+        alt="Merge preview" />
+      <p v-else-if="scapes.length > 0" class="muted">
+        Select at least 2 Scapes to preview
+      </p>
+      <p v-else class="muted">
+        Select Scapes to merge
+      </p>
     </div>
-  </div>
+
+    <!-- Actions -->
+    <Actions>
+      <FormCheckbox v-model="fadeMode" class="small">
+        {{ fadeMode ? "Fade" : "Merge" }}
+      </FormCheckbox>
+
+      <Button v-if="scapes.length > 0" class="small tertiary" @click="clear">
+        Clear
+      </Button>
+
+      <EvmTransactionFlow :text="transactionText" :request="mergeRequest" @complete="handleMergeComplete">
+        <template #start="{ start }">
+          <Button class="primary" :disabled="!canMerge" @click="start">
+            {{ canMerge ? `Merge ${scapes.length} Scapes` : "Select at least 2 Scapes" }}
+          </Button>
+        </template>
+
+        <template #complete>
+          <Button :to="`/scapes/${tokenId}`" class="tertiary">
+            View your Merge
+          </Button>
+        </template>
+      </EvmTransactionFlow>
+    </Actions>
+
+    <!-- Selected Scapes -->
+    <header class="merge-creator__header">
+      <h3>Selected Scapes</h3>
+      <span>{{ scapes.length }}/8</span>
+    </header>
+
+    <div v-if="scapes.length === 0" class="merge-creator__status">
+      No Scapes selected yet.
+    </div>
+
+    <div v-else class="merge-creator__selected-grid">
+      <div v-for="(scape, index) in scapes" :key="String(scape[0])" class="merge-creator__selected-item">
+        <ScapeImage :id="scape[0]" />
+        <Actions>
+          <Button class="small" :class="{ primary: scape[1] }" title="Flip horizontal" @click="toggleFlipX(index)">
+            Flip
+          </Button>
+          <Button class="small danger" title="Remove" @click="removeScape(index)">
+            Remove
+          </Button>
+        </Actions>
+      </div>
+    </div>
+
+    <!-- Select Scapes -->
+    <header class="merge-creator__header">
+      <h3>Select Scapes</h3>
+      <Actions>
+        <FormItem class="small">
+          <input v-model="searchQuery" type="text" inputmode="numeric" placeholder="Search by ID (1-10000)" />
+        </FormItem>
+        <FormCheckbox v-if="isConnected" v-model="onlyOwned" class="small">
+          Only owned
+        </FormCheckbox>
+      </Actions>
+    </header>
+
+    <Card v-if="searchedId" class="merge-creator__search-result" :class="{ disabled: isFull }"
+      @click="handleSearchSelect">
+      <ScapeImage :id="searchedId" />
+      <span>#{{ searchedId }}</span>
+    </Card>
+
+    <Loading v-if="loading && availableScapes.length === 0" txt="Loading scapes..." />
+    <div v-else-if="scapeError" class="merge-creator__status merge-creator__status--error">
+      Unable to load scapes right now.
+    </div>
+    <div v-else-if="availableScapes.length === 0" class="merge-creator__status">
+      No Scapes available.
+    </div>
+
+    <ScapesGrid v-else :scapes="availableScapes" :columns="contentColumns">
+      <template #item="{ scape, scapeCount }">
+        <button type="button" class="merge-creator__scape-btn" :disabled="isFull" @click="handleSelect(scape)">
+          <ScapeImage :id="scape.id" :scape-count="scapeCount" />
+        </button>
+      </template>
+    </ScapesGrid>
+
+    <Button v-if="hasMore && availableScapes.length > 0" class="merge-creator__load-more small tertiary"
+      :disabled="loading" @click="loadMore">
+      {{ loading ? "Loading..." : "Load more" }}
+    </Button>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -252,8 +192,7 @@ const handleSelect = (scape: ScapeRecord) => {
   addScape(scape.id);
 };
 
-const { columns } = useScapeGrid();
-const gridColumns = computed(() => Math.max(1, columns.value));
+const { contentColumns } = useScapeGrid();
 
 const mergeRequest = async (): Promise<Hash> => {
   return writeContract($wagmi as Config, {
@@ -290,30 +229,23 @@ const transactionText = computed(() => ({
 
 <style scoped>
 .merge-creator {
+  --grid-columns: var(--content-columns);
+
   display: grid;
   gap: var(--grid-gutter);
-}
-
-.merge-creator__preview {
-  display: grid;
-}
-
-.merge-creator__preview-layout {
-  display: grid;
-  gap: var(--spacer);
-  height: 100%;
-  grid-template-rows: minmax(0, 1fr) auto;
+  width: var(--content-width);
+  margin: auto;
 }
 
 .merge-creator__canvas {
-  aspect-ratio: 1;
   background: var(--gray-z-1);
-  border-radius: var(--spacer-xs);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   width: 100%;
+  min-height: calc(var(--scape-height-gutter) * var(--content-columns) - var(--grid-gutter));
+  padding-inline: 5%;
 }
 
 .merge-creator__image {
@@ -323,122 +255,38 @@ const transactionText = computed(() => ({
   image-rendering: pixelated;
 }
 
-.merge-creator__placeholder {
-  color: var(--muted);
-  font-size: var(--font-sm);
-  text-align: center;
-  padding: var(--spacer);
-}
-
-.merge-creator__error {
-  color: var(--error);
-  font-size: var(--font-sm);
-  text-align: center;
-  padding: var(--spacer);
-}
-
-.merge-creator__actions {
+.merge-creator__header {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacer);
-}
-
-.merge-creator__mode {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--spacer);
   justify-content: space-between;
-}
-
-.merge-creator__toggle {
-  display: flex;
   align-items: center;
-  gap: var(--spacer-xs);
-  cursor: pointer;
-  font-size: var(--font-sm);
+  height: var(--scape-height);
+  margin: var(--scape-height-gutter) 0 0;
+  background: var(--background);
+  padding: var(--spacer);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  h3 {
+    margin: 0;
+  }
 }
 
-.merge-creator__toggle input {
-  width: 16px;
-  height: 16px;
-}
-
-.merge-creator__clear {
-  padding: var(--spacer-xs) var(--spacer-sm);
-  border: 1px solid var(--border);
-  border-radius: var(--spacer-xs);
-  background: none;
-  cursor: pointer;
-  font-size: var(--font-sm);
-}
-
-.merge-creator__clear:hover {
+.merge-creator__status {
+  padding: var(--spacer);
+  border-radius: var(--radius);
   background: var(--gray-z-1);
 }
 
-.merge-creator__merge-btn {
-  width: 100%;
-  padding: var(--spacer) var(--spacer-lg);
-  border: none;
-  border-radius: var(--spacer-xs);
-  background: var(--color);
-  color: var(--background);
-  font-size: var(--font-lg);
-  cursor: pointer;
-}
-
-.merge-creator__merge-btn:disabled {
-  background: var(--gray-z-2);
-  color: var(--muted);
-  cursor: not-allowed;
-}
-
-.merge-creator__merge-btn:not(:disabled):hover {
-  opacity: 0.9;
-}
-
-.merge-creator__view-link {
-  display: block;
-  text-align: center;
-  padding: var(--spacer) var(--spacer-lg);
-  border: 1px solid var(--color);
-  border-radius: var(--spacer-xs);
-  color: var(--color);
-  text-decoration: none;
-}
-
-.merge-creator__view-link:hover {
-  background: var(--gray-z-1);
-}
-
-.merge-creator__selected {
-  display: grid;
-  gap: var(--spacer);
-}
-
-.merge-creator__selected-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacer);
-}
-
-.merge-creator__selected-header h3,
-.merge-creator__catalog-header h3 {
-  margin: 0;
-  font-size: var(--font-lg);
-}
-
-.merge-creator__selected-count {
-  font-size: var(--font-sm);
-  color: var(--muted);
+.merge-creator__status--error {
+  background: oklch(from var(--error) l c h / 0.1);
 }
 
 .merge-creator__selected-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(calc(var(--scape-width) / 2), 1fr));
-  gap: var(--spacer-xs);
+  gap: var(--grid-gutter);
 }
 
 .merge-creator__selected-item {
@@ -447,144 +295,38 @@ const transactionText = computed(() => ({
   text-align: center;
 }
 
-.merge-creator__selected-controls {
-  display: flex;
-  gap: var(--spacer-xs);
-  justify-content: center;
-}
-
-.merge-creator__selected-btn {
-  padding: 0 var(--spacer-sm);
-  border: 1px solid var(--border);
-  border-radius: var(--spacer-xs);
-  background: var(--background);
-  color: var(--color);
-  font-size: var(--font-xs);
-  cursor: pointer;
-}
-
-.merge-creator__selected-btn.active {
-  background: var(--color);
-  color: var(--background);
-}
-
-.merge-creator__selected-btn--remove {
-  border-color: var(--error);
-  color: var(--error);
-}
-
-.merge-creator__catalog {
-  display: grid;
-  gap: var(--spacer);
-}
-
-.merge-creator__catalog-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacer);
-}
-
-.merge-creator__catalog-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--spacer);
-}
-
-.merge-creator__search {
-  padding: var(--spacer-sm);
-  border: 1px solid var(--border);
-  border-radius: var(--spacer-xs);
-  background: var(--background);
-  font-size: var(--font-sm);
-}
-
-.merge-creator__search:focus {
-  outline: none;
-  border-color: var(--color);
-}
-
 .merge-creator__search-result {
   display: flex;
   align-items: center;
   gap: var(--spacer-sm);
-  padding: var(--spacer-sm);
-  border: 2px solid var(--color);
-  border-radius: var(--spacer-xs);
-  background: var(--gray-z-1);
   cursor: pointer;
-  text-align: left;
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
-.merge-creator__search-result:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.merge-creator__search-result img {
-  width: calc(var(--scape-width) / 3);
-  height: calc(var(--scape-width) / 3);
-  border-radius: var(--spacer-xs);
-}
-
-.merge-creator__scape {
+.merge-creator__scape-btn {
   display: block;
   width: 100%;
+  height: var(--scape-height);
   padding: 0;
-  border: 2px solid transparent;
-  border-radius: var(--spacer-xs);
+  border: none;
   background: none;
   cursor: pointer;
-  text-align: center;
-  transition: border-color 0.15s;
-}
 
-.merge-creator__scape:hover:not(:disabled) {
-  border-color: var(--color);
-}
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
-.merge-creator__scape:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.merge-creator__scape-id {
-  display: block;
-  font-size: var(--font-xs);
-  color: var(--muted);
-  margin-top: var(--spacer-xs);
-}
-
-.merge-creator__status {
-  text-align: center;
-  color: var(--muted);
-  padding: var(--spacer-lg);
-  background: var(--gray-z-1);
-  border-radius: var(--spacer-xs);
-}
-
-.merge-creator__status--error {
-  background: oklch(from var(--error) l c h / 0.1);
-  color: var(--error);
+  &:hover:not(:disabled) {
+    opacity: 0.8;
+  }
 }
 
 .merge-creator__load-more {
-  padding: var(--spacer-sm) var(--spacer);
-  border: 1px solid var(--border);
-  border-radius: var(--spacer-xs);
-  background: var(--background);
-  cursor: pointer;
-  font-size: var(--font-sm);
-}
-
-.merge-creator__load-more:hover:not(:disabled) {
-  background: var(--gray-z-1);
-}
-
-.merge-creator__load-more:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  justify-self: center;
 }
 </style>
