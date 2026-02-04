@@ -6,29 +6,44 @@
       <Alert v-else-if="previewError" type="error">
         {{ previewError.message }}
       </Alert>
-      <img v-else-if="previewUrl && scapes.length >= 2" class="merge-creator__image" :src="previewUrl"
-        alt="Merge preview" />
-      <p v-else-if="scapes.length > 0" class="muted">
-        Select at least 2 Scapes to preview
-      </p>
+      <template v-else-if="scapes.length > 0">
+        <img v-if="previewUrl && scapes.length >= 2" class="merge-creator__image" :src="previewUrl"
+          alt="Merge preview" />
+        <p v-else class="muted">
+          Select at least 2 Scapes to preview
+        </p>
+
+        <div class="scape-actions">
+          <div v-for="(scape, index) in scapes" :key="String(scape[0])">
+            <Button class="small" :class="{ primary: scape[1] }" title="Flip horizontal" @click="toggleFlipX(index)">
+              Flip
+            </Button>
+            <Button class="small danger" title="Remove" @click="removeScape(index)">
+              ×
+            </Button>
+          </div>
+        </div>
+      </template>
       <p v-else class="muted">
         Select Scapes to merge
       </p>
     </div>
 
     <!-- Actions -->
-    <Actions>
-      <FormCheckbox v-model="fadeMode" class="small">
-        {{ fadeMode ? "Fade" : "Merge" }}
-      </FormCheckbox>
+    <GridArea padding class="actions">
+      <div>
+        <FormCheckbox v-model="fadeMode" class="small">
+          {{ fadeMode ? "Fade" : "Merge" }}
+        </FormCheckbox>
 
-      <Button v-if="scapes.length > 0" class="small tertiary" @click="clear">
-        Clear
-      </Button>
+        <Button v-if="scapes.length > 0" class="small tertiary" @click="clear">
+          Clear
+        </Button>
+      </div>
 
       <EvmTransactionFlow :text="transactionText" :request="mergeRequest" @complete="handleMergeComplete">
         <template #start="{ start }">
-          <Button class="primary" :disabled="!canMerge" @click="start">
+          <Button class="primary small" :disabled="!canMerge" @click="start">
             {{ canMerge ? `Merge ${scapes.length} Scapes` : "Select at least 2 Scapes" }}
           </Button>
         </template>
@@ -39,31 +54,7 @@
           </Button>
         </template>
       </EvmTransactionFlow>
-    </Actions>
-
-    <!-- Selected Scapes -->
-    <header class="merge-creator__header">
-      <h3>Selected Scapes</h3>
-      <span>{{ scapes.length }}/8</span>
-    </header>
-
-    <div v-if="scapes.length === 0" class="merge-creator__status">
-      No Scapes selected yet.
-    </div>
-
-    <div v-else class="merge-creator__selected-grid">
-      <div v-for="(scape, index) in scapes" :key="String(scape[0])" class="merge-creator__selected-item">
-        <ScapeImage :id="scape[0]" />
-        <Actions>
-          <Button class="small" :class="{ primary: scape[1] }" title="Flip horizontal" @click="toggleFlipX(index)">
-            Flip
-          </Button>
-          <Button class="small danger" title="Remove" @click="removeScape(index)">
-            Remove
-          </Button>
-        </Actions>
-      </div>
-    </div>
+    </GridArea>
 
     <!-- Select Scapes -->
     <header class="merge-creator__header">
@@ -238,21 +229,45 @@ const transactionText = computed(() => ({
 }
 
 .merge-creator__canvas {
-  background: var(--gray-z-1);
+  background: var(--background);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: var(--spacer);
   overflow: hidden;
   width: 100%;
   min-height: calc(var(--scape-height-gutter) * var(--content-columns) - var(--grid-gutter));
-  padding-inline: 5%;
+  padding: var(--spacer);
 }
 
 .merge-creator__image {
   width: 100%;
-  height: 100%;
   object-fit: contain;
   image-rendering: pixelated;
+}
+
+.scape-actions {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+
+  &>div {
+    display: flex;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacer);
+  align-items: center;
+  justify-content: space-between;
+
+  &>div {
+    display: flex;
+    gap: var(--spacer);
+    align-items: center;
+  }
 }
 
 .merge-creator__header {
@@ -281,18 +296,6 @@ const transactionText = computed(() => ({
 
 .merge-creator__status--error {
   background: oklch(from var(--error) l c h / 0.1);
-}
-
-.merge-creator__selected-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(calc(var(--scape-width) / 2), 1fr));
-  gap: var(--grid-gutter);
-}
-
-.merge-creator__selected-item {
-  display: grid;
-  gap: var(--spacer-xs);
-  text-align: center;
 }
 
 .merge-creator__search-result {
