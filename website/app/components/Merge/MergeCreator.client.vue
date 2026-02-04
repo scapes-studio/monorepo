@@ -1,7 +1,7 @@
 <template>
   <section class="merge-creator">
     <!-- Preview -->
-    <div class="merge-creator__canvas">
+    <div class="merge-creator__canvas grid-shadow">
       <Loading v-if="previewLoading" txt="Loading preview..." />
       <Alert v-else-if="previewError" type="error">
         {{ previewError.message }}
@@ -56,7 +56,7 @@
     </GridArea>
 
     <!-- Select Scapes -->
-    <header class="merge-creator__header">
+    <header class="merge-creator__header grid-shadow">
       <h1>Select Scapes</h1>
 
       <Actions>
@@ -235,7 +235,7 @@ const transactionText = computed(() => ({
 }
 
 .merge-creator__canvas {
-  background: var(--background);
+  background: var(--grid-color);
   display: flex;
   flex-direction: column;
   align-items: center;
