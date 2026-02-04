@@ -3,9 +3,7 @@
     <div v-if="scapesError" class="scapes-tab__status scapes-tab__status--error">
       Failed to load scapes.
     </div>
-    <div v-else-if="scapesLoading && scapes.length === 0" class="scapes-tab__status">
-      Loading scapes…
-    </div>
+    <ScapesSkeleton v-else-if="scapesLoading && scapes.length === 0" :count="contentColumns * 3" />
     <div v-else-if="scapes.length === 0" class="scapes-tab__status">
       No scapes found for this account.
     </div>
