@@ -1,6 +1,6 @@
 <template>
   <section v-if="hasAttributes" class="attributes">
-    <ul class="attributes__list">
+    <ul class="attributes__list grid-shadow">
       <GridArea v-for="attr in attributeList" :key="attr.trait_type" :rows="1" :width="1" tag="li"
         class="attributes__item">
         <span class="attributes__trait">{{ attr.trait_type }}</span>
