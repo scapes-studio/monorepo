@@ -142,7 +142,7 @@ const ownerData = await useScapesByOwner(ownerAddress);
 
 const availableScapes = computed(() => {
   const source = onlyOwned.value ? ownerData.scapes.value : galleryData.scapes.value;
-  return source.filter((s) => !selectedIds.value.includes(s.id));
+  return source.filter((s) => s.id <= 10000n && !selectedIds.value.includes(s.id));
 });
 
 const loading = computed(() =>
