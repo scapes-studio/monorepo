@@ -8,6 +8,10 @@
           class="attributes__value attributes__value--link">
           {{ formatValue(attr) }}
         </NuxtLink>
+        <NuxtLink v-else-if="getTraitLink(attr)" :to="getTraitLink(attr)"
+          class="attributes__value attributes__value--link">
+          {{ formatValue(attr) }}
+        </NuxtLink>
         <span v-else class="attributes__value">{{ formatValue(attr) }}</span>
       </GridArea>
     </ul>
@@ -47,6 +51,24 @@ function formatValue(attr: AttributeEntry): string | number {
     return DateTime.fromSeconds(attr.value).toLocaleString(DateTime.DATE_MED);
   }
   return attr.value;
+}
+
+function getTraitLink(attr: AttributeEntry): string | null {
+  if (isDateAttribute(attr)) {
+    return null;
+  }
+
+  const traitType = attr.trait_type?.trim();
+  if (!traitType) {
+    return null;
+  }
+
+  const value = String(attr.value).trim();
+  if (!value) {
+    return null;
+  }
+
+  return `/scapes?traits=${encodeURIComponent(`${traitType}=${value}`)}`;
 }
 </script>
 
