@@ -26,9 +26,7 @@
         </aside>
 
         <main class="gallery__main" :style="{ '--grid-columns': `${galleryColumns}` }">
-          <div v-if="loading && scapes.length === 0" class="gallery__status">
-            Loading scapes...
-          </div>
+          <ScapesSkeleton v-if="loading && scapes.length === 0" :count="galleryColumns * 4" />
           <div v-else-if="error" class="gallery__status gallery__status--error">
             Unable to load scapes right now.
           </div>
