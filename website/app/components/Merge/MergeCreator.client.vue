@@ -85,8 +85,8 @@
       </template>
     </ScapesGrid>
 
-    <Button v-if="hasMore && !searchedId && displayedScapes.length > 0" class="merge-creator__load-more small tertiary"
-      :disabled="loading" @click="loadMore">
+    <Button v-if="hasMore && !searchedId && displayedScapes.length > 0" ref="loadMoreRef"
+      class="merge-creator__load-more small tertiary" :disabled="loading" @click="loadMore">
       {{ loading ? "Loading..." : "Load more" }}
     </Button>
   </section>
@@ -185,6 +185,11 @@ const handleSelect = (scape: ScapeRecord) => {
 };
 
 const { contentColumns } = useScapeGrid();
+
+const loadMoreRef = ref<HTMLElement | null>(null);
+useIntersectionObserver(loadMoreRef, ([entry]) => {
+  if (entry?.isIntersecting && !loading.value) loadMore();
+});
 
 const mergeRequest = async (): Promise<Hash> => {
   return writeContract($wagmi as Config, {
