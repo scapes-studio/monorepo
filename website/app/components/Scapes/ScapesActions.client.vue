@@ -75,7 +75,7 @@ const isOwner = computed(() => {
 
 const isMerge = computed(() => isMergeTokenId(BigInt(props.scapeId)));
 
-const showActions = computed(() => isConnected.value && (Boolean(props.listing) || isOwner.value));
+const showActions = computed(() => Boolean(props.listing) || isOwner.value);
 
 const hasOnchainListing = computed(() => props.listing?.source === "onchain");
 const hasSeaportListing = computed(() => props.listing?.source === "seaport");
