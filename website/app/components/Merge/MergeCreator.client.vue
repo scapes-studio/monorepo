@@ -69,21 +69,15 @@
       </Actions>
     </header>
 
-    <Card v-if="searchedId" class="merge-creator__search-result" :class="{ disabled: isFull }"
-      @click="handleSearchSelect">
-      <ScapeImage :id="searchedId" />
-      <span>#{{ searchedId }}</span>
-    </Card>
-
-    <Loading v-if="loading && availableScapes.length === 0" txt="Loading scapes..." />
+    <Loading v-if="loading && displayedScapes.length === 0" txt="Loading scapes..." />
     <div v-else-if="scapeError" class="merge-creator__status merge-creator__status--error">
       Unable to load scapes right now.
     </div>
-    <div v-else-if="availableScapes.length === 0" class="merge-creator__status">
-      No Scapes available.
+    <div v-else-if="displayedScapes.length === 0" class="merge-creator__status">
+      {{ searchedId ? `Scape #${searchedId} is already selected.` : "No Scapes available." }}
     </div>
 
-    <ScapesGrid v-else :scapes="availableScapes" :columns="contentColumns">
+    <ScapesGrid v-else :scapes="displayedScapes" :columns="contentColumns">
       <template #item="{ scape, scapeCount }">
         <button type="button" class="merge-creator__scape-btn" :disabled="isFull" @click="handleSelect(scape)">
           <ScapeImage :id="scape.id" :scape-count="scapeCount" />
@@ -91,7 +85,7 @@
       </template>
     </ScapesGrid>
 
-    <Button v-if="hasMore && availableScapes.length > 0" class="merge-creator__load-more small tertiary"
+    <Button v-if="hasMore && !searchedId && displayedScapes.length > 0" class="merge-creator__load-more small tertiary"
       :disabled="loading" @click="loadMore">
       {{ loading ? "Loading..." : "Load more" }}
     </Button>
@@ -168,19 +162,26 @@ const loadMore = () => {
 const searchedId = computed(() => {
   const num = parseInt(searchQuery.value, 10);
   if (Number.isNaN(num) || num < 1 || num > 10000) return null;
-  if (selectedIds.value.includes(BigInt(num))) return null;
   return BigInt(num);
 });
 
-const handleSearchSelect = () => {
-  if (isFull.value || !searchedId.value) return;
-  addScape(searchedId.value);
-  searchQuery.value = "";
-};
+const displayedScapes = computed(() => {
+  if (searchedId.value) {
+    // If searched ID is already selected, return empty to show "already selected" message
+    if (selectedIds.value.includes(searchedId.value)) return [];
+    // Show only the searched scape
+    return [{ id: searchedId.value }] as ScapeRecord[];
+  }
+  return availableScapes.value;
+});
 
 const handleSelect = (scape: ScapeRecord) => {
   if (isFull.value) return;
   addScape(scape.id);
+  // Clear search after selecting a searched scape
+  if (searchedId.value && scape.id === searchedId.value) {
+    searchQuery.value = "";
+  }
 };
 
 const { contentColumns } = useScapeGrid();
@@ -296,6 +297,7 @@ const transactionText = computed(() => ({
 
   & .form-item {
     width: min-content;
+    min-width: 10rem;
   }
 
   & input {
@@ -311,18 +313,6 @@ const transactionText = computed(() => ({
 
 .merge-creator__status--error {
   background: oklch(from var(--error) l c h / 0.1);
-}
-
-.merge-creator__search-result {
-  display: flex;
-  align-items: center;
-  gap: var(--spacer-sm);
-  cursor: pointer;
-
-  &.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
 }
 
 .merge-creator__scape-btn {
