@@ -54,8 +54,9 @@ const handleTraitSelect = (trait: string) => {
 .sidebar__scroll {
   position: sticky;
   top: var(--spacer);
-  max-height: calc(100vh - 2 * var(--spacer));
+  max-height: 100dvh;
   overflow-y: auto;
+  padding-bottom: calc(var(--scape-height-gutter) * 2.5);
 
   .trait-group {
     background: var(--background);
