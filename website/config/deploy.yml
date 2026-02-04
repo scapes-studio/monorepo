@@ -10,7 +10,9 @@ servers:
 
 proxy:
   ssl: true
-  host: scapes.xyz
+  hosts:
+    - scapes.xyz
+    - 2026.scapes.xyz
   app_port: 3000
   healthcheck:
     path: /
