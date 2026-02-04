@@ -17,5 +17,9 @@
       border: 0 !important;
     }
   }
+
+  & .actions {
+    margin-top: var(--spacer-lg) !important;
+  }
 }
 
