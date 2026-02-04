@@ -1,8 +1,8 @@
 <template>
   <section class="merge">
     <GridArea width="content" center :rows="2">
-      <h1>Create Merge</h1>
-      <p class="muted">Combine multiple Scapes into a unique merged artwork.</p>
+      <h1>Scape Merges</h1>
+      <p class="muted">An early experiment of composable onchain art.</p>
     </GridArea>
 
     <ClientOnly>
