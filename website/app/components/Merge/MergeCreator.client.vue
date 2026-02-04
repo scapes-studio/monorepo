@@ -9,11 +9,10 @@
       <template v-else-if="scapes.length > 0">
         <img v-if="previewUrl && scapes.length >= 2" class="merge-creator__image" :src="previewUrl"
           alt="Merge preview" />
-        <p v-else class="muted">
-          Select at least 2 Scapes to preview
-        </p>
+        <ScapeImage v-else :id="scapes[0]![0]" class="merge-creator__image-single" />
+        <p v-if="scapes.length < 2" class="muted">Select at least 2 scapes to preview a merge</p>
 
-        <div class="scape-actions">
+        <div v-if="scapes.length >= 2" class="scape-actions">
           <div v-for="(scape, index) in scapes" :key="String(scape[0])">
             <Button class="small" :class="{ primary: scape[1] }" title="Flip horizontal" @click="toggleFlipX(index)">
               Flip
@@ -30,7 +29,7 @@
     </div>
 
     <!-- Actions -->
-    <GridArea padding class="actions">
+    <GridArea padding class="scape-preview-actions">
       <div>
         <FormCheckbox v-model="fadeMode" class="small">
           {{ fadeMode ? "Fade" : "Merge" }}
@@ -58,14 +57,15 @@
 
     <!-- Select Scapes -->
     <header class="merge-creator__header">
-      <h3>Select Scapes</h3>
+      <h1>Select Scapes</h1>
+
       <Actions>
-        <FormItem class="small">
-          <input v-model="searchQuery" type="text" inputmode="numeric" placeholder="Search by ID (1-10000)" />
-        </FormItem>
         <FormCheckbox v-if="isConnected" v-model="onlyOwned" class="small">
           Only owned
         </FormCheckbox>
+        <FormItem class="small">
+          <input v-model="searchQuery" type="text" inputmode="numeric" placeholder="Search by ID" />
+        </FormItem>
       </Actions>
     </header>
 
@@ -239,12 +239,18 @@ const transactionText = computed(() => ({
   width: 100%;
   min-height: calc(var(--scape-height-gutter) * var(--content-columns) - var(--grid-gutter));
   padding: var(--spacer);
+  margin: var(--scape-height-gutter) 0 0;
 }
 
 .merge-creator__image {
   width: 100%;
   object-fit: contain;
   image-rendering: pixelated;
+}
+
+.merge-creator__image-single {
+  height: var(--scape-height);
+  width: var(--scape-width);
 }
 
 .scape-actions {
@@ -257,7 +263,7 @@ const transactionText = computed(() => ({
   }
 }
 
-.actions {
+.scape-preview-actions {
   display: flex;
   gap: var(--spacer);
   align-items: center;
@@ -279,12 +285,21 @@ const transactionText = computed(() => ({
   background: var(--background);
   padding: var(--spacer);
 
-  &:first-of-type {
-    margin-top: 0;
+  & h1 {
+    white-space: nowrap;
   }
 
-  h3 {
-    margin: 0;
+  & .actions {
+    gap: var(--spacer);
+    font-size: var(--font-sm);
+  }
+
+  & .form-item {
+    width: min-content;
+  }
+
+  & input {
+    font-size: var(--font-sm);
   }
 }
 
@@ -318,6 +333,7 @@ const transactionText = computed(() => ({
   border: none;
   background: none;
   cursor: pointer;
+  box-shadow: none;
 
   &:disabled {
     opacity: 0.5;
