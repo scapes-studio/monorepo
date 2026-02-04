@@ -10,10 +10,6 @@
 <script setup lang="ts">
 const { isInitialized, isMobile } = useScapeGrid()
 
-onMounted(() => {
-  console.log(isMobile)
-})
-
 useHead({
   bodyAttrs: {
     class: computed(() => {
