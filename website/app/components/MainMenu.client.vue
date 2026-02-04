@@ -12,6 +12,9 @@
           <NuxtLink to="/scapes">Scapes</NuxtLink>
         </li>
         <li>
+          <NuxtLink to="/merge">Merges</NuxtLink>
+        </li>
+        <li>
           <NuxtLink to="/people">Owners</NuxtLink>
         </li>
         <li>
@@ -19,9 +22,6 @@
         </li>
         <li>
           <NuxtLink to="/gallery27">Gallery27</NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/merge">Merge</NuxtLink>
         </li>
       </slot>
     </NavIndicator>
