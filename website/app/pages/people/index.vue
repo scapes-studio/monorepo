@@ -13,7 +13,7 @@
 
     <div v-else class="accounts-page__results">
       <ol class="accounts-page__list">
-        <li v-for="(entry, index) in owners" :key="entry.owner" class="accounts-page__row">
+        <li v-for="(entry, index) in owners" :key="entry.owner" class="accounts-page__row grid-shadow">
           <span class="accounts-page__rank">{{ index + 1 }}</span>
           <AccountLink :address="entry.owner" class="accounts-page__owner" shorten-ens />
           <span class="accounts-page__count">{{ entry.count }} scapes</span>
