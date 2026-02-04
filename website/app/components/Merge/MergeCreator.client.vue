@@ -10,7 +10,7 @@
         <img v-if="previewUrl && scapes.length >= 2" class="merge-creator__image" :src="previewUrl"
           alt="Merge preview" />
         <ScapeImage v-else :id="scapes[0]![0]" class="merge-creator__image-single" />
-        <p v-if="scapes.length < 2" class="muted">Select at least 2 scapes to preview a merge</p>
+        <p v-if="scapes.length === 1" class="muted">Select another scape...</p>
 
         <div v-if="scapes.length >= 2" class="scape-actions">
           <div v-for="(scape, index) in scapes" :key="String(scape[0])">
@@ -207,7 +207,7 @@ const transactionText = computed(() => ({
     complete: "Merge Created!",
   },
   lead: {
-    confirm: `Merge ${scapes.value.length} Scapes into a new unique artwork.`,
+    confirm: `Merge ${scapes.value.length} Scapes into a new token.`,
     requesting: "Please confirm the transaction in your wallet.",
     waiting: "Your merge is being created on-chain.",
     complete: "Your merge has been created successfully!",
