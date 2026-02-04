@@ -7,7 +7,12 @@
         marketplace` : `Seaport (OpenSea)` }}.</p>
     </header>
     <Actions class="left">
-      <EvmConnect v-if="!isConnected" class-name="small" />
+      <template v-if="hasSeaportListing && listPrice">
+        <Button :to="openseaUrl" target="_blank" rel="noopener noreferrer" class="small">
+          Buy on OpenSea ({{ listPrice }} ETH)
+        </Button>
+      </template>
+      <EvmConnect v-else-if="!isConnected" class-name="small" />
       <template v-else>
         <!-- Owner actions -->
         <template v-if="isOwner">
@@ -42,12 +47,6 @@
               @listing-change="emit('listingChange')" />
           </template>
 
-          <!-- Non-owner with seaport listing: link to OpenSea -->
-          <template v-else-if="hasSeaportListing && listPrice">
-            <Button :to="openseaUrl" target="_blank" rel="noopener noreferrer" class="small">
-              Buy on OpenSea ({{ listPrice }} ETH)
-            </Button>
-          </template>
         </template>
       </template>
     </Actions>
