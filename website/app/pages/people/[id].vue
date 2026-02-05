@@ -1,9 +1,11 @@
 <template>
   <section class="account-page">
     <div v-if="profilePending" class="account-page__status">Loading profile…</div>
-    <div v-else-if="profileError" class="account-page__status account-page__status--error">
-      Unable to load profile. Please check the address or ENS name.
-    </div>
+    <GridArea v-else-if="profileError" padding center>
+      <p>
+        Unable to load profile. Please check the address or ENS name.
+      </p>
+    </GridArea>
 
     <template v-else>
       <div class="account-page__profile">

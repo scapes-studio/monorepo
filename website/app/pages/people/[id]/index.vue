@@ -1,12 +1,12 @@
 <template>
   <section class="scapes-tab grid-shadow" :class="{ 'has-merges': showMerges }">
-    <div v-if="scapesError" class="scapes-tab__status scapes-tab__status--error">
+    <GridArea v-if="scapesError" padding center>
       Failed to load scapes.
-    </div>
+    </GridArea>
     <ScapesSkeleton v-else-if="scapesLoading && scapes.length === 0" :count="contentColumns * 3" />
-    <div v-else-if="scapes.length === 0" class="scapes-tab__status">
+    <GridArea v-else-if="scapes.length === 0" padding center>
       No scapes found for this account.
-    </div>
+    </GridArea>
 
     <template v-else>
       <!-- Merges Section -->
@@ -57,8 +57,6 @@ const {
 const merges = computed(() => scapes.value.filter(s => s.id > 10_000n));
 const regularScapes = computed(() => scapes.value.filter(s => s.id <= 10_000n));
 const showMerges = computed(() => merges.value.length > 0);
-
-const scapesOwnedCount = computed(() => scapesTotal.value ?? scapes.value.length);
 
 const { contentColumns } = useScapeGrid();
 
@@ -125,23 +123,5 @@ defineOgImageComponent(
   padding: var(--spacer);
   border-radius: var(--size-3);
   background: var(--gray-z-1);
-}
-
-.scapes-tab__status--error {
-  background: oklch(from var(--error) l c h / 0.1);
-}
-
-.scapes-tab__load-more {
-  justify-self: center;
-  padding: var(--spacer-sm) var(--spacer-md);
-  border-radius: var(--size-10);
-  border: var(--border);
-  background: var(--background);
-  cursor: pointer;
-}
-
-.scapes-tab__load-more:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
 }
 </style>
