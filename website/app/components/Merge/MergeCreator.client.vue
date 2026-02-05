@@ -12,7 +12,7 @@
         <ScapeImage v-else :id="scapes[0]![0]" class="merge-creator__image-single" />
         <p v-if="scapes.length === 1" class="muted">Select another scape...</p>
 
-        <div v-if="scapes.length >= 2" class="scape-actions">
+        <Actions v-if="scapes.length >= 2" class="scape-actions">
           <div v-for="(scape, index) in scapes" :key="String(scape[0])">
             <Button class="small" :class="{ primary: scape[1] }" title="Flip horizontal" @click="toggleFlipX(index)">
               Flip
@@ -21,7 +21,7 @@
               ×
             </Button>
           </div>
-        </div>
+        </Actions>
       </template>
       <p v-else class="muted">
         Select Scapes to merge
@@ -64,7 +64,7 @@
           Only owned
         </FormCheckbox>
         <FormItem class="small">
-          <input v-model="searchQuery" type="text" inputmode="numeric" placeholder="Search by ID" />
+          <input v-model="searchQuery" type="text" inputmode="numeric" placeholder="Search by ID" class="small" />
         </FormItem>
       </Actions>
     </header>
@@ -245,7 +245,11 @@ const transactionText = computed(() => ({
   width: 100%;
   min-height: calc(var(--scape-height-gutter) * var(--content-columns) - var(--grid-gutter));
   padding: var(--spacer);
-  margin: var(--scape-height-gutter) 0 0;
+  margin: 0;
+
+  @media (min-width: 800px) {
+    margin: var(--scape-height-gutter) 0 0;
+  }
 }
 
 .merge-creator__image {
@@ -261,7 +265,7 @@ const transactionText = computed(() => ({
 
 .scape-actions {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-evenly !important;
   width: 100%;
 
   &>div {
@@ -280,6 +284,10 @@ const transactionText = computed(() => ({
     gap: var(--spacer);
     align-items: center;
   }
+
+  & button.primary {
+    margin-right: var(--grid-gutter);
+  }
 }
 
 .merge-creator__header {
@@ -287,9 +295,13 @@ const transactionText = computed(() => ({
   justify-content: space-between;
   align-items: center;
   height: var(--scape-height);
-  margin: var(--scape-height-gutter) 0 0;
   background: var(--background);
   padding: var(--spacer);
+  margin: 0;
+
+  @media (min-width: 800px) {
+    margin: var(--scape-height-gutter) 0 0;
+  }
 
   & h1 {
     white-space: nowrap;
