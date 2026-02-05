@@ -9,7 +9,7 @@
     <NavIndicator class="main-menu__nav">
       <slot name="nav">
         <li>
-          <NuxtLink to="/scapes">Scapes</NuxtLink>
+          <NuxtLink to="/">Scapes</NuxtLink>
         </li>
         <li>
           <NuxtLink to="/people">Owners</NuxtLink>
