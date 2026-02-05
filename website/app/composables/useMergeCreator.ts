@@ -1,6 +1,10 @@
 import { type MergePart, mergeDefinitionToTokenId } from "~/utils/merges";
 
 const MAX_SCAPES = 8;
+const DEFAULT_SCAPES: MergePart[] = [
+  [316n, false, false],
+  [54n, false, false],
+];
 
 /**
  * Parse URL params into merge state.
@@ -40,8 +44,9 @@ export const useMergeCreator = () => {
   const route = useRoute();
   const router = useRouter();
 
-  // Initialize from URL params
-  const initialScapes = parseScapesParam(route.query.scapes as string | null);
+  // Initialize from URL params, fallback to defaults
+  const parsedScapes = parseScapesParam(route.query.scapes as string | null);
+  const initialScapes = parsedScapes.length > 0 ? parsedScapes : DEFAULT_SCAPES;
   const initialFade = route.query.fade !== "0";
 
   const scapes = ref<MergePart[]>(initialScapes);
