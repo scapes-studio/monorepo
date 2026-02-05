@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink class="scape-link" :class="{ 'scape-link--tall': doubleHeight }" :to="`/scapes/${scape.id}`"
+  <NuxtLink class="scape-link" :class="{ 'scape-link--tall': doubleHeight }" :to="`/${scape.id}`"
     :style="spanStyle">
     <ScapeImage :id="scape.id" :scape-count="scapeCount ?? 1" />
     <div v-if="formattedPrice" class="scape-link__price">

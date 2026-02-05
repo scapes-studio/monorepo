@@ -48,7 +48,7 @@
         </template>
 
         <template #complete>
-          <Button :to="`/scapes/${tokenId}`" class="tertiary">
+          <Button :to="`/${tokenId}`" class="tertiary">
             View your Merge
           </Button>
         </template>
@@ -201,7 +201,7 @@ const mergeRequest = async (): Promise<Hash> => {
 };
 
 const handleMergeComplete = () => {
-  router.push(`/scapes/${tokenId.value}`);
+  router.push(`/${tokenId.value}`);
 };
 
 const transactionText = computed(() => ({

@@ -121,7 +121,7 @@ const scapeUrl = (tokenId: string, collection: string) => {
   if (collection === "twenty-seven-year-scapes") {
     return `/twenty-seven-year-scapes/${tokenId}`;
   }
-  return `/scapes/${tokenId}`;
+  return `/${tokenId}`;
 };
 const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
 </script>

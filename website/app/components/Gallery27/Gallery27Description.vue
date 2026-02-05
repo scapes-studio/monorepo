@@ -5,7 +5,7 @@
     </p>
 
     <div v-if="scapeId" class="gallery27-description__link">
-      Based on <NuxtLink :to="`/scapes/${scapeId}`">Scape #{{ scapeId }}</NuxtLink>
+      Based on <NuxtLink :to="`/${scapeId}`">Scape #{{ scapeId }}</NuxtLink>
     </div>
 
     <div v-if="isOnChain" class="gallery27-description__links">

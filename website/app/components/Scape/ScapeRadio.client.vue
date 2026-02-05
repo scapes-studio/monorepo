@@ -4,7 +4,7 @@
     <Transition name="fade-up">
       <div v-if="isHovered && isPlaying" class="scape-radio-inline__popover">
         <!-- Link to scape (only if not on that page) -->
-        <NuxtLink v-if="currentScape && !isOnScapePage" :to="`/scapes/${currentScape.id}`"
+        <NuxtLink v-if="currentScape && !isOnScapePage" :to="`/${currentScape.id}`"
           class="scape-radio-inline__link border">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -55,7 +55,7 @@ const isHovered = ref(false)
 // Check if currently on the scape's detail page
 const isOnScapePage = computed(() => {
   if (!currentScape.value) return false
-  return route.path === `/scapes/${currentScape.value.id}`
+  return route.path === `/${currentScape.value.id}`
 })
 
 const onHover = (hovered: boolean) => {
