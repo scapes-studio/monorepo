@@ -77,6 +77,14 @@ const selectedTraits = ref<string[]>(
 const showPrices = ref(route.query.prices === "true")
 const includeSeaport = ref(route.query.seaport !== "false")
 
+const priceSorts = new Set<GallerySortOption>(["price-asc", "price-desc"])
+
+watch(selectedSort, (nextSort) => {
+  if (priceSorts.has(nextSort)) {
+    showPrices.value = true
+  }
+})
+
 // Sync state to URL
 watch(
   [selectedSort, selectedTraits, showPrices, includeSeaport],
@@ -139,14 +147,6 @@ useSeo({
 
     &>* {
       white-space: nowrap;
-    }
-
-    &>.for-sale-toggle {
-      display: none;
-
-      @media (min-width: 800px) {
-        display: flex;
-      }
     }
 
     &>div {
