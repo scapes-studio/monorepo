@@ -8,7 +8,7 @@ type SeoOptions = {
 }
 
 const SITE_URL = 'https://scapes.xyz'
-const DEFAULT_IMAGE = `${SITE_URL}/og-default.png`
+const DEFAULT_IMAGE = `${SITE_URL}/og.png`
 
 export function useSeo(options: MaybeRefOrGetter<SeoOptions>) {
   const route = useRoute()

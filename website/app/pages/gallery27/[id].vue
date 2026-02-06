@@ -149,7 +149,7 @@ const ogImage = computed(() => {
     return `https://cdn.scapes.xyz/${imagePath}`;
   }
   if (scape.value?.scapeId) {
-    return `https://scapes.xyz/__og-image__/image/scapes/${scape.value.scapeId}/og.png`;
+    return `https://scapes.xyz/__og-image__/image/${scape.value.scapeId}/og.png`;
   }
   return "https://scapes.xyz/og-default.png";
 });

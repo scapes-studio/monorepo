@@ -63,7 +63,7 @@ const seoOptions = computed(() => {
     title: `${displayName} - ${tabName}`,
     description: profileData.value?.description
       || `View ${displayName}'s ${tabName} collection on Scapes.`,
-    image: profileData.value?.avatar || undefined,
+    image: null,
     imageAlt: `${displayName}'s profile`,
   };
 });
