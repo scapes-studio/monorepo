@@ -1,3 +1,4 @@
 <script setup lang="ts">
-await navigateTo('/', { redirectCode: 301 })
+const route = useRoute()
+await navigateTo({ path: '/', query: route.query }, { redirectCode: 301 })
 </script>
