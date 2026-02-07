@@ -1,5 +1,6 @@
 import type { RadioPlayer } from "~/utils/RadioPlayer";
 import { randomScape, type ScapeInfo } from "~/utils/radio";
+import { mergeIdToScapeIds } from "~/utils/merges";
 
 export type RadioMode = "random" | "fixed";
 
@@ -9,6 +10,8 @@ interface RadioState {
   currentScape: ScapeInfo | null;
   mode: RadioMode;
   fixedScapeId: number | null;
+  fixedScapeIds: number[];
+  fixedNextIndex: number;
   progress: number;
   isExpanded: boolean;
   hasStarted: boolean;
@@ -22,6 +25,8 @@ const state = reactive<RadioState>({
   currentScape: null,
   mode: "random",
   fixedScapeId: null,
+  fixedScapeIds: [],
+  fixedNextIndex: 0,
   progress: 0,
   isExpanded: false,
   hasStarted: false,
@@ -52,9 +57,17 @@ const initializePlayer = async (): Promise<RadioPlayer> => {
   };
 
   player.getNextScapeId = () => {
-    // In fixed mode, return the same scape ID
-    if (state.mode === "fixed" && state.fixedScapeId !== null) {
-      return state.fixedScapeId;
+    if (state.mode === "fixed") {
+      // Merge: cycle through component scapes
+      if (state.fixedScapeIds.length > 1) {
+        const id = state.fixedScapeIds[state.fixedNextIndex % state.fixedScapeIds.length]!;
+        state.fixedNextIndex++;
+        return id;
+      }
+      // Single fixed scape: repeat
+      if (state.fixedScapeId !== null) {
+        return state.fixedScapeId;
+      }
     }
     return randomScape();
   };
@@ -80,10 +93,22 @@ export const useScapeRadio = () => {
 
     // Initialize if not already setup
     if (!radioPlayer.getCurrentScape()) {
-      const currentId = state.fixedScapeId ?? randomScape();
-      const nextId = state.mode === "fixed" && state.fixedScapeId !== null
-        ? state.fixedScapeId
-        : randomScape();
+      let currentId: number;
+      let nextId: number;
+
+      if (state.mode === "fixed" && state.fixedScapeIds.length > 1) {
+        // Merge: start with first component, queue second
+        currentId = state.fixedScapeIds[0]!;
+        nextId = state.fixedScapeIds[1]!;
+        state.fixedNextIndex = 2;
+      } else if (state.mode === "fixed" && state.fixedScapeId !== null) {
+        currentId = state.fixedScapeId;
+        nextId = state.fixedScapeId;
+      } else {
+        currentId = randomScape();
+        nextId = randomScape();
+      }
+
       radioPlayer.setup(null, currentId, nextId);
     }
 
@@ -105,17 +130,33 @@ export const useScapeRadio = () => {
   };
 
   const skip = (): void => {
-    if (!player || state.mode === "fixed") return;
+    if (!player) return;
+    // Allow skip for merges (multiple components) but not single fixed scape
+    if (state.mode === "fixed" && state.fixedScapeIds.length <= 1) return;
     player.next();
   };
 
   const setFixedScape = (scapeId: number): void => {
-    const previousMode = state.mode;
     state.mode = "fixed";
-    state.fixedScapeId = scapeId;
 
-    if (player && player.getCurrentScape()) {
-      player.switchToScape(scapeId);
+    if (scapeId > 10000) {
+      // Merge: decode into component scape IDs
+      const componentIds = mergeIdToScapeIds(BigInt(scapeId)).map(Number);
+      state.fixedScapeIds = componentIds;
+      state.fixedNextIndex = 1;
+      state.fixedScapeId = componentIds[0]!;
+
+      if (player && player.getCurrentScape()) {
+        player.switchToScape(state.fixedScapeId, { autoSkip: true });
+      }
+    } else {
+      state.fixedScapeIds = [scapeId];
+      state.fixedNextIndex = 0;
+      state.fixedScapeId = scapeId;
+
+      if (player && player.getCurrentScape()) {
+        player.switchToScape(scapeId);
+      }
     }
   };
 
@@ -124,6 +165,8 @@ export const useScapeRadio = () => {
 
     state.mode = "random";
     state.fixedScapeId = null;
+    state.fixedScapeIds = [];
+    state.fixedNextIndex = 0;
 
     if (player && player.getCurrentScape()) {
       player.resumeRandomMode(randomScape());

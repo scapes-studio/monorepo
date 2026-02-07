@@ -352,13 +352,25 @@ export class RadioPlayer {
     }
   }
 
-  switchToScape(id: number): void {
+  switchToScape(id: number, options?: { autoSkip?: boolean }): void {
     if (!this.currentScape) {
-      this.setup(null, id, id);
+      const nextId = options?.autoSkip ? (this.getNextScapeId?.() ?? id) : id;
+      this.setup(null, id, nextId);
       return;
     }
 
-    if (this.currentScape.id === id) return;
+    if (this.currentScape.id === id) {
+      // Even if same scape, may need to update queued next and auto-skip
+      if (options?.autoSkip) {
+        this.nextScape?.destroy();
+        const nextId = this.getNextScapeId?.() ?? id;
+        this.nextScape = new Scape(nextId);
+        if (this.isPlaying) {
+          this.scheduleAutoSkip();
+        }
+      }
+      return;
+    }
 
     this.cancelAutoSkip();
 
@@ -374,14 +386,24 @@ export class RadioPlayer {
     this.previousScape = this.currentScape;
     this.currentScape = newScape;
     this.nextScape?.destroy();
-    this.nextScape = new Scape(id); // In fixed mode, next is same scape
+
+    // Queue next scape
+    if (options?.autoSkip) {
+      const nextId = this.getNextScapeId?.() ?? id;
+      this.nextScape = new Scape(nextId);
+    } else {
+      this.nextScape = new Scape(id); // In fixed mode, next is same scape
+    }
 
     this.notifyStateChange({
       currentScape: this.currentScape.info,
       progress: 0,
     });
     this.setupMediaSession();
-    // No auto-skip in fixed mode
+
+    if (options?.autoSkip && this.isPlaying) {
+      this.scheduleAutoSkip();
+    }
   }
 
   resumeRandomMode(nextId: number): void {
