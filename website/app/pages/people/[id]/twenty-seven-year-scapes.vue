@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import type { ProfileResponse } from "~/composables/useProfile";
+import { shortenAddress } from "~/composables/useENSResolution";
 
 const injected = inject<{
   profile: Ref<ProfileResponse | null>;
@@ -40,17 +41,27 @@ const displayAddress = injected?.displayAddress ?? computed(() => resolvedAddres
 const { data, pending, error } = await useGallery27ScapesByOwner(resolvedAddress);
 const scapes = computed(() => data.value?.scapes ?? []);
 
-const ogTitle = computed(() =>
-  displayAddress.value
-    ? `Gallery27 for ${displayAddress.value}`
-    : "Gallery27",
-);
+const ogTitle = computed(() => {
+  const ens = profile.value?.ens;
+  if (ens) return ens;
+  const addr = displayAddress.value;
+  return addr ? shortenAddress(addr) : "Profile";
+});
 const ogSubtitle = computed(
   () => "Twenty Seven Year Scapes owned by this collector.",
 );
 const ogImage = computed(
   () =>
-    profile.value?.data?.avatar || null
+    profile.value?.data?.avatar || "https://scapes.xyz/oneday-profile.png"
+);
+
+const CDN_BASE = "https://cdn.scapes.xyz";
+const ogImageUrls = computed(() =>
+  scapes.value.slice(0, 16).map((s) => {
+    if (s.imagePath) return `${CDN_BASE}/${s.imagePath}`;
+    if (s.scapeId) return `${CDN_BASE}/scapes/sm/${s.scapeId}.png`;
+    return null;
+  }).filter((url): url is string => url !== null),
 );
 
 const seoOptions = computed(() => ({
@@ -67,6 +78,7 @@ defineOgImageComponent(
     title: ogTitle,
     subtitle: ogSubtitle,
     image: ogImage,
+    imageUrls: ogImageUrls,
   },
   { cacheMaxAgeSeconds: 0 },
 );
