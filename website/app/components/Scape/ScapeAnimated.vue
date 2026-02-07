@@ -5,10 +5,10 @@
       <iframe :src="embedUrl" frameborder="0"></iframe>
     </div>
   </div>
-  <Button v-if="scapeImageLoaded && !play" @click="startPlay" class="small">
+  <Button v-if="isPlayable && scapeImageLoaded && !play" @click="startPlay" class="small">
     <IconPlay />
   </Button>
-  <Button v-if="play" @click="stopPlay" class="small">
+  <Button v-if="isPlayable && play" @click="stopPlay" class="small">
     <IconPause />
   </Button>
 </template>
@@ -27,6 +27,7 @@ const props = defineProps({
   },
 });
 
+const isPlayable = computed(() => Number(props.id) <= 10000);
 const play = ref(false);
 const scapeImageLoaded = ref(false);
 const embedUrl = computed(
