@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import type { ProfileResponse } from "~/composables/useProfile";
+import { shortenAddress } from "~/composables/useENSResolution";
 
 const injected = inject<{
   profile: Ref<ProfileResponse | null>;
@@ -60,18 +61,22 @@ const showMerges = computed(() => merges.value.length > 0);
 
 const { contentColumns } = useScapeGrid();
 
-const ogTitle = computed(() =>
-  displayAddress.value ? `Profile ${displayAddress.value}` : "Profile",
-);
+const ogTitle = computed(() => {
+  const ens = profile.value?.ens;
+  if (ens) return ens;
+  const addr = displayAddress.value;
+  return addr ? shortenAddress(addr) : "Profile";
+});
 const ogSubtitle = computed(
   () => profile.value?.data?.description || "Scapes owned and activity overview.",
 );
-const ogImage = computed(
-  () =>
-    profile.value?.data?.avatar ||
-    profile.value?.data?.header ||
-    "https://scapes.xyz/og-default.png",
+const ogAvatar = computed(
+  () => profile.value?.data?.avatar || "https://scapes.xyz/oneday-profile.png",
 );
+const ogScapeIds = computed(() =>
+  regularScapes.value.slice(0, 36).map(s => Number(s.id)),
+);
+const ogCount = computed(() => scapesTotal.value ?? scapes.value.length);
 
 const seoOptions = computed(() => ({
   title: ogTitle.value,
@@ -86,9 +91,10 @@ defineOgImageComponent(
   {
     title: ogTitle,
     subtitle: ogSubtitle,
-    image: ogImage,
+    image: ogAvatar,
+    scapeIds: ogScapeIds,
+    count: ogCount,
   },
-
 );
 </script>
 
