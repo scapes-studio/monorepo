@@ -68,7 +68,7 @@ function getTraitLink(attr: AttributeEntry): string | null {
     return null;
   }
 
-  return `/scapes?traits=${encodeURIComponent(`${traitType}=${value}`)}`;
+  return `/?traits=${encodeURIComponent(`${traitType}=${value}`)}`;
 }
 </script>
 
