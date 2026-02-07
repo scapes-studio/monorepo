@@ -2,7 +2,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-07',
   devtools: { enabled: true },
-  modules: ['nuxt-og-image'],
+  modules: ['@nuxt/fonts', 'nuxt-og-image'],
+  fonts: {
+    families: [
+      { name: 'Space Mono', weights: [700], styles: ['normal', 'italic'], global: true },
+    ],
+  },
   app: {
     head: {
       titleTemplate: '%s | Scapes',
