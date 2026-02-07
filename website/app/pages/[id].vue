@@ -197,20 +197,21 @@ const ogImage = computed(
   () => `https://cdn.scapes.xyz/scapes/lg/${scapeId.value}.png`,
 );
 
+const scapeCount = computed(() => mergeScapeCount(BigInt(scapeId.value)));
+
 defineOgImageComponent(
   "ScapeDetail",
   {
     title: ogTitle,
     subtitle: ogSubtitle,
     image: ogImage,
+    scapeCount,
   },
   {
     width: 1200,
     height: 1200,
   },
 );
-
-const scapeCount = computed(() => mergeScapeCount(BigInt(scapeId.value)));
 
 const sesModalOpen = ref(false);
 </script>
