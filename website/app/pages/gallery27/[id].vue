@@ -1,44 +1,51 @@
 <template>
-  <div class="gallery27-page">
-    <div v-if="scapePending" class="gallery27-page__loading">
-      Loading...
-    </div>
+  <GridArea v-if="scapePending" padding center width="content">
+    Loading...
+  </GridArea>
 
-    <div v-else-if="scapeError" class="gallery27-page__error">
-      Failed to load scape. Please check the day number.
-    </div>
+  <GridArea v-else-if="scapeError" padding center width="content">
+    Failed to load scape. Please check the day number.
+  </GridArea>
 
-    <template v-else-if="scape && tokenId">
-      <Gallery27Header :token-id="tokenId" :date="scape.date" />
-
-      <div class="gallery27-page__content">
-        <div class="gallery27-page__main">
-          <Gallery27Painting v-if="displayedImage" :image="displayedImage" :alt="`Day ${tokenId}`" />
-          <div v-else-if="showFallbackScape" class="gallery27-page__fallback">
-            <ScapeImage :id="fallbackScapeId!" />
-          </div>
-          <div v-else class="gallery27-page__placeholder">
-            No image available
-          </div>
-        </div>
-
-        <aside class="gallery27-page__sidebar">
-          <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" />
-
-          <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId"
-            :auction="auction ?? null" :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner"
-            :is-active="isActive" :is-minted="scape.isMinted" :selected-image="selectedImage"
-            @action-complete="handleActionComplete" />
-
-          <Gallery27Description :token-id="tokenId" :scape-id="scape.scapeId" :description="scape.description"
-            :is-on-chain="scape.isMinted" />
-
-          <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids"
-            :initial-render="bidsData.initialRender" :accepted-image="bidsData.acceptedImage" />
-        </aside>
+  <section v-else-if="scape && tokenId" class="gallery27-page">
+    <GridArea rows="1" padding tag="header">
+      <div>
+        <h1>Day {{ tokenId }}</h1>
+        <p v-if="formattedDate" class="gallery27-page__date">{{ formattedDate }}</p>
       </div>
-    </template>
-  </div>
+
+      <nav class="gallery27-page__nav">
+        <NuxtLink v-if="tokenId > 1" :to="`/gallery27/${tokenId - 1}`">
+          Previous
+        </NuxtLink>
+        <NuxtLink v-if="tokenId < 10000" :to="`/gallery27/${tokenId + 1}`">
+          Next
+        </NuxtLink>
+      </nav>
+    </GridArea>
+
+    <GridArea rows="calc(var(--content-columns, 5) * 2)" class="main-image">
+      <Gallery27Painting v-if="displayedImage" :image="displayedImage" :alt="`Day ${tokenId}`" />
+      <ScapeImage v-else :id="fallbackScapeId!" class="fallback" />
+    </GridArea>
+
+    <!-- <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" /> -->
+    <!---->
+    <!-- <GridArea :rows="2" width="full" class="border-drop_" padding> -->
+    <!--   <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId" -->
+    <!--     :auction="auction ?? null" :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner" -->
+    <!--     :is-active="isActive" :is-minted="scape.isMinted" :selected-image="selectedImage" -->
+    <!--     @action-complete="handleActionComplete" /> -->
+    <!-- </GridArea> -->
+    <!---->
+    <!-- <GridArea :rows="1" width="full" padding> -->
+    <!--   <Gallery27Description :token-id="tokenId" :scape-id="scape.scapeId" :description="scape.description" -->
+    <!--     :is-on-chain="scape.isMinted" /> -->
+    <!-- </GridArea> -->
+    <!---->
+    <!-- <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids" -->
+    <!--   :initial-render="bidsData.initialRender" :accepted-image="bidsData.acceptedImage" class="border-drop_" /> -->
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -55,6 +62,17 @@ const tokenId = computed(() => {
 const tokenIdRef = computed(() => tokenId.value?.toString());
 
 const { data: scape, pending: scapePending, error: scapeError } = await useGallery27Scape(tokenIdRef);
+
+// Date formatting (inlined from Gallery27Header)
+const formattedDate = computed(() => {
+  if (!scape.value?.date) return null;
+  return new Date(scape.value.date * 1000).toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+});
 
 // Radio integration: play the underlying scape when on detail page (client-only)
 if (import.meta.client) {
@@ -139,7 +157,6 @@ const displayedImage = computed(() => {
 
 // Fallback to parent PunkScape image when no AI image is available (future auctions)
 const fallbackScapeId = computed(() => scape.value?.scapeId ?? null);
-const showFallbackScape = computed(() => !displayedImage.value && fallbackScapeId.value !== null);
 
 // Page meta
 const ogDay = computed(() => scape.value?.tokenId);
@@ -173,43 +190,59 @@ useSeo(seoOptions);
 .gallery27-page {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--spacer-lg) var(--spacer);
   display: grid;
-  gap: var(--spacer-lg);
-}
+  gap: var(--grid-gutter);
+  container-type: inline-size;
 
-.gallery27-page__loading,
-.gallery27-page__error {
-  padding: var(--spacer);
-  border-radius: var(--size-3);
-  background: var(--gray-z-1);
-}
+  >header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-.gallery27-page__error {
-  background: oklch(from var(--error) l c h / 0.1);
-}
+    >div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
-.gallery27-page__content {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: var(--spacer-lg);
-}
+      >h1 {
+        margin: 0;
+      }
+    }
+  }
 
-@media (max-width: 900px) {
-  .gallery27-page__content {
-    grid-template-columns: 1fr;
+  >.main-image {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    >.fallback {
+      max-width: var(--content-width-small);
+    }
   }
 }
 
-.gallery27-page__main {
-  display: grid;
-  gap: var(--spacer);
+
+.gallery27-page__image {
+  position: relative;
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16%;
 }
 
-.gallery27-page__sidebar {
-  display: grid;
-  gap: var(--spacer-lg);
-  align-content: start;
+.gallery27-page__header {}
+
+.gallery27-page__date {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--font-sm);
+}
+
+.gallery27-page__nav {
+  display: flex;
+  gap: var(--spacer);
 }
 
 .gallery27-page__fallback {

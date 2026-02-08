@@ -1,6 +1,7 @@
 <template>
   <div class="gallery27-painting">
-    <img v-if="imageUrl" :src="imageUrl" :alt="alt || 'Gallery27 Painting'" class="gallery27-painting__image" @error="onImageError" />
+    <img v-if="imageUrl" :src="imageUrl" :alt="alt || 'Gallery27 Painting'" class="gallery27-painting__image"
+      @error="onImageError" />
     <div v-else class="gallery27-painting__placeholder">
       No image available
     </div>
@@ -41,9 +42,8 @@ watch(() => props.image?.path, () => {
 <style scoped>
 .gallery27-painting {
   width: 100%;
-  aspect-ratio: 1;
+  height: 100%;
   background: var(--gray-z-1);
-  border-radius: var(--spacer-xs);
   overflow: hidden;
 }
 
