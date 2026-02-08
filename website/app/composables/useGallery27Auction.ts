@@ -15,11 +15,25 @@ export const useGallery27Auction = (tokenId: Ref<string | number | undefined>) =
     { watch: [tokenId] },
   );
 
-  // Check if auction is active
+  // Reactive clock (updates every second on client) so isActive
+  // flips to false the moment the auction end time passes.
+  const now = ref(Math.floor(Date.now() / 1000));
+  let tickInterval: ReturnType<typeof setInterval> | null = null;
+
+  if (import.meta.client) {
+    tickInterval = setInterval(() => {
+      now.value = Math.floor(Date.now() / 1000);
+    }, 1000);
+  }
+
+  // Check if auction is active (started, not yet ended, not settled)
   const isActive = computed(() => {
-    if (!data.value?.endTimestamp) return false;
-    const now = Math.floor(Date.now() / 1000);
-    return now < data.value.endTimestamp && !data.value.settled;
+    if (!data.value) return false;
+    if (data.value.settled) return false;
+    if (!data.value.endTimestamp) return false;
+    // Auction hasn't started yet
+    if (data.value.startTimestamp && now.value < data.value.startTimestamp) return false;
+    return now.value < data.value.endTimestamp;
   });
 
   // Poll interval (13 seconds like the old site)
@@ -54,6 +68,10 @@ export const useGallery27Auction = (tokenId: Ref<string | number | undefined>) =
   // Clean up on unmount
   onUnmounted(() => {
     stopPolling();
+    if (tickInterval) {
+      clearInterval(tickInterval);
+      tickInterval = null;
+    }
   });
 
   return {

@@ -1,7 +1,7 @@
 <template>
   <div v-if="isConnected" class="gallery27-actions">
     <!-- Active auction: bid form -->
-    <template v-if="isActive">
+    <template v-if="isActive && !isMinted">
       <div v-if="!showBidForm" class="gallery27-actions__cta">
         <button type="button" class="gallery27-actions__btn" @click="showBidForm = true">
           Place Bid
