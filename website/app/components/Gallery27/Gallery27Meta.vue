@@ -1,17 +1,16 @@
 <template>
-  <div class="gallery27-meta">
+  <GridArea rows="2" padding>
     <div v-if="!auction" class="gallery27-meta__loading">
       Loading auction data...
     </div>
 
     <template v-else>
-      <div class="gallery27-meta__row">
-        <span class="gallery27-meta__label">Status</span>
+      <div v-if="auctionStatus === 'not-started' && auction.startTimestamp" class="gallery27-meta__row">
+        <span class="gallery27-meta__label">Starts in</span>
         <span class="gallery27-meta__value">
-          <template v-if="auctionStatus === 'settled'">Settled</template>
-          <template v-else-if="auctionStatus === 'ended'">Ended</template>
-          <template v-else-if="auctionStatus === 'active'">Active</template>
-          <template v-else>Not Started</template>
+          <ClientOnly>
+            <Gallery27Countdown :end-timestamp="auction.startTimestamp" />
+          </ClientOnly>
         </span>
       </div>
 
@@ -23,15 +22,6 @@
       <div v-if="auctionStatus !== 'not-started'" class="gallery27-meta__row">
         <span class="gallery27-meta__label">Bids</span>
         <span class="gallery27-meta__value">{{ auction.bidCount }}</span>
-      </div>
-
-      <div v-if="auctionStatus === 'not-started' && auction.startTimestamp" class="gallery27-meta__row">
-        <span class="gallery27-meta__label">Starts in</span>
-        <span class="gallery27-meta__value">
-          <ClientOnly>
-            <Gallery27Countdown :end-timestamp="auction.startTimestamp" />
-          </ClientOnly>
-        </span>
       </div>
 
       <div v-if="auctionStatus === 'active' && auction.endTimestamp" class="gallery27-meta__row">
@@ -51,7 +41,7 @@
         </span>
       </div>
     </template>
-  </div>
+  </GridArea>
 </template>
 
 <script setup lang="ts">
@@ -105,6 +95,5 @@ const auctionStatus = computed(() => {
   color: var(--muted);
 }
 
-.gallery27-meta__value {
-}
+.gallery27-meta__value {}
 </style>
