@@ -5,7 +5,7 @@
     </GridArea>
 
     <header class="border-drop_">
-      <GridArea rows="1" width="full" class="scape-detail__header" padding>
+      <GridArea rows="1" class="scape-detail__header" padding>
         <div>
           <h1>Scape #{{ scapeId }}</h1>
           <div class="scape-detail__owner">
