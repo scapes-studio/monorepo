@@ -1,23 +1,21 @@
 <template>
-  <div class="gallery27-bid-item" :class="{ 'gallery27-bid-item--selected': selected }" @click="$emit('select')">
-    <div v-if="thumbnailUrl" class="gallery27-bid-item__thumbnail">
-      <img :src="thumbnailUrl" :alt="`Bid by ${bid.bidderEns || bid.bidder}`" />
-    </div>
+  <GridArea rows="2" class="history-item" @click="$emit('select')">
+    <img v-if="thumbnailUrl" :src="thumbnailUrl" :alt="`Bid by ${bid.bidderEns || bid.bidder}`" />
 
-    <div class="gallery27-bid-item__content">
-      <div class="gallery27-bid-item__header">
+    <div class="content">
+      <header>
         <AccountLink :address="bid.bidder" :ens="bid.bidderEns" />
         <span class="gallery27-bid-item__amount">{{ formattedAmount }} ETH</span>
-      </div>
+      </header>
 
-      <p v-if="bid.message" class="gallery27-bid-item__message">{{ bid.message }}</p>
+      <p v-if="bid.message" class="message">{{ bid.message }}</p>
 
-      <div class="gallery27-bid-item__footer">
+      <footer>
         <time :datetime="new Date(bid.timestamp * 1000).toISOString()">{{ formattedTime }}</time>
         <a :href="etherscanUrl" target="_blank" rel="noopener">View tx</a>
-      </div>
+      </footer>
     </div>
-  </div>
+  </GridArea>
 </template>
 
 <script setup lang="ts">
@@ -55,54 +53,20 @@ const thumbnailUrl = computed(() => {
 </script>
 
 <style scoped>
-.gallery27-bid-item {
-  display: flex;
-  gap: var(--spacer);
-  padding: var(--spacer-sm);
-  border-radius: var(--spacer-xs);
-  cursor: pointer;
-}
-
-.gallery27-bid-item:hover,
-.gallery27-bid-item--selected {
-  background: var(--gray-z-1);
-}
-
-.gallery27-bid-item__thumbnail {
-  flex-shrink: 0;
-  width: 64px;
-  height: 64px;
-  border-radius: var(--spacer-xs);
-  overflow: hidden;
-}
-
-.gallery27-bid-item__thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.gallery27-bid-item__content {
-  flex: 1;
-  min-width: 0;
-}
-
-.gallery27-bid-item__header {
+header {
   display: flex;
   justify-content: space-between;
   gap: var(--spacer-sm);
 }
 
-.gallery27-bid-item__amount {
-}
-
-.gallery27-bid-item__message {
+.message {
   margin: var(--spacer-xs) 0;
   color: var(--muted);
   font-size: var(--font-sm);
 }
 
-.gallery27-bid-item__footer {
+footer {
+  margin-top: var(--spacer);
   display: flex;
   justify-content: space-between;
   font-size: var(--font-xs);

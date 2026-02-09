@@ -24,7 +24,7 @@
       <ScapesAttributes :attributes="attributes" :gallery27-token-id="gallery27TokenId" />
     </header>
 
-    <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-detail__actions border-drop_"
+    <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-actions"
       @listing-change="refreshListing" />
 
     <ScapesTransactionHistory :scape-id="scapeId" :history="history" :pending="pending" :error="error"
@@ -219,7 +219,7 @@ const sesModalOpen = ref(false);
   margin: 0 auto;
   display: grid;
   gap: var(--grid-gutter);
-  gap: calc(var(--scape-height-gutter) + var(--grid-gutter));
+  /* gap: calc(var(--scape-height-gutter) + var(--grid-gutter)); */
   container-type: inline-size;
 
 
@@ -274,5 +274,10 @@ const sesModalOpen = ref(false);
 
 .scape-detail__owner-link:hover {
   text-decoration: underline;
+}
+
+.scape-actions,
+.history {
+  margin-top: var(--scape-height-gutter);
 }
 </style>

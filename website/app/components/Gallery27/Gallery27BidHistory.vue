@@ -1,33 +1,28 @@
 <template>
-  <div class="gallery27-bid-history">
-    <h3>Bid History ({{ bids.length }})</h3>
+  <GridArea padding class="bid-history-header">
+    <h1>History <small class="muted">Every bid transforms the visual</small></h1>
+    <span class="muted">
+      {{ bids.length }} bids
+    </span>
+  </GridArea>
 
-    <div
-      v-if="initialRender"
-      class="gallery27-bid-history__initial"
-      :class="{ 'gallery27-bid-history__initial--selected': activeBidId === 'initial' }"
-      @click="selectedBidId = 'initial'"
-    >
-      <div v-if="initialRenderThumbnail" class="gallery27-bid-history__initial-thumbnail">
-        <img :src="initialRenderThumbnail" alt="Initial Render" />
-      </div>
-      <div class="gallery27-bid-history__initial-label">Initial Render</div>
-    </div>
+  <GridArea v-if="bids.length === 0" padding center class="muted">
+    No bids yet
+  </GridArea>
 
-    <div v-if="bids.length === 0" class="gallery27-bid-history__empty">
-      No bids yet
-    </div>
+  <Gallery27BidItem v-for="bid in bids" :key="bid.id" :bid="bid" :selected="activeBidId === bid.id"
+    @select="selectedBidId = bid.id" />
 
-    <div v-else class="gallery27-bid-history__list">
-      <Gallery27BidItem
-        v-for="bid in bids"
-        :key="bid.id"
-        :bid="bid"
-        :selected="activeBidId === bid.id"
-        @select="selectedBidId = bid.id"
-      />
+  <GridArea v-if="initialRender" class="initial-render history-item"
+    :class="{ 'gallery27-bid-history__initial--selected': activeBidId === 'initial' }"
+    @click="selectedBidId = 'initial'" rows="2">
+    <img v-if="initialRenderThumbnail" :src="initialRenderThumbnail" alt="Initial Render" />
+    <div class="content">
+      <h2>Initial Render</h2>
+      <p class="muted">Every scape starts with an initial render.</p>
     </div>
-  </div>
+  </GridArea>
+
 </template>
 
 <script setup lang="ts">
@@ -76,14 +71,54 @@ defineExpose({ selectedImage });
 </script>
 
 <style scoped>
-.gallery27-bid-history {
-  display: grid;
-  gap: var(--spacer);
+.bid-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--scape-height-gutter);
+
+  &>h1 {
+    margin: 0;
+
+    &>small {
+      display: block;
+      font-size: var(--font-sm);
+    }
+  }
 }
 
-.gallery27-bid-history h3 {
-  margin: 0;
+.history-item {
+  display: grid;
+  grid-template-columns: calc(var(--scape-height-gutter) * 2 - var(--grid-gutter)) 1fr;
+  gap: var(--spacer);
+  padding: var(--spacer);
+  align-items: center;
+  transition: background var(--speed);
+
+  &:hover {
+    background: var(--gray-z-0) !important;
+  }
+
+  &:deep(img) {
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &>.content {
+    display: grid;
+    gap: var(--spacer-xs);
+    align-items: center;
+
+    & h2 {
+      white-space: nowrap;
+    }
+
+    & p {
+      font-size: var(--font-sm);
+    }
+  }
 }
+
 
 .gallery27-bid-history__initial {
   display: flex;
@@ -113,8 +148,7 @@ defineExpose({ selectedImage });
   object-fit: cover;
 }
 
-.gallery27-bid-history__initial-label {
-}
+.gallery27-bid-history__initial-label {}
 
 .gallery27-bid-history__empty {
   color: var(--muted);

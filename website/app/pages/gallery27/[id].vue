@@ -36,9 +36,8 @@
       :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner" :is-active="isActive"
       :has-ended="hasEnded" :is-minted="scape.isMinted" :selected-image="selectedImage" @action-complete="handleActionComplete" />
 
-    <!---->
-    <!-- <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids" -->
-    <!--   :initial-render="bidsData.initialRender" :accepted-image="bidsData.acceptedImage" class="border-drop_" /> -->
+    <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids"
+      :initial-render="bidsData.initialRender" :accepted-image="bidsData.acceptedImage" class="border-drop_" />
   </section>
 </template>
 

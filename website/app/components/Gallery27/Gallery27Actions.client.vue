@@ -65,7 +65,7 @@ const currentBid = computed(() => {
 .gallery27-actions {
   display: grid;
   gap: var(--spacer-sm);
-  margin-block: var(--scape-height-gutter);
+  margin-top: var(--scape-height-gutter);
 
   &>header {
     & p {
