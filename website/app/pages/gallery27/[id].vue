@@ -33,10 +33,11 @@
       :punk-scape-owner="scape.punkScapeOwner" :scape-id="scape.scapeId" :description="scape.description" />
 
     <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId" :auction="auction ?? null"
-      :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner" :is-active="isActive"
-      :has-ended="hasEnded" :is-minted="scape.isMinted" :selected-image="selectedImage" @action-complete="handleActionComplete" />
+      :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner" :is-active="isActive" :has-ended="hasEnded"
+      :is-minted="scape.isMinted" :selected-image="selectedImage" @action-complete="handleActionComplete" />
 
-    <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids"
+    <Gallery27BidHistory v-if="bidsData && (isActive || hasEnded) && bidsData.bids?.length > 0"
+      v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids" :is-active="isActive"
       :initial-render="bidsData.initialRender" :accepted-image="bidsData.acceptedImage" class="border-drop_" />
   </section>
 </template>

@@ -6,10 +6,6 @@
     </span>
   </GridArea>
 
-  <GridArea v-if="bids.length === 0" padding center class="muted">
-    No bids yet
-  </GridArea>
-
   <Gallery27BidItem v-for="bid in bids" :key="bid.id" :bid="bid" :selected="activeBidId === bid.id"
     @select="selectedBidId = bid.id" />
 
@@ -23,6 +19,9 @@
     </div>
   </GridArea>
 
+  <GridArea v-if="bids.length === 0" padding center class="muted">
+    {{ isActive ? 'No bids yet' : 'No bids' }}
+  </GridArea>
 </template>
 
 <script setup lang="ts">
@@ -32,6 +31,7 @@ const CDN_BASE = "https://cdn.scapes.xyz";
 
 const props = defineProps<{
   bids: Gallery27Bid[];
+  isActive: boolean;
   initialRender: Gallery27Image | null;
   acceptedImage: Gallery27Image | null;
 }>();
