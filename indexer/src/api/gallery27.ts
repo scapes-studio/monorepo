@@ -45,8 +45,12 @@ export async function getGallery27Scape(c: Context) {
     }
   }
 
+  const now = Math.floor(Date.now() / 1000);
+  const auctionStarted = scape.date !== null && scape.date <= now;
+
   return c.json({
     ...scape,
+    description: auctionStarted ? scape.description : null,
     punkScapeOwner,
     isMinted: !!onchainScape,
   });
@@ -121,7 +125,10 @@ export async function getGallery27Next(c: Context) {
     return c.json({ error: "No upcoming scape found" }, 404);
   }
 
-  return c.json(scape);
+  return c.json({
+    ...scape,
+    description: null,
+  });
 }
 
 /**
