@@ -1,4 +1,10 @@
+@layer variables {
+  --button-border-color-highlight: var(--color);
+}
+
 @layer components {
+  --button-border-color-highlight: var(--color);
+
   button,
   a.button {
     background: var(--background);
