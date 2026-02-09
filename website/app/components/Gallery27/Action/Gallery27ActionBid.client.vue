@@ -9,39 +9,24 @@
 
     <Dialog v-model:open="open" title="Place Bid">
       <div class="gallery27-action__form">
-        <textarea
-          v-model="bidMessage"
-          placeholder="Your message for the AI..."
-          class="gallery27-action__textarea"
-          rows="3"
-        />
+        <textarea v-model="bidMessage" placeholder="Your message for the AI..." rows="3" />
         <FormItem>
-          <input
-            v-model="bidAmount"
-            type="number"
-            step="0.001"
-            :min="minimumBid"
-            :placeholder="`Min ${minimumBid}`"
-          />
+          <input v-model="bidAmount" type="number" step="0.001" :min="minimumBid" :placeholder="`Min ${minimumBid}`" />
           <template #suffix>ETH</template>
         </FormItem>
         <Actions>
           <Button class="small" @click="handleCancel">
             Cancel
           </Button>
-          <Button class="small" :disabled="!bidAmount || Number(bidAmount) < Number(minimumBid)" @click="handleContinue">
+          <Button class="small" :disabled="!bidAmount || Number(bidAmount) < Number(minimumBid)"
+            @click="handleContinue">
             Place Bid
           </Button>
         </Actions>
       </div>
     </Dialog>
 
-    <EvmTransactionFlow
-      ref="transactionFlowRef"
-      :text="bidText"
-      :request="bidRequest"
-      @complete="handleBidComplete"
-    />
+    <EvmTransactionFlow ref="transactionFlowRef" :text="bidText" :request="bidRequest" @complete="handleBidComplete" />
   </div>
 </template>
 
@@ -133,7 +118,7 @@ const bidText = computed(() => ({
 .gallery27-action__form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacer-sm);
+  gap: var(--spacer);
 }
 
 .gallery27-action__hint {
@@ -142,22 +127,12 @@ const bidText = computed(() => ({
   margin: 0;
 }
 
-.gallery27-action__textarea {
-  padding: var(--spacer-sm);
-  border: 1px solid var(--border);
-  border-radius: var(--spacer-xs);
-  background: var(--background);
-  font-size: var(--font-base);
-  font-family: inherit;
+textarea {
   resize: vertical;
-}
 
-.gallery27-action__textarea:focus {
-  outline: none;
-  border-color: var(--color);
-}
-
-.actions {
-  margin-top: var(--spacer);
+  &:focus {
+    outline: none;
+    border-color: var(--color);
+  }
 }
 </style>
