@@ -29,6 +29,7 @@ const props = defineProps<{
   latestBidder: string | null;
   punkScapeOwner: string | null;
   isActive: boolean;
+  hasEnded: boolean;
   isMinted: boolean;
   selectedImage: Gallery27Image | null;
 }>();
@@ -37,7 +38,7 @@ const emit = defineEmits<{
   actionComplete: [];
 }>();
 
-const { address, isConnected } = useConnection()
+const { address } = useConnection()
 
 const isWinner = computed(() => {
   if (!address.value) return false;
@@ -51,7 +52,7 @@ const isWinner = computed(() => {
 });
 
 const canClaim = computed(() => {
-  return !props.isActive && isWinner.value && !props.isMinted;
+  return props.hasEnded && !props.isActive && isWinner.value && !props.isMinted;
 });
 
 const currentBid = computed(() => {

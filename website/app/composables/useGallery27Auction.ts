@@ -36,6 +36,13 @@ export const useGallery27Auction = (tokenId: Ref<string | number | undefined>) =
     return now.value < data.value.endTimestamp;
   });
 
+  // Check if the auction end time has passed (regardless of settled state)
+  const hasEnded = computed(() => {
+    if (!data.value) return false;
+    if (!data.value.endTimestamp) return false;
+    return now.value >= data.value.endTimestamp;
+  });
+
   // Poll interval (13 seconds like the old site)
   let pollInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -80,5 +87,6 @@ export const useGallery27Auction = (tokenId: Ref<string | number | undefined>) =
     error,
     refresh,
     isActive,
+    hasEnded,
   };
 };

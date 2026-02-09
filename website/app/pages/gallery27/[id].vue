@@ -34,7 +34,7 @@
 
     <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId" :auction="auction ?? null"
       :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner" :is-active="isActive"
-      :is-minted="scape.isMinted" :selected-image="selectedImage" @action-complete="handleActionComplete" />
+      :has-ended="hasEnded" :is-minted="scape.isMinted" :selected-image="selectedImage" @action-complete="handleActionComplete" />
 
     <!---->
     <!-- <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids" -->
@@ -84,7 +84,7 @@ if (import.meta.client) {
     clearFixedScape();
   });
 }
-const { data: auction, pending: auctionPending, isActive, refresh: refreshAuction } = useGallery27Auction(tokenIdRef);
+const { data: auction, pending: auctionPending, isActive, hasEnded, refresh: refreshAuction } = useGallery27Auction(tokenIdRef);
 const { data: bidsData, pending: bidsPending, refresh: refreshBids } = await useGallery27Bids(tokenIdRef);
 
 const selectedBidId = ref<string | null>(null);
