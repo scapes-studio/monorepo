@@ -5,7 +5,17 @@
 
   <template v-else>
     <GridArea v-if="scapeId" class="gallery27-meta" padding>
-      <span>Scape</span>
+      <header v-if="description">
+        <h1>
+          {{ description }}
+        </h1>
+
+        <span v-if="scapeId">
+          Based on <NuxtLink :to="`/${scapeId}`">Scape #{{ scapeId }}</NuxtLink>
+        </span>
+      </header>
+
+      <span v-else>Scape</span>
       <span v-if="auctionStatus === 'not-started'">
         <NuxtLink :to="`/${scapeId}`">
           #{{ scapeId }}
@@ -62,7 +72,8 @@
       </span>
     </GridArea>
 
-    <GridArea v-else-if="(auctionStatus === 'ended' || auctionStatus === 'settled') && auction.bidCount === 0 && punkScapeOwner"
+    <GridArea
+      v-else-if="(auctionStatus === 'ended' || auctionStatus === 'settled') && auction.bidCount === 0 && punkScapeOwner"
       class="gallery27-meta" padding>
       <span>Awarded to</span>
       <span>
@@ -81,6 +92,7 @@ const props = defineProps<{
   owner: string | null;
   punkScapeOwner: string | null;
   scapeId: number | null;
+  description: string | null;
 }>();
 
 const formattedBid = computed(() => {
@@ -121,6 +133,19 @@ const ownerDiffersFromWinner = computed(() => {
 
   &>*:first-child {
     color: var(--muted);
+  }
+
+  &>header {
+    display: grid;
+    gap: var(--spacer-xs);
+
+    &>h1 {
+      color: var(--color);
+    }
+
+    &>span {
+      font-size: var(--font-sm);
+    }
   }
 }
 </style>

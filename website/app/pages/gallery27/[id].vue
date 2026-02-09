@@ -30,20 +30,12 @@
     </GridArea>
 
     <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" :owner="scape.owner"
-      :punk-scape-owner="scape.punkScapeOwner" :scape-id="scape.scapeId" />
+      :punk-scape-owner="scape.punkScapeOwner" :scape-id="scape.scapeId" :description="scape.description" />
 
     <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId" :auction="auction ?? null"
       :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner" :is-active="isActive"
       :is-minted="scape.isMinted" :selected-image="selectedImage" @action-complete="handleActionComplete" />
 
-    <!---->
-    <!-- <GridArea :rows="2" width="full" class="border-drop_" padding> -->
-    <!-- </GridArea> -->
-    <!---->
-    <!-- <GridArea :rows="1" width="full" padding> -->
-    <!--   <Gallery27Description :token-id="tokenId" :scape-id="scape.scapeId" :description="scape.description" -->
-    <!--     :is-on-chain="scape.isMinted" /> -->
-    <!-- </GridArea> -->
     <!---->
     <!-- <Gallery27BidHistory v-if="bidsData" v-model:selected-bid-id="selectedBidId" :bids="bidsData.bids" -->
     <!--   :initial-render="bidsData.initialRender" :accepted-image="bidsData.acceptedImage" class="border-drop_" /> -->
