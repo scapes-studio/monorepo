@@ -29,7 +29,8 @@
       <ScapeImage v-else :id="fallbackScapeId!" class="fallback" />
     </GridArea>
 
-    <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" />
+    <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" :owner="scape.owner" :scape-id="scape.scapeId" />
+
     <!---->
     <!-- <GridArea :rows="2" width="full" class="border-drop_" padding> -->
     <!--   <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId" -->

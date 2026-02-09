@@ -4,6 +4,20 @@
   </GridArea>
 
   <template v-else>
+    <GridArea v-if="scapeId" class="gallery27-meta" padding>
+      <span>Scape</span>
+      <span v-if="auctionStatus === 'not-started'">
+        <NuxtLink :to="`/${scapeId}`">
+          #{{ scapeId }}
+        </NuxtLink>
+      </span>
+      <span v-else>
+        <NuxtLink :to="`/${scapeId}`" :title="`Scape #${scapeId}`">
+          <ScapeImage :id="scapeId" />
+        </NuxtLink>
+      </span>
+    </GridArea>
+
     <GridArea v-if="auctionStatus === 'not-started' && auction.startTimestamp" class="gallery27-meta" padding>
       <span>Starts in</span>
       <span>
@@ -33,7 +47,14 @@
       <span>{{ formattedBid }} ETH</span>
     </GridArea>
 
-    <GridArea v-if="auction.latestBidder" class="gallery27-meta" padding>
+    <GridArea v-if="ownerDiffersFromWinner" class="gallery27-meta" padding>
+      <span>Owner</span>
+      <span>
+        <AccountLink :address="owner!" />
+      </span>
+    </GridArea>
+
+    <GridArea v-else-if="auction.latestBidder" class="gallery27-meta" padding>
       <span>{{ auctionStatus === 'ended' || auctionStatus === 'settled' ? 'Winner' :
         'Leading Bidder' }}</span>
       <span>
@@ -48,7 +69,9 @@ import type { Gallery27AuctionState } from "~/types/gallery27";
 
 const props = defineProps<{
   auction: Gallery27AuctionState | null;
-  isOnChain: boolean
+  isOnChain: boolean;
+  owner: string | null;
+  scapeId: number | null;
 }>();
 
 const formattedBid = computed(() => {
@@ -71,6 +94,12 @@ const auctionStatus = computed(() => {
   if (!props.auction.endTimestamp) return "not-started";
   if (props.isOnChain || (now >= props.auction.endTimestamp)) return "ended";
   return "active";
+});
+
+const ownerDiffersFromWinner = computed(() => {
+  if (!props.owner || !props.auction?.latestBidder) return false;
+  if (auctionStatus.value !== "ended" && auctionStatus.value !== "settled") return false;
+  return props.owner.toLowerCase() !== props.auction.latestBidder.toLowerCase();
 });
 </script>
 
