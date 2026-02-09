@@ -4,7 +4,7 @@
       Claim Your Scape
     </Button>
     <p v-if="!selectedImage" class="gallery27-action__hint">
-      Select an image above to claim
+      Select an image to claim
     </p>
 
     <Dialog v-model:open="open" title="Claim Your Scape">
@@ -21,12 +21,8 @@
       </div>
     </Dialog>
 
-    <EvmTransactionFlow
-      ref="transactionFlowRef"
-      :text="claimText"
-      :request="claimRequest"
-      @complete="handleClaimComplete"
-    />
+    <EvmTransactionFlow ref="transactionFlowRef" :text="claimText" :request="claimRequest"
+      @complete="handleClaimComplete" />
   </div>
 </template>
 
