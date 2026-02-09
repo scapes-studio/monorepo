@@ -61,6 +61,14 @@
         <AccountLink :address="auction.latestBidder" />
       </span>
     </GridArea>
+
+    <GridArea v-else-if="(auctionStatus === 'ended' || auctionStatus === 'settled') && auction.bidCount === 0 && punkScapeOwner"
+      class="gallery27-meta" padding>
+      <span>Awarded to</span>
+      <span>
+        <AccountLink :address="punkScapeOwner!" />
+      </span>
+    </GridArea>
   </template>
 </template>
 
@@ -71,6 +79,7 @@ const props = defineProps<{
   auction: Gallery27AuctionState | null;
   isOnChain: boolean;
   owner: string | null;
+  punkScapeOwner: string | null;
   scapeId: number | null;
 }>();
 
