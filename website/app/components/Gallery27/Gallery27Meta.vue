@@ -1,47 +1,46 @@
 <template>
-  <GridArea rows="2" padding>
-    <div v-if="!auction" class="gallery27-meta__loading">
-      Loading auction data...
-    </div>
-
-    <template v-else>
-      <div v-if="auctionStatus === 'not-started' && auction.startTimestamp" class="gallery27-meta__row">
-        <span class="gallery27-meta__label">Starts in</span>
-        <span class="gallery27-meta__value">
-          <ClientOnly>
-            <Gallery27Countdown :end-timestamp="auction.startTimestamp" />
-          </ClientOnly>
-        </span>
-      </div>
-
-      <div v-if="auction.bidCount > 0" class="gallery27-meta__row">
-        <span class="gallery27-meta__label">Current Bid</span>
-        <span class="gallery27-meta__value">{{ formattedBid }} ETH</span>
-      </div>
-
-      <div v-if="auctionStatus !== 'not-started'" class="gallery27-meta__row">
-        <span class="gallery27-meta__label">Bids</span>
-        <span class="gallery27-meta__value">{{ auction.bidCount }}</span>
-      </div>
-
-      <div v-if="auctionStatus === 'active' && auction.endTimestamp" class="gallery27-meta__row">
-        <span class="gallery27-meta__label">Ends in</span>
-        <span class="gallery27-meta__value">
-          <ClientOnly>
-            <Gallery27Countdown :end-timestamp="auction.endTimestamp" />
-          </ClientOnly>
-        </span>
-      </div>
-
-      <div v-if="auction.latestBidder" class="gallery27-meta__row">
-        <span class="gallery27-meta__label">{{ auctionStatus === 'ended' || auctionStatus === 'settled' ? 'Winner' :
-          'Leading Bidder' }}</span>
-        <span class="gallery27-meta__value">
-          <AccountLink :address="auction.latestBidder" />
-        </span>
-      </div>
-    </template>
+  <GridArea v-if="!auction" class="gallery27-meta" padding>
+    Loading auction data...
   </GridArea>
+
+  <template v-else>
+    <GridArea v-if="auctionStatus === 'not-started' && auction.startTimestamp" class="gallery27-meta" padding>
+      <span>Starts in</span>
+      <span>
+        <ClientOnly>
+          <Gallery27Countdown :end-timestamp="auction.startTimestamp" />
+        </ClientOnly>
+      </span>
+    </GridArea>
+
+    <GridArea v-if="auctionStatus === 'active' && auction.endTimestamp" class="gallery27-meta" padding>
+      <span>Ends in</span>
+      <span>
+        <ClientOnly>
+          <Gallery27Countdown :end-timestamp="auction.endTimestamp" />
+        </ClientOnly>
+      </span>
+    </GridArea>
+
+    <GridArea v-if="auctionStatus !== 'not-started'" class="gallery27-meta" padding>
+      <span>Bids</span>
+      <span>{{ auction.bidCount }}</span>
+    </GridArea>
+
+    <GridArea v-if="auction.bidCount > 0" class="gallery27-meta" padding>
+      <span v-if="auctionStatus === 'active'">Current Bid</span>
+      <span v-else>Final Bid</span>
+      <span>{{ formattedBid }} ETH</span>
+    </GridArea>
+
+    <GridArea v-if="auction.latestBidder" class="gallery27-meta" padding>
+      <span>{{ auctionStatus === 'ended' || auctionStatus === 'settled' ? 'Winner' :
+        'Leading Bidder' }}</span>
+      <span>
+        <AccountLink :address="auction.latestBidder" />
+      </span>
+    </GridArea>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -77,23 +76,13 @@ const auctionStatus = computed(() => {
 
 <style scoped>
 .gallery27-meta {
-  display: grid;
-  gap: var(--spacer-sm);
-}
-
-.gallery27-meta__loading {
-  color: var(--muted);
-}
-
-.gallery27-meta__row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: var(--spacer);
-}
 
-.gallery27-meta__label {
-  color: var(--muted);
+  &>*:first-child {
+    color: var(--muted);
+  }
 }
-
-.gallery27-meta__value {}
 </style>
