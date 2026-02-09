@@ -19,9 +19,6 @@
 
         <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
           class="scape-detail__listings" />
-        <!-- <button type="button" class="scape-detail__ses-button" @click="sesModalOpen = true"> -->
-        <!--   Play SES -->
-        <!-- </button> -->
       </GridArea>
 
       <ScapesAttributes :attributes="attributes" :gallery27-token-id="gallery27TokenId" />
