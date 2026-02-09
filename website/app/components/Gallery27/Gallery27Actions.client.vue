@@ -1,5 +1,5 @@
 <template>
-  <GridArea v-if="isConnected" class="gallery27-actions" rows="2" padding>
+  <GridArea v-if="isActive || canClaim" class="gallery27-actions" rows="2" padding>
     <header>
       <h1>Auction Status</h1>
       <p v-if="isActive && !isMinted && !latestBidder">This auction is open for bidding.</p>
