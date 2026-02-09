@@ -29,14 +29,15 @@
       <ScapeImage v-else :id="fallbackScapeId!" class="fallback" />
     </GridArea>
 
-    <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" :owner="scape.owner" :scape-id="scape.scapeId" />
+    <Gallery27Meta :auction="auction ?? null" :is-on-chain="scape.isMinted" :owner="scape.owner"
+      :punk-scape-owner="scape.punkScapeOwner" :scape-id="scape.scapeId" />
+
+    <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId" :auction="auction ?? null"
+      :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner" :is-active="isActive"
+      :is-minted="scape.isMinted" :selected-image="selectedImage" @action-complete="handleActionComplete" />
 
     <!---->
     <!-- <GridArea :rows="2" width="full" class="border-drop_" padding> -->
-    <!--   <Gallery27Actions v-if="scape.scapeId" :punk-scape-id="scape.scapeId" :token-id="tokenId" -->
-    <!--     :auction="auction ?? null" :latest-bidder="latestBidder" :punk-scape-owner="scape.punkScapeOwner" -->
-    <!--     :is-active="isActive" :is-minted="scape.isMinted" :selected-image="selectedImage" -->
-    <!--     @action-complete="handleActionComplete" /> -->
     <!-- </GridArea> -->
     <!---->
     <!-- <GridArea :rows="1" width="full" padding> -->
