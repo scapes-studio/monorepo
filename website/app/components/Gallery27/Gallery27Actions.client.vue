@@ -1,5 +1,5 @@
 <template>
-  <GridArea v-if="isActive || canClaim" class="gallery27-actions" rows="2" padding>
+  <GridArea v-if="isActive || canClaim || (hasEnded && !isMinted)" class="gallery27-actions" rows="2" padding>
     <header>
       <h1>Auction Status</h1>
       <p v-if="isActive && !isMinted && !latestBidder">This auction is open for bidding.</p>
@@ -9,7 +9,9 @@
       <p v-else-if="!isActive">This auction has ended.</p>
     </header>
 
-    <Gallery27ActionBid v-if="isActive && !isMinted" :punk-scape-id="punkScapeId" :auction="auction"
+    <EvmConnect v-if="!isConnected" class-name="small" />
+
+    <Gallery27ActionBid v-else-if="isActive && !isMinted" :punk-scape-id="punkScapeId" :auction="auction"
       :latest-bidder="latestBidder" @action-complete="emit('actionComplete')" />
 
     <Gallery27ActionClaim v-else-if="canClaim" :punk-scape-id="punkScapeId" :selected-image="selectedImage"
@@ -38,7 +40,7 @@ const emit = defineEmits<{
   actionComplete: [];
 }>();
 
-const { address } = useConnection()
+const { address, isConnected } = useConnection()
 
 const isWinner = computed(() => {
   if (!address.value) return false;
