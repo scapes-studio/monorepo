@@ -1,31 +1,29 @@
 <template>
-  <div class="scapes-action">
-    <Button class="small" @click="open = true">
-      Unmerge
-    </Button>
+  <Button class="small" @click="open = true">
+    Unmerge
+  </Button>
 
-    <Dialog v-model:open="open" title="Unmerge" class="scapes-action__dialog">
-      <div class="scapes-action__form">
-        <p class="scapes-action__copy">Unmerge this merge and return the component Scapes.</p>
-        <Actions>
-          <Button class="small" @click="open = false">
-            Keep Merge
-          </Button>
-          <Button class="small" @click="handleContinue">
-            Unmerge
-          </Button>
-        </Actions>
-      </div>
-    </Dialog>
+  <Dialog v-model:open="open" title="Unmerge" class="scapes-action__dialog">
+    <div class="scapes-action__form">
+      <p class="scapes-action__copy">Unmerge this merge and return the component Scapes.</p>
+      <Actions>
+        <Button class="small" @click="open = false">
+          Keep Merge
+        </Button>
+        <Button class="small" @click="handleContinue">
+          Unmerge
+        </Button>
+      </Actions>
+    </div>
+  </Dialog>
 
-    <EvmTransactionFlow
-      ref="transactionFlowRef"
-      :text="purgeText"
-      :request="purgeRequest"
-      auto-close-success
-      @complete="handlePurgeComplete"
-    />
-  </div>
+  <EvmTransactionFlow
+    ref="transactionFlowRef"
+    :text="purgeText"
+    :request="purgeRequest"
+    auto-close-success
+    @complete="handlePurgeComplete"
+  />
 </template>
 
 <script setup lang="ts">

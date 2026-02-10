@@ -1,26 +1,24 @@
 <template>
-  <div class="scapes-action">
-    <Button class="small" @click="open = true">
-      Buy for {{ priceEth }} ETH
-    </Button>
+  <Button class="small" @click="open = true">
+    Buy for {{ priceEth }} ETH
+  </Button>
 
-    <Dialog v-model:open="open" title="Buy Scape" class="scapes-action__dialog">
-      <div class="scapes-action__form">
-        <p class="scapes-action__copy">Buy Scape #{{ scapeId }} for {{ priceEth }} ETH.</p>
-        <Actions>
-          <Button class="small" @click="open = false">
-            Cancel
-          </Button>
-          <Button class="small" @click="handleContinue">
-            Buy for {{ priceEth }} ETH
-          </Button>
-        </Actions>
-      </div>
-    </Dialog>
+  <Dialog v-model:open="open" title="Buy Scape" class="scapes-action__dialog">
+    <div class="scapes-action__form">
+      <p class="scapes-action__copy">Buy Scape #{{ scapeId }} for {{ priceEth }} ETH.</p>
+      <Actions>
+        <Button class="small" @click="open = false">
+          Cancel
+        </Button>
+        <Button class="small" @click="handleContinue">
+          Buy for {{ priceEth }} ETH
+        </Button>
+      </Actions>
+    </div>
+  </Dialog>
 
-    <EvmTransactionFlow ref="transactionFlowRef" :text="buyText" :request="buyRequest"
-      auto-close-success @complete="handleBuyComplete" />
-  </div>
+  <EvmTransactionFlow ref="transactionFlowRef" :text="buyText" :request="buyRequest"
+    auto-close-success @complete="handleBuyComplete" />
 </template>
 
 <script setup lang="ts">

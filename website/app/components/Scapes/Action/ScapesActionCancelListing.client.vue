@@ -1,31 +1,29 @@
 <template>
-  <div class="scapes-action">
-    <Button class="small" @click="open = true">
-      Cancel Listing
-    </Button>
+  <Button class="small" @click="open = true">
+    Cancel Listing
+  </Button>
 
-    <Dialog v-model:open="open" title="Cancel Listing" class="scapes-action__dialog">
-      <div class="scapes-action__form">
-        <p class="scapes-action__copy">Cancel your listing for Scape #{{ scapeId }}.</p>
-        <Actions>
-          <Button class="small" @click="open = false">
-            Keep Listing
-          </Button>
-          <Button class="small" @click="handleContinue">
-            Cancel Listing
-          </Button>
-        </Actions>
-      </div>
-    </Dialog>
+  <Dialog v-model:open="open" title="Cancel Listing" class="scapes-action__dialog">
+    <div class="scapes-action__form">
+      <p class="scapes-action__copy">Cancel your listing for Scape #{{ scapeId }}.</p>
+      <Actions>
+        <Button class="small" @click="open = false">
+          Keep Listing
+        </Button>
+        <Button class="small" @click="handleContinue">
+          Cancel Listing
+        </Button>
+      </Actions>
+    </div>
+  </Dialog>
 
-    <EvmTransactionFlow
-      ref="transactionFlowRef"
-      :text="cancelText"
-      :request="cancelRequest"
-      auto-close-success
-      @complete="handleCancelComplete"
-    />
-  </div>
+  <EvmTransactionFlow
+    ref="transactionFlowRef"
+    :text="cancelText"
+    :request="cancelRequest"
+    auto-close-success
+    @complete="handleCancelComplete"
+  />
 </template>
 
 <script setup lang="ts">

@@ -1,29 +1,27 @@
 <template>
-  <div class="scapes-action">
-    <Button class="small" @click="open = true">
-      List for Sale
-    </Button>
+  <Button class="small" @click="open = true">
+    List for Sale
+  </Button>
 
-    <Dialog v-model:open="open" title="List for Sale" class="scapes-action__dialog">
-      <div class="scapes-action__form">
-        <FormItem>
-          <input v-model="listPriceInput" type="number" step="0.001" min="0" placeholder="Price in ETH" />
-          <template #suffix>ETH</template>
-        </FormItem>
-        <Actions>
-          <Button class="small" @click="handleCancel">
-            Cancel
-          </Button>
-          <Button class="small" :disabled="!isPriceValid" @click="handleContinue">
-            Continue
-          </Button>
-        </Actions>
-      </div>
-    </Dialog>
+  <Dialog v-model:open="open" title="List for Sale" class="scapes-action__dialog">
+    <div class="scapes-action__form">
+      <FormItem>
+        <input v-model="listPriceInput" type="number" step="0.001" min="0" placeholder="Price in ETH" />
+        <template #suffix>ETH</template>
+      </FormItem>
+      <Actions>
+        <Button class="small" @click="handleCancel">
+          Cancel
+        </Button>
+        <Button class="small" :disabled="!isPriceValid" @click="handleContinue">
+          Continue
+        </Button>
+      </Actions>
+    </div>
+  </Dialog>
 
-    <EvmTransactionFlow ref="transactionFlowRef" :text="listText" :request="listRequest"
-      auto-close-success @complete="handleListComplete" />
-  </div>
+  <EvmTransactionFlow ref="transactionFlowRef" :text="listText" :request="listRequest" auto-close-success
+    @complete="handleListComplete" />
 </template>
 
 <script setup lang="ts">
