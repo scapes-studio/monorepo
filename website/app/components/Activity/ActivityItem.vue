@@ -119,7 +119,7 @@ const typeLabel = computed(() => {
 
 const scapeUrl = (tokenId: string, collection: string) => {
   if (collection === "twenty-seven-year-scapes") {
-    return `/twenty-seven-year-scapes/${tokenId}`;
+    return `/gallery27/${tokenId}`;
   }
   return `/${tokenId}`;
 };
