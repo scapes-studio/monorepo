@@ -198,7 +198,9 @@ async function processRequest(
       if (sourceSmallExists && !destSmallExists) {
         actions.push(`copy ${sourceSmall} → ${imagePath}`);
       }
-      if (!useFinalFallback && sourceUpscaledExists && !destUpscaledExists) {
+      if (useFinalFallback && sourceSmallExists && !destUpscaledExists) {
+        actions.push(`copy ${sourceSmall} → ${imagePath}_upscaled (final.png fallback)`);
+      } else if (sourceUpscaledExists && !destUpscaledExists) {
         actions.push(`copy ${sourceUpscaled} → ${imagePath}_upscaled`);
       }
       return {
@@ -218,8 +220,10 @@ async function processRequest(
       );
     }
 
-    // Only copy upscaled if not using final.png fallback
-    if (!useFinalFallback && sourceUpscaledExists && !destUpscaledExists) {
+    // Copy upscaled: use step upscaled file, or fall back to final.png
+    if (useFinalFallback && sourceSmallExists && !destUpscaledExists) {
+      await s3Service.copyObject(sourceSmall!, `${imagePath}_upscaled`, "image/png");
+    } else if (!useFinalFallback && sourceUpscaledExists && !destUpscaledExists) {
       await s3Service.copyObject(sourceUpscaled!, `${imagePath}_upscaled`, "image/png");
     }
 
