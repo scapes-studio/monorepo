@@ -5,7 +5,7 @@
       <p class="muted">10,000 unique pixel landscapes on Ethereum</p>
     </GridArea>
 
-    <ContentRenderer v-if="page" :value="page" class="about-page__content prose" />
+    <ContentRenderer v-if="page" ref="contentEl" :value="page" class="about-page__content prose" />
 
     <nav v-if="articles?.length" class="about-page__nav">
       <NuxtLink v-for="article in articles" :key="article.path" :to="article.path" class="about-page__nav-item border">
@@ -32,6 +32,24 @@ const { data: articles } = await useAsyncData('about-articles', () =>
     .order('stem', 'ASC')
     .all(),
 )
+
+const contentEl = ref<ComponentPublicInstance>()
+const { scapeHeight, gutter } = useScapeGrid()
+
+const snapContentToGrid = () => {
+  const el = contentEl.value?.$el as HTMLElement | undefined
+  if (!el) return
+
+  const unit = scapeHeight.value + gutter.value
+
+  el.style.minHeight = ''
+  const naturalHeight = el.offsetHeight
+  const rows = Math.max(1, Math.ceil((naturalHeight + gutter.value) / unit))
+  el.style.minHeight = `${rows * unit - gutter.value}px`
+}
+
+watch([scapeHeight, gutter], snapContentToGrid)
+onMounted(snapContentToGrid)
 </script>
 
 <style scoped>
@@ -60,8 +78,9 @@ const { data: articles } = await useAsyncData('about-articles', () =>
 .about-page__nav-item {
   display: flex;
   flex-direction: column;
-  gap: 0.25em;
-  padding: var(--scape-height) var(--scape-height);
+  justify-content: center;
+  height: calc(var(--scape-height) * 2 + var(--grid-gutter));
+  padding: var(--spacer);
   background: var(--background);
   text-decoration: none;
   transition: background var(--speed);

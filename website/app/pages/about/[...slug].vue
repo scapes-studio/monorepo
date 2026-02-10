@@ -5,7 +5,7 @@
       <p class="muted">{{ page?.description }}</p>
     </GridArea>
 
-    <article v-if="page" class="about-article__content prose">
+    <article v-if="page" ref="contentEl" class="about-article__content prose">
       <ContentRenderer :value="page" />
     </article>
 
@@ -35,6 +35,24 @@ const { data: page } = await useAsyncData(`about-${path.value}`, () =>
 const { data: surround } = await useAsyncData(`about-surround-${path.value}`, () =>
   queryCollectionItemSurroundings('about', path.value),
 )
+
+const contentEl = ref<HTMLElement>()
+const { scapeHeight, gutter } = useScapeGrid()
+
+const snapContentToGrid = () => {
+  const el = contentEl.value
+  if (!el) return
+
+  const unit = scapeHeight.value + gutter.value
+
+  el.style.minHeight = ''
+  const naturalHeight = el.offsetHeight
+  const rows = Math.max(1, Math.ceil((naturalHeight + gutter.value) / unit))
+  el.style.minHeight = `${rows * unit - gutter.value}px`
+}
+
+watch([scapeHeight, gutter], snapContentToGrid)
+onMounted(snapContentToGrid)
 
 useSeo({
   title: page.value?.title || 'About',
