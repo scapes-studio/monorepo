@@ -13,7 +13,8 @@
     "cli": "tsx cli.ts",
     "drizzle-kit": "drizzle-kit",
     "kamal:setup": "set -a && . ./.env.production && set +a && kamal setup",
-    "kamal:deploy": "set -a && . ./.env.production && set +a && kamal deploy"
+    "kamal:deploy": "set -a && . ./.env.production && set +a && kamal deploy",
+    "kamal:sh": "set -a && . ./.env.production && set +a && kamal app exec -i --reuse \"sh\""
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.968.0",
