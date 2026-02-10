@@ -9,18 +9,7 @@
       <ContentRenderer :value="page" />
     </article>
 
-    <nav v-if="surround?.length" class="about-article__surround">
-      <NuxtLink v-if="surround[0]" :to="surround[0].path" class="border about-article__surround-link">
-        <span class="muted">Previous</span>
-        <span>{{ surround[0].title }}</span>
-      </NuxtLink>
-      <div v-else />
-      <NuxtLink v-if="surround[1]" :to="surround[1].path"
-        class="border about-article__surround-link about-article__surround-link--next">
-        <span class="muted">Next</span>
-        <span>{{ surround[1].title }}</span>
-      </NuxtLink>
-    </nav>
+    <AboutNav :links="navLinks" />
   </section>
 </template>
 
@@ -35,6 +24,14 @@ const { data: page } = await useAsyncData(`about-${path.value}`, () =>
 const { data: surround } = await useAsyncData(`about-surround-${path.value}`, () =>
   queryCollectionItemSurroundings('about', path.value),
 )
+
+const navLinks = computed(() => {
+  if (!surround.value?.length) return []
+  return [
+    surround.value[0] ? { to: surround.value[0].path, title: surround.value[0].title, label: 'Previous' } : null,
+    surround.value[1] ? { to: surround.value[1].path, title: surround.value[1].title, label: 'Next', align: 'right' as const } : null,
+  ]
+})
 
 const contentEl = ref<HTMLElement>()
 useGridSnap(contentEl)
@@ -63,44 +60,4 @@ useSeo({
   display: none;
 }
 
-.about-article__back {
-  display: flex;
-}
-
-.about-article__back-link {
-  padding: var(--grid-gutter) var(--scape-height);
-  background: var(--background);
-  text-decoration: none;
-  font-size: var(--font-sm);
-  transition: background var(--speed);
-}
-
-.about-article__back-link:hover {
-  background: var(--gray-z-1);
-}
-
-.about-article__surround {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--grid-gutter);
-}
-
-.about-article__surround-link {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: calc(var(--scape-height) * 2 + var(--grid-gutter));
-  padding: var(--spacer);
-  background: var(--background);
-  text-decoration: none;
-  transition: background var(--speed);
-}
-
-.about-article__surround-link:hover {
-  background: var(--gray-z-1);
-}
-
-.about-article__surround-link--next {
-  text-align: right;
-}
 </style>

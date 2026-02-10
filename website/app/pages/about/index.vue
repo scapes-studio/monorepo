@@ -7,12 +7,7 @@
 
     <ContentRenderer v-if="page" ref="contentEl" :value="page" class="about-page__content prose" />
 
-    <nav v-if="articles?.length" class="about-page__nav">
-      <NuxtLink v-for="article in articles" :key="article.path" :to="article.path" class="about-page__nav-item border">
-        <span class="about-page__nav-title">{{ article.title }}</span>
-        <span class="about-page__nav-description muted">{{ article.description }}</span>
-      </NuxtLink>
-    </nav>
+    <AboutNav :links="navLinks" />
   </section>
 </template>
 
@@ -31,6 +26,14 @@ const { data: articles } = await useAsyncData('about-articles', () =>
     .where('path', 'NOT LIKE', '/about')
     .order('stem', 'ASC')
     .all(),
+)
+
+const navLinks = computed(() =>
+  articles.value?.map(article => ({
+    to: article.path,
+    title: article.title,
+    description: article.description,
+  })) ?? [],
 )
 
 const contentEl = ref<ComponentPublicInstance>()
@@ -55,31 +58,4 @@ useGridSnap(contentEl)
   display: none;
 }
 
-.about-page__nav {
-  display: grid;
-  gap: var(--grid-gutter);
-}
-
-.about-page__nav-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: calc(var(--scape-height) * 2 + var(--grid-gutter));
-  padding: var(--spacer-lg);
-  background: var(--background);
-  text-decoration: none;
-  transition: background var(--speed);
-}
-
-.about-page__nav-item:hover {
-  background: var(--gray-z-1);
-}
-
-.about-page__nav-title {
-  font-weight: 700;
-}
-
-.about-page__nav-description {
-  font-size: var(--font-sm);
-}
 </style>

@@ -113,7 +113,7 @@ const typeLabel = computed(() => {
     case "listing":
       return "Listing";
     default:
-      return props.item.type;
+      return (props.item as { type: string }).type;
   }
 });
 
