@@ -3,5 +3,7 @@
 **/generated
 .git
 **/.env*.local
-**/*.md
+README.md
+**/README.md
+**/CHANGELOG.md
 **/.eslintrc.json
