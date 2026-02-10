@@ -15,7 +15,9 @@ servers:
 
 proxy:
   ssl: true
-  host: <%= ENV["INDEXER_HOST"] %>
+  hosts:
+    - <%= ENV["INDEXER_HOST"] %>
+    - <%= ENV["INDEXER_HOST_2"] %>
   app_port: 42069
   healthcheck:
     path: /ready
