@@ -40,7 +40,7 @@
         </Button>
       </div>
 
-      <EvmTransactionFlow :text="transactionText" :request="mergeRequest" @complete="handleMergeComplete">
+      <EvmTransactionFlow :text="transactionText" :request="mergeRequest" auto-close-success @complete="handleMergeComplete">
         <template #start="{ start }">
           <Button class="primary small" :disabled="!canMerge" @click="start">
             {{ canMerge ? `Merge ${scapes.length} Scapes` : "Select at least 2 Scapes" }}

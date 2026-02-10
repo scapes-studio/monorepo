@@ -26,7 +26,8 @@
       </div>
     </Dialog>
 
-    <EvmTransactionFlow ref="transactionFlowRef" :text="bidText" :request="bidRequest" @complete="handleBidComplete" />
+    <EvmTransactionFlow ref="transactionFlowRef" :text="bidText" :request="bidRequest"
+      auto-close-success @complete="handleBidComplete" />
   </div>
 </template>
 

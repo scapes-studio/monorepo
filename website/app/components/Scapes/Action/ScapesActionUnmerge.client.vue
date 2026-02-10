@@ -22,6 +22,7 @@
       ref="transactionFlowRef"
       :text="purgeText"
       :request="purgeRequest"
+      auto-close-success
       @complete="handlePurgeComplete"
     />
   </div>

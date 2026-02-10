@@ -22,7 +22,7 @@
     </Dialog>
 
     <EvmTransactionFlow ref="transactionFlowRef" :text="claimText" :request="claimRequest"
-      @complete="handleClaimComplete" />
+      auto-close-success @complete="handleClaimComplete" />
   </div>
 </template>
 

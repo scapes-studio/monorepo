@@ -6,7 +6,7 @@
     </Button>
 
     <EvmTransactionFlow ref="transactionFlowRef" :text="withdrawText" :request="withdrawRequest"
-      @complete="handleWithdrawComplete" />
+      auto-close-success @complete="handleWithdrawComplete" />
   </div>
 </template>
 

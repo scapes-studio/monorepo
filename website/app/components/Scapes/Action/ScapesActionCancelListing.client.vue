@@ -22,6 +22,7 @@
       ref="transactionFlowRef"
       :text="cancelText"
       :request="cancelRequest"
+      auto-close-success
       @complete="handleCancelComplete"
     />
   </div>

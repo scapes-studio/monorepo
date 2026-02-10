@@ -18,7 +18,8 @@
       </div>
     </Dialog>
 
-    <EvmTransactionFlow ref="transactionFlowRef" :text="buyText" :request="buyRequest" @complete="handleBuyComplete" />
+    <EvmTransactionFlow ref="transactionFlowRef" :text="buyText" :request="buyRequest"
+      auto-close-success @complete="handleBuyComplete" />
   </div>
 </template>
 

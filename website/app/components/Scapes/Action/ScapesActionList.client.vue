@@ -22,7 +22,7 @@
     </Dialog>
 
     <EvmTransactionFlow ref="transactionFlowRef" :text="listText" :request="listRequest"
-      @complete="handleListComplete" />
+      auto-close-success @complete="handleListComplete" />
   </div>
 </template>
 
