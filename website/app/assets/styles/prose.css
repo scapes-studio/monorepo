@@ -4,20 +4,20 @@
 
   /* Headings */
   & h1 {
-    font-size: var(--font-2xl);
     margin-bottom: var(--size-6);
+    text-transform: uppercase;
   }
 
   & h2 {
-    font-size: var(--font-xl);
     margin-top: var(--size-8);
     margin-bottom: var(--size-4);
+    text-transform: uppercase;
   }
 
   & h3 {
-    font-size: var(--font-lg);
     margin-top: var(--size-7);
     margin-bottom: var(--size-2);
+    text-transform: uppercase;
   }
 
   & h2 + h3 {
@@ -28,10 +28,17 @@
     margin-top: 0;
   }
 
+  & h1, h2, h3, h4, h5, h6 {
+    & > a:first-child:last-child {
+      text-decoration: none;
+    }
+  }
+
   /* Paragraphs */
   & p {
     margin-top: var(--size-4);
     margin-bottom: var(--size-4);
+    color: var(--gray-z-8);
   }
 
   /* Links */

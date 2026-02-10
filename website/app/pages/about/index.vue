@@ -34,22 +34,7 @@ const { data: articles } = await useAsyncData('about-articles', () =>
 )
 
 const contentEl = ref<ComponentPublicInstance>()
-const { scapeHeight, gutter } = useScapeGrid()
-
-const snapContentToGrid = () => {
-  const el = contentEl.value?.$el as HTMLElement | undefined
-  if (!el) return
-
-  const unit = scapeHeight.value + gutter.value
-
-  el.style.minHeight = ''
-  const naturalHeight = el.offsetHeight
-  const rows = Math.max(1, Math.ceil((naturalHeight + gutter.value) / unit))
-  el.style.minHeight = `${rows * unit - gutter.value}px`
-}
-
-watch([scapeHeight, gutter], snapContentToGrid)
-onMounted(snapContentToGrid)
+useGridSnap(contentEl)
 </script>
 
 <style scoped>
@@ -63,7 +48,7 @@ onMounted(snapContentToGrid)
 .about-page__content {
   background: var(--background);
   box-shadow: var(--grid-shadow);
-  padding: var(--scape-height) var(--scape-height);
+  padding: var(--spacer-lg);
 }
 
 .about-page__content :deep(h1) {
@@ -80,7 +65,7 @@ onMounted(snapContentToGrid)
   flex-direction: column;
   justify-content: center;
   height: calc(var(--scape-height) * 2 + var(--grid-gutter));
-  padding: var(--spacer);
+  padding: var(--spacer-lg);
   background: var(--background);
   text-decoration: none;
   transition: background var(--speed);

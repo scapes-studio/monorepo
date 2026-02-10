@@ -37,22 +37,7 @@ const { data: surround } = await useAsyncData(`about-surround-${path.value}`, ()
 )
 
 const contentEl = ref<HTMLElement>()
-const { scapeHeight, gutter } = useScapeGrid()
-
-const snapContentToGrid = () => {
-  const el = contentEl.value
-  if (!el) return
-
-  const unit = scapeHeight.value + gutter.value
-
-  el.style.minHeight = ''
-  const naturalHeight = el.offsetHeight
-  const rows = Math.max(1, Math.ceil((naturalHeight + gutter.value) / unit))
-  el.style.minHeight = `${rows * unit - gutter.value}px`
-}
-
-watch([scapeHeight, gutter], snapContentToGrid)
-onMounted(snapContentToGrid)
+useGridSnap(contentEl)
 
 useSeo({
   title: page.value?.title || 'About',
@@ -71,7 +56,7 @@ useSeo({
 .about-article__content {
   background: var(--background);
   box-shadow: var(--grid-shadow);
-  padding: var(--scape-height) var(--scape-height);
+  padding: var(--spacer-lg);
 }
 
 .about-article__content :deep(h1) {
