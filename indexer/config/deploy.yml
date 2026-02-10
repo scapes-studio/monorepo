@@ -1,21 +1,21 @@
 # Scapes Indexer - Kamal Deployment Configuration
 service: scapes-indexer
 
-image: jwahdatehagh/scapes-indexer
+image: <%= ENV["DOCKER_REGISTRY_USERNAME"] %>/scapes-indexer
 
 servers:
   web:
     hosts:
-      - 46.62.228.203
+      - <%= ENV["DEPLOY_HOST"] %>
   cron:
     hosts:
-      - 46.62.228.203
+      - <%= ENV["DEPLOY_HOST"] %>
     cmd:
       /usr/local/bin/supercronic config/crontab
 
 proxy:
   ssl: true
-  host: indexer.scapes.xyz
+  host: <%= ENV["INDEXER_HOST"] %>
   app_port: 42069
   healthcheck:
     path: /ready
@@ -26,7 +26,7 @@ proxy:
 deploy_timeout: 300
 
 registry:
-  username: jwahdatehagh
+  username: <%= ENV["DOCKER_REGISTRY_USERNAME"] %>
   password:
     - KAMAL_REGISTRY_PASSWORD
 
@@ -73,7 +73,7 @@ env:
 accessories:
   db:
     image: postgres:17-alpine
-    host: 46.62.228.203
+    host: <%= ENV["DEPLOY_HOST"] %>
     port: "127.0.0.1:5432:5432"
     env:
       clear:
