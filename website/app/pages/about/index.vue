@@ -2,18 +2,13 @@
   <section class="about-page">
     <GridArea :rows="2" center>
       <h1>About</h1>
-      <p class="muted">The Scapes project and its many layers.</p>
+      <p class="muted">10,000 unique pixel landscapes on Ethereum</p>
     </GridArea>
 
     <ContentRenderer v-if="page" :value="page" class="about-page__content prose" />
 
     <nav v-if="articles?.length" class="about-page__nav">
-      <NuxtLink
-        v-for="article in articles"
-        :key="article.path"
-        :to="article.path"
-        class="about-page__nav-item border"
-      >
+      <NuxtLink v-for="article in articles" :key="article.path" :to="article.path" class="about-page__nav-item border">
         <span class="about-page__nav-title">{{ article.title }}</span>
         <span class="about-page__nav-description muted">{{ article.description }}</span>
       </NuxtLink>
