@@ -1,6 +1,6 @@
 # Scapes Studio
 
-Monorepo for the [Scapes](https://scapes.xyz) ecosystem — an onchain indexer and website tracking [PunkScapes](https://punkscapes.com), Scapes, and TwentySevenYearScapes NFT collections.
+Monorepo for the [Scapes](https://scapes.xyz) ecosystem — an onchain indexer and website tracking PunkScapes, Scapes, and TwentySevenYearScapes NFT collections.
 
 ## Architecture
 
