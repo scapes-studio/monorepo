@@ -1,0 +1,147 @@
+.prose {
+  line-height: var(--line-height-lg);
+  text-transform: none;
+
+  /* Headings */
+  & h1 {
+    font-size: var(--font-2xl);
+    margin-bottom: var(--size-6);
+  }
+
+  & h2 {
+    font-size: var(--font-xl);
+    margin-top: var(--size-8);
+    margin-bottom: var(--size-4);
+  }
+
+  & h3 {
+    font-size: var(--font-lg);
+    margin-top: var(--size-7);
+    margin-bottom: var(--size-2);
+  }
+
+  & h2 + h3 {
+    margin-top: var(--size-5);
+  }
+
+  & :is(h2, h3) + p {
+    margin-top: 0;
+  }
+
+  /* Paragraphs */
+  & p {
+    margin-top: var(--size-4);
+    margin-bottom: var(--size-4);
+  }
+
+  /* Links */
+  & a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color var(--speed);
+  }
+
+  & a:hover {
+    color: var(--muted);
+  }
+
+  /* Bold */
+  & strong {
+    font-weight: 700;
+  }
+
+  /* Emphasis — since the site is globally italic,
+     use normal style so <em> actually stands out */
+  & em {
+    font-style: normal;
+  }
+
+  /* Unordered lists */
+  & ul {
+    list-style-type: disc;
+    padding-left: 1.5em;
+    margin-top: var(--size-4);
+    margin-bottom: var(--size-4);
+  }
+
+  & ul ul {
+    list-style-type: circle;
+  }
+
+  /* Ordered lists */
+  & ol {
+    list-style-type: decimal;
+    padding-left: 1.5em;
+    margin-top: var(--size-4);
+    margin-bottom: var(--size-4);
+  }
+
+  /* List items */
+  & li {
+    margin-top: var(--size-2);
+    margin-bottom: var(--size-2);
+    padding-left: var(--size-1);
+  }
+
+  & li > ul,
+  & li > ol {
+    margin-top: var(--size-1);
+    margin-bottom: var(--size-1);
+  }
+
+  /* Horizontal rules */
+  & hr {
+    border: none;
+    border-top: var(--border-width) solid var(--gray-z-3);
+    margin-top: var(--size-8);
+    margin-bottom: var(--size-8);
+  }
+
+  /* Blockquotes */
+  & blockquote {
+    border-left: var(--border-width-lg) solid var(--gray-z-3);
+    padding-left: var(--size-5);
+    margin-top: var(--size-4);
+    margin-bottom: var(--size-4);
+    color: var(--muted);
+  }
+
+  & blockquote p {
+    margin-top: var(--size-2);
+    margin-bottom: var(--size-2);
+  }
+
+  /* Inline code */
+  & code {
+    font-size: 0.9em;
+    padding: var(--size-0) var(--size-1);
+    background: var(--gray-z-1);
+    box-shadow: var(--border-shadow);
+  }
+
+  /* Code blocks */
+  & pre {
+    margin-top: var(--size-5);
+    margin-bottom: var(--size-5);
+    padding: var(--size-4);
+    overflow-x: auto;
+    background: var(--gray-z-1);
+    box-shadow: var(--border-shadow);
+  }
+
+  & pre code {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  /* Remove top margin from first child, bottom from last */
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & > :last-child {
+    margin-bottom: 0;
+  }
+}

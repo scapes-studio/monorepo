@@ -23,6 +23,9 @@
         <li>
           <NuxtLink to="/gallery27">Gallery27</NuxtLink>
         </li>
+        <li>
+          <NuxtLink to="/about">About</NuxtLink>
+        </li>
       </slot>
     </NavIndicator>
 
