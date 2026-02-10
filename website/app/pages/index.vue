@@ -117,8 +117,8 @@ const updateSelectedTraits = (newTraits: string[]) => {
 }
 
 useSeo({
-  title: 'Scapes Gallery',
-  description: 'Explore all 10,000 Scapes - pixel-art landscapes from September 2021.',
+  title: 'Scapes on Ethereum',
+  description: '10,000 Scapes - composable pixel art landscapes inspired by CryptoPunks.',
 })
 </script>
 
