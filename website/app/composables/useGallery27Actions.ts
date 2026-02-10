@@ -139,15 +139,54 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
   };
 
   /**
+   * Read the full auction tuple from the contract.
+   * Tries V2 first, falls back to V1 if endTimestamp === 0n.
+   */
+  const getAuctionFromContract = async () => {
+    const scapeId = toValue(punkScapeId);
+    if (!scapeId) throw new Error("PunkScape ID required");
+
+    const scapeIdBigInt = BigInt(scapeId);
+
+    // Try V2 first
+    let auction = await readContract($wagmi as Config, {
+      address: GALLERY27_ADDRESS,
+      abi: gallery27ABI,
+      functionName: "getAuction",
+      args: [scapeIdBigInt],
+    });
+    let contractAddress: Hex = GALLERY27_ADDRESS;
+
+    // If no auction on V2 (endTimestamp === 0), try V1
+    if (auction[2] === 0n) {
+      auction = await readContract($wagmi as Config, {
+        address: GALLERY27_V1_ADDRESS,
+        abi: gallery27ABI,
+        functionName: "getAuction",
+        args: [scapeIdBigInt],
+      });
+      contractAddress = GALLERY27_V1_ADDRESS;
+    }
+
+    return {
+      latestBidder: auction[0],
+      latestBid: auction[1],
+      endTimestamp: auction[2],
+      settled: auction[3],
+      rewardsClaimed: auction[4],
+      contractAddress,
+    };
+  };
+
+  /**
    * Withdraw 50% revenue share (PunkScape owner only).
    * No signature needed.
    */
-  const withdraw = async (punkScapeIds: number[]): Promise<Hash> => {
+  const withdraw = async (punkScapeIds: number[], contractAddress?: Hex): Promise<Hash> => {
     if (punkScapeIds.length === 0) throw new Error("At least one PunkScape ID required");
 
-    // Use main contract for withdrawals
     return writeContract($wagmi as Config, {
-      address: GALLERY27_ADDRESS,
+      address: contractAddress ?? GALLERY27_ADDRESS,
       abi: gallery27ABI,
       functionName: "withdraw",
       args: [punkScapeIds.map(id => BigInt(id))],
@@ -161,5 +200,6 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
     withdraw,
     getCurrentBidPrice,
     getContractAddress,
+    getAuctionFromContract,
   };
 };
