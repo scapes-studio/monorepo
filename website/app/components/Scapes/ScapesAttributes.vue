@@ -8,7 +8,7 @@
           class="attributes__value attributes__value--link">
           {{ formatValue(attr) }}
         </NuxtLink>
-        <NuxtLink v-else-if="getTraitLink(attr)" :to="getTraitLink(attr)"
+        <NuxtLink v-else-if="getTraitLink(attr)" :to="getTraitLink(attr)!"
           class="attributes__value attributes__value--link">
           {{ formatValue(attr) }}
         </NuxtLink>
