@@ -111,8 +111,7 @@ const listPrice = computed(() => {
   }
 
   &>.actions {
-    display: grid;
-    gap: var(--spacer-sm);
+    gap: var(--spacer);
     padding-inline: var(--grid-gutter);
     padding-bottom: var(--grid-gutter);
   }
