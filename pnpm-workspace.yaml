@@ -7,3 +7,5 @@ onlyBuiltDependencies:
   - '@parcel/watcher'
   - '@reown/appkit'
   - vue-demi
+  - better-sqlite3
+  - sqlite3
