@@ -9,27 +9,14 @@
       <ContentRenderer :value="page" />
     </article>
 
-    <nav class="about-article__back">
-      <NuxtLink to="/about" class="border about-article__back-link">
-        All Articles
-      </NuxtLink>
-    </nav>
-
     <nav v-if="surround?.length" class="about-article__surround">
-      <NuxtLink
-        v-if="surround[0]"
-        :to="surround[0].path"
-        class="border about-article__surround-link"
-      >
+      <NuxtLink v-if="surround[0]" :to="surround[0].path" class="border about-article__surround-link">
         <span class="muted">Previous</span>
         <span>{{ surround[0].title }}</span>
       </NuxtLink>
       <div v-else />
-      <NuxtLink
-        v-if="surround[1]"
-        :to="surround[1].path"
-        class="border about-article__surround-link about-article__surround-link--next"
-      >
+      <NuxtLink v-if="surround[1]" :to="surround[1].path"
+        class="border about-article__surround-link about-article__surround-link--next">
         <span class="muted">Next</span>
         <span>{{ surround[1].title }}</span>
       </NuxtLink>
@@ -98,8 +85,9 @@ useSeo({
 .about-article__surround-link {
   display: flex;
   flex-direction: column;
-  gap: 0.25em;
-  padding: var(--scape-height) var(--scape-height);
+  justify-content: center;
+  height: calc(var(--scape-height) * 2 + var(--grid-gutter));
+  padding: var(--spacer);
   background: var(--background);
   text-decoration: none;
   transition: background var(--speed);
