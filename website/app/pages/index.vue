@@ -1,8 +1,8 @@
 <template>
   <section class="gallery">
     <GridArea width="full" center :rows="2">
-      <h1>Scapes</h1>
-      <p class="muted">{{ formatNumber(10_000) }} pixel-art landscapes</p>
+      <h1>WELCOME HOME</h1>
+      <p class="muted">{{ formatNumber(10_000) }} pixel-art landscapes on Ethereum</p>
     </GridArea>
 
     <GridArea class="controls" width="full" padding>
