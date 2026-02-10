@@ -169,8 +169,9 @@ async function processRequest(
       sourceUpscaledExists = await s3Service.objectExists(sourceUpscaled);
     }
 
-    // Fallback to final.png if step files don't exist
+    // Fallback to final.png / final_upscaled.png if step files don't exist
     const sourceFinal = `${imagePath}/final.png`;
+    const sourceFinalUpscaled = `${imagePath}/final_upscaled.png`;
     let useFinalFallback = false;
 
     if (!sourceSmallExists) {
@@ -179,6 +180,14 @@ async function processRequest(
         sourceSmall = sourceFinal;
         sourceSmallExists = true;
         useFinalFallback = true;
+      }
+    }
+
+    if (useFinalFallback && !sourceUpscaledExists) {
+      const finalUpscaledExists = await s3Service.objectExists(sourceFinalUpscaled);
+      if (finalUpscaledExists) {
+        sourceUpscaled = sourceFinalUpscaled;
+        sourceUpscaledExists = true;
       }
     }
 
@@ -198,16 +207,14 @@ async function processRequest(
       if (sourceSmallExists && !destSmallExists) {
         actions.push(`copy ${sourceSmall} → ${imagePath}`);
       }
-      if (useFinalFallback && sourceSmallExists && !destUpscaledExists) {
-        actions.push(`copy ${sourceSmall} → ${imagePath}_upscaled (final.png fallback)`);
-      } else if (sourceUpscaledExists && !destUpscaledExists) {
+      if (sourceUpscaledExists && !destUpscaledExists) {
         actions.push(`copy ${sourceUpscaled} → ${imagePath}_upscaled`);
       }
       return {
         requestId,
         tokenId,
         status: "processed",
-        message: actions.join("; ") + (useFinalFallback ? " (using final.png fallback)" : ""),
+        message: actions.join("; ") + (useFinalFallback ? " (using final fallback)" : ""),
       };
     }
 
@@ -220,10 +227,7 @@ async function processRequest(
       );
     }
 
-    // Copy upscaled: use step upscaled file, or fall back to final.png
-    if (useFinalFallback && sourceSmallExists && !destUpscaledExists) {
-      await s3Service.copyObject(sourceSmall!, `${imagePath}_upscaled`, "image/png");
-    } else if (!useFinalFallback && sourceUpscaledExists && !destUpscaledExists) {
+    if (sourceUpscaledExists && !destUpscaledExists) {
       await s3Service.copyObject(sourceUpscaled!, `${imagePath}_upscaled`, "image/png");
     }
 
