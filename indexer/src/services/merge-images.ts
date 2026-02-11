@@ -46,15 +46,15 @@ export class MergeImagesService {
 
     // Query scapes with tokenId > 10000 that aren't processed
     const pendingScapes = await viewsDb.execute(
-      sql`SELECT id::integer as "tokenId" FROM scape
+      sql`SELECT id as "tokenId" FROM scape
           WHERE id > ${MERGE_TOKEN_ID_START - 1}
           ${processedIds.length > 0 ? sql`AND id NOT IN (${sql.join(processedIds.map(id => sql`${id}`), sql`, `)})` : sql``}
           ORDER BY id ASC
           LIMIT ${limit}`,
     );
 
-    return (pendingScapes.rows as Array<{ tokenId: number }>).map(
-      (r) => r.tokenId,
+    return (pendingScapes.rows as Array<{ tokenId: string }>).map(
+      (r) => Number(r.tokenId),
     );
   }
 
@@ -261,22 +261,22 @@ export class MergeImagesService {
 
     // Get total merges from scapes table
     const totalResult = await viewsDb.execute(
-      sql`SELECT COUNT(*)::integer as count FROM scape WHERE id > ${MERGE_TOKEN_ID_START - 1}`,
+      sql`SELECT COUNT(*) as count FROM scape WHERE id > ${MERGE_TOKEN_ID_START - 1}`,
     );
-    const total = (totalResult.rows[0] as { count: number }).count;
+    const total = Number((totalResult.rows[0] as { count: string }).count);
 
     // Get counts by status
     const statusCounts = await offchainDb.execute(
-      sql`SELECT status, COUNT(*)::integer as count FROM offchain.merge_image GROUP BY status`,
+      sql`SELECT status, COUNT(*) as count FROM offchain.merge_image GROUP BY status`,
     );
 
     const counts = { processed: 0, failed: 0 };
     for (const row of statusCounts.rows as Array<{
       status: string;
-      count: number;
+      count: string;
     }>) {
-      if (row.status === "processed") counts.processed = row.count;
-      if (row.status === "failed") counts.failed = row.count;
+      if (row.status === "processed") counts.processed = Number(row.count);
+      if (row.status === "failed") counts.failed = Number(row.count);
     }
 
     return {

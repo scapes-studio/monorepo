@@ -60,7 +60,7 @@ export const ensProfile = offchainSchema.table("ens_profile", {
 
 // Merge image processing status
 export const mergeImage = offchainSchema.table("merge_image", {
-  tokenId: integer("token_id").primaryKey(),
+  tokenId: bigint("token_id", { mode: "number" }).primaryKey(),
   status: text("status").notNull().default("pending"), // pending | processed | failed
   errorMessage: text("error_message"),
   processedAt: integer("processed_at"),
