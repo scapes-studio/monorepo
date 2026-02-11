@@ -50,6 +50,7 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 
 .current-link {
   margin-top: var(--spacer-lg);
+  width: min-content;
 }
 
 .gallery__status {
