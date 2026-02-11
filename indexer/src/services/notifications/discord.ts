@@ -4,15 +4,17 @@ import type {
   MergeEvent,
   OfferEvent,
   SaleEvent,
+  SeaportSaleEvent,
   G27BidEvent,
   G27ClaimEvent,
 } from "./types";
-import { formatEth, formatAddress } from "./formatters";
+import { formatEth, formatPrice, formatAddress } from "./formatters";
 
 function getWebhookUrl(eventType: NotificationEventType): string | undefined {
   switch (eventType) {
     case "merge":
     case "sale":
+    case "seaport_sale":
       return process.env.DISCORD_WEBHOOK_MAIN;
     case "offer":
       return process.env.DISCORD_WEBHOOK_LISTINGS;
@@ -31,7 +33,7 @@ function formatMergePayload(event: MergeEvent): DiscordPayload {
       {
         color: 0xeeeeee,
         title: `New Merge! Scape #${event.tokenId}`,
-        url: `https://scapes.xyz/scapes/${event.tokenId}`,
+        url: `https://scapes.xyz/${event.tokenId}`,
         image: {
           url: `https://cdn.scapes.xyz/scapes/lg/${event.tokenId}.png`,
         },
@@ -55,7 +57,7 @@ function formatOfferPayload(event: OfferEvent): DiscordPayload {
       {
         color: 0xeeeeee,
         title: `New Listing! Scape #${event.tokenId}`,
-        url: `https://scapes.xyz/scapes/${event.tokenId}`,
+        url: `https://scapes.xyz/${event.tokenId}`,
         image: {
           url: `https://cdn.scapes.xyz/scapes/lg/${event.tokenId}.png`,
         },
@@ -84,7 +86,7 @@ function formatSalePayload(event: SaleEvent): DiscordPayload {
       {
         color: 0xeeeeee,
         title: `New Sale! Scape #${event.tokenId}`,
-        url: `https://scapes.xyz/scapes/${event.tokenId}`,
+        url: `https://scapes.xyz/${event.tokenId}`,
         image: {
           url: `https://cdn.scapes.xyz/scapes/lg/${event.tokenId}.png`,
         },
@@ -97,6 +99,36 @@ function formatSalePayload(event: SaleEvent): DiscordPayload {
           {
             name: "Price",
             value: `${formatEth(event.price)} ETH`,
+            inline: true,
+          },
+        ],
+        timestamp: new Date(event.timestamp * 1000).toISOString(),
+      },
+    ],
+  };
+}
+
+function formatSeaportSalePayload(event: SeaportSaleEvent): DiscordPayload {
+  const buyer = event.buyerDisplay || formatAddress(event.buyer);
+  const isScapes = event.slug === "scapes";
+  return {
+    embeds: [
+      {
+        color: 0xeeeeee,
+        title: `New Sale! Scape #${event.tokenId}`,
+        url: isScapes
+          ? `https://scapes.xyz/${event.tokenId}`
+          : `https://scapes.xyz/${event.tokenId}`,
+        image: `https://cdn.scapes.xyz/scapes/lg/${event.tokenId}.png`,
+        fields: [
+          {
+            name: "Scapoor",
+            value: `[${buyer}](https://scapes.xyz/people/${event.buyer})`,
+            inline: true,
+          },
+          {
+            name: "Price",
+            value: `${formatPrice(event.price)} ETH`,
             inline: true,
           },
         ],
@@ -155,7 +187,7 @@ function formatG27ClaimPayload(event: G27ClaimEvent): DiscordPayload {
 
 function formatPayload(
   eventType: NotificationEventType,
-  event: MergeEvent | OfferEvent | SaleEvent | G27BidEvent | G27ClaimEvent
+  event: MergeEvent | OfferEvent | SaleEvent | SeaportSaleEvent | G27BidEvent | G27ClaimEvent
 ): DiscordPayload {
   switch (eventType) {
     case "merge":
@@ -164,6 +196,8 @@ function formatPayload(
       return formatOfferPayload(event as OfferEvent);
     case "sale":
       return formatSalePayload(event as SaleEvent);
+    case "seaport_sale":
+      return formatSeaportSalePayload(event as SeaportSaleEvent);
     case "g27_bid":
       return formatG27BidPayload(event as G27BidEvent);
     case "g27_claim":
@@ -174,7 +208,7 @@ function formatPayload(
 class DiscordService {
   async send(
     eventType: NotificationEventType,
-    event: MergeEvent | OfferEvent | SaleEvent | G27BidEvent | G27ClaimEvent
+    event: MergeEvent | OfferEvent | SaleEvent | SeaportSaleEvent | G27BidEvent | G27ClaimEvent
   ): Promise<void> {
     const webhookUrl = getWebhookUrl(eventType);
     if (!webhookUrl) {

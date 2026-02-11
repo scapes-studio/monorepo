@@ -2,6 +2,7 @@ export type NotificationEventType =
   | "merge"
   | "offer"
   | "sale"
+  | "seaport_sale"
   | "g27_bid"
   | "g27_claim";
 
@@ -49,6 +50,20 @@ export interface SaleEvent extends NotificationEvent {
   buyerDisplay?: string;
 }
 
+export interface SeaportSaleEvent extends NotificationEvent {
+  tokenId: string;
+  slug: string;
+  seller: string;
+  buyer: string;
+  price: { wei: string; eth: number; usd: number };
+  scape?: {
+    id: bigint;
+    owner: string;
+    attributes: unknown;
+  };
+  buyerDisplay?: string;
+}
+
 export interface G27BidEvent extends NotificationEvent {
   punkScapeId: bigint;
   bidder: string;
@@ -79,6 +94,7 @@ export type AnyNotificationEvent =
   | MergeEvent
   | OfferEvent
   | SaleEvent
+  | SeaportSaleEvent
   | G27BidEvent
   | G27ClaimEvent;
 

@@ -15,6 +15,18 @@ export function formatEth(wei: bigint): string {
 }
 
 /**
+ * Format a Price JSON object (from seaport sales) to a readable ETH string
+ */
+export function formatPrice(price: { eth: number }): string {
+  const num = price.eth;
+  if (num === 0) return "0";
+  if (num < 0.001) return "<0.001";
+  if (num >= 1000) return num.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  if (num >= 1) return num.toLocaleString(undefined, { maximumFractionDigits: 4 });
+  return num.toLocaleString(undefined, { maximumFractionDigits: 4 });
+}
+
+/**
  * Truncate an address to a readable short form
  */
 export function formatAddress(address: string): string {

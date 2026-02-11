@@ -4,10 +4,11 @@ import type {
   MergeEvent,
   OfferEvent,
   SaleEvent,
+  SeaportSaleEvent,
   G27BidEvent,
   G27ClaimEvent,
 } from "./types";
-import { formatEth, formatAddress } from "./formatters";
+import { formatEth, formatPrice, formatAddress } from "./formatters";
 
 function getOAuth1Config(eventType: NotificationEventType): OAuth1Config | null {
   // G27 events use a different Twitter account
@@ -38,23 +39,28 @@ function getOAuth1Config(eventType: NotificationEventType): OAuth1Config | null 
 
 function formatTweet(
   eventType: NotificationEventType,
-  event: MergeEvent | OfferEvent | SaleEvent | G27BidEvent | G27ClaimEvent
+  event: MergeEvent | OfferEvent | SaleEvent | SeaportSaleEvent | G27BidEvent | G27ClaimEvent
 ): string {
   switch (eventType) {
     case "merge": {
       const e = event as MergeEvent;
       const owner = e.ownerDisplay || formatAddress(e.to);
-      return `New Merge! ${owner} just created Scape #${e.tokenId}\n\nhttps://scapes.xyz/scapes/${e.tokenId}`;
+      return `New Merge! ${owner} just created Scape #${e.tokenId}\n\nhttps://scapes.xyz/${e.tokenId}`;
     }
     case "offer": {
       const e = event as OfferEvent;
       const lister = e.listerDisplay || formatAddress(e.lister);
-      return `New Listing! ${lister} listed Scape #${e.tokenId} for ${formatEth(e.price)} ETH\n\nhttps://scapes.xyz/scapes/${e.tokenId}`;
+      return `New Listing! ${lister} listed Scape #${e.tokenId} for ${formatEth(e.price)} ETH\n\nhttps://scapes.xyz/${e.tokenId}`;
     }
     case "sale": {
       const e = event as SaleEvent;
       const buyer = e.buyerDisplay || formatAddress(e.buyer);
-      return `New Sale! ${buyer} bought Scape #${e.tokenId} for ${formatEth(e.price)} ETH\n\nhttps://scapes.xyz/scapes/${e.tokenId}`;
+      return `New Sale! ${buyer} bought Scape #${e.tokenId} for ${formatEth(e.price)} ETH\n\nhttps://scapes.xyz/${e.tokenId}`;
+    }
+    case "seaport_sale": {
+      const e = event as SeaportSaleEvent;
+      const buyer = e.buyerDisplay || formatAddress(e.buyer);
+      return `New Sale! ${buyer} bought Scape #${e.tokenId} for ${formatPrice(e.price)} ETH\n\nhttps://scapes.xyz/${e.tokenId}`;
     }
     case "g27_bid": {
       const e = event as G27BidEvent;
@@ -75,7 +81,7 @@ function formatTweet(
 class TwitterService {
   async send(
     eventType: NotificationEventType,
-    event: MergeEvent | OfferEvent | SaleEvent | G27BidEvent | G27ClaimEvent
+    event: MergeEvent | OfferEvent | SaleEvent | SeaportSaleEvent | G27BidEvent | G27ClaimEvent
   ): Promise<void> {
     const oauth1Config = getOAuth1Config(eventType);
     if (!oauth1Config) {

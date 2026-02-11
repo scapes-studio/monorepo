@@ -5,6 +5,7 @@ import {
   notificationState,
   ensProfile,
   twentySevenYearScapeDetail,
+  seaportSale,
 } from "../../../offchain.schema";
 import { discordService } from "./discord";
 import { twitterService } from "./twitter";
@@ -14,6 +15,7 @@ import type {
   MergeEvent,
   OfferEvent,
   SaleEvent,
+  SeaportSaleEvent,
   G27BidEvent,
   G27ClaimEvent,
   AnyNotificationEvent,
@@ -45,6 +47,7 @@ export class NotificationService {
       "merge",
       "offer",
       "sale",
+      "seaport_sale",
       "g27_bid",
       "g27_claim",
     ];
@@ -130,6 +133,8 @@ export class NotificationService {
         return this.getOfferEvents(afterTimestamp);
       case "sale":
         return this.getSaleEvents(afterTimestamp);
+      case "seaport_sale":
+        return this.getSeaportSaleEvents(afterTimestamp);
       case "g27_bid":
         return this.getG27BidEvents(afterTimestamp);
       case "g27_claim":
@@ -242,6 +247,50 @@ export class NotificationService {
         const buyerDisplay = await this.getDisplayName(r.buyer);
         return {
           ...r,
+          scape: scape ?? undefined,
+          buyerDisplay,
+        };
+      })
+    );
+  }
+
+  private async getSeaportSaleEvents(afterTimestamp: number): Promise<SeaportSaleEvent[]> {
+    const offchainDb = getOffchainDb();
+    const viewsDb = getViewsDb();
+
+    const results = await offchainDb
+      .select({
+        id: seaportSale.id,
+        timestamp: seaportSale.timestamp,
+        tokenId: seaportSale.tokenId,
+        slug: seaportSale.slug,
+        seller: seaportSale.seller,
+        buyer: seaportSale.buyer,
+        price: seaportSale.price,
+        txHash: seaportSale.txHash,
+      })
+      .from(seaportSale)
+      .where(gt(seaportSale.timestamp, afterTimestamp))
+      .orderBy(asc(seaportSale.timestamp));
+
+    return Promise.all(
+      results.map(async (r) => {
+        const scape =
+          r.slug === "scapes"
+            ? await viewsDb.query.scape.findFirst({
+                where: eq(schema.scape.id, BigInt(r.tokenId)),
+              })
+            : undefined;
+        const buyerDisplay = await this.getDisplayName(r.buyer);
+        return {
+          id: r.id,
+          timestamp: r.timestamp,
+          tokenId: r.tokenId,
+          slug: r.slug,
+          seller: r.seller,
+          buyer: r.buyer,
+          price: r.price,
+          txHash: r.txHash,
           scape: scape ?? undefined,
           buyerDisplay,
         };

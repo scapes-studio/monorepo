@@ -9,6 +9,7 @@ const ALL_EVENT_TYPES: NotificationEventType[] = [
   "merge",
   "offer",
   "sale",
+  "seaport_sale",
   "g27_bid",
   "g27_claim",
 ];
