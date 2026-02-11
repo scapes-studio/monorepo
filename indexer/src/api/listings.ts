@@ -84,6 +84,7 @@ export const getListings = async (c: Context) => {
           WHERE l.slug = 'scapes'
             AND l.is_private_listing = false
             AND l.expiration_date > ${now}
+            AND lower(l.maker) = lower(s.owner)
             ${traitClause}
             ${rarityExclusion}
         ) combined
@@ -165,11 +166,13 @@ export const getListingByTokenId = async (c: Context) => {
     db
       .select({ price: seaportListing.price })
       .from(seaportListing)
+      .innerJoin(scape, eq(sql`${seaportListing.tokenId}::bigint`, scape.id))
       .where(and(
         eq(seaportListing.slug, "scapes"),
         eq(seaportListing.tokenId, tokenId),
         eq(seaportListing.isPrivateListing, false),
         gt(seaportListing.expirationDate, now),
+        eq(sql`lower(${seaportListing.maker})`, sql`lower(${scape.owner})`),
       ))
       .limit(1),
   ]);
