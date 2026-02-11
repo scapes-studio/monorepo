@@ -119,7 +119,7 @@ function formatSeaportSalePayload(event: SeaportSaleEvent): DiscordPayload {
         url: isScapes
           ? `https://scapes.xyz/${event.tokenId}`
           : `https://scapes.xyz/${event.tokenId}`,
-        image: `https://cdn.scapes.xyz/scapes/lg/${event.tokenId}.png`,
+        image: { url: `https://cdn.scapes.xyz/scapes/lg/${event.tokenId}.png` },
         fields: [
           {
             name: "Scapoor",
