@@ -8,6 +8,7 @@
   button,
   a.button {
     background: var(--background);
+    width: mint-content;
 
     &:not(.unstyled) {
     }
