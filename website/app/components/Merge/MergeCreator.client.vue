@@ -193,6 +193,7 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 
 const mergeRequest = async (): Promise<Hash> => {
   return writeContract($wagmi as Config, {
+    chainId: 1,
     address: SCAPES_CONTRACT,
     abi: scapesABI,
     functionName: "merge",

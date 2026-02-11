@@ -10,6 +10,7 @@ export const useMarketplaceActions = (scapeId: MaybeRefOrGetter<string>) => {
 
   const makeOffer = (price: bigint): Promise<Hash> => {
     return writeContract($wagmi as Config, {
+      chainId: 1,
       address: SCAPES_CONTRACT,
       abi: scapesABI,
       functionName: "makeOffer",
@@ -19,6 +20,7 @@ export const useMarketplaceActions = (scapeId: MaybeRefOrGetter<string>) => {
 
   const cancelOffer = (): Promise<Hash> => {
     return writeContract($wagmi as Config, {
+      chainId: 1,
       address: SCAPES_CONTRACT,
       abi: scapesABI,
       functionName: "cancelOffer",
@@ -28,6 +30,7 @@ export const useMarketplaceActions = (scapeId: MaybeRefOrGetter<string>) => {
 
   const buy = (price: bigint): Promise<Hash> => {
     return writeContract($wagmi as Config, {
+      chainId: 1,
       address: SCAPES_CONTRACT,
       abi: scapesABI,
       functionName: "buy",
@@ -38,6 +41,7 @@ export const useMarketplaceActions = (scapeId: MaybeRefOrGetter<string>) => {
 
   const purge = (): Promise<Hash> => {
     return writeContract($wagmi as Config, {
+      chainId: 1,
       address: SCAPES_CONTRACT,
       abi: scapesABI,
       functionName: "purge",

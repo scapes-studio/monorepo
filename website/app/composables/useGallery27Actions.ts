@@ -51,6 +51,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
     if (!scapeId) throw new Error("PunkScape ID required");
 
     return readContract($wagmi as Config, {
+      chainId: 1,
       address: GALLERY27_ADDRESS,
       abi: gallery27ABI,
       functionName: "currentBidPrice",
@@ -77,6 +78,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
 
     // Call contract (cast API string responses to proper hex types)
     return writeContract($wagmi as Config, {
+      chainId: 1,
       address: response.contractAddress as Hex,
       abi: gallery27ABI,
       functionName: "initializeAuction",
@@ -99,6 +101,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
     if (!scapeId) throw new Error("PunkScape ID required");
 
     return writeContract($wagmi as Config, {
+      chainId: 1,
       address: GALLERY27_ADDRESS,
       abi: gallery27ABI,
       functionName: "bid",
@@ -126,6 +129,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
 
     // Call contract (cast API string responses to proper hex types)
     return writeContract($wagmi as Config, {
+      chainId: 1,
       address: response.contractAddress as Hex,
       abi: gallery27ABI,
       functionName: "claim",
@@ -150,6 +154,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
 
     // Try V2 first
     let auction = await readContract($wagmi as Config, {
+      chainId: 1,
       address: GALLERY27_ADDRESS,
       abi: gallery27ABI,
       functionName: "getAuction",
@@ -160,6 +165,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
     // If no auction on V2 (endTimestamp === 0), try V1
     if (auction[2] === 0n) {
       auction = await readContract($wagmi as Config, {
+        chainId: 1,
         address: GALLERY27_V1_ADDRESS,
         abi: gallery27ABI,
         functionName: "getAuction",
@@ -186,6 +192,7 @@ export const useGallery27Actions = (punkScapeId: MaybeRefOrGetter<number | null>
     if (punkScapeIds.length === 0) throw new Error("At least one PunkScape ID required");
 
     return writeContract($wagmi as Config, {
+      chainId: 1,
       address: contractAddress ?? GALLERY27_ADDRESS,
       abi: gallery27ABI,
       functionName: "withdraw",
