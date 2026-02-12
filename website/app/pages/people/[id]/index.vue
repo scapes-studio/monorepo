@@ -26,8 +26,10 @@
       <!-- Merges Section -->
       <template v-if="showMerges">
         <header class="scapes-tab__header grid-shadow">
-          <h2>Merges</h2>
-          <span>{{ merges.length }} owned</span>
+          <h2>
+            <span>Merges</span>
+            <span class="muted"> ({{ merges.length }} owned)</span>
+          </h2>
         </header>
         <ScapesGrid
           :scapes="merges"
@@ -40,7 +42,7 @@
         <h2 v-if="showMerges">
           <span>Scapes</span>
           <span
-            v-if="sortedScapes.length > 12"
+            v-if="merges.length || sortedScapes.length > 3"
             class="muted"
           >
             ({{ sortedScapes.length }} owned)</span
