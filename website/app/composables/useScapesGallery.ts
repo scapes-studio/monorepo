@@ -1,4 +1,5 @@
-import { and, asc, desc, sql } from "@ponder/client"
+import { and, asc, desc, ne, sql } from "@ponder/client"
+import { zeroAddress } from "viem"
 import type { TraitCounts } from "~/data/traits"
 import { SCAPE_TRAIT_COUNTS, TRAITS } from "~/data/traits"
 import type { ScapeRecord } from "~/composables/useScapesByOwner"
@@ -98,6 +99,7 @@ export const useScapesGallery = (
   includeSeaport: Ref<boolean> = ref(true),
 ) => {
   const client = usePonderClient()
+  const excludeBurned = ne(schema.scape.owner, zeroAddress)
   const isMarketMode = computed(
     () => showPrices.value || sortBy.value.startsWith("price"),
   )
@@ -238,8 +240,8 @@ export const useScapesGallery = (
       ? sql`${schema.scape.id} <= 10000`
       : undefined
     const baseConditions = traitConditions
-      ? and(traitConditions, rarityExclusion)
-      : rarityExclusion
+      ? and(excludeBurned, traitConditions, rarityExclusion)
+      : and(excludeBurned, rarityExclusion)
 
     return await client.db
       .select({
@@ -258,8 +260,8 @@ export const useScapesGallery = (
       ? sql`${schema.scape.id} <= 10000`
       : undefined
     const baseConditions = traitConditions
-      ? and(traitConditions, rarityExclusion)
-      : rarityExclusion
+      ? and(excludeBurned, traitConditions, rarityExclusion)
+      : and(excludeBurned, rarityExclusion)
 
     return await client.db.$count(schema.scape, baseConditions)
   }
