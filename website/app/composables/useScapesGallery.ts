@@ -1,4 +1,4 @@
-import { and, asc, desc, ne, sql } from "@ponder/client"
+import { and, asc, desc, sql } from "@ponder/client"
 import type { TraitCounts } from "~/data/traits"
 import { SCAPE_TRAIT_COUNTS, TRAITS } from "~/data/traits"
 import type { ScapeRecord } from "~/composables/useScapesByOwner"
@@ -98,14 +98,9 @@ export const useScapesGallery = (
   includeSeaport: Ref<boolean> = ref(true),
 ) => {
   const client = usePonderClient()
-  const { public: { scapeCollectionAddress } } = useRuntimeConfig()
-  const normalizedCollectionAddress = scapeCollectionAddress.toLowerCase() as `0x${string}`
   const isMarketMode = computed(
     () => showPrices.value || sortBy.value.startsWith("price"),
   )
-
-  // Exclude scapes owned by contract (merged scapes)
-  const excludeMergedScapes = ne(schema.scape.owner, normalizedCollectionAddress)
 
   // Track additional items loaded via loadMore (separate from initial data)
   const additionalScapes = ref<GalleryScape[]>([])
@@ -243,8 +238,8 @@ export const useScapesGallery = (
       ? sql`${schema.scape.id} <= 10000`
       : undefined
     const baseConditions = traitConditions
-      ? and(excludeMergedScapes, traitConditions, rarityExclusion)
-      : and(excludeMergedScapes, rarityExclusion)
+      ? and(traitConditions, rarityExclusion)
+      : rarityExclusion
 
     return await client.db
       .select({
@@ -263,8 +258,8 @@ export const useScapesGallery = (
       ? sql`${schema.scape.id} <= 10000`
       : undefined
     const baseConditions = traitConditions
-      ? and(excludeMergedScapes, traitConditions, rarityExclusion)
-      : and(excludeMergedScapes, rarityExclusion)
+      ? and(traitConditions, rarityExclusion)
+      : rarityExclusion
 
     return await client.db.$count(schema.scape, baseConditions)
   }
