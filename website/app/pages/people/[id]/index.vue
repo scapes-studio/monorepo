@@ -1,10 +1,24 @@
 <template>
-  <section class="scapes-tab grid-shadow" :class="{ 'has-merges': showMerges }">
-    <GridArea v-if="scapesError" padding center>
+  <section
+    class="scapes-tab grid-shadow"
+    :class="{ 'has-merges': showMerges }"
+  >
+    <GridArea
+      v-if="scapesError"
+      padding
+      center
+    >
       Failed to load scapes.
     </GridArea>
-    <ScapesSkeleton v-else-if="scapesLoading && scapes.length === 0" :count="contentColumns * 3" />
-    <GridArea v-else-if="scapes.length === 0" padding center>
+    <ScapesSkeleton
+      v-else-if="scapesLoading && scapes.length === 0"
+      :count="contentColumns * 3"
+    />
+    <GridArea
+      v-else-if="scapes.length === 0"
+      padding
+      center
+    >
       No scapes found for this account.
     </GridArea>
 
@@ -15,36 +29,70 @@
           <h2>Merges</h2>
           <span>{{ merges.length }} owned</span>
         </header>
-        <ScapesGrid :scapes="merges" :columns="contentColumns" />
+        <ScapesGrid
+          :scapes="merges"
+          :columns="contentColumns"
+        />
       </template>
 
       <!-- Scapes Section -->
-      <header v-if="showMerges" class="scapes-tab__header grid-shadow">
-        <h2>Scapes</h2>
-        <span>{{ regularScapes.length }} owned</span>
+      <header class="scapes-tab__header grid-shadow">
+        <h2 v-if="showMerges">
+          <span>Scapes</span>
+          <span
+            v-if="sortedScapes.length > 12"
+            class="muted"
+          >
+            ({{ sortedScapes.length }} owned)</span
+          >
+        </h2>
+        <div
+          v-if="sortedScapes.length > 1"
+          class="scapes-tab__sort"
+        >
+          <span>Sort:</span>
+          <FormSelect
+            v-model="selectedSort"
+            :options="sortOptions"
+            class="small"
+          />
+        </div>
       </header>
-      <ScapesGrid :scapes="regularScapes" :columns="contentColumns" />
+      <ScapesGrid
+        :scapes="sortedScapes"
+        :columns="contentColumns"
+      />
     </template>
 
-    <button v-if="hasMore" class="scapes-tab__load-more" type="button" :disabled="scapesLoading" @click="loadMore">
-      {{ scapesLoading ? "Loading…" : "Load more" }}
+    <button
+      v-if="hasMore"
+      class="scapes-tab__load-more"
+      type="button"
+      :disabled="scapesLoading"
+      @click="loadMore"
+    >
+      {{ scapesLoading ? 'Loading…' : 'Load more' }}
     </button>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { ProfileResponse } from "~/composables/useProfile";
-import { shortenAddress } from "~/composables/useENSResolution";
+import type { ProfileResponse } from '~/composables/useProfile'
+import { shortenAddress } from '~/composables/useENSResolution'
+import type { ScapeRecord } from '~/composables/useScapesByOwner'
+
+type SortOption = 'id-desc' | 'id-asc' | 'rarity-desc' | 'rarity-asc'
 
 const injected = inject<{
-  profile: Ref<ProfileResponse | null>;
-  resolvedAddress: Ref<string | null>;
-  displayAddress: Ref<string>;
-}>("profile");
+  profile: Ref<ProfileResponse | null>
+  resolvedAddress: Ref<string | null>
+  displayAddress: Ref<string>
+}>('profile')
 
-const profile = injected?.profile ?? ref(null);
-const resolvedAddress = injected?.resolvedAddress ?? ref(null);
-const displayAddress = injected?.displayAddress ?? computed(() => resolvedAddress.value ?? "");
+const profile = injected?.profile ?? ref(null)
+const resolvedAddress = injected?.resolvedAddress ?? ref(null)
+const displayAddress =
+  injected?.displayAddress ?? computed(() => resolvedAddress.value ?? '')
 
 const {
   scapes,
@@ -53,49 +101,94 @@ const {
   error: scapesError,
   hasMore,
   loadMore,
-} = await useScapesByOwner(resolvedAddress);
+} = await useScapesByOwner(resolvedAddress)
 
-const merges = computed(() => scapes.value.filter(s => s.id > 10_000n));
-const regularScapes = computed(() => scapes.value.filter(s => s.id <= 10_000n));
-const showMerges = computed(() => merges.value.length > 0);
+const merges = computed(() => scapes.value.filter((s) => s.id > 10_000n))
+const regularScapes = computed(() =>
+  scapes.value.filter((s) => s.id <= 10_000n),
+)
+const showMerges = computed(() => merges.value.length > 0)
 
-const { contentColumns } = useScapeGrid();
+const { contentColumns } = useScapeGrid()
 
+// Sorting
+const sortOptions = [
+  { value: 'id-desc', label: 'ID (High to Low)' },
+  { value: 'id-asc', label: 'ID (Low to High)' },
+  { value: 'rarity-desc', label: 'Rarest First' },
+  { value: 'rarity-asc', label: 'Most Common First' },
+]
+
+const route = useRoute()
+const router = useRouter()
+
+const selectedSort = ref<SortOption>(
+  (route.query.sort as SortOption) || 'id-desc',
+)
+
+watch(selectedSort, (sort) => {
+  router.replace({
+    query: {
+      ...route.query,
+      sort: sort !== 'id-desc' ? sort : undefined,
+    },
+  })
+})
+
+const sortScapes = (list: ScapeRecord[], sort: SortOption): ScapeRecord[] => {
+  const sorted = [...list]
+  switch (sort) {
+    case 'id-asc':
+      return sorted.sort((a, b) => (a.id < b.id ? -1 : 1))
+    case 'id-desc':
+      return sorted.sort((a, b) => (a.id > b.id ? -1 : 1))
+    case 'rarity-asc':
+      return sorted.sort((a, b) => (a.rarity ?? 0) - (b.rarity ?? 0))
+    case 'rarity-desc':
+      return sorted.sort((a, b) => (b.rarity ?? 0) - (a.rarity ?? 0))
+    default:
+      return sorted
+  }
+}
+
+const sortedScapes = computed(() =>
+  sortScapes(regularScapes.value, selectedSort.value),
+)
+
+// SEO
 const ogTitle = computed(() => {
-  const ens = profile.value?.ens;
-  if (ens) return ens;
-  const addr = displayAddress.value;
-  return addr ? shortenAddress(addr) : "Profile";
-});
+  const ens = profile.value?.ens
+  if (ens) return ens
+  const addr = displayAddress.value
+  return addr ? shortenAddress(addr) : 'Profile'
+})
 const ogSubtitle = computed(
-  () => profile.value?.data?.description || "Scapes owned and activity overview.",
-);
+  () =>
+    profile.value?.data?.description || 'Scapes owned and activity overview.',
+)
 const ogAvatar = computed(
-  () => profile.value?.data?.avatar || "https://scapes.xyz/oneday-profile.png",
-);
+  () => profile.value?.data?.avatar || 'https://scapes.xyz/oneday-profile.png',
+)
 const ogScapeIds = computed(() =>
-  regularScapes.value.slice(0, 36).map(s => Number(s.id)),
-);
-const ogCount = computed(() => scapesTotal.value ?? scapes.value.length);
+  regularScapes.value.slice(0, 36).map((s) => Number(s.id)),
+)
+const ogCount = computed(() => scapesTotal.value ?? scapes.value.length)
 
 const seoOptions = computed(() => ({
   title: ogTitle.value,
   description: ogSubtitle.value,
   image: null,
   imageAlt: null,
-}));
-useSeo(seoOptions);
+}))
+useSeo(seoOptions)
 
-defineOgImageComponent(
-  "PeopleProfile",
-  {
-    title: ogTitle,
-    subtitle: ogSubtitle,
-    image: ogAvatar,
-    scapeIds: ogScapeIds,
-    count: ogCount,
-  },
-);
+defineOgImageComponent('PeopleProfile', {
+  title: ogTitle,
+  subtitle: ogSubtitle,
+  image: ogAvatar,
+  scapeIds: ogScapeIds,
+  count: ogCount,
+})
 </script>
 
 <style scoped>
@@ -123,6 +216,19 @@ defineOgImageComponent(
 
 .scapes-tab__header h2 {
   margin: 0;
+}
+
+.scapes-tab__sort {
+  display: flex;
+  align-items: center;
+  gap: var(--spacer);
+  margin-left: auto;
+  font-size: var(--font-sm);
+  white-space: nowrap;
+
+  &:deep(select) {
+    font-size: var(--font-sm);
+  }
 }
 
 .scapes-tab__status {

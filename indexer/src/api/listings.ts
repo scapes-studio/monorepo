@@ -70,6 +70,7 @@ export const getListings = async (c: Context) => {
             ${traitClause}
             ${rarityExclusion}
 
+
           UNION ALL
 
           SELECT
@@ -87,6 +88,7 @@ export const getListings = async (c: Context) => {
             AND lower(l.maker) = lower(s.owner)
             ${traitClause}
             ${rarityExclusion}
+
         ) combined
         ORDER BY id, price::numeric ASC
       `
