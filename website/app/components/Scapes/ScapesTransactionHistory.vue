@@ -1,87 +1,121 @@
 <template>
   <section class="history">
-    <GridArea width="full" padding class="history__title">
+    <GridArea
+      width="full"
+      padding
+      class="history__title"
+    >
       <h2>Transfer History</h2>
-      <div v-if="history.length > 3" class="history__stats">
+      <div
+        v-if="history.length > 3"
+        class="history__stats"
+      >
         <span>{{ totalTransfers }} transfers</span>
         <span>{{ totalSales }} sales</span>
       </div>
     </GridArea>
 
-    <GridArea v-if="pending" :rows="1" width="full" center :background="false" class="history__status">
+    <GridArea
+      v-if="pending"
+      :rows="1"
+      width="full"
+      center
+      :background="false"
+      class="history__status"
+    >
       Loading scape history…
     </GridArea>
-    <GridArea v-else-if="error" :rows="1" width="full" center :background="false"
-      class="history__status history__status--error">
+    <GridArea
+      v-else-if="error"
+      :rows="1"
+      width="full"
+      center
+      :background="false"
+      class="history__status history__status--error"
+    >
       Unable to load scape history right now.
     </GridArea>
-    <GridArea v-else-if="history.length === 0" :rows="1" width="full" center :background="false"
-      class="history__status">
+    <GridArea
+      v-else-if="history.length === 0"
+      :rows="1"
+      width="full"
+      center
+      :background="false"
+      class="history__status"
+    >
       No transfers yet.
     </GridArea>
 
-    <ul v-else class="history__list">
-      <ScapesTransactionHistoryEvent v-for="entry in history" :key="entry.id" :entry="entry" :scape-id="scapeId" />
+    <ul
+      v-else
+      class="history__list"
+    >
+      <ScapesTransactionHistoryEvent
+        v-for="entry in history"
+        :key="entry.id"
+        :entry="entry"
+        :scape-id="scapeId"
+      />
     </ul>
   </section>
 </template>
 
 <script setup lang="ts">
 type SalePrice = {
-  wei?: string;
-  eth?: number;
-  usd?: number;
+  wei?: string
+  eth?: number
+  usd?: number
   currency?: {
-    symbol?: string;
-    amount?: string;
-  };
-};
+    symbol?: string
+    amount?: string
+  }
+}
 
 type SaleDetails = {
-  id: string | number;
-  price?: SalePrice;
-  seller?: string;
-  buyer?: string;
-  slug?: string;
-  source?: string;
-};
+  id: string | number
+  price?: SalePrice
+  seller?: string
+  buyer?: string
+  slug?: string
+  source?: string
+}
 
 type TransferEntry = {
-  type: "transfer" | "sale";
-  id: string;
-  timestamp: number;
-  from: string;
-  to: string;
-  txHash: string;
-  sale: SaleDetails | null;
-};
+  type: 'transfer' | 'sale'
+  id: string
+  timestamp: number
+  from: string
+  to: string
+  txHash: string
+  sale: SaleDetails | null
+}
 
 type ListingEntry = {
-  type: "listing";
-  id: string;
-  timestamp: number;
-  lister: string;
-  price: { wei: string; eth: number };
-  isActive: boolean;
-  txHash: string;
-};
+  type: 'listing'
+  id: string
+  timestamp: number
+  lister: string
+  price: { wei: string; eth: number }
+  isActive: boolean
+  txHash: string
+}
 
-type ScapeHistoryEntry = TransferEntry | ListingEntry;
+type ScapeHistoryEntry = TransferEntry | ListingEntry
 
 const props = defineProps<{
-  scapeId: string;
-  history?: ScapeHistoryEntry[];
-  pending?: boolean;
-  error?: unknown | null;
-  totalTransfers?: number;
-  totalSales?: number;
-}>();
+  scapeId: string
+  history?: ScapeHistoryEntry[]
+  pending?: boolean
+  error?: unknown | null
+  totalTransfers?: number
+  totalSales?: number
+}>()
 
-const history = computed(() => props.history ?? []);
-const pending = computed(() => props.pending ?? false);
-const error = computed(() => props.error ?? null);
-const totalTransfers = computed(() => props.totalTransfers ?? 0);
-const totalSales = computed(() => props.totalSales ?? 0);
+const history = computed(() => props.history ?? [])
+const pending = computed(() => props.pending ?? false)
+const error = computed(() => props.error ?? null)
+const totalTransfers = computed(() => props.totalTransfers ?? 0)
+const totalSales = computed(() => props.totalSales ?? 0)
 </script>
 
 <style scoped>

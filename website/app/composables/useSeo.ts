@@ -20,7 +20,10 @@ export function useSeo(options: MaybeRefOrGetter<SeoOptions>) {
     description: () => resolved.value.description,
     ogTitle: () => resolved.value.title,
     ogDescription: () => resolved.value.description,
-    ogImage: () => (resolved.value.image === null ? undefined : resolved.value.image || DEFAULT_IMAGE),
+    ogImage: () =>
+      resolved.value.image === null
+        ? undefined
+        : resolved.value.image || DEFAULT_IMAGE,
     ogImageAlt: () =>
       resolved.value.image === null
         ? undefined
@@ -28,7 +31,10 @@ export function useSeo(options: MaybeRefOrGetter<SeoOptions>) {
     ogUrl: () => `${SITE_URL}${route.path}`,
     twitterTitle: () => resolved.value.title,
     twitterDescription: () => resolved.value.description,
-    twitterImage: () => (resolved.value.image === null ? undefined : resolved.value.image || DEFAULT_IMAGE),
+    twitterImage: () =>
+      resolved.value.image === null
+        ? undefined
+        : resolved.value.image || DEFAULT_IMAGE,
   })
 
   useHead({

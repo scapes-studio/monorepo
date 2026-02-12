@@ -1,45 +1,104 @@
 <template>
   <section class="gallery">
-    <GridArea width="full" center :rows="2">
+    <GridArea
+      width="full"
+      center
+      :rows="2"
+    >
       <h1>WELCOME HOME</h1>
-      <p class="muted">{{ formatNumber(10_000) }} pixel-art landscapes on Ethereum</p>
+      <p class="muted">
+        {{ formatNumber(10_000) }} pixel-art landscapes on Ethereum
+      </p>
     </GridArea>
 
-    <GridArea class="controls" width="full" padding>
-      <FormCheckbox v-model="showPrices" class="small for-sale-toggle">For Sale</FormCheckbox>
+    <GridArea
+      class="controls"
+      width="full"
+      padding
+    >
+      <FormCheckbox
+        v-model="showPrices"
+        class="small for-sale-toggle"
+        >For Sale</FormCheckbox
+      >
 
       <div>
         <span>Sort by:</span>
-        <FormSelect v-model="selectedSort" :options="sortOptions" class="small" />
+        <FormSelect
+          v-model="selectedSort"
+          :options="sortOptions"
+          class="small"
+        />
       </div>
     </GridArea>
 
-    <GridArea v-if="selectedTraits.length > 0" class="filter-tags" width="full" padding>
-      <GalleryFilterTags :selected-traits="selectedTraits" @update="updateSelectedTraits" />
+    <GridArea
+      v-if="selectedTraits.length > 0"
+      class="filter-tags"
+      width="full"
+      padding
+    >
+      <GalleryFilterTags
+        :selected-traits="selectedTraits"
+        @update="updateSelectedTraits"
+      />
     </GridArea>
 
     <ClientOnly>
-      <div class="gallery__layout" :class="{ 'gallery__layout--with-sidebar': showSidebar }">
-        <aside v-if="showSidebar" class="gallery__sidebar">
-          <GalleryScapeGallerySidebar :selected-traits="selectedTraits" :trait-counts="traitCounts"
-            :counts-loading="countsLoading" @update-traits="updateSelectedTraits" />
+      <div
+        class="gallery__layout"
+        :class="{ 'gallery__layout--with-sidebar': showSidebar }"
+      >
+        <aside
+          v-if="showSidebar"
+          class="gallery__sidebar"
+        >
+          <GalleryScapeGallerySidebar
+            :selected-traits="selectedTraits"
+            :trait-counts="traitCounts"
+            :counts-loading="countsLoading"
+            @update-traits="updateSelectedTraits"
+          />
         </aside>
 
-        <main class="gallery__main" :style="{ '--grid-columns': `${galleryColumns}` }">
-          <ScapesSkeleton v-if="loading && scapes.length === 0" :count="galleryColumns * 4" />
-          <div v-else-if="error" class="gallery__status gallery__status--error">
+        <main
+          class="gallery__main"
+          :style="{ '--grid-columns': `${galleryColumns}` }"
+        >
+          <ScapesSkeleton
+            v-if="loading && scapes.length === 0"
+            :count="galleryColumns * 4"
+          />
+          <div
+            v-else-if="error"
+            class="gallery__status gallery__status--error"
+          >
             Unable to load scapes right now.
           </div>
-          <div v-else-if="scapes.length === 0" class="gallery__status">
+          <div
+            v-else-if="scapes.length === 0"
+            class="gallery__status"
+          >
             No matching scapes found.
           </div>
 
           <template v-else>
-            <ScapesVirtualGrid :scapes="scapes" :has-more="hasMore" :loading="loading" :columns="galleryColumns"
-              :show-prices="showPrices" @load-more="loadMore" />
+            <ScapesVirtualGrid
+              :scapes="scapes"
+              :has-more="hasMore"
+              :loading="loading"
+              :columns="galleryColumns"
+              :show-prices="showPrices"
+              @load-more="loadMore"
+            />
 
-            <Button v-if="hasMore" class="gallery__load-more" :disabled="loading" @click="loadMore">
-              {{ loading ? "Loading..." : "Load more" }}
+            <Button
+              v-if="hasMore"
+              class="gallery__load-more"
+              :disabled="loading"
+              @click="loadMore"
+            >
+              {{ loading ? 'Loading...' : 'Load more' }}
             </Button>
           </template>
         </main>
@@ -49,35 +108,35 @@
 </template>
 
 <script setup lang="ts">
-import type { GallerySortOption } from "~/composables/useScapesGallery"
+import type { GallerySortOption } from '~/composables/useScapesGallery'
 
 const route = useRoute()
 const router = useRouter()
 
 const sortOptions = [
-  { value: "id-asc", label: "ID (Low to High)" },
-  { value: "id-desc", label: "ID (High to Low)" },
-  { value: "rarity-desc", label: "Rarest First" },
-  { value: "rarity-asc", label: "Most Common First" },
-  { value: "price-asc", label: "Price (Low to High)" },
-  { value: "price-desc", label: "Price (High to Low)" },
+  { value: 'id-asc', label: 'ID (Low to High)' },
+  { value: 'id-desc', label: 'ID (High to Low)' },
+  { value: 'rarity-desc', label: 'Rarest First' },
+  { value: 'rarity-asc', label: 'Most Common First' },
+  { value: 'price-asc', label: 'Price (Low to High)' },
+  { value: 'price-desc', label: 'Price (High to Low)' },
 ]
 
 // State from URL query params
 const selectedSort = ref<GallerySortOption>(
-  (route.query.sort as GallerySortOption) || "id-asc",
+  (route.query.sort as GallerySortOption) || 'id-asc',
 )
 
 const selectedTraits = ref<string[]>(
   route.query.traits
-    ? decodeURIComponent(route.query.traits as string).split("&&")
+    ? decodeURIComponent(route.query.traits as string).split('&&')
     : [],
 )
 
-const showPrices = ref(route.query.prices === "true")
-const includeSeaport = ref(route.query.seaport !== "false")
+const showPrices = ref(route.query.prices === 'true')
+const includeSeaport = ref(route.query.seaport !== 'false')
 
-const priceSorts = new Set<GallerySortOption>(["price-asc", "price-desc"])
+const priceSorts = new Set<GallerySortOption>(['price-asc', 'price-desc'])
 
 watch(selectedSort, (nextSort) => {
   if (priceSorts.has(nextSort)) {
@@ -92,12 +151,12 @@ watch(
     router.replace({
       query: {
         ...route.query,
-        sort: selectedSort.value !== "id-asc" ? selectedSort.value : undefined,
+        sort: selectedSort.value !== 'id-asc' ? selectedSort.value : undefined,
         traits: selectedTraits.value.length
-          ? encodeURIComponent(selectedTraits.value.join("&&"))
+          ? encodeURIComponent(selectedTraits.value.join('&&'))
           : undefined,
-        prices: showPrices.value ? "true" : undefined,
-        seaport: includeSeaport.value ? undefined : "false",
+        prices: showPrices.value ? 'true' : undefined,
+        seaport: includeSeaport.value ? undefined : 'false',
       },
     })
   },
@@ -107,10 +166,19 @@ watch(
 const { isMobile, columns } = useScapeGrid()
 
 const showSidebar = computed(() => !isMobile.value)
-const galleryColumns = computed(() => Math.max(1, columns.value - (showSidebar.value ? 2 : 0)))
+const galleryColumns = computed(() =>
+  Math.max(1, columns.value - (showSidebar.value ? 2 : 0)),
+)
 
-const { scapes, loading, error, hasMore, loadMore, traitCounts, countsLoading } =
-  useScapesGallery(selectedTraits, selectedSort, showPrices, includeSeaport)
+const {
+  scapes,
+  loading,
+  error,
+  hasMore,
+  loadMore,
+  traitCounts,
+  countsLoading,
+} = useScapesGallery(selectedTraits, selectedSort, showPrices, includeSeaport)
 
 const updateSelectedTraits = (newTraits: string[]) => {
   selectedTraits.value = newTraits
@@ -118,7 +186,8 @@ const updateSelectedTraits = (newTraits: string[]) => {
 
 useSeo({
   title: 'Scapes on Ethereum',
-  description: '10,000 Scapes - composable pixel art landscapes inspired by CryptoPunks.',
+  description:
+    '10,000 Scapes - composable pixel art landscapes inspired by CryptoPunks.',
 })
 </script>
 
@@ -128,8 +197,8 @@ useSeo({
   display: grid;
   gap: var(--grid-gutter);
 
-  &>.controls,
-  &>.filter-tags {
+  & > .controls,
+  & > .filter-tags {
     display: flex;
     gap: var(--spacer-lg);
     align-items: center;
@@ -137,7 +206,7 @@ useSeo({
     overflow: auto;
   }
 
-  &>.controls {
+  & > .controls {
     justify-content: center;
     font-size: var(--font-sm);
 
@@ -145,11 +214,11 @@ useSeo({
       justify-content: flex-end;
     }
 
-    &>* {
+    & > * {
       white-space: nowrap;
     }
 
-    &>div {
+    & > div {
       display: flex;
       align-items: center;
       gap: var(--spacer);

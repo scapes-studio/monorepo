@@ -1,35 +1,49 @@
 <template>
-  <NuxtLink class="scape-link" :class="{ 'scape-link--tall': doubleHeight }" :to="`/${scape.id}`"
-    :style="spanStyle">
-    <ScapeImage :id="scape.id" :scape-count="scapeCount ?? 1" />
-    <div v-if="formattedPrice" class="scape-link__price">
+  <NuxtLink
+    class="scape-link"
+    :class="{ 'scape-link--tall': doubleHeight }"
+    :to="`/${scape.id}`"
+    :style="spanStyle"
+  >
+    <ScapeImage
+      :id="scape.id"
+      :scape-count="scapeCount ?? 1"
+    />
+    <div
+      v-if="formattedPrice"
+      class="scape-link__price"
+    >
       {{ formattedPrice }} ETH
-      <span v-if="isSeaport" class="scape-link__badge">OpenSea</span>
+      <span
+        v-if="isSeaport"
+        class="scape-link__badge"
+        >OpenSea</span
+      >
     </div>
   </NuxtLink>
 </template>
 
 <script setup lang="ts">
-import type { ScapeRecord } from "~/composables/useScapesByOwner";
+import type { ScapeRecord } from '~/composables/useScapesByOwner'
 
 const props = defineProps<{
-  scape: ScapeRecord;
-  price?: bigint | null;
-  isSeaport?: boolean;
-  columns?: number;
-  scapeCount?: number;
-  doubleHeight?: boolean;
-}>();
+  scape: ScapeRecord
+  price?: bigint | null
+  isSeaport?: boolean
+  columns?: number
+  scapeCount?: number
+  doubleHeight?: boolean
+}>()
 
 const formattedPrice = computed(() => {
-  if (!props.price) return null;
-  return formatETH(Number(props.price) / 1e18);
-});
+  if (!props.price) return null
+  return formatETH(Number(props.price) / 1e18)
+})
 
 const spanStyle = computed(() => {
-  const cols = props.columns ?? 1;
-  return cols > 1 ? { gridColumn: `span ${cols}` } : undefined;
-});
+  const cols = props.columns ?? 1
+  return cols > 1 ? { gridColumn: `span ${cols}` } : undefined
+})
 </script>
 
 <style scoped>

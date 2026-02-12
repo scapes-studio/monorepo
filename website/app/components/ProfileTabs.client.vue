@@ -1,15 +1,27 @@
 <template>
-  <nav ref="navRef" class="profile-tabs grid-shadow">
-    <NuxtLink :to="`/people/${props.accountId}`" class="profile-tabs__tab"
-      :class="{ 'profile-tabs__tab--active': currentTab === 'scapes' }">
+  <nav
+    ref="navRef"
+    class="profile-tabs grid-shadow"
+  >
+    <NuxtLink
+      :to="`/people/${props.accountId}`"
+      class="profile-tabs__tab"
+      :class="{ 'profile-tabs__tab--active': currentTab === 'scapes' }"
+    >
       Scapes
     </NuxtLink>
-    <NuxtLink :to="`/people/${props.accountId}/twenty-seven-year-scapes`" class="profile-tabs__tab"
-      :class="{ 'profile-tabs__tab--active': currentTab === 'gallery27' }">
+    <NuxtLink
+      :to="`/people/${props.accountId}/twenty-seven-year-scapes`"
+      class="profile-tabs__tab"
+      :class="{ 'profile-tabs__tab--active': currentTab === 'gallery27' }"
+    >
       <span class="profile-tabs__text--mobile">27y Scapes</span>
       <span class="profile-tabs__text--desktop">Twenty Seven Year Scapes</span>
     </NuxtLink>
-    <span class="profile-tabs__indicator" :style="indicatorStyle" />
+    <span
+      class="profile-tabs__indicator"
+      :style="indicatorStyle"
+    />
   </nav>
 </template>
 
@@ -22,7 +34,11 @@ const route = useRoute()
 const { scapeWidth, gutter } = useScapeGrid()
 
 const navRef = ref<HTMLElement | null>(null)
-const indicatorStyle = ref({ transform: 'translateX(0)', width: '0px', opacity: '0' })
+const indicatorStyle = ref({
+  transform: 'translateX(0)',
+  width: '0px',
+  opacity: '0',
+})
 
 const currentTab = computed(() => {
   const path = route.path
@@ -48,7 +64,7 @@ const snapTabWidths = () => {
   })
 
   // Read natural widths in one batch
-  const widths = Array.from(tabs).map(tab => tab.scrollWidth)
+  const widths = Array.from(tabs).map((tab) => tab.scrollWidth)
 
   // Apply grid-snapped widths
   tabs.forEach((tab, i) => {
@@ -62,7 +78,11 @@ const updateIndicator = () => {
 
   const activeLink = navRef.value.querySelector('.profile-tabs__tab--active')
   if (!activeLink) {
-    indicatorStyle.value = { transform: 'translateX(0)', width: '0px', opacity: '0' }
+    indicatorStyle.value = {
+      transform: 'translateX(0)',
+      width: '0px',
+      opacity: '0',
+    }
     return
   }
 
@@ -135,7 +155,10 @@ onMounted(refresh)
   height: calc(var(--grid-gutter) * 2);
   background: var(--color);
   border-radius: var(--grid-gutter) var(--grid-gutter) 0 0;
-  transition: transform 0.3s ease, width 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease,
+    opacity 0.3s ease;
   pointer-events: none;
   will-change: transform, width;
 }

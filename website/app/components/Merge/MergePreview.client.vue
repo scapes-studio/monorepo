@@ -1,21 +1,42 @@
 <template>
   <div class="merge-preview">
     <div class="merge-preview__canvas">
-      <div v-if="isLoading" class="merge-preview__loading">Loading preview...</div>
-      <div v-else-if="error" class="merge-preview__error">{{ error.message }}</div>
+      <div
+        v-if="isLoading"
+        class="merge-preview__loading"
+      >
+        Loading preview...
+      </div>
+      <div
+        v-else-if="error"
+        class="merge-preview__error"
+      >
+        {{ error.message }}
+      </div>
       <img
         v-else-if="previewUrl && hasPreview"
         class="merge-preview__image"
         :src="previewUrl"
         alt="Merge preview"
       />
-      <div v-else-if="hasScapes" class="merge-preview__placeholder">
+      <div
+        v-else-if="hasScapes"
+        class="merge-preview__placeholder"
+      >
         Select at least 2 Scapes to preview
       </div>
-      <div v-else class="merge-preview__placeholder">Select Scapes to merge</div>
+      <div
+        v-else
+        class="merge-preview__placeholder"
+      >
+        Select Scapes to merge
+      </div>
     </div>
 
-    <div v-if="hasScapes" class="merge-preview__scapes">
+    <div
+      v-if="hasScapes"
+      class="merge-preview__scapes"
+    >
       <div
         v-for="(scape, index) in scapes"
         :key="String(scape[0])"
@@ -47,22 +68,22 @@
 </template>
 
 <script setup lang="ts">
-import type { MergePart } from "~/utils/merges";
+import type { MergePart } from '~/utils/merges'
 
 const props = defineProps<{
-  scapes: MergePart[];
-  previewUrl: string | null;
-  isLoading: boolean;
-  error: Error | null;
-}>();
+  scapes: MergePart[]
+  previewUrl: string | null
+  isLoading: boolean
+  error: Error | null
+}>()
 
 const emit = defineEmits<{
-  toggleFlipX: [index: number];
-  remove: [index: number];
-}>();
+  toggleFlipX: [index: number]
+  remove: [index: number]
+}>()
 
-const hasScapes = computed(() => props.scapes.length > 0);
-const hasPreview = computed(() => props.scapes.length >= 2);
+const hasScapes = computed(() => props.scapes.length > 0)
+const hasPreview = computed(() => props.scapes.length >= 2)
 </script>
 
 <style scoped>

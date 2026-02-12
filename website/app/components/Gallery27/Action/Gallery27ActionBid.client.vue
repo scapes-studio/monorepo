@@ -1,118 +1,151 @@
 <template>
   <div class="gallery27-action">
-    <Button class="small" @click="open = true">
+    <Button
+      class="small"
+      @click="open = true"
+    >
       Place Bid
     </Button>
-    <p v-if="!isFirstBid" class="gallery27-action__hint">
+    <p
+      v-if="!isFirstBid"
+      class="gallery27-action__hint"
+    >
       Minimum bid: {{ minimumBid }} ETH
     </p>
 
-    <Dialog v-model:open="open" title="Place Bid">
+    <Dialog
+      v-model:open="open"
+      title="Place Bid"
+    >
       <div class="gallery27-action__form">
-        <textarea v-model="bidMessage" placeholder="Your message for the AI..." rows="3" />
+        <textarea
+          v-model="bidMessage"
+          placeholder="Your message for the AI..."
+          rows="3"
+        />
         <FormItem>
-          <input v-model="bidAmount" type="number" step="0.001" :min="minimumBid" :placeholder="`Min ${minimumBid}`" />
+          <input
+            v-model="bidAmount"
+            type="number"
+            step="0.001"
+            :min="minimumBid"
+            :placeholder="`Min ${minimumBid}`"
+          />
           <template #suffix>ETH</template>
         </FormItem>
         <Actions>
-          <Button class="small" @click="handleCancel">
+          <Button
+            class="small"
+            @click="handleCancel"
+          >
             Cancel
           </Button>
-          <Button class="small" :disabled="!bidAmount || Number(bidAmount) < Number(minimumBid)"
-            @click="handleContinue">
+          <Button
+            class="small"
+            :disabled="!bidAmount || Number(bidAmount) < Number(minimumBid)"
+            @click="handleContinue"
+          >
             Place Bid
           </Button>
         </Actions>
       </div>
     </Dialog>
 
-    <EvmTransactionFlow ref="transactionFlowRef" :text="bidText" :request="bidRequest"
-      auto-close-success @complete="handleBidComplete" />
+    <EvmTransactionFlow
+      ref="transactionFlowRef"
+      :text="bidText"
+      :request="bidRequest"
+      auto-close-success
+      @complete="handleBidComplete"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { parseEther, formatEther } from "viem";
-import type { Hash } from "viem";
-import type { Gallery27AuctionState } from "~/types/gallery27";
+import { parseEther, formatEther } from 'viem'
+import type { Hash } from 'viem'
+import type { Gallery27AuctionState } from '~/types/gallery27'
 
 const props = defineProps<{
-  punkScapeId: number;
-  auction: Gallery27AuctionState | null;
-  latestBidder: string | null;
-}>();
+  punkScapeId: number
+  auction: Gallery27AuctionState | null
+  latestBidder: string | null
+}>()
 
 const emit = defineEmits<{
-  actionComplete: [];
-}>();
+  actionComplete: []
+}>()
 
-const punkScapeIdRef = computed(() => props.punkScapeId);
-const { initializeAuction, bid } = useGallery27Actions(punkScapeIdRef);
+const punkScapeIdRef = computed(() => props.punkScapeId)
+const { initializeAuction, bid } = useGallery27Actions(punkScapeIdRef)
 
-const open = ref(false);
-const bidMessage = ref("");
-const bidAmount = ref("");
+const open = ref(false)
+const bidMessage = ref('')
+const bidAmount = ref('')
 
-const transactionFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
+const transactionFlowRef = ref<{
+  initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown>
+} | null>(null)
 
-const isFirstBid = computed(() => !props.latestBidder);
+const isFirstBid = computed(() => !props.latestBidder)
 
 const minimumBid = computed(() => {
-  if (!props.auction?.latestBid) return "0.05";
-  const current = BigInt(props.auction.latestBid);
-  const minimum = current + (current * 5n) / 100n;
-  return formatEther(minimum);
-});
+  if (!props.auction?.latestBid) return '0.05'
+  const current = BigInt(props.auction.latestBid)
+  const minimum = current + (current * 5n) / 100n
+  return formatEther(minimum)
+})
 
-const delay = (ms: number) => new Promise<void>((resolve) => {
-  setTimeout(resolve, ms);
-});
+const delay = (ms: number) =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, ms)
+  })
 
 const bidRequest = async (): Promise<Hash> => {
-  const value = parseEther(String(bidAmount.value));
+  const value = parseEther(String(bidAmount.value))
   if (isFirstBid.value) {
-    return initializeAuction(bidMessage.value, value);
+    return initializeAuction(bidMessage.value, value)
   }
-  return bid(bidMessage.value, value);
-};
+  return bid(bidMessage.value, value)
+}
 
 const handleContinue = async () => {
-  open.value = false;
-  await nextTick();
-  await transactionFlowRef.value?.initializeRequest(bidRequest);
-};
+  open.value = false
+  await nextTick()
+  await transactionFlowRef.value?.initializeRequest(bidRequest)
+}
 
 const handleCancel = () => {
-  open.value = false;
-  bidMessage.value = "";
-  bidAmount.value = "";
-};
+  open.value = false
+  bidMessage.value = ''
+  bidAmount.value = ''
+}
 
 const handleBidComplete = async () => {
-  await delay(2000);
-  bidMessage.value = "";
-  bidAmount.value = "";
-  emit("actionComplete");
-};
+  await delay(2000)
+  bidMessage.value = ''
+  bidAmount.value = ''
+  emit('actionComplete')
+}
 
 const bidText = computed(() => ({
   title: {
-    confirm: "Place Bid",
-    requesting: "Confirm in Wallet",
-    waiting: "Placing Bid",
-    complete: "Bid Placed!",
+    confirm: 'Place Bid',
+    requesting: 'Confirm in Wallet',
+    waiting: 'Placing Bid',
+    complete: 'Bid Placed!',
   },
   lead: {
-    confirm: `Bid ${bidAmount.value || "..."} ETH`,
-    requesting: "Please confirm the transaction in your wallet.",
-    waiting: "Your bid is being recorded on-chain.",
-    complete: "You are now the leading bidder!",
+    confirm: `Bid ${bidAmount.value || '...'} ETH`,
+    requesting: 'Please confirm the transaction in your wallet.',
+    waiting: 'Your bid is being recorded on-chain.',
+    complete: 'You are now the leading bidder!',
   },
   action: {
-    confirm: "Place Bid",
-    error: "Try Again",
+    confirm: 'Place Bid',
+    error: 'Try Again',
   },
-}));
+}))
 </script>
 
 <style scoped>

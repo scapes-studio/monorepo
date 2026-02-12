@@ -1,20 +1,41 @@
 <template>
-  <div class="scape-animated-image" :class="{ 'scape-animated-image--play': play }">
-    <ScapeImage :id="id" :scape-count="scapeCount" @loaded="handleScapeLoaded" />
-    <div v-if="play" class="scape-animated-image__iframe">
-      <iframe :src="embedUrl" frameborder="0"></iframe>
+  <div
+    class="scape-animated-image"
+    :class="{ 'scape-animated-image--play': play }"
+  >
+    <ScapeImage
+      :id="id"
+      :scape-count="scapeCount"
+      @loaded="handleScapeLoaded"
+    />
+    <div
+      v-if="play"
+      class="scape-animated-image__iframe"
+    >
+      <iframe
+        :src="embedUrl"
+        frameborder="0"
+      ></iframe>
     </div>
   </div>
-  <Button v-if="isPlayable && scapeImageLoaded && !play" @click="startPlay" class="small">
+  <Button
+    v-if="isPlayable && scapeImageLoaded && !play"
+    @click="startPlay"
+    class="small"
+  >
     <IconPlay />
   </Button>
-  <Button v-if="isPlayable && play" @click="stopPlay" class="small">
+  <Button
+    v-if="isPlayable && play"
+    @click="stopPlay"
+    class="small"
+  >
     <IconPause />
   </Button>
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
+import type { PropType } from 'vue'
 
 const props = defineProps({
   id: {
@@ -25,36 +46,36 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
-});
+})
 
-const isPlayable = computed(() => Number(props.id) <= 10000);
-const play = ref(false);
-const scapeImageLoaded = ref(false);
+const isPlayable = computed(() => Number(props.id) <= 10000)
+const play = ref(false)
+const scapeImageLoaded = ref(false)
 const embedUrl = computed(
   () =>
     `https://embed.scapes.xyz/?simple&autoplay&chapter-switch=false&sound-control=false#${props.id}`,
-);
+)
 
 const handleScapeLoaded = () => {
-  scapeImageLoaded.value = true;
-};
+  scapeImageLoaded.value = true
+}
 
 const startPlay = () => {
-  if (!scapeImageLoaded.value) return;
-  play.value = true;
-};
+  if (!scapeImageLoaded.value) return
+  play.value = true
+}
 
 const stopPlay = () => {
-  play.value = false;
-};
+  play.value = false
+}
 
 watch(
   () => props.id,
   () => {
-    play.value = false;
-    scapeImageLoaded.value = false;
+    play.value = false
+    scapeImageLoaded.value = false
   },
-);
+)
 </script>
 
 <style scoped>
@@ -103,7 +124,7 @@ button.small {
   box-shadow: none;
   background: var(--gray-z-1);
 
-  &>svg {
+  & > svg {
     width: calc(var(--scape-height) / 4);
     height: calc(var(--scape-height) / 4);
     color: var(--gray-z-5);

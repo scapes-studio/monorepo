@@ -1,21 +1,15 @@
 <template>
   <div class="activity-filters grid-shadow">
-    <FormCheckbox v-model="filters.transfers">
-      Transfers
-    </FormCheckbox>
-    <FormCheckbox v-model="filters.sales">
-      Sales
-    </FormCheckbox>
-    <FormCheckbox v-model="filters.listings">
-      Listings
-    </FormCheckbox>
+    <FormCheckbox v-model="filters.transfers"> Transfers </FormCheckbox>
+    <FormCheckbox v-model="filters.sales"> Sales </FormCheckbox>
+    <FormCheckbox v-model="filters.listings"> Listings </FormCheckbox>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ActivityFilters } from "~/types/activity";
+import type { ActivityFilters } from '~/types/activity'
 
-const filters = defineModel<ActivityFilters>({ required: true });
+const filters = defineModel<ActivityFilters>({ required: true })
 </script>
 
 <style scoped>

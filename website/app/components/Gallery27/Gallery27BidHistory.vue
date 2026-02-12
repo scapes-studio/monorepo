@@ -1,73 +1,98 @@
 <template>
-  <GridArea padding class="bid-history-header">
-    <h1>History <small class="muted">Every bid transforms the visual</small></h1>
-    <span class="muted">
-      {{ bids.length }} bids
-    </span>
+  <GridArea
+    padding
+    class="bid-history-header"
+  >
+    <h1>
+      History <small class="muted">Every bid transforms the visual</small>
+    </h1>
+    <span class="muted"> {{ bids.length }} bids </span>
   </GridArea>
 
-  <Gallery27BidItem v-for="bid in bids" :key="bid.id" :bid="bid" :selected="activeBidId === bid.id"
-    @select="selectedBidId = bid.id" />
+  <Gallery27BidItem
+    v-for="bid in bids"
+    :key="bid.id"
+    :bid="bid"
+    :selected="activeBidId === bid.id"
+    @select="selectedBidId = bid.id"
+  />
 
-  <GridArea v-if="initialRender" class="initial-render history-item"
-    :class="{ 'gallery27-bid-history__initial--selected': activeBidId === 'initial' }"
-    @click="selectedBidId = 'initial'" rows="2">
-    <img v-if="initialRenderThumbnail" :src="initialRenderThumbnail" alt="Initial Render" />
+  <GridArea
+    v-if="initialRender"
+    class="initial-render history-item"
+    :class="{
+      'gallery27-bid-history__initial--selected': activeBidId === 'initial',
+    }"
+    @click="selectedBidId = 'initial'"
+    rows="2"
+  >
+    <img
+      v-if="initialRenderThumbnail"
+      :src="initialRenderThumbnail"
+      alt="Initial Render"
+    />
     <div class="content">
       <h2>Initial Render</h2>
       <p class="muted">Every scape starts with an initial render.</p>
     </div>
   </GridArea>
 
-  <GridArea v-if="bids.length === 0" padding center class="muted">
+  <GridArea
+    v-if="bids.length === 0"
+    padding
+    center
+    class="muted"
+  >
     {{ isActive ? 'No bids yet' : 'No bids' }}
   </GridArea>
 </template>
 
 <script setup lang="ts">
-import type { Gallery27Bid, Gallery27Image } from "~/types/gallery27";
+import type { Gallery27Bid, Gallery27Image } from '~/types/gallery27'
 
-const CDN_BASE = "https://cdn.scapes.xyz";
+const CDN_BASE = 'https://cdn.scapes.xyz'
 
 const props = defineProps<{
-  bids: Gallery27Bid[];
-  isActive: boolean;
-  initialRender: Gallery27Image | null;
-  acceptedImage: Gallery27Image | null;
-}>();
+  bids: Gallery27Bid[]
+  isActive: boolean
+  initialRender: Gallery27Image | null
+  acceptedImage: Gallery27Image | null
+}>()
 
-const selectedBidId = defineModel<string | null>("selectedBidId");
+const selectedBidId = defineModel<string | null>('selectedBidId')
 
 const initialRenderThumbnail = computed(() => {
-  if (!props.initialRender?.path) return null;
-  return `${CDN_BASE}/${props.initialRender.path}`;
-});
+  if (!props.initialRender?.path) return null
+  return `${CDN_BASE}/${props.initialRender.path}`
+})
 
 // Determine which item is currently "active" (displayed in the painting)
 const activeBidId = computed(() => {
-  if (selectedBidId.value) return selectedBidId.value;
+  if (selectedBidId.value) return selectedBidId.value
 
   // Default: find bid matching accepted image, or fall back to initial
   if (props.acceptedImage) {
-    const acceptedBid = props.bids.find(b => b.image?.id === props.acceptedImage?.id);
-    if (acceptedBid) return acceptedBid.id;
+    const acceptedBid = props.bids.find(
+      (b) => b.image?.id === props.acceptedImage?.id,
+    )
+    if (acceptedBid) return acceptedBid.id
   }
 
-  return "initial";
-});
+  return 'initial'
+})
 
 const selectedImage = computed(() => {
-  if (selectedBidId.value === "initial") {
-    return props.initialRender;
+  if (selectedBidId.value === 'initial') {
+    return props.initialRender
   }
   if (selectedBidId.value) {
-    const bid = props.bids.find(b => b.id === selectedBidId.value);
-    return bid?.image ?? null;
+    const bid = props.bids.find((b) => b.id === selectedBidId.value)
+    return bid?.image ?? null
   }
-  return null;
-});
+  return null
+})
 
-defineExpose({ selectedImage });
+defineExpose({ selectedImage })
 </script>
 
 <style scoped>
@@ -77,10 +102,10 @@ defineExpose({ selectedImage });
   justify-content: space-between;
   margin-top: var(--scape-height-gutter);
 
-  &>h1 {
+  & > h1 {
     margin: 0;
 
-    &>small {
+    & > small {
       display: block;
       font-size: var(--font-sm);
     }
@@ -89,7 +114,9 @@ defineExpose({ selectedImage });
 
 .history-item {
   display: grid;
-  grid-template-columns: calc(var(--scape-height-gutter) * 2 - var(--grid-gutter)) 1fr;
+  grid-template-columns: calc(
+      var(--scape-height-gutter) * 2 - var(--grid-gutter)
+    ) 1fr;
   gap: var(--spacer);
   padding: var(--spacer);
   align-items: center;
@@ -104,7 +131,7 @@ defineExpose({ selectedImage });
     object-fit: cover;
   }
 
-  &>.content {
+  & > .content {
     display: grid;
     gap: var(--spacer-xs);
     align-items: center;
@@ -118,7 +145,6 @@ defineExpose({ selectedImage });
     }
   }
 }
-
 
 .gallery27-bid-history__initial {
   display: flex;
@@ -148,7 +174,8 @@ defineExpose({ selectedImage });
   object-fit: cover;
 }
 
-.gallery27-bid-history__initial-label {}
+.gallery27-bid-history__initial-label {
+}
 
 .gallery27-bid-history__empty {
   color: var(--muted);

@@ -18,7 +18,7 @@ export function useVirtualGrid<T>(options: VirtualGridOptions<T>) {
       count: rowCount.value,
       estimateSize: () => rowHeight.value,
       overscan,
-    }))
+    })),
   )
 
   // Re-measure when columns or row height changes

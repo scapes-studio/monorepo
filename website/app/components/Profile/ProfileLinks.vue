@@ -1,8 +1,19 @@
 <template>
-  <section v-if="activeLinks.length" class="profile-links grid-shadow">
+  <section
+    v-if="activeLinks.length"
+    class="profile-links grid-shadow"
+  >
     <ul class="profile-links__list">
-      <li v-for="{ key, value } in activeLinks" :key="key" class="grid-shadow">
-        <NuxtLink :to="buildUrl(key, value)" rel="noopener noreferrer" target="_blank">
+      <li
+        v-for="{ key, value } in activeLinks"
+        :key="key"
+        class="grid-shadow"
+      >
+        <NuxtLink
+          :to="buildUrl(key, value)"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           {{ labelMap[key] }}
         </NuxtLink>
       </li>
@@ -11,35 +22,36 @@
 </template>
 
 <script setup lang="ts">
-import type { ProfileLinks as Links } from "~/composables/useProfile";
+import type { ProfileLinks as Links } from '~/composables/useProfile'
 
-const props = defineProps<{ links: Links | null | undefined }>();
+const props = defineProps<{ links: Links | null | undefined }>()
 
-const activeLinks = computed(() => props.links
-  ? (Object.entries(props.links) as [keyof Links, string | undefined][])
-    .filter((entry): entry is [keyof Links, string] => !!entry[1])
-    .map(([key, value]) => ({ key, value }))
-  : []
-);
+const activeLinks = computed(() =>
+  props.links
+    ? (Object.entries(props.links) as [keyof Links, string | undefined][])
+        .filter((entry): entry is [keyof Links, string] => !!entry[1])
+        .map(([key, value]) => ({ key, value }))
+    : [],
+)
 
 const labelMap: Record<keyof Links, string> = {
-  url: "Website",
-  email: "Email",
-  twitter: "X",
-  github: "GitHub",
-};
+  url: 'Website',
+  email: 'Email',
+  twitter: 'X',
+  github: 'GitHub',
+}
 
 const urlPrefixMap: Partial<Record<keyof Links, string>> = {
-  email: "mailto:",
-  twitter: "https://x.com/",
-  github: "https://github.com/",
-};
+  email: 'mailto:',
+  twitter: 'https://x.com/',
+  github: 'https://github.com/',
+}
 
 function buildUrl(key: keyof Links, value: string): string {
-  const prefix = urlPrefixMap[key];
-  if (!prefix) return value;
-  const cleanValue = key === "twitter" ? value.replace(/^@/, "") : value;
-  return prefix + cleanValue;
+  const prefix = urlPrefixMap[key]
+  if (!prefix) return value
+  const cleanValue = key === 'twitter' ? value.replace(/^@/, '') : value
+  return prefix + cleanValue
 }
 </script>
 

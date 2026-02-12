@@ -1,16 +1,31 @@
 <template>
-  <Button class="small" @click="open = true">
+  <Button
+    class="small"
+    @click="open = true"
+  >
     Unmerge
   </Button>
 
-  <Dialog v-model:open="open" title="Unmerge" class="scapes-action__dialog">
+  <Dialog
+    v-model:open="open"
+    title="Unmerge"
+    class="scapes-action__dialog"
+  >
     <div class="scapes-action__form">
-      <p class="scapes-action__copy">Unmerge this merge and return the component Scapes.</p>
+      <p class="scapes-action__copy">
+        Unmerge this merge and return the component Scapes.
+      </p>
       <Actions>
-        <Button class="small" @click="open = false">
+        <Button
+          class="small"
+          @click="open = false"
+        >
           Keep Merge
         </Button>
-        <Button class="small" @click="handleContinue">
+        <Button
+          class="small"
+          @click="handleContinue"
+        >
           Unmerge
         </Button>
       </Actions>
@@ -27,60 +42,63 @@
 </template>
 
 <script setup lang="ts">
-import type { Hash } from "viem";
+import type { Hash } from 'viem'
 
 const props = defineProps<{
-  scapeId: string;
-}>();
+  scapeId: string
+}>()
 
 const emit = defineEmits<{
-  listingChange: [];
-}>();
+  listingChange: []
+}>()
 
-const { purge } = useMarketplaceActions(() => props.scapeId);
+const { purge } = useMarketplaceActions(() => props.scapeId)
 
-const open = ref(false);
+const open = ref(false)
 
-const transactionFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
+const transactionFlowRef = ref<{
+  initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown>
+} | null>(null)
 
-const delay = (ms: number) => new Promise<void>((resolve) => {
-  setTimeout(resolve, ms);
-});
+const delay = (ms: number) =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, ms)
+  })
 
 const purgeRequest = async (): Promise<Hash> => {
-  return purge();
-};
+  return purge()
+}
 
 const handleContinue = async () => {
-  open.value = false;
-  await nextTick();
-  await transactionFlowRef.value?.initializeRequest(purgeRequest);
-};
+  open.value = false
+  await nextTick()
+  await transactionFlowRef.value?.initializeRequest(purgeRequest)
+}
 
 const handlePurgeComplete = async () => {
-  await delay(2000);
-  open.value = false;
-  emit("listingChange");
-};
+  await delay(2000)
+  open.value = false
+  emit('listingChange')
+}
 
 const purgeText = {
   title: {
-    confirm: "Unmerge",
-    requesting: "Confirm in Wallet",
-    waiting: "Unmerging",
-    complete: "Unmerged!",
+    confirm: 'Unmerge',
+    requesting: 'Confirm in Wallet',
+    waiting: 'Unmerging',
+    complete: 'Unmerged!',
   },
   lead: {
-    confirm: "Unmerge this merge and return the component Scapes.",
-    requesting: "Please confirm the transaction in your wallet.",
-    waiting: "Your merge is being unmerged on-chain.",
-    complete: "The merge has been unmerged. Your Scapes are back!",
+    confirm: 'Unmerge this merge and return the component Scapes.',
+    requesting: 'Please confirm the transaction in your wallet.',
+    waiting: 'Your merge is being unmerged on-chain.',
+    complete: 'The merge has been unmerged. Your Scapes are back!',
   },
   action: {
-    confirm: "Unmerge",
-    error: "Try Again",
+    confirm: 'Unmerge',
+    error: 'Try Again',
   },
-};
+}
 </script>
 
 <style scoped>

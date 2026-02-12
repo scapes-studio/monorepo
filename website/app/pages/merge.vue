@@ -1,6 +1,10 @@
 <template>
   <section class="merge">
-    <GridArea width="content" center :rows="2">
+    <GridArea
+      width="content"
+      center
+      :rows="2"
+    >
       <h1>Scape Merges</h1>
       <p class="muted">An early experiment of composable onchain art.</p>
     </GridArea>
@@ -15,7 +19,7 @@
 useSeo({
   title: 'Create Merge',
   description: 'Combine multiple Scapes into a unique merged artwork.',
-});
+})
 </script>
 
 <style scoped>

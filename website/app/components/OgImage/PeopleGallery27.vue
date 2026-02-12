@@ -1,5 +1,6 @@
 <template>
-  <div style="
+  <div
+    style="
       width: 1200px;
       height: 630px;
       background: #ffffff;
@@ -9,9 +10,11 @@
       align-items: center;
       font-style: italic;
       text-transform: uppercase;
-    ">
+    "
+  >
     <!-- Image grid -->
-    <div style="
+    <div
+      style="
         flex: 1;
         display: flex;
         flex-wrap: wrap;
@@ -20,36 +23,61 @@
         overflow: hidden;
         align-content: center;
         justify-content: center;
-      ">
-      <img v-for="(url, i) in imageUrls" :key="i" :src="url" :style="{
-        width: `${tileWidth}px`,
-        height: `${Math.round(tileWidth / 2)}px`,
-        objectFit: 'cover',
-        borderRadius: '2px',
-      }" />
+      "
+    >
+      <img
+        v-for="(url, i) in imageUrls"
+        :key="i"
+        :src="url"
+        :style="{
+          width: `${tileWidth}px`,
+          height: `${Math.round(tileWidth / 2)}px`,
+          objectFit: 'cover',
+          borderRadius: '2px',
+        }"
+      />
     </div>
 
     <!-- Profile bar -->
-    <div style="
+    <div
+      style="
         display: flex;
         align-items: center;
         gap: 8px;
         padding: 32px 32px 80px;
-      ">
-      <img v-if="image" :src="image" style="
+      "
+    >
+      <img
+        v-if="image"
+        :src="image"
+        style="
           width: 48px;
           height: 48px;
           border-radius: 999px;
           object-fit: cover;
           border: 2px solid #e5e5e5;
-        " width="48" height="48" />
-      <div v-else style="
+        "
+        width="48"
+        height="48"
+      />
+      <div
+        v-else
+        style="
           width: 48px;
           height: 48px;
           border-radius: 999px;
           background: #e5e5e5;
-        " />
-      <div style="font-size: 24px; font-weight: 700; color: #111111; font-style: italic; height: 28px;">
+        "
+      />
+      <div
+        style="
+          font-size: 24px;
+          font-weight: 700;
+          color: #111111;
+          font-style: italic;
+          height: 28px;
+        "
+      >
         {{ title }}
       </div>
     </div>

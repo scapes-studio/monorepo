@@ -1,11 +1,18 @@
 <template>
   <section class="about-article">
-    <GridArea :rows="2" center>
+    <GridArea
+      :rows="2"
+      center
+    >
       <h1>{{ page?.title }}</h1>
       <p class="muted">{{ page?.description }}</p>
     </GridArea>
 
-    <article v-if="page" ref="contentEl" class="about-article__content prose">
+    <article
+      v-if="page"
+      ref="contentEl"
+      class="about-article__content prose"
+    >
       <ContentRenderer :value="page" />
     </article>
 
@@ -21,15 +28,29 @@ const { data: page } = await useAsyncData(`about-${path.value}`, () =>
   queryCollection('about').path(path.value).first(),
 )
 
-const { data: surround } = await useAsyncData(`about-surround-${path.value}`, () =>
-  queryCollectionItemSurroundings('about', path.value),
+const { data: surround } = await useAsyncData(
+  `about-surround-${path.value}`,
+  () => queryCollectionItemSurroundings('about', path.value),
 )
 
 const navLinks = computed(() => {
   if (!surround.value?.length) return []
   return [
-    surround.value[0] ? { to: surround.value[0].path, title: surround.value[0].title, label: 'Previous' } : null,
-    surround.value[1] ? { to: surround.value[1].path, title: surround.value[1].title, label: 'Next', align: 'right' as const } : null,
+    surround.value[0]
+      ? {
+          to: surround.value[0].path,
+          title: surround.value[0].title,
+          label: 'Previous',
+        }
+      : null,
+    surround.value[1]
+      ? {
+          to: surround.value[1].path,
+          title: surround.value[1].title,
+          label: 'Next',
+          align: 'right' as const,
+        }
+      : null,
   ]
 })
 
@@ -59,5 +80,4 @@ useSeo({
 .about-article__content :deep(h1) {
   display: none;
 }
-
 </style>

@@ -1,1 +1,1 @@
-export type ListingSource = "onchain" | "seaport";
+export type ListingSource = 'onchain' | 'seaport'

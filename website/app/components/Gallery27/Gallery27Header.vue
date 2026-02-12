@@ -1,13 +1,21 @@
 <template>
   <header class="gallery27-header">
-    <NuxtLink v-if="tokenId > 1" :to="`/gallery27/${tokenId - 1}`" class="gallery27-header__nav">
+    <NuxtLink
+      v-if="tokenId > 1"
+      :to="`/gallery27/${tokenId - 1}`"
+      class="gallery27-header__nav"
+    >
       Previous
     </NuxtLink>
     <div class="gallery27-header__title">
       <h1>Day {{ tokenId }}</h1>
       <p v-if="formattedDate">{{ formattedDate }}</p>
     </div>
-    <NuxtLink v-if="tokenId < 10000" :to="`/gallery27/${tokenId + 1}`" class="gallery27-header__nav">
+    <NuxtLink
+      v-if="tokenId < 10000"
+      :to="`/gallery27/${tokenId + 1}`"
+      class="gallery27-header__nav"
+    >
       Next
     </NuxtLink>
   </header>
@@ -15,19 +23,19 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  tokenId: number;
-  date: number | null;
-}>();
+  tokenId: number
+  date: number | null
+}>()
 
 const formattedDate = computed(() => {
-  if (!props.date) return null;
-  return new Date(props.date * 1000).toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-});
+  if (!props.date) return null
+  return new Date(props.date * 1000).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+})
 </script>
 
 <style scoped>

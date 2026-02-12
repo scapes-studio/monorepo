@@ -1,34 +1,39 @@
 export type ScapeRecord = {
-  id: bigint;
-  rarity?: number | null;
-};
+  id: bigint
+  rarity?: number | null
+}
 
 type ScapesPayload = {
-  total: number;
-  scapes: ScapeRecord[];
-};
+  total: number
+  scapes: ScapeRecord[]
+}
 
-const PAGE_SIZE = 500;
+const PAGE_SIZE = 500
 
-export const useScapesByOwner = async (owner: Ref<string | null | undefined>) => {
-  const client = usePonderClient();
-  const scapes = ref<ScapeRecord[]>([]);
-  const total = ref<number | null>(null);
-  const loadMoreLoading = ref(false);
-  const error = ref<Error | null>(null);
-  const hasMore = ref(true);
-  const offset = ref(0);
+export const useScapesByOwner = async (
+  owner: Ref<string | null | undefined>,
+) => {
+  const client = usePonderClient()
+  const scapes = ref<ScapeRecord[]>([])
+  const total = ref<number | null>(null)
+  const loadMoreLoading = ref(false)
+  const error = ref<Error | null>(null)
+  const hasMore = ref(true)
+  const offset = ref(0)
 
   const reset = () => {
-    scapes.value = [];
-    total.value = null;
-    error.value = null;
-    offset.value = 0;
-    hasMore.value = true;
-    loadMoreLoading.value = false;
-  };
+    scapes.value = []
+    total.value = null
+    error.value = null
+    offset.value = 0
+    hasMore.value = true
+    loadMoreLoading.value = false
+  }
 
-  const fetchScapes = async (normalizedOwner: `0x${string}`, startOffset: number) => {
+  const fetchScapes = async (
+    normalizedOwner: `0x${string}`,
+    startOffset: number,
+  ) => {
     return await client.db
       .select({
         id: schema.scape.id,
@@ -38,70 +43,83 @@ export const useScapesByOwner = async (owner: Ref<string | null | undefined>) =>
       .where(eq(schema.scape.owner, normalizedOwner))
       .orderBy(desc(schema.scape.id))
       .limit(PAGE_SIZE)
-      .offset(startOffset);
-  };
+      .offset(startOffset)
+  }
 
   const fetchInitial = async (): Promise<ScapesPayload> => {
     if (!owner.value) {
-      return { total: 0, scapes: [] };
+      return { total: 0, scapes: [] }
     }
 
-    const normalizedOwner = owner.value.toLowerCase() as `0x${string}`;
+    const normalizedOwner = owner.value.toLowerCase() as `0x${string}`
     const [countResult, scapesResult] = await Promise.all([
       client.db.$count(schema.scape, eq(schema.scape.owner, normalizedOwner)),
       fetchScapes(normalizedOwner, 0),
-    ]);
+    ])
 
     return {
       total: countResult ?? 0,
       scapes: scapesResult,
-    };
-  };
+    }
+  }
 
-  const asyncKey = computed(() => `scapes-by-owner-${owner.value?.toLowerCase() ?? "unknown"}`);
-  const { data: initial, pending, error: asyncError } = await useAsyncData(asyncKey, fetchInitial);
+  const asyncKey = computed(
+    () => `scapes-by-owner-${owner.value?.toLowerCase() ?? 'unknown'}`,
+  )
+  const {
+    data: initial,
+    pending,
+    error: asyncError,
+  } = await useAsyncData(asyncKey, fetchInitial)
 
   watch(
     initial,
     (value) => {
-      if (!value) return;
-      scapes.value = value.scapes;
-      total.value = value.total;
-      offset.value = value.scapes.length;
-      hasMore.value = value.scapes.length >= PAGE_SIZE;
+      if (!value) return
+      scapes.value = value.scapes
+      total.value = value.total
+      offset.value = value.scapes.length
+      hasMore.value = value.scapes.length >= PAGE_SIZE
     },
     { immediate: true },
-  );
+  )
 
   watch(
     asyncError,
     (value) => {
-      error.value = value ?? null;
+      error.value = value ?? null
     },
     { immediate: true },
-  );
+  )
 
   const loadMore = async () => {
-    if (!owner.value || loadMoreLoading.value || pending.value || !hasMore.value) return;
-    loadMoreLoading.value = true;
-    error.value = null;
+    if (
+      !owner.value ||
+      loadMoreLoading.value ||
+      pending.value ||
+      !hasMore.value
+    )
+      return
+    loadMoreLoading.value = true
+    error.value = null
 
     try {
-      const normalizedOwner = owner.value.toLowerCase() as `0x${string}`;
-      const result = await fetchScapes(normalizedOwner, offset.value);
-      scapes.value.push(...result);
-      offset.value += result.length;
+      const normalizedOwner = owner.value.toLowerCase() as `0x${string}`
+      const result = await fetchScapes(normalizedOwner, offset.value)
+      scapes.value.push(...result)
+      offset.value += result.length
       if (result.length < PAGE_SIZE) {
-        hasMore.value = false;
+        hasMore.value = false
       }
     } catch (err) {
-      error.value = err instanceof Error ? err : new Error("Failed to load scapes");
+      error.value =
+        err instanceof Error ? err : new Error('Failed to load scapes')
     } finally {
-      loadMoreLoading.value = false;
+      loadMoreLoading.value = false
     }
-  };
+  }
 
-  const loading = computed(() => pending.value || loadMoreLoading.value);
+  const loading = computed(() => pending.value || loadMoreLoading.value)
 
   return {
     scapes,
@@ -111,5 +129,5 @@ export const useScapesByOwner = async (owner: Ref<string | null | undefined>) =>
     hasMore,
     loadMore,
     pageSize: PAGE_SIZE,
-  };
-};
+  }
+}

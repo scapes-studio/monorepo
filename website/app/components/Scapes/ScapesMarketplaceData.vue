@@ -3,11 +3,17 @@
     <span v-if="isPending">Checking listings…</span>
     <span v-else-if="hasError">Listing status unavailable</span>
     <template v-else>
-      <span v-if="isListed" class="marketplace-data__badge"
-        :class="{ 'marketplace-data__badge--seaport': source === 'seaport' }">
+      <span
+        v-if="isListed"
+        class="marketplace-data__badge"
+        :class="{ 'marketplace-data__badge--seaport': source === 'seaport' }"
+      >
         {{ formattedPrice }} ETH
       </span>
-      <span v-else class="marketplace-data__badge marketplace-data__badge--muted">
+      <span
+        v-else
+        class="marketplace-data__badge marketplace-data__badge--muted"
+      >
         Not listed
       </span>
     </template>
@@ -15,33 +21,36 @@
 </template>
 
 <script setup lang="ts">
-import type { ListingData } from "~/composables/useScapeListing";
+import type { ListingData } from '~/composables/useScapeListing'
 
 const props = defineProps<{
-  listing: ListingData;
-  isPending?: boolean;
-  hasError?: boolean;
-}>();
+  listing: ListingData
+  isPending?: boolean
+  hasError?: boolean
+}>()
 
-const isListed = computed(() => props.listing !== null);
-const source = computed(() => props.listing?.source ?? null);
+const isListed = computed(() => props.listing !== null)
+const source = computed(() => props.listing?.source ?? null)
 
 const formatEth = (wei: string) => {
-  const eth = Number(wei) / 1e18;
-  return eth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 });
-};
+  const eth = Number(wei) / 1e18
+  return eth.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  })
+}
 
 const formattedPrice = computed(() => {
-  const price = props.listing?.price;
-  if (!price) return null;
-  return formatEth(price);
-});
+  const price = props.listing?.price
+  if (!price) return null
+  return formatEth(price)
+})
 
 const sourceLabel = computed(() => {
-  if (source.value === "onchain") return "Internal marketplace";
-  if (source.value === "seaport") return "OpenSea";
-  return null;
-});
+  if (source.value === 'onchain') return 'Internal marketplace'
+  if (source.value === 'seaport') return 'OpenSea'
+  return null
+})
 </script>
 
 <style scoped>

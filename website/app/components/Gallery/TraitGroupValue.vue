@@ -1,22 +1,34 @@
 <template>
-  <li class="trait-value" :class="{ 'trait-value--selected': selected, 'trait-value--loading': loading }"
-    @click="emit('toggle')">
+  <li
+    class="trait-value"
+    :class="{
+      'trait-value--selected': selected,
+      'trait-value--loading': loading,
+    }"
+    @click="emit('toggle')"
+  >
     <div class="trait-value__icon">
-      <img :src="iconUrl" :alt="value" />
+      <img
+        :src="iconUrl"
+        :alt="value"
+      />
     </div>
     <span class="trait-value__label">
       <span>
         {{ value }}
       </span>
 
-      <Icon v-if="selected" type="check" />
+      <Icon
+        v-if="selected"
+        type="check"
+      />
     </span>
     <span class="trait-value__count">{{ count }}</span>
   </li>
 </template>
 
 <script setup lang="ts">
-import { getTraitIconUrl } from "~/data/traits"
+import { getTraitIconUrl } from '~/data/traits'
 
 const props = defineProps<{
   category: string

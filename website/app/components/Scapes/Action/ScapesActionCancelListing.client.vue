@@ -1,16 +1,31 @@
 <template>
-  <Button class="small" @click="open = true">
+  <Button
+    class="small"
+    @click="open = true"
+  >
     Cancel Listing
   </Button>
 
-  <Dialog v-model:open="open" title="Cancel Listing" class="scapes-action__dialog">
+  <Dialog
+    v-model:open="open"
+    title="Cancel Listing"
+    class="scapes-action__dialog"
+  >
     <div class="scapes-action__form">
-      <p class="scapes-action__copy">Cancel your listing for Scape #{{ scapeId }}.</p>
+      <p class="scapes-action__copy">
+        Cancel your listing for Scape #{{ scapeId }}.
+      </p>
       <Actions>
-        <Button class="small" @click="open = false">
+        <Button
+          class="small"
+          @click="open = false"
+        >
           Keep Listing
         </Button>
-        <Button class="small" @click="handleContinue">
+        <Button
+          class="small"
+          @click="handleContinue"
+        >
           Cancel Listing
         </Button>
       </Actions>
@@ -27,60 +42,63 @@
 </template>
 
 <script setup lang="ts">
-import type { Hash } from "viem";
+import type { Hash } from 'viem'
 
 const props = defineProps<{
-  scapeId: string;
-}>();
+  scapeId: string
+}>()
 
 const emit = defineEmits<{
-  listingChange: [];
-}>();
+  listingChange: []
+}>()
 
-const { cancelOffer } = useMarketplaceActions(() => props.scapeId);
+const { cancelOffer } = useMarketplaceActions(() => props.scapeId)
 
-const open = ref(false);
+const open = ref(false)
 
-const transactionFlowRef = ref<{ initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown> } | null>(null);
+const transactionFlowRef = ref<{
+  initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown>
+} | null>(null)
 
-const delay = (ms: number) => new Promise<void>((resolve) => {
-  setTimeout(resolve, ms);
-});
+const delay = (ms: number) =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, ms)
+  })
 
 const cancelRequest = async (): Promise<Hash> => {
-  return cancelOffer();
-};
+  return cancelOffer()
+}
 
 const handleContinue = async () => {
-  open.value = false;
-  await nextTick();
-  await transactionFlowRef.value?.initializeRequest(cancelRequest);
-};
+  open.value = false
+  await nextTick()
+  await transactionFlowRef.value?.initializeRequest(cancelRequest)
+}
 
 const handleCancelComplete = async () => {
-  await delay(2000);
-  open.value = false;
-  emit("listingChange");
-};
+  await delay(2000)
+  open.value = false
+  emit('listingChange')
+}
 
 const cancelText = {
   title: {
-    confirm: "Cancel Listing",
-    requesting: "Confirm in Wallet",
-    waiting: "Canceling Listing",
-    complete: "Listing Canceled!",
+    confirm: 'Cancel Listing',
+    requesting: 'Confirm in Wallet',
+    waiting: 'Canceling Listing',
+    complete: 'Listing Canceled!',
   },
   lead: {
     confirm: `Cancel your listing for Scape #${props.scapeId}.`,
-    requesting: "Please confirm the transaction in your wallet.",
-    waiting: "Your listing is being canceled on-chain.",
-    complete: "Your listing has been canceled.",
+    requesting: 'Please confirm the transaction in your wallet.',
+    waiting: 'Your listing is being canceled on-chain.',
+    complete: 'Your listing has been canceled.',
   },
   action: {
-    confirm: "Cancel Listing",
-    error: "Try Again",
+    confirm: 'Cancel Listing',
+    error: 'Try Again',
   },
-};
+}
 </script>
 
 <style scoped>

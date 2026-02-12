@@ -1,7 +1,13 @@
 <template>
   <div class="scapes-grid-row">
-    <ScapesGridItem v-for="scape in items" :key="`${scape.id}`" :scape="scape" :price="scape.price ?? null"
-      :is-seaport="scape.source === 'seaport'" :double-height="showPrices" />
+    <ScapesGridItem
+      v-for="scape in items"
+      :key="`${scape.id}`"
+      :scape="scape"
+      :price="scape.price ?? null"
+      :is-seaport="scape.source === 'seaport'"
+      :double-height="showPrices"
+    />
   </div>
 </template>
 

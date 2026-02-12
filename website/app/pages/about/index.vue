@@ -1,11 +1,19 @@
 <template>
   <section class="about-page">
-    <GridArea :rows="2" center>
+    <GridArea
+      :rows="2"
+      center
+    >
       <h1>About</h1>
       <p class="muted">10,000 unique pixel landscapes on Ethereum</p>
     </GridArea>
 
-    <ContentRenderer v-if="page" ref="contentEl" :value="page" class="about-page__content prose" />
+    <ContentRenderer
+      v-if="page"
+      ref="contentEl"
+      :value="page"
+      class="about-page__content prose"
+    />
 
     <AboutNav :links="navLinks" />
   </section>
@@ -14,7 +22,8 @@
 <script setup lang="ts">
 useSeo({
   title: 'About',
-  description: 'An overview of the Scapes project — 10,000 unique pixel landscapes on Ethereum.',
+  description:
+    'An overview of the Scapes project — 10,000 unique pixel landscapes on Ethereum.',
 })
 
 const { data: page } = await useAsyncData('about-index', () =>
@@ -28,12 +37,13 @@ const { data: articles } = await useAsyncData('about-articles', () =>
     .all(),
 )
 
-const navLinks = computed(() =>
-  articles.value?.map(article => ({
-    to: article.path,
-    title: article.title,
-    description: article.description,
-  })) ?? [],
+const navLinks = computed(
+  () =>
+    articles.value?.map((article) => ({
+      to: article.path,
+      title: article.title,
+      description: article.description,
+    })) ?? [],
 )
 
 const contentEl = ref<ComponentPublicInstance>()
@@ -57,5 +67,4 @@ useGridSnap(contentEl)
 .about-page__content :deep(h1) {
   display: none;
 }
-
 </style>

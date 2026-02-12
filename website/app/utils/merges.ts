@@ -3,12 +3,17 @@ const PART_SIZE = 16
 
 export type MergePart = [bigint, boolean, boolean] // [tokenId, flipX, flipY]
 
-export function mergeDefinitionToTokenId(parts: MergePart[], isFade: boolean): bigint {
+export function mergeDefinitionToTokenId(
+  parts: MergePart[],
+  isFade: boolean,
+): bigint {
   let mergeId = BigInt(isFade ? 1 : 0)
 
   parts.forEach((part, i) => {
     const mergePartBytes =
-      part[0] | (BigInt(part[1] ? 1 : 0) << 14n) | (BigInt(part[2] ? 1 : 0) << 15n)
+      part[0] |
+      (BigInt(part[1] ? 1 : 0) << 14n) |
+      (BigInt(part[2] ? 1 : 0) << 15n)
     mergeId |= mergePartBytes << (BigInt(PART_SIZE * i) + 1n)
   })
 

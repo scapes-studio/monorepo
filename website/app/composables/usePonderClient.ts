@@ -1,11 +1,13 @@
-let ponderClient: ReturnType<typeof createClient> | null = null;
+let ponderClient: ReturnType<typeof createClient> | null = null
 
 export const usePonderClient = () => {
-  const runtimeConfig = useRuntimeConfig();
+  const runtimeConfig = useRuntimeConfig()
 
   if (!ponderClient) {
-    ponderClient = createClient(`${runtimeConfig.public.apiUrl}/sql`, { schema });
+    ponderClient = createClient(`${runtimeConfig.public.apiUrl}/sql`, {
+      schema,
+    })
   }
 
-  return ponderClient;
-};
+  return ponderClient
+}

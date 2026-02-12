@@ -1,58 +1,104 @@
 <template>
   <li class="activity-item grid-shadow">
-    <GridArea :rows="1" width="full" class="activity-item__header no-shadow">
+    <GridArea
+      :rows="1"
+      width="full"
+      class="activity-item__header no-shadow"
+    >
       <span class="activity-item__type">
         <NuxtLink :to="scapeUrl(item.tokenId, item.collection)">
-          <span>{{ typeLabel }} <span class="muted">#{{ item.tokenId }}</span></span>
+          <span
+            >{{ typeLabel }}
+            <span class="muted">#{{ item.tokenId }}</span></span
+          >
           <template v-if="item.type === 'sale'">
             <span class="muted">
-              (<span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>
-              <span class="activity-item__source" v-if="item.source === 'seaport'">
-                via {{ item.source }}
-              </span>)
+              (<span class="activity-item__price"
+                >{{ formatETH(item.price.eth) }} ETH</span
+              >
+              <span
+                class="activity-item__source"
+                v-if="item.source === 'seaport'"
+              >
+                via {{ item.source }} </span
+              >)
             </span>
           </template>
           <template v-if="item.type === 'listing'">
             <span>
-              (<span class="activity-item__price">{{ formatETH(item.price.eth) }} ETH</span>)
+              (<span class="activity-item__price"
+                >{{ formatETH(item.price.eth) }} ETH</span
+              >)
             </span>
           </template>
         </NuxtLink>
         <span class="image">
-          <ScapesGridItem v-if="item.collection === 'scapes'" :scape="{ id: BigInt(item.tokenId) }" />
-          <ActivityGallery27Image v-else-if="item.collection === 'twenty-seven-year-scapes'" :token-id="item.tokenId" />
+          <ScapesGridItem
+            v-if="item.collection === 'scapes'"
+            :scape="{ id: BigInt(item.tokenId) }"
+          />
+          <ActivityGallery27Image
+            v-else-if="item.collection === 'twenty-seven-year-scapes'"
+            :token-id="item.tokenId"
+          />
         </span>
-        <a v-if="item.txHash" :href="txUrl(item.txHash)" class="activity-item__time" target="_blank"
-          rel="noopener noreferrer">{{ timeAgo }}</a>
-        <span v-else class="activity-item__time">{{ timeAgo }}</span>
+        <a
+          v-if="item.txHash"
+          :href="txUrl(item.txHash)"
+          class="activity-item__time"
+          target="_blank"
+          rel="noopener noreferrer"
+          >{{ timeAgo }}</a
+        >
+        <span
+          v-else
+          class="activity-item__time"
+          >{{ timeAgo }}</span
+        >
       </span>
     </GridArea>
 
-    <GridArea :rows="1" width="full" class="activity-item__content no-shadow">
+    <GridArea
+      :rows="1"
+      width="full"
+      class="activity-item__content no-shadow"
+    >
       <template v-if="item.type === 'transfer'">
         <div class="activity-item__addresses">
           <template v-if="isMint">
             <div></div>
             <div>
               <span class="activity-item__label">To</span>
-              <AccountLink :address="item.to" class="activity-item__link" />
+              <AccountLink
+                :address="item.to"
+                class="activity-item__link"
+              />
             </div>
           </template>
           <template v-else-if="isBurn">
             <div></div>
             <div>
               <span class="activity-item__label">From</span>
-              <AccountLink :address="item.from" class="activity-item__link" />
+              <AccountLink
+                :address="item.from"
+                class="activity-item__link"
+              />
             </div>
           </template>
           <template v-else>
             <div>
               <span class="activity-item__label">From</span>
-              <AccountLink :address="item.from" class="activity-item__link" />
+              <AccountLink
+                :address="item.from"
+                class="activity-item__link"
+              />
             </div>
             <div>
               <span class="activity-item__label">To</span>
-              <AccountLink :address="item.to" class="activity-item__link" />
+              <AccountLink
+                :address="item.to"
+                class="activity-item__link"
+              />
             </div>
           </template>
         </div>
@@ -62,11 +108,17 @@
         <div class="activity-item__addresses">
           <div>
             <span class="activity-item__label">From</span>
-            <AccountLink :address="item.seller" class="activity-item__link" />
+            <AccountLink
+              :address="item.seller"
+              class="activity-item__link"
+            />
           </div>
           <div>
             <span class="activity-item__label">To</span>
-            <AccountLink :address="item.buyer" class="activity-item__link" />
+            <AccountLink
+              :address="item.buyer"
+              class="activity-item__link"
+            />
           </div>
         </div>
       </template>
@@ -75,7 +127,10 @@
         <div class="activity-item__addresses">
           <div>
             <span class="activity-item__label">By</span>
-            <AccountLink :address="item.lister" class="activity-item__link" />
+            <AccountLink
+              :address="item.lister"
+              class="activity-item__link"
+            />
           </div>
           <div></div>
         </div>
@@ -86,44 +141,48 @@
 
 <script setup lang="ts">
 import { useTimeAgo } from '@vueuse/core'
-import type { ActivityItem } from "~/types/activity"
+import type { ActivityItem } from '~/types/activity'
 
-const props = defineProps<{ item: ActivityItem }>();
+const props = defineProps<{ item: ActivityItem }>()
 
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
-const timeAgo = useTimeAgo(() => new Date(props.item.timestamp * 1000));
+const timeAgo = useTimeAgo(() => new Date(props.item.timestamp * 1000))
 
-const isMint = computed(() =>
-  props.item.type === "transfer" && props.item.from.toLowerCase() === ZERO_ADDRESS
-);
+const isMint = computed(
+  () =>
+    props.item.type === 'transfer' &&
+    props.item.from.toLowerCase() === ZERO_ADDRESS,
+)
 
-const isBurn = computed(() =>
-  props.item.type === "transfer" && props.item.to.toLowerCase() === ZERO_ADDRESS
-);
+const isBurn = computed(
+  () =>
+    props.item.type === 'transfer' &&
+    props.item.to.toLowerCase() === ZERO_ADDRESS,
+)
 
 const typeLabel = computed(() => {
-  if (isMint.value) return "Mint";
-  if (isBurn.value) return "Burn";
+  if (isMint.value) return 'Mint'
+  if (isBurn.value) return 'Burn'
   switch (props.item.type) {
-    case "transfer":
-      return "Transfer";
-    case "sale":
-      return "Sale";
-    case "listing":
-      return "Listing";
+    case 'transfer':
+      return 'Transfer'
+    case 'sale':
+      return 'Sale'
+    case 'listing':
+      return 'Listing'
     default:
-      return (props.item as { type: string }).type;
+      return (props.item as { type: string }).type
   }
-});
+})
 
 const scapeUrl = (tokenId: string, collection: string) => {
-  if (collection === "twenty-seven-year-scapes") {
-    return `/gallery27/${tokenId}`;
+  if (collection === 'twenty-seven-year-scapes') {
+    return `/gallery27/${tokenId}`
   }
-  return `/${tokenId}`;
-};
-const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`;
+  return `/${tokenId}`
+}
+const txUrl = (hash: string) => `https://etherscan.io/tx/${hash}`
 </script>
 
 <style scoped>
@@ -189,8 +248,7 @@ a.activity-item__time:hover {
   width: 100%;
   gap: var(--spacer);
 
-
-  &>*:last-child {
+  & > *:last-child {
     text-align: right;
   }
 }
@@ -199,7 +257,6 @@ a.activity-item__time:hover {
   display: block;
   text-transform: uppercase;
   color: var(--muted);
-
 }
 
 .activity-item__link {

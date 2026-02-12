@@ -1,7 +1,13 @@
 <template>
-  <ul ref="navRef" class="nav-indicator">
+  <ul
+    ref="navRef"
+    class="nav-indicator"
+  >
     <slot />
-    <span class="nav-indicator__bar" :style="indicatorStyle" />
+    <span
+      class="nav-indicator__bar"
+      :style="indicatorStyle"
+    />
   </ul>
 </template>
 
@@ -11,7 +17,11 @@ import { useEventListener } from '@vueuse/core'
 const route = useRoute()
 
 const navRef = ref<HTMLElement | null>(null)
-const indicatorStyle = ref({ transform: 'translateX(0)', width: '0px', opacity: '0' })
+const indicatorStyle = ref({
+  transform: 'translateX(0)',
+  width: '0px',
+  opacity: '0',
+})
 let resizeFrame: number | null = null
 
 const updateIndicator = () => {
@@ -19,7 +29,11 @@ const updateIndicator = () => {
 
   const activeLink = navRef.value.querySelector('.router-link-active')
   if (!activeLink) {
-    indicatorStyle.value = { transform: 'translateX(0)', width: '0px', opacity: '0' }
+    indicatorStyle.value = {
+      transform: 'translateX(0)',
+      width: '0px',
+      opacity: '0',
+    }
     return
   }
 
@@ -42,9 +56,12 @@ const onResize = () => {
   })
 }
 
-watch(() => route.path, () => {
-  nextTick(updateIndicator)
-})
+watch(
+  () => route.path,
+  () => {
+    nextTick(updateIndicator)
+  },
+)
 
 useEventListener(window, 'resize', onResize, { passive: true })
 
@@ -81,7 +98,10 @@ defineExpose({ navRef })
   height: calc(var(--grid-gutter) * 2);
   background: black;
   border-radius: var(--grid-gutter) var(--grid-gutter) 0 0;
-  transition: transform 0.3s ease, width 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease,
+    opacity 0.3s ease;
   pointer-events: none;
   will-change: transform, width;
 }

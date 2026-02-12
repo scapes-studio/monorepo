@@ -1,89 +1,123 @@
 <template>
   <section class="activity-page">
-    <GridArea :rows="2" center>
+    <GridArea
+      :rows="2"
+      center
+    >
       <h1>Activity</h1>
       <p class="muted">
         <span>Recent activity </span>
-        <span v-if="total !== null" class="activity-page__count">({{ formatNumber(total) }} total events)</span>
+        <span
+          v-if="total !== null"
+          class="activity-page__count"
+          >({{ formatNumber(total) }} total events)</span
+        >
       </p>
     </GridArea>
     <ActivityFilters v-model="filters" />
 
-    <div v-if="loading && activity.length === 0" class="activity-page__status">
+    <div
+      v-if="loading && activity.length === 0"
+      class="activity-page__status"
+    >
       Loading activity...
     </div>
-    <div v-else-if="error" class="activity-page__status activity-page__status--error">
+    <div
+      v-else-if="error"
+      class="activity-page__status activity-page__status--error"
+    >
       Unable to load activity right now.
     </div>
-    <div v-else-if="activity.length === 0" class="activity-page__status">
+    <div
+      v-else-if="activity.length === 0"
+      class="activity-page__status"
+    >
       No activity found.
     </div>
 
     <template v-else>
       <ul class="activity-page__list">
-        <ActivityItem v-for="item in activity" :key="item.id" :item="item" />
+        <ActivityItem
+          v-for="item in activity"
+          :key="item.id"
+          :item="item"
+        />
       </ul>
 
-      <button v-if="hasMore" ref="loadMoreRef" class="activity-page__load-more" type="button" :disabled="loading"
-        @click="loadMore">
+      <button
+        v-if="hasMore"
+        ref="loadMoreRef"
+        class="activity-page__load-more"
+        type="button"
+        :disabled="loading"
+        @click="loadMore"
+      >
         <span v-if="loading">Loading...</span>
         <span v-else>Load more</span>
       </button>
-      <div v-else class="activity-page__status">All activity loaded.</div>
+      <div
+        v-else
+        class="activity-page__status"
+      >
+        All activity loaded.
+      </div>
     </template>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { ActivityFilters } from "~/types/activity";
+import type { ActivityFilters } from '~/types/activity'
 
 useSeo({
   title: 'Activity',
-  description: 'Recent activity across Scapes collections - transfers, sales, and listings.',
-});
+  description:
+    'Recent activity across Scapes collections - transfers, sales, and listings.',
+})
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
 const parseFilterParam = (value: unknown): boolean => {
-  if (value === "false" || value === "0") return false;
-  return true;
-};
+  if (value === 'false' || value === '0') return false
+  return true
+}
 
 const getInitialFilters = (): ActivityFilters => ({
   transfers: parseFilterParam(route.query.transfers),
   sales: parseFilterParam(route.query.sales),
   listings: parseFilterParam(route.query.listings),
-});
+})
 
-const filters = ref<ActivityFilters>(getInitialFilters());
+const filters = ref<ActivityFilters>(getInitialFilters())
 
 watch(
   filters,
   (newFilters) => {
-    const allDisabled = !newFilters.transfers && !newFilters.sales && !newFilters.listings;
+    const allDisabled =
+      !newFilters.transfers && !newFilters.sales && !newFilters.listings
     if (allDisabled) {
       nextTick(() => {
-        filters.value = { transfers: true, sales: true, listings: true };
-      });
-      return;
+        filters.value = { transfers: true, sales: true, listings: true }
+      })
+      return
     }
 
-    const query: Record<string, string> = {};
-    if (!newFilters.transfers) query.transfers = "false";
-    if (!newFilters.sales) query.sales = "false";
-    if (!newFilters.listings) query.listings = "false";
-    router.replace({ query });
+    const query: Record<string, string> = {}
+    if (!newFilters.transfers) query.transfers = 'false'
+    if (!newFilters.sales) query.sales = 'false'
+    if (!newFilters.listings) query.listings = 'false'
+    router.replace({ query })
   },
-  { deep: true }
-);
+  { deep: true },
+)
 
-const { activity, total, loading, error, hasMore, loadMore } = useActivity(filters);
+const { activity, total, loading, error, hasMore, loadMore } =
+  useActivity(filters)
 
-const loadMoreRef = ref<HTMLElement | null>(null);
+const loadMoreRef = ref<HTMLElement | null>(null)
 useIntersectionObserver(loadMoreRef, ([entry]) => {
-  if (entry?.isIntersecting) loadMore();
-});
+  if (entry?.isIntersecting) loadMore()
+})
 </script>
 
 <style scoped>
@@ -98,7 +132,7 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
   margin: 0;
   padding: 0;
 
-  >* {
+  > * {
     display: flex;
     justify-content: space-between;
   }
@@ -133,7 +167,7 @@ useIntersectionObserver(loadMoreRef, ([entry]) => {
 .activity-page__load-more {
   text-align: center;
 
-  &>span {
+  & > span {
     width: 100%;
     display: flex;
     align-items: center;

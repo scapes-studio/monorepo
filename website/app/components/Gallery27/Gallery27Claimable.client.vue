@@ -6,27 +6,37 @@
     </header>
     <Gallery27Grid :scapes="claimableScapes" />
   </template>
-  <div v-else-if="isOwnProfile && claimablePending" class="gallery27-claimable__status">
+  <div
+    v-else-if="isOwnProfile && claimablePending"
+    class="gallery27-claimable__status"
+  >
     Checking for claimable scapes…
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAccount } from "@wagmi/vue";
+import { useAccount } from '@wagmi/vue'
 
 const props = defineProps<{
-  resolvedAddress: string | null;
-}>();
+  resolvedAddress: string | null
+}>()
 
-const { address: connectedAddress } = useAccount();
-const isOwnProfile = computed(() =>
-  connectedAddress.value?.toLowerCase() === props.resolvedAddress?.toLowerCase()
-);
+const { address: connectedAddress } = useAccount()
+const isOwnProfile = computed(
+  () =>
+    connectedAddress.value?.toLowerCase() ===
+    props.resolvedAddress?.toLowerCase(),
+)
 
-const claimableOwner = computed(() => isOwnProfile.value ? props.resolvedAddress : null);
-const { data: claimableData, pending: claimablePending } = await useGallery27ClaimableByOwner(claimableOwner);
-const claimableScapes = computed(() => claimableData.value?.scapes ?? []);
-const showClaimable = computed(() => isOwnProfile.value && claimableScapes.value.length > 0);
+const claimableOwner = computed(() =>
+  isOwnProfile.value ? props.resolvedAddress : null,
+)
+const { data: claimableData, pending: claimablePending } =
+  await useGallery27ClaimableByOwner(claimableOwner)
+const claimableScapes = computed(() => claimableData.value?.scapes ?? [])
+const showClaimable = computed(
+  () => isOwnProfile.value && claimableScapes.value.length > 0,
+)
 </script>
 
 <style scoped>

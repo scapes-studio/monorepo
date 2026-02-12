@@ -1,14 +1,21 @@
 <template>
   <aside class="sidebar">
     <div class="sidebar__scroll">
-      <GalleryTraitGroup v-for="group in TRAITS" :key="group.name" :group="group" :counts="traitCounts[group.name]"
-        :loading="countsLoading" :selected-traits="selectedTraits" @select="handleTraitSelect" />
+      <GalleryTraitGroup
+        v-for="group in TRAITS"
+        :key="group.name"
+        :group="group"
+        :counts="traitCounts[group.name]"
+        :loading="countsLoading"
+        :selected-traits="selectedTraits"
+        @select="handleTraitSelect"
+      />
     </div>
   </aside>
 </template>
 
 <script setup lang="ts">
-import { TRAITS, type TraitCounts } from "~/data/traits"
+import { TRAITS, type TraitCounts } from '~/data/traits'
 
 const props = defineProps<{
   selectedTraits: string[]
@@ -17,12 +24,12 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  "update-traits": [traits: string[]]
+  'update-traits': [traits: string[]]
 }>()
 
 const handleTraitSelect = (trait: string) => {
   let newTraits = [...props.selectedTraits]
-  const [category] = trait.split("=")
+  const [category] = trait.split('=')
 
   if (props.selectedTraits.includes(trait)) {
     // Deselect
@@ -33,7 +40,7 @@ const handleTraitSelect = (trait: string) => {
     newTraits.push(trait)
   }
 
-  emit("update-traits", newTraits)
+  emit('update-traits', newTraits)
 }
 </script>
 

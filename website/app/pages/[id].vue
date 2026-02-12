@@ -1,169 +1,206 @@
 <template>
-  <section class="scape-detail" :style="{ '--scape-count': scapeCount }">
-    <GridArea rows="calc(var(--content-columns, 5) * 2)" width="full" class="scape-detail__image border-drop_">
-      <ScapeAnimated :id="scapeId" :scape-count="scapeCount" />
+  <section
+    class="scape-detail"
+    :style="{ '--scape-count': scapeCount }"
+  >
+    <GridArea
+      rows="calc(var(--content-columns, 5) * 2)"
+      width="full"
+      class="scape-detail__image border-drop_"
+    >
+      <ScapeAnimated
+        :id="scapeId"
+        :scape-count="scapeCount"
+      />
     </GridArea>
 
     <header class="border-drop_">
-      <GridArea rows="1" class="scape-detail__header" padding>
+      <GridArea
+        rows="1"
+        class="scape-detail__header"
+        padding
+      >
         <div>
           <h1>Scape #{{ scapeId }}</h1>
           <div class="scape-detail__owner">
             <span v-if="scapePending">Loading owner…</span>
             <template v-else-if="owner">
               Owned by
-              <AccountLink :address="owner" class="scape-detail__owner-link" shorten-ens />
+              <AccountLink
+                :address="owner"
+                class="scape-detail__owner-link"
+                shorten-ens
+              />
             </template>
           </div>
         </div>
 
-        <ScapesMarketplaceData :listing="listing" :is-pending="listingPending" :has-error="listingError"
-          class="scape-detail__listings" />
+        <ScapesMarketplaceData
+          :listing="listing"
+          :is-pending="listingPending"
+          :has-error="listingError"
+          class="scape-detail__listings"
+        />
       </GridArea>
 
-      <ScapesAttributes :attributes="attributes" :gallery27-token-id="gallery27TokenId" />
+      <ScapesAttributes
+        :attributes="attributes"
+        :gallery27-token-id="gallery27TokenId"
+      />
     </header>
 
-    <ScapesActions :scape-id="scapeId" :owner="owner" :listing="listing" class="scape-actions"
-      @listing-change="refreshListing" />
+    <ScapesActions
+      :scape-id="scapeId"
+      :owner="owner"
+      :listing="listing"
+      class="scape-actions"
+      @listing-change="refreshListing"
+    />
 
-    <ScapesTransactionHistory :scape-id="scapeId" :history="history" :pending="pending" :error="error"
-      :total-transfers="totalTransfers" :total-sales="totalSales" class="border-drop_" />
+    <ScapesTransactionHistory
+      :scape-id="scapeId"
+      :history="history"
+      :pending="pending"
+      :error="error"
+      :total-transfers="totalTransfers"
+      :total-sales="totalSales"
+      class="border-drop_"
+    />
 
     <ClientOnly>
-      <ScapesSESModal v-model:open="sesModalOpen" :token-id="scapeId" />
+      <ScapesSESModal
+        v-model:open="sesModalOpen"
+        :token-id="scapeId"
+      />
     </ClientOnly>
   </section>
 </template>
 
 <script setup lang="ts">
-import { eq } from "@ponder/client";
+import { eq } from '@ponder/client'
 
 type SalePrice = {
-  wei?: string;
-  eth?: number;
-  usd?: number;
+  wei?: string
+  eth?: number
+  usd?: number
   currency?: {
-    symbol?: string;
-    amount?: string;
-  };
-};
+    symbol?: string
+    amount?: string
+  }
+}
 
 type SaleDetails = {
-  id: string | number;
-  price?: SalePrice;
-  seller?: string;
-  buyer?: string;
-  slug?: string;
-  source?: string;
-};
+  id: string | number
+  price?: SalePrice
+  seller?: string
+  buyer?: string
+  slug?: string
+  source?: string
+}
 
 type TransferEntry = {
-  type: "transfer" | "sale";
-  id: string;
-  timestamp: number;
-  from: string;
-  to: string;
-  txHash: string;
-  sale: SaleDetails | null;
-};
+  type: 'transfer' | 'sale'
+  id: string
+  timestamp: number
+  from: string
+  to: string
+  txHash: string
+  sale: SaleDetails | null
+}
 
 type ListingEntry = {
-  type: "listing";
-  id: string;
-  timestamp: number;
-  lister: string;
-  price: { wei: string; eth: number };
-  isActive: boolean;
-  txHash: string;
-};
+  type: 'listing'
+  id: string
+  timestamp: number
+  lister: string
+  price: { wei: string; eth: number }
+  isActive: boolean
+  txHash: string
+}
 
-type ScapeHistoryEntry = TransferEntry | ListingEntry;
+type ScapeHistoryEntry = TransferEntry | ListingEntry
 
 type ScapeHistoryResponse = {
-  collection: string;
-  tokenId: string;
-  history: ScapeHistoryEntry[];
-  totalTransfers: number;
-  totalSales: number;
-  totalListings: number;
-};
+  collection: string
+  tokenId: string
+  history: ScapeHistoryEntry[]
+  totalTransfers: number
+  totalSales: number
+  totalListings: number
+}
 
-const route = useRoute();
-const scapeId = computed(() => route.params.id as string);
-const client = usePonderClient();
+const route = useRoute()
+const scapeId = computed(() => route.params.id as string)
+const client = usePonderClient()
 
 // Radio integration: play this scape when on detail page (client-only)
 if (import.meta.client) {
-  const { setFixedScape, clearFixedScape } = useScapeRadio();
+  const { setFixedScape, clearFixedScape } = useScapeRadio()
   watch(
     scapeId,
     (id) => {
       if (id) {
-        setFixedScape(Number(id));
+        setFixedScape(Number(id))
       }
     },
     { immediate: true },
-  );
+  )
   onBeforeUnmount(() => {
-    clearFixedScape();
-  });
+    clearFixedScape()
+  })
 }
 
 const { data, pending, error } = await useAPI<ScapeHistoryResponse>(
   () => `/scapes/${scapeId.value}/history`,
   { watch: [scapeId] },
-);
+)
 
-const scapeDataKey = computed(() => `scape-data-${scapeId.value ?? "unknown"}`);
-const {
-  data: scapeData,
-  pending: scapePending,
-} = await useAsyncData(
+const scapeDataKey = computed(() => `scape-data-${scapeId.value ?? 'unknown'}`)
+const { data: scapeData, pending: scapePending } = await useAsyncData(
   scapeDataKey,
   async () => {
-    const tokenIdValue = BigInt(scapeId.value);
+    const tokenIdValue = BigInt(scapeId.value)
 
     const result = await client.db
       .select()
       .from(schema.scape)
       .where(eq(schema.scape.id, tokenIdValue))
-      .limit(1);
+      .limit(1)
 
-    const row = result[0];
-    return row ?? null;
+    const row = result[0]
+    return row ?? null
   },
   { watch: [scapeId] },
-);
+)
 
-const owner = computed(() => scapeData.value?.owner ?? null);
-const attributes = computed(() => scapeData.value?.attributes ?? null);
+const owner = computed(() => scapeData.value?.owner ?? null)
+const attributes = computed(() => scapeData.value?.attributes ?? null)
 
-const history = computed(() => data.value?.history ?? []);
-const totalTransfers = computed(() => data.value?.totalTransfers ?? 0);
-const totalSales = computed(() => data.value?.totalSales ?? 0);
+const history = computed(() => data.value?.history ?? [])
+const totalTransfers = computed(() => data.value?.totalTransfers ?? 0)
+const totalSales = computed(() => data.value?.totalSales ?? 0)
 
 const {
   listing,
   isPending: listingPending,
   hasError: listingError,
   refresh: refreshListing,
-} = useScapeListing(scapeId);
+} = useScapeListing(scapeId)
 
-const { data: gallery27TokenId } = await useGallery27ByScape(scapeId);
+const { data: gallery27TokenId } = await useGallery27ByScape(scapeId)
 
 // Page meta
 const seoOptions = computed(() => {
-  const id = scapeId.value;
-  const attrs = attributes.value;
-  let description = `View Scape #${id} details, ownership history, and marketplace listings.`;
+  const id = scapeId.value
+  const attrs = attributes.value
+  let description = `View Scape #${id} details, ownership history, and marketplace listings.`
   if (attrs && typeof attrs === 'object') {
     const attrEntries = Object.entries(attrs as Record<string, string>)
       .filter(([key]) => key !== 'Seed')
       .slice(0, 4)
-      .map(([key, value]) => `${key}: ${value}`);
+      .map(([key, value]) => `${key}: ${value}`)
     if (attrEntries.length > 0) {
-      description = `Scape #${id} - ${attrEntries.join(', ')}. View ownership history and marketplace listings.`;
+      description = `Scape #${id} - ${attrEntries.join(', ')}. View ownership history and marketplace listings.`
     }
   }
 
@@ -172,32 +209,32 @@ const seoOptions = computed(() => {
     description,
     image: null,
     imageAlt: null,
-  };
-});
-useSeo(seoOptions);
+  }
+})
+useSeo(seoOptions)
 
-const ogTitle = computed(() => `Scape #${scapeId.value}`);
+const ogTitle = computed(() => `Scape #${scapeId.value}`)
 const ogSubtitle = computed(() => {
-  const attrs = attributes.value;
-  if (attrs && typeof attrs === "object") {
+  const attrs = attributes.value
+  if (attrs && typeof attrs === 'object') {
     const attrEntries = Object.entries(attrs as Record<string, string>)
-      .filter(([key]) => key !== "Seed")
+      .filter(([key]) => key !== 'Seed')
       .slice(0, 2)
-      .map(([key, value]) => `${key}: ${value}`);
+      .map(([key, value]) => `${key}: ${value}`)
     if (attrEntries.length > 0) {
-      return attrEntries.join(" · ");
+      return attrEntries.join(' · ')
     }
   }
-  return "Ownership, history, and listings.";
-});
+  return 'Ownership, history, and listings.'
+})
 const ogImage = computed(
   () => `https://cdn.scapes.xyz/scapes/lg/${scapeId.value}.png`,
-);
+)
 
-const scapeCount = computed(() => mergeScapeCount(BigInt(scapeId.value)));
+const scapeCount = computed(() => mergeScapeCount(BigInt(scapeId.value)))
 
 defineOgImageComponent(
-  "ScapeDetail",
+  'ScapeDetail',
   {
     title: ogTitle,
     subtitle: ogSubtitle,
@@ -208,9 +245,9 @@ defineOgImageComponent(
     width: 1200,
     height: 1200,
   },
-);
+)
 
-const sesModalOpen = ref(false);
+const sesModalOpen = ref(false)
 </script>
 
 <style scoped>
@@ -222,8 +259,7 @@ const sesModalOpen = ref(false);
   /* gap: calc(var(--scape-height-gutter) + var(--grid-gutter)); */
   container-type: inline-size;
 
-
-  &>header {
+  & > header {
     display: grid;
     gap: var(--grid-gutter);
   }
@@ -238,24 +274,26 @@ const sesModalOpen = ref(false);
   padding: 16%;
 
   img {
-    width: calc(var(--scape-width-gutter) * var(--detail-columns, 3) * var(--scape-count, 1));
+    width: calc(
+      var(--scape-width-gutter) * var(--detail-columns, 3) *
+        var(--scape-count, 1)
+    );
     max-width: 100%;
     height: auto;
   }
 }
-
 
 .scape-detail__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  &>div {
+  & > div {
     display: flex;
     flex-direction: column;
     justify-content: center;
 
-    &>h1 {
+    & > h1 {
       margin: 0;
     }
   }

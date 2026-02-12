@@ -1,11 +1,14 @@
 <template>
-  <section v-if="description" class="profile-bio">
+  <section
+    v-if="description"
+    class="profile-bio"
+  >
     <p>{{ description }}</p>
   </section>
 </template>
 
 <script setup lang="ts">
-defineProps<{ description: string | null | undefined }>();
+defineProps<{ description: string | null | undefined }>()
 </script>
 
 <style scoped>

@@ -1,36 +1,82 @@
 <template>
-  <div class="scape-radio-inline" @mouseenter="onHover(true)" @mouseleave="onHover(false)">
+  <div
+    class="scape-radio-inline"
+    @mouseenter="onHover(true)"
+    @mouseleave="onHover(false)"
+  >
     <!-- Hover popover (only when playing) -->
     <Transition name="fade-up">
-      <div v-if="isHovered && isPlaying" class="scape-radio-inline__popover">
+      <div
+        v-if="isHovered && isPlaying"
+        class="scape-radio-inline__popover"
+      >
         <!-- Link to scape (only if not on that page) -->
-        <NuxtLink v-if="currentScape && !isOnScapePage" :to="`/${currentScape.id}`"
-          class="scape-radio-inline__link border">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+        <NuxtLink
+          v-if="currentScape && !isOnScapePage"
+          :to="`/${currentScape.id}`"
+          class="scape-radio-inline__link border"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+            />
             <polyline points="15 3 21 3 21 9" />
-            <line x1="10" y1="14" x2="21" y2="3" />
+            <line
+              x1="10"
+              y1="14"
+              x2="21"
+              y2="3"
+            />
           </svg>
         </NuxtLink>
 
         <!-- Volume slider -->
         <div class="scape-radio-inline__volume border">
-          <input type="range" min="0" max="1" step="0.01" :value="volume" class="scape-radio-inline__slider"
-            @input="handleVolumeChange" />
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            :value="volume"
+            class="scape-radio-inline__slider"
+            @input="handleVolumeChange"
+          />
         </div>
       </div>
     </Transition>
 
     <!-- Main button -->
-    <button type="button" class="scape-radio-inline__btn border" :disabled="isLoading" @click.stop="handlePlayPause">
+    <button
+      type="button"
+      class="scape-radio-inline__btn border"
+      :disabled="isLoading"
+      @click.stop="handlePlayPause"
+    >
       <!-- Background image (when playing) -->
-      <img v-if="isPlaying && currentScape" :src="currentScape.coverUrl" :alt="currentScape.title"
-        class="scape-radio-inline__cover" />
+      <img
+        v-if="isPlaying && currentScape"
+        :src="currentScape.coverUrl"
+        :alt="currentScape.title"
+        class="scape-radio-inline__cover"
+      />
 
       <!-- Play/pause icon -->
       <span class="scape-radio-inline__icon">
-        <span v-if="isLoading" class="scape-radio-inline__loading">...</span>
+        <span
+          v-if="isLoading"
+          class="scape-radio-inline__loading"
+          >...</span
+        >
         <IconPause v-else-if="isPlaying" />
         <IconPlay v-else />
       </span>
@@ -40,15 +86,8 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const {
-  isPlaying,
-  isLoading,
-  currentScape,
-  volume,
-  play,
-  pause,
-  setVolume,
-} = useScapeRadio()
+const { isPlaying, isLoading, currentScape, volume, play, pause, setVolume } =
+  useScapeRadio()
 
 const isHovered = ref(false)
 
@@ -184,7 +223,9 @@ const handleVolumeChange = (event: Event) => {
 /* Fade-up transition */
 .fade-up-enter-active,
 .fade-up-leave-active {
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .fade-up-enter-from,

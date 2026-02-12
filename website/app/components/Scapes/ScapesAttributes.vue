@@ -1,18 +1,37 @@
 <template>
-  <section v-if="hasAttributes" class="attributes">
+  <section
+    v-if="hasAttributes"
+    class="attributes"
+  >
     <ul class="attributes__list grid-shadow">
-      <GridArea v-for="attr in attributeList" :key="attr.trait_type" :rows="1" :width="1" tag="li"
-        class="attributes__item">
+      <GridArea
+        v-for="attr in attributeList"
+        :key="attr.trait_type"
+        :rows="1"
+        :width="1"
+        tag="li"
+        class="attributes__item"
+      >
         <span class="attributes__trait">{{ attr.trait_type }}</span>
-        <NuxtLink v-if="isDateAttribute(attr) && gallery27TokenId" :to="`/gallery27/${gallery27TokenId}`"
-          class="attributes__value attributes__value--link">
+        <NuxtLink
+          v-if="isDateAttribute(attr) && gallery27TokenId"
+          :to="`/gallery27/${gallery27TokenId}`"
+          class="attributes__value attributes__value--link"
+        >
           {{ formatValue(attr) }}
         </NuxtLink>
-        <NuxtLink v-else-if="getTraitLink(attr)" :to="getTraitLink(attr)!"
-          class="attributes__value attributes__value--link">
+        <NuxtLink
+          v-else-if="getTraitLink(attr)"
+          :to="getTraitLink(attr)!"
+          class="attributes__value attributes__value--link"
+        >
           {{ formatValue(attr) }}
         </NuxtLink>
-        <span v-else class="attributes__value">{{ formatValue(attr) }}</span>
+        <span
+          v-else
+          class="attributes__value"
+          >{{ formatValue(attr) }}</span
+        >
       </GridArea>
     </ul>
   </section>
@@ -22,53 +41,53 @@
 import { DateTime } from 'luxon'
 
 const props = defineProps<{
-  attributes: unknown;
-  gallery27TokenId?: number | null;
-}>();
+  attributes: unknown
+  gallery27TokenId?: number | null
+}>()
 
 type AttributeEntry = {
-  trait_type: string;
-  value: string | number;
-};
+  trait_type: string
+  value: string | number
+}
 
 const attributeList = computed(() => {
   if (!props.attributes || !Array.isArray(props.attributes)) {
-    return [];
+    return []
   }
-  return props.attributes as AttributeEntry[];
-});
+  return props.attributes as AttributeEntry[]
+})
 
-const hasAttributes = computed(() => attributeList.value.length > 0);
+const hasAttributes = computed(() => attributeList.value.length > 0)
 
-const { gallery27TokenId } = toRefs(props);
+const { gallery27TokenId } = toRefs(props)
 
 function isDateAttribute(attr: AttributeEntry): boolean {
-  return attr.trait_type === 'date' && typeof attr.value === 'number';
+  return attr.trait_type === 'date' && typeof attr.value === 'number'
 }
 
 function formatValue(attr: AttributeEntry): string | number {
   if (attr.trait_type === 'date' && typeof attr.value === 'number') {
-    return DateTime.fromSeconds(attr.value).toLocaleString(DateTime.DATE_MED);
+    return DateTime.fromSeconds(attr.value).toLocaleString(DateTime.DATE_MED)
   }
-  return attr.value;
+  return attr.value
 }
 
 function getTraitLink(attr: AttributeEntry): string | null {
   if (isDateAttribute(attr)) {
-    return null;
+    return null
   }
 
-  const traitType = attr.trait_type?.trim();
+  const traitType = attr.trait_type?.trim()
   if (!traitType) {
-    return null;
+    return null
   }
 
-  const value = String(attr.value).trim();
+  const value = String(attr.value).trim()
   if (!value) {
-    return null;
+    return null
   }
 
-  return `/?traits=${encodeURIComponent(`${traitType}=${value}`)}`;
+  return `/?traits=${encodeURIComponent(`${traitType}=${value}`)}`
 }
 </script>
 

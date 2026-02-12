@@ -1,6 +1,10 @@
 import type { ComponentPublicInstance, Ref } from 'vue'
 
-export function useGridSnap(target: Ref<HTMLElement | undefined> | Ref<ComponentPublicInstance | undefined>) {
+export function useGridSnap(
+  target:
+    | Ref<HTMLElement | undefined>
+    | Ref<ComponentPublicInstance | undefined>,
+) {
   const { scapeHeight, gutter } = useScapeGrid()
 
   const resolveEl = (): HTMLElement | undefined => {

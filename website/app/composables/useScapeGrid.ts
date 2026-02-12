@@ -57,11 +57,14 @@ export function useScapeGrid() {
   })
 
   const minScapeWidth = computed(() =>
-    isMobile.value ? MIN_SCAPE_WIDTH_MOBILE : MIN_SCAPE_WIDTH
+    isMobile.value ? MIN_SCAPE_WIDTH_MOBILE : MIN_SCAPE_WIDTH,
   )
 
   const columns = computed(() => {
-    return Math.max(1, Math.floor((windowWidth.value - 2) / (minScapeWidth.value + 2)))
+    return Math.max(
+      1,
+      Math.floor((windowWidth.value - 2) / (minScapeWidth.value + 2)),
+    )
   })
 
   const isEven = computed(() => columns.value % 2 === 0)
@@ -102,7 +105,7 @@ export function useScapeGrid() {
   })
 
   const marginOffset = computed(() =>
-    isMobile.value ? 0 : (windowWidth.value - gridWidth.value) / 2
+    isMobile.value ? 0 : (windowWidth.value - gridWidth.value) / 2,
   )
 
   watchEffect(() => {

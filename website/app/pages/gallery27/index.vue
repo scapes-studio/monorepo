@@ -1,27 +1,50 @@
 <template>
   <section class="gallery">
-    <GridArea width="full" center :rows="3">
+    <GridArea
+      width="full"
+      center
+      :rows="3"
+    >
       <h1>27 Year Scapes</h1>
       <p class="muted">A daily AI-generated scape for 27 years.</p>
 
-      <Button to="/gallery27/now" class="current-link">Go to today</Button>
+      <Button
+        to="/gallery27/now"
+        class="current-link"
+        >Go to today</Button
+      >
     </GridArea>
 
-    <div v-if="loading && scapes.length === 0" class="gallery__status">
+    <div
+      v-if="loading && scapes.length === 0"
+      class="gallery__status"
+    >
       Loading scapes...
     </div>
-    <div v-else-if="error" class="gallery__status gallery__status--error">
+    <div
+      v-else-if="error"
+      class="gallery__status gallery__status--error"
+    >
       Unable to load scapes right now.
     </div>
-    <div v-else-if="scapes.length === 0" class="gallery__status">
+    <div
+      v-else-if="scapes.length === 0"
+      class="gallery__status"
+    >
       No scapes available yet.
     </div>
 
     <template v-else>
       <Gallery27Grid :scapes="scapes" />
 
-      <Button v-if="hasMore" ref="loadMoreRef" class="gallery__load-more" :disabled="loading" @click="loadMore">
-        {{ loading ? "Loading..." : "Load more" }}
+      <Button
+        v-if="hasMore"
+        ref="loadMoreRef"
+        class="gallery__load-more"
+        :disabled="loading"
+        @click="loadMore"
+      >
+        {{ loading ? 'Loading...' : 'Load more' }}
       </Button>
     </template>
   </section>
@@ -30,15 +53,16 @@
 <script setup lang="ts">
 useSeo({
   title: '27 Year Scapes',
-  description: 'A daily AI-generated scape for 27 years. Browse the Gallery27 collection.',
-});
+  description:
+    'A daily AI-generated scape for 27 years. Browse the Gallery27 collection.',
+})
 
-const { scapes, total, loading, error, hasMore, loadMore } = useGallery27List();
+const { scapes, total, loading, error, hasMore, loadMore } = useGallery27List()
 
-const loadMoreRef = ref<HTMLElement | null>(null);
+const loadMoreRef = ref<HTMLElement | null>(null)
 useIntersectionObserver(loadMoreRef, ([entry]) => {
-  if (entry?.isIntersecting) loadMore();
-});
+  if (entry?.isIntersecting) loadMore()
+})
 </script>
 
 <style scoped>

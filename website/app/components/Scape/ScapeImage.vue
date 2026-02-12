@@ -11,11 +11,11 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
+import type { PropType } from 'vue'
 
 const emit = defineEmits<{
-  (event: "loaded"): void;
-}>();
+  (event: 'loaded'): void
+}>()
 
 const props = defineProps({
   id: {
@@ -26,23 +26,25 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
-});
+})
 
-const imageUrl = computed(() => `https://cdn.scapes.xyz/scapes/sm/${props.id}.png`);
-const aspectRatio = computed(() => `${3 * props.scapeCount}/1`);
-const loaded = ref(false);
-const imgRef = ref<HTMLImageElement>();
+const imageUrl = computed(
+  () => `https://cdn.scapes.xyz/scapes/sm/${props.id}.png`,
+)
+const aspectRatio = computed(() => `${3 * props.scapeCount}/1`)
+const loaded = ref(false)
+const imgRef = ref<HTMLImageElement>()
 
 const handleLoad = () => {
-  loaded.value = true;
-  emit("loaded");
-};
+  loaded.value = true
+  emit('loaded')
+}
 
 onMounted(() => {
   if (imgRef.value?.complete) {
-    handleLoad();
+    handleLoad()
   }
-});
+})
 </script>
 
 <style scoped>

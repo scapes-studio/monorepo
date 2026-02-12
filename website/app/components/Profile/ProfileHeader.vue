@@ -1,21 +1,44 @@
 <template>
   <section class="profile-header">
-    <GridArea v-if="resolvedHeader" rows="var(--content-columns)" width="full" :background="false" class="profile-header__banner">
-      <img :src="resolvedHeader" alt="Profile header" />
-      <Button v-if="onRefresh" class="profile-header__refresh" :disabled="isRefreshing"
-        :title="isRefreshing ? 'Refreshing...' : 'Refresh from ENS'" @click="handleRefresh">
+    <GridArea
+      v-if="resolvedHeader"
+      rows="var(--content-columns)"
+      width="full"
+      :background="false"
+      class="profile-header__banner"
+    >
+      <img
+        :src="resolvedHeader"
+        alt="Profile header"
+      />
+      <Button
+        v-if="onRefresh"
+        class="profile-header__refresh"
+        :disabled="isRefreshing"
+        :title="isRefreshing ? 'Refreshing...' : 'Refresh from ENS'"
+        @click="handleRefresh"
+      >
         <Icon type="lucide:refresh-cw" />
       </Button>
     </GridArea>
 
-    <GridArea :rows="2" width="full" class="profile-header__content">
+    <GridArea
+      :rows="2"
+      width="full"
+      class="profile-header__content"
+    >
       <div class="profile-header__avatar">
         <AccountAvatar :address="address as `0x${string}`" />
       </div>
 
       <div class="profile-header__meta">
         <h1>{{ displayName }}</h1>
-        <a :href="etherscanUrl" target="_blank" class="profile-header__address">{{ shortenAddress(address) }}</a>
+        <a
+          :href="etherscanUrl"
+          target="_blank"
+          class="profile-header__address"
+          >{{ shortenAddress(address) }}</a
+        >
       </div>
     </GridArea>
   </section>
@@ -23,29 +46,31 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  address: string;
-  ens: string | null;
-  avatar: string | null;
-  header: string | null;
-  onRefresh?: () => Promise<void>;
-}>();
+  address: string
+  ens: string | null
+  avatar: string | null
+  header: string | null
+  onRefresh?: () => Promise<void>
+}>()
 
-const { resolveIpfsUrl } = useIpfs();
+const { resolveIpfsUrl } = useIpfs()
 
-const displayName = computed(() => props.ens || props.address);
-const resolvedHeader = computed(() => resolveIpfsUrl(props.header));
-const etherscanUrl = computed(() => `https://etherscan.io/address/${props.address}`);
+const displayName = computed(() => props.ens || props.address)
+const resolvedHeader = computed(() => resolveIpfsUrl(props.header))
+const etherscanUrl = computed(
+  () => `https://etherscan.io/address/${props.address}`,
+)
 
-const isRefreshing = ref(false);
+const isRefreshing = ref(false)
 const handleRefresh = async () => {
-  if (!props.onRefresh) return;
-  isRefreshing.value = true;
+  if (!props.onRefresh) return
+  isRefreshing.value = true
   try {
-    await props.onRefresh();
+    await props.onRefresh()
   } finally {
-    isRefreshing.value = false;
+    isRefreshing.value = false
   }
-};
+}
 </script>
 
 <style scoped>

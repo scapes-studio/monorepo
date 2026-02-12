@@ -1,11 +1,20 @@
 <template>
   <div class="gallery27-now">
-    <div v-if="pending" class="gallery27-now__status">
+    <div
+      v-if="pending"
+      class="gallery27-now__status"
+    >
       Loading current auction...
     </div>
-    <div v-else-if="error || !scape" class="gallery27-now__status gallery27-now__status--empty">
+    <div
+      v-else-if="error || !scape"
+      class="gallery27-now__status gallery27-now__status--empty"
+    >
       <p>No active auction right now.</p>
-      <NuxtLink to="/gallery27" class="gallery27-now__link">
+      <NuxtLink
+        to="/gallery27"
+        class="gallery27-now__link"
+      >
         Browse all scapes
       </NuxtLink>
     </div>
@@ -13,33 +22,35 @@
 </template>
 
 <script setup lang="ts">
-import type { Gallery27ScapeDetail } from "~/types/gallery27";
+import type { Gallery27ScapeDetail } from '~/types/gallery27'
 
-const runtimeConfig = useRuntimeConfig();
+const runtimeConfig = useRuntimeConfig()
 
-const { data: scape, pending, error } = await useAsyncData(
-  "gallery27-current",
-  async () => {
-    const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
-    return await $fetch<Gallery27ScapeDetail>(`${baseUrl}/gallery27/current`);
-  },
-);
+const {
+  data: scape,
+  pending,
+  error,
+} = await useAsyncData('gallery27-current', async () => {
+  const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, '')
+  return await $fetch<Gallery27ScapeDetail>(`${baseUrl}/gallery27/current`)
+})
 
 // Redirect to the current auction if found
 watch(
   () => scape.value,
   (current) => {
     if (current?.tokenId) {
-      navigateTo(`/gallery27/${current.tokenId}`, { replace: true });
+      navigateTo(`/gallery27/${current.tokenId}`, { replace: true })
     }
   },
   { immediate: true },
-);
+)
 
 useSeo({
   title: 'Current Auction',
-  description: 'View the current Gallery27 auction. Daily AI-generated scapes for 27 years.',
-});
+  description:
+    'View the current Gallery27 auction. Daily AI-generated scapes for 27 years.',
+})
 </script>
 
 <style scoped>

@@ -1,42 +1,53 @@
 <template>
   <div class="gallery27-painting">
-    <img v-if="imageUrl" :src="imageUrl" :alt="alt || 'Gallery27 Painting'" class="gallery27-painting__image"
-      @error="onImageError" />
-    <div v-else class="gallery27-painting__placeholder">
+    <img
+      v-if="imageUrl"
+      :src="imageUrl"
+      :alt="alt || 'Gallery27 Painting'"
+      class="gallery27-painting__image"
+      @error="onImageError"
+    />
+    <div
+      v-else
+      class="gallery27-painting__placeholder"
+    >
       No image available
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Gallery27Image } from "~/types/gallery27";
+import type { Gallery27Image } from '~/types/gallery27'
 
 const props = defineProps<{
-  image: Gallery27Image | null;
-  alt?: string;
-}>();
+  image: Gallery27Image | null
+  alt?: string
+}>()
 
-const CDN_BASE = "https://cdn.scapes.xyz";
-const useBasePath = ref(false);
+const CDN_BASE = 'https://cdn.scapes.xyz'
+const useBasePath = ref(false)
 
 const imageUrl = computed(() => {
-  if (!props.image?.path) return null;
+  if (!props.image?.path) return null
 
   if (useBasePath.value) {
-    return `${CDN_BASE}/${props.image.path}`;
+    return `${CDN_BASE}/${props.image.path}`
   }
-  return `${CDN_BASE}/${props.image.path}_upscaled`;
-});
+  return `${CDN_BASE}/${props.image.path}_upscaled`
+})
 
 const onImageError = () => {
   if (!useBasePath.value) {
-    useBasePath.value = true;
+    useBasePath.value = true
   }
-};
+}
 
-watch(() => props.image?.path, () => {
-  useBasePath.value = false;
-});
+watch(
+  () => props.image?.path,
+  () => {
+    useBasePath.value = false
+  },
+)
 </script>
 
 <style scoped>

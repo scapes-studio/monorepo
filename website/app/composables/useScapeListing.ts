@@ -1,18 +1,18 @@
-import type { ListingSource } from "~/types/listings";
+import type { ListingSource } from '~/types/listings'
 
 export type ListingData = {
-  price: string;
-  source: ListingSource;
-} | null;
+  price: string
+  source: ListingSource
+} | null
 
 type ListingResponse = {
-  data: ListingData;
-};
+  data: ListingData
+}
 
 export const useScapeListing = (scapeId: MaybeRefOrGetter<string>) => {
-  const runtimeConfig = useRuntimeConfig();
+  const runtimeConfig = useRuntimeConfig()
 
-  const listingKey = computed(() => `scape-listing-${toValue(scapeId)}`);
+  const listingKey = computed(() => `scape-listing-${toValue(scapeId)}`)
 
   const {
     data: listing,
@@ -22,20 +22,22 @@ export const useScapeListing = (scapeId: MaybeRefOrGetter<string>) => {
   } = useAsyncData<ListingResponse>(
     listingKey,
     async () => {
-      const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, "");
-      return await $fetch<ListingResponse>(`${baseUrl}/listings/${toValue(scapeId)}`);
+      const baseUrl = runtimeConfig.public.apiUrl.replace(/\/$/, '')
+      return await $fetch<ListingResponse>(
+        `${baseUrl}/listings/${toValue(scapeId)}`,
+      )
     },
     {
       watch: [() => toValue(scapeId)],
     },
-  );
+  )
 
-  const isPending = computed(() => status.value === "pending");
-  const hasError = computed(() => Boolean(error.value));
-  const listingData = computed(() => listing.value?.data ?? null);
-  const isListed = computed(() => listingData.value !== null);
-  const source = computed(() => listingData.value?.source ?? null);
-  const price = computed(() => listingData.value?.price ?? null);
+  const isPending = computed(() => status.value === 'pending')
+  const hasError = computed(() => Boolean(error.value))
+  const listingData = computed(() => listing.value?.data ?? null)
+  const isListed = computed(() => listingData.value !== null)
+  const source = computed(() => listingData.value?.source ?? null)
+  const price = computed(() => listingData.value?.price ?? null)
 
   return {
     listing: listingData,
@@ -45,5 +47,5 @@ export const useScapeListing = (scapeId: MaybeRefOrGetter<string>) => {
     source,
     price,
     refresh,
-  };
-};
+  }
+}

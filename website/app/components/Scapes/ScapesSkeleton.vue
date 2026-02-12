@@ -1,6 +1,10 @@
 <template>
   <div class="scapes-skeleton">
-    <div v-for="i in count" :key="i" class="scapes-skeleton__item">
+    <div
+      v-for="i in count"
+      :key="i"
+      class="scapes-skeleton__item"
+    >
       <div class="scapes-skeleton__image" />
     </div>
   </div>

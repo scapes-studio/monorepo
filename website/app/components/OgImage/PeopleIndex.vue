@@ -11,7 +11,10 @@
       font-family: Inter, ui-sans-serif, system-ui;
     "
   >
-    <div v-if="image" style="display: flex; align-items: center;">
+    <div
+      v-if="image"
+      style="display: flex; align-items: center"
+    >
       <img
         :src="image"
         style="
@@ -23,11 +26,11 @@
         "
       />
     </div>
-    <div style="display: flex; flex-direction: column; gap: 14px;">
-      <div style="font-size: 56px; font-weight: 700; color: #111111;">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <div style="font-size: 56px; font-weight: 700; color: #111111">
         {{ title }}
       </div>
-      <div style="font-size: 28px; color: #555555;">
+      <div style="font-size: 28px; color: #555555">
         {{ subtitle }}
       </div>
     </div>
@@ -36,8 +39,8 @@
 
 <script setup lang="ts">
 defineProps<{
-  title: string;
-  subtitle: string;
-  image?: string | null;
-}>();
+  title: string
+  subtitle: string
+  image?: string | null
+}>()
 </script>

@@ -2,7 +2,10 @@
   <nav class="main-menu border-drop">
     <div class="main-menu__brand border">
       <NuxtLink to="/">
-        <img src="/icon.png" alt="Scapes Logo" />
+        <img
+          src="/icon.png"
+          alt="Scapes Logo"
+        />
       </NuxtLink>
     </div>
 
@@ -36,7 +39,10 @@
           <AccountAvatar />
         </template>
         <template #connected="{ address }">
-          <NuxtLink :to="getAccountDisplay(address).url" class="border">
+          <NuxtLink
+            :to="getAccountDisplay(address).url"
+            class="border"
+          >
             <AccountAvatar :address="address" />
           </NuxtLink>
         </template>
@@ -51,13 +57,15 @@ const { getAccountDisplay } = useENSResolution()
 
 <style scoped>
 .main-menu {
-  --offset-min: max(calc(var(--grid-margin-offset) / 2 + var(--grid-gutter)), calc(var(--scape-height)/2));
+  --offset-min: max(
+    calc(var(--grid-margin-offset) / 2 + var(--grid-gutter)),
+    calc(var(--scape-height)/2)
+  );
   --main-menu-size: min(3.5rem, var(--scape-height));
 
   @media (min-width: 680px) {
     --main-menu-size: var(--scape-height);
   }
-
 
   position: fixed;
   bottom: max(var(--offset-min), env(safe-area-inset-bottom));

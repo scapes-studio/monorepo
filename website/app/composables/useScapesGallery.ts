@@ -1,17 +1,17 @@
-import { and, asc, desc, ne, sql } from "@ponder/client"
-import { zeroAddress } from "viem"
-import type { TraitCounts } from "~/data/traits"
-import { SCAPE_TRAIT_COUNTS, TRAITS } from "~/data/traits"
-import type { ScapeRecord } from "~/composables/useScapesByOwner"
-import type { ListingSource } from "~/types/listings"
+import { and, asc, desc, ne, sql } from '@ponder/client'
+import { zeroAddress } from 'viem'
+import type { TraitCounts } from '~/data/traits'
+import { SCAPE_TRAIT_COUNTS, TRAITS } from '~/data/traits'
+import type { ScapeRecord } from '~/composables/useScapesByOwner'
+import type { ListingSource } from '~/types/listings'
 
 export type GallerySortOption =
-  | "id-asc"
-  | "id-desc"
-  | "rarity-asc"
-  | "rarity-desc"
-  | "price-asc"
-  | "price-desc"
+  | 'id-asc'
+  | 'id-desc'
+  | 'rarity-asc'
+  | 'rarity-desc'
+  | 'price-asc'
+  | 'price-desc'
 
 export type GalleryScape = ScapeRecord & {
   price?: bigint | null
@@ -44,7 +44,7 @@ const buildTraitConditions = (traits: string[]) => {
   if (traits.length === 0) return undefined
 
   const conditions = traits.map((trait) => {
-    const [category, value] = trait.split("=")
+    const [category, value] = trait.split('=')
     // Use JSON containment query
     return sql`${schema.scape.attributes}::jsonb @> ${JSON.stringify([{ trait_type: category, value }])}::jsonb`
   })
@@ -54,17 +54,17 @@ const buildTraitConditions = (traits: string[]) => {
 
 const getSortOrder = (sortBy: GallerySortOption) => {
   switch (sortBy) {
-    case "id-asc":
+    case 'id-asc':
       return [asc(schema.scape.id)]
-    case "id-desc":
+    case 'id-desc':
       return [desc(schema.scape.id)]
-    case "rarity-asc":
+    case 'rarity-asc':
       return [asc(schema.scape.rarity), asc(schema.scape.id)]
-    case "rarity-desc":
+    case 'rarity-desc':
       return [desc(schema.scape.rarity), asc(schema.scape.id)]
-    case "price-asc":
+    case 'price-asc':
       return [asc(schema.offer.price), asc(schema.scape.id)]
-    case "price-desc":
+    case 'price-desc':
       return [desc(schema.offer.price), asc(schema.scape.id)]
     default:
       return [asc(schema.scape.id)]
@@ -72,36 +72,36 @@ const getSortOrder = (sortBy: GallerySortOption) => {
 }
 
 const isRaritySort = (sortBy: GallerySortOption) =>
-  sortBy === "rarity-asc" || sortBy === "rarity-desc"
+  sortBy === 'rarity-asc' || sortBy === 'rarity-desc'
 
 const getListingSort = (sortBy: GallerySortOption) => {
   switch (sortBy) {
-    case "price-desc":
-      return { sort: "price", order: "desc" }
-    case "price-asc":
-      return { sort: "price", order: "asc" }
-    case "rarity-desc":
-      return { sort: "rarity", order: "desc" }
-    case "rarity-asc":
-      return { sort: "rarity", order: "asc" }
-    case "id-desc":
-      return { sort: "id", order: "desc" }
-    case "id-asc":
+    case 'price-desc':
+      return { sort: 'price', order: 'desc' }
+    case 'price-asc':
+      return { sort: 'price', order: 'asc' }
+    case 'rarity-desc':
+      return { sort: 'rarity', order: 'desc' }
+    case 'rarity-asc':
+      return { sort: 'rarity', order: 'asc' }
+    case 'id-desc':
+      return { sort: 'id', order: 'desc' }
+    case 'id-asc':
     default:
-      return { sort: "id", order: "asc" }
+      return { sort: 'id', order: 'asc' }
   }
 }
 
 export const useScapesGallery = (
   selectedTraits: Ref<string[]>,
-  sortBy: Ref<GallerySortOption> = ref("id-asc"),
+  sortBy: Ref<GallerySortOption> = ref('id-asc'),
   showPrices: Ref<boolean> = ref(false),
   includeSeaport: Ref<boolean> = ref(true),
 ) => {
   const client = usePonderClient()
   const excludeBurned = ne(schema.scape.owner, zeroAddress)
   const isMarketMode = computed(
-    () => showPrices.value || sortBy.value.startsWith("price"),
+    () => showPrices.value || sortBy.value.startsWith('price'),
   )
 
   // Track additional items loaded via loadMore (separate from initial data)
@@ -127,19 +127,21 @@ export const useScapesGallery = (
   type AttributeCountRow = { category: string; value: string; count: string }
   const runtimeConfig = useRuntimeConfig()
 
-  const fetchTraitCounts = async (currentTraits: string[]): Promise<TraitCounts> => {
+  const fetchTraitCounts = async (
+    currentTraits: string[],
+  ): Promise<TraitCounts> => {
     // If no filters, return static counts
     if (currentTraits.length === 0) {
       return { ...SCAPE_TRAIT_COUNTS }
     }
 
     // Build API URL with traits query param
-    const traitsParam = currentTraits.join(",")
+    const traitsParam = currentTraits.join(',')
     const url = `${runtimeConfig.public.apiUrl}/scapes/attributes?traits=${encodeURIComponent(traitsParam)}`
 
     const response = await fetch(url)
     if (!response.ok) {
-      throw new Error("Failed to fetch attribute counts")
+      throw new Error('Failed to fetch attribute counts')
     }
 
     const rows: AttributeCountRow[] = await response.json()
@@ -190,7 +192,7 @@ export const useScapesGallery = (
   const fetchListings = async (startOffset: number) => {
     const { sort, order } = getListingSort(sortBy.value)
     const traitsParam = selectedTraits.value.length
-      ? selectedTraits.value.join("&&")
+      ? selectedTraits.value.join('&&')
       : undefined
 
     const response = await $fetch<ListingsResponse>(
@@ -255,7 +257,9 @@ export const useScapesGallery = (
       .offset(startOffset)
   }
 
-  const fetchCount = async (traitConditions: ReturnType<typeof buildTraitConditions>) => {
+  const fetchCount = async (
+    traitConditions: ReturnType<typeof buildTraitConditions>,
+  ) => {
     const rarityExclusion = isRaritySort(sortBy.value)
       ? sql`${schema.scape.id} <= 10000`
       : undefined
@@ -290,7 +294,7 @@ export const useScapesGallery = (
 
   const asyncKey = computed(
     () =>
-      `gallery-${selectedTraits.value.join(",")}-${sortBy.value}-${showPrices.value}-${includeSeaport.value}`,
+      `gallery-${selectedTraits.value.join(',')}-${sortBy.value}-${showPrices.value}-${includeSeaport.value}`,
   )
 
   const {
@@ -337,20 +341,26 @@ export const useScapesGallery = (
 
     try {
       const traitConditions = buildTraitConditions(selectedTraits.value)
-      const currentOffset = (data.value?.scapes.length ?? 0) + additionalScapes.value.length
+      const currentOffset =
+        (data.value?.scapes.length ?? 0) + additionalScapes.value.length
       if (isMarketMode.value) {
         const result = await fetchListings(currentOffset)
         additionalScapes.value.push(...result.scapes)
         loadMoreHasMore.value = result.hasMore
       } else {
-        const result = await fetchScapesWithoutPrices(traitConditions, currentOffset, sortBy.value)
+        const result = await fetchScapesWithoutPrices(
+          traitConditions,
+          currentOffset,
+          sortBy.value,
+        )
         additionalScapes.value.push(...result)
         if (result.length < PAGE_SIZE) {
           loadMoreHasMore.value = false
         }
       }
     } catch (err) {
-      loadMoreError.value = err instanceof Error ? err : new Error("Failed to load scapes")
+      loadMoreError.value =
+        err instanceof Error ? err : new Error('Failed to load scapes')
     } finally {
       loadMoreLoading.value = false
     }

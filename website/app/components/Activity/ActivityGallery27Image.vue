@@ -1,10 +1,17 @@
 <template>
-  <Gallery27GridItem v-if="scape" :scape="scape" minimal />
-  <div v-else class="activity-gallery27-image__placeholder" />
+  <Gallery27GridItem
+    v-if="scape"
+    :scape="scape"
+    minimal
+  />
+  <div
+    v-else
+    class="activity-gallery27-image__placeholder"
+  />
 </template>
 
 <script setup lang="ts">
-import type { Gallery27ListItem } from "~/types/gallery27"
+import type { Gallery27ListItem } from '~/types/gallery27'
 
 const props = defineProps<{ tokenId: string }>()
 

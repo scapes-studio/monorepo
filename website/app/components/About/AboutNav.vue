@@ -1,11 +1,29 @@
 <template>
-  <nav v-if="hasLinks" class="about-nav">
-    <template v-for="(link, i) in links" :key="i">
-      <NuxtLink v-if="link" :to="link.to" class="about-nav__link"
-        :class="{ 'about-nav__link--end': link.align === 'right' }">
-        <span v-if="link.label" class="about-nav__label muted">{{ link.label }}</span>
+  <nav
+    v-if="hasLinks"
+    class="about-nav"
+  >
+    <template
+      v-for="(link, i) in links"
+      :key="i"
+    >
+      <NuxtLink
+        v-if="link"
+        :to="link.to"
+        class="about-nav__link"
+        :class="{ 'about-nav__link--end': link.align === 'right' }"
+      >
+        <span
+          v-if="link.label"
+          class="about-nav__label muted"
+          >{{ link.label }}</span
+        >
         <span class="about-nav__title">{{ link.title }}</span>
-        <span v-if="link.description" class="about-nav__description muted">{{ link.description }}</span>
+        <span
+          v-if="link.description"
+          class="about-nav__description muted"
+          >{{ link.description }}</span
+        >
       </NuxtLink>
       <div v-else />
     </template>

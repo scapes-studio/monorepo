@@ -5,15 +5,22 @@
       <span class="trait-group__count">({{ counts?.count ?? 0 }})</span>
     </h2>
     <ul class="trait-group__list">
-      <GalleryTraitGroupValue v-for="value in group.values" :key="value" :category="group.name" :value="value"
-        :count="getCount(value)" :selected="isSelected(value)" :loading="loading"
-        @toggle="emit('select', `${group.name}=${value}`)" />
+      <GalleryTraitGroupValue
+        v-for="value in group.values"
+        :key="value"
+        :category="group.name"
+        :value="value"
+        :count="getCount(value)"
+        :selected="isSelected(value)"
+        :loading="loading"
+        @toggle="emit('select', `${group.name}=${value}`)"
+      />
     </ul>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { TraitGroup } from "~/data/traits"
+import type { TraitGroup } from '~/data/traits'
 
 const props = defineProps<{
   group: TraitGroup
