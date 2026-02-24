@@ -45,7 +45,7 @@
             </template>
             <template #actions>
               <Button
-                :to="getAccountDisplay(address).url"
+                @click="viewProfile(address)"
               >
                 <Icon type="home" />
                 <span>View Profile</span>
@@ -60,6 +60,14 @@
 
 <script setup lang="ts">
 const { getAccountDisplay } = useENSResolution()
+
+const viewProfile = (address: string) => {
+  const dialog = document.querySelector('.dialog.evm-profile.open')
+  if (dialog?.nextElementSibling?.classList.contains('overlay')) {
+    ;(dialog.nextElementSibling as HTMLElement).click()
+  }
+  navigateTo(getAccountDisplay(address).url)
+}
 </script>
 
 <style scoped>
