@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Globals />
     <MainMenu />
     <main>
       <NuxtPage />
