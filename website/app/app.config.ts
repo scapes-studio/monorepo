@@ -11,7 +11,10 @@ export default defineAppConfig({
         blockExplorer: 'https://etherscan.io',
       },
     },
-    ens: { mode: 'indexer' },
+    ens: {
+      mode: 'indexer',
+      indexer1: 'https://indexer.scapes.xyz/profiles',
+    },
     ipfsGateway: 'https://ipfs.io/ipfs/',
     arweaveGateway: 'https://arweave.net/',
   },

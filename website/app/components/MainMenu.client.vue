@@ -39,12 +39,19 @@
           <AccountAvatar />
         </template>
         <template #connected="{ address }">
-          <NuxtLink
-            :to="getAccountDisplay(address).url"
-            class="border"
-          >
-            <AccountAvatar :address="address" />
-          </NuxtLink>
+          <EvmProfile class-name="main-menu__actions-profile">
+            <template #default>
+              <AccountAvatar :address="address" />
+            </template>
+            <template #actions>
+              <Button
+                :to="getAccountDisplay(address).url"
+              >
+                <Icon type="home" />
+                <span>View Profile</span>
+              </Button>
+            </template>
+          </EvmProfile>
         </template>
       </EvmConnect>
     </div>
@@ -103,6 +110,12 @@ const { getAccountDisplay } = useENSResolution()
     padding: 0 !important;
     width: var(--main-menu-size);
     height: var(--main-menu-size);
+  }
+
+  &:deep(.main-menu__actions-profile) {
+    all: unset;
+    cursor: pointer;
+    display: block;
   }
 }
 
