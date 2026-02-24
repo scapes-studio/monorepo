@@ -1,4 +1,4 @@
-import { writeContract, readContract } from '@wagmi/core'
+import { writeContract, readContract } from '@wagmi/vue/actions'
 import type { Config } from '@wagmi/vue'
 import type { Hash, Hex } from 'viem'
 import { gallery27ABI } from '@scapes-studio/abis'

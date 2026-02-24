@@ -197,7 +197,7 @@
 
 <script setup lang="ts">
 import { scapesABI } from '@scapes-studio/abis'
-import { writeContract } from '@wagmi/core'
+import { writeContract } from '@wagmi/vue/actions'
 import { useConnection, type Config } from '@wagmi/vue'
 import type { Hash } from 'viem'
 

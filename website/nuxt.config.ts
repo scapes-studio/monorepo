@@ -72,8 +72,12 @@ export default defineNuxtConfig({
       ipfsGateway:
         process.env.NUXT_PUBLIC_IPFS_GATEWAY || 'https://ipfs.io/ipfs/',
       scapeCollectionAddress: '0xb7def63a9040ad5dc431aff79045617922f4023a',
-      chainId: 1,
-      rpc1: process.env.NUXT_PUBLIC_RPC_URL,
+      evm: {
+        walletConnectProjectId: '',
+        chains: {
+          mainnet: { rpc1: process.env.NUXT_PUBLIC_RPC_URL },
+        },
+      },
     },
   },
   css: ['~/assets/styles/index.css'],

@@ -38,8 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon'
-
 const props = defineProps<{
   attributes: unknown
   gallery27TokenId?: number | null
@@ -65,9 +63,11 @@ function isDateAttribute(attr: AttributeEntry): boolean {
   return attr.trait_type === 'date' && typeof attr.value === 'number'
 }
 
+const dateFmt = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' })
+
 function formatValue(attr: AttributeEntry): string | number {
   if (attr.trait_type === 'date' && typeof attr.value === 'number') {
-    return DateTime.fromSeconds(attr.value).toLocaleString(DateTime.DATE_MED)
+    return dateFmt.format(new Date(attr.value * 1000))
   }
   return attr.value
 }
