@@ -31,6 +31,7 @@
     "pinata": "^2.5.3",
     "ponder": "^0.16.0",
     "sharp": "^0.34.5",
+    "@1001-digital/ponder-ens": "^0.1.0",
     "viem": "^2.21.3"
   },
   "devDependencies": {

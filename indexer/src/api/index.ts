@@ -1,9 +1,10 @@
-import { db } from "ponder:api";
+import { db, publicClients } from "ponder:api";
 import { Hono } from "hono";
 import { client, graphql } from "ponder";
+import { createEnsRoutes } from "@1001-digital/ponder-ens";
 import * as ponderSchema from "../../ponder.schema";
 import { schema as combinedSchema } from "../../combined.schema";
-import { getProfile, forceUpdateProfile } from "./profiles";
+import { getOffchainDb } from "../services/database";
 import { getSales, getSalesBySlug } from "./sales";
 import { getVolumeStats, getVolumeStatsBySlug } from "./stats";
 import { getScapeHistory, getTwentySevenYearScapeHistory } from "./history";
@@ -41,9 +42,14 @@ app.use("/graphql", graphql({ db, schema: combinedSchema }));
 
 app.get("/", (c) => c.text("Scapes Indexer"));
 
-// Profile routes
-app.get("/profiles/:id", getProfile);
-app.post("/profiles/:id", forceUpdateProfile);
+// Profile routes (ENS resolution + caching via @1001-digital/ponder-ens)
+app.route(
+  "/profiles",
+  createEnsRoutes({
+    client: publicClients["ethereum"]!,
+    db: getOffchainDb(),
+  }),
+);
 
 // Seaport sales routes
 app.get("/seaport/sales", getSales);

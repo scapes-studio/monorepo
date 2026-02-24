@@ -12,6 +12,9 @@ importers:
 
   indexer:
     dependencies:
+      '@1001-digital/ponder-ens':
+        specifier: ^0.1.0
+        version: 0.1.0(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(better-sqlite3@12.6.2)(kysely@0.26.3)(pg@8.16.3))(hono@4.11.3)(pg@8.16.3)(viem@2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
       '@aws-sdk/client-s3':
         specifier: ^3.968.0
         version: 3.968.0
@@ -86,8 +89,8 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.7)(ox@0.12.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@wagmi/vue@0.5.0(7009da5fad0fe757aad7edcb1276effb))(magicast@0.5.1)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@1001-digital/layers.evm':
-        specifier: ^1.1.4
-        version: 1.1.4(6ea8408d5d7076b796c33f5b7c7692a0)
+        specifier: ^1.1.5
+        version: 1.1.5(6ea8408d5d7076b796c33f5b7c7692a0)
       '@nuxt/content':
         specifier: ^3.11.2
         version: 3.11.2(@electric-sql/pglite@0.2.13)(better-sqlite3@12.6.2)(bufferutil@4.1.0)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(better-sqlite3@12.6.2)(kysely@0.26.3)(pg@8.16.3))(magicast@0.5.1)(utf-8-validate@5.0.10)
@@ -162,13 +165,43 @@ packages:
       viem:
         optional: true
 
+  '@1001-digital/components@1.1.2':
+    resolution: {integrity: sha512-4KxXzmc4xKi9KwEdIZyFDhU7eaCRVS6aybv9O2yX80RI+hJS2xXxYYQwg7ocvibusXU7Lk2Zms6QRCCR8ha96Q==}
+    peerDependencies:
+      '@1001-digital/styles': ^1.0.0
+      '@wagmi/core': '>=3.0.0'
+      '@wagmi/vue': '>=0.5.0'
+      viem: '>=2.0.0'
+      vue: ^3.5.0
+    peerDependenciesMeta:
+      '@wagmi/core':
+        optional: true
+      '@wagmi/vue':
+        optional: true
+      viem:
+        optional: true
+
   '@1001-digital/layers.base@1.0.3':
     resolution: {integrity: sha512-7N3YCmvzEAUXDqN/JQRDA/6ol/mm16sIvUWPsj0pc+zfShnilys+9ttL8XvWjUWoO5R5Vp8U73hW4xj1L2i9OA==}
 
-  '@1001-digital/layers.evm@1.1.4':
-    resolution: {integrity: sha512-jhERwrX4P/pViK14NI4lx5c4pbB43vtS34O6gmy9U/JxWc2QHI/Zddz28FA9QS7ZVjm9pXnPhWX9M2GzLyotmQ==}
+  '@1001-digital/layers.evm@1.1.5':
+    resolution: {integrity: sha512-jiLNHsV7mRHgbtdizVj1e/BGEI2nrukUb87lXeE7teXJvQLqi/MSKDWxtWZ7m51DB908KRm0Fgi2A2cbm+HZTQ==}
     peerDependencies:
       '@1001-digital/layers.base': ^1.0.3
+
+  '@1001-digital/ponder-ens@0.1.0':
+    resolution: {integrity: sha512-Yg0RDnjDVGyG/kVTiZu8fCWPKQwkKa81zw7O5fz+6JVCBC/oXvEiCya3/S8DtV0H3yTe/CuXh9naFIXLSScflg==}
+    peerDependencies:
+      '@electric-sql/pglite': '>=0.2.0'
+      drizzle-orm: '>=0.38.0'
+      hono: '>=4.0.0'
+      pg: '>=8.0.0'
+      viem: '>=2.0.0'
+    peerDependenciesMeta:
+      '@electric-sql/pglite':
+        optional: true
+      pg:
+        optional: true
 
   '@1001-digital/styles@1.0.0':
     resolution: {integrity: sha512-wT/xml15ImFJiCNlZvn9sb9VWB9FRZAiLyH5OfZ3P9CyieZFqXbxvK7xaeZi9RK+NQhbAN70pMmifdOH/YUOvQ==}
@@ -7023,6 +7056,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.7.4:
+    resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   send@1.2.1:
     resolution: {integrity: sha512-1gnZf7DFcoIcajTjTwjwuDjzuz4PPcY2StKPlsGAQ1+YH20IRVrBaXSWmdjowTJ6u8Rc01PoYOGHXfP1mYcZNQ==}
     engines: {node: '>= 18'}
@@ -8207,6 +8245,24 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
 
+  '@1001-digital/components@1.1.2(@1001-digital/styles@1.0.0)(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.7)(ox@0.12.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@wagmi/vue@0.5.0(7009da5fad0fe757aad7edcb1276effb))(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(vue@3.5.26(typescript@5.9.3))':
+    dependencies:
+      '@1001-digital/styles': 1.0.0
+      '@iconify/vue': 5.0.0(vue@3.5.26(typescript@5.9.3))
+      '@internationalized/date': 3.10.1
+      '@visualizevalue/opepicons': 0.1.0
+      '@vueuse/core': 14.2.0(vue@3.5.26(typescript@5.9.3))
+      luxon: 3.7.2
+      qrcode: 1.5.4
+      reka-ui: 2.8.0(vue@3.5.26(typescript@5.9.3))
+      vue: 3.5.26(typescript@5.9.3)
+    optionalDependencies:
+      '@wagmi/core': 3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.7)(ox@0.12.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@wagmi/vue': 0.5.0(7009da5fad0fe757aad7edcb1276effb)
+      viem: 2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+
   '@1001-digital/layers.base@1.0.3(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.7)(ox@0.12.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@wagmi/vue@0.5.0(7009da5fad0fe757aad7edcb1276effb))(magicast@0.5.1)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))':
     dependencies:
       '@1001-digital/components': 1.1.1(@1001-digital/styles@1.0.0)(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.7)(ox@0.12.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@wagmi/vue@0.5.0(7009da5fad0fe757aad7edcb1276effb))(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(vue@3.5.26(typescript@5.9.3))
@@ -8223,9 +8279,9 @@ snapshots:
       - vite
       - vue
 
-  '@1001-digital/layers.evm@1.1.4(6ea8408d5d7076b796c33f5b7c7692a0)':
+  '@1001-digital/layers.evm@1.1.5(6ea8408d5d7076b796c33f5b7c7692a0)':
     dependencies:
-      '@1001-digital/components': 1.1.1(@1001-digital/styles@1.0.0)(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.7)(ox@0.12.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@wagmi/vue@0.5.0(7009da5fad0fe757aad7edcb1276effb))(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(vue@3.5.26(typescript@5.9.3))
+      '@1001-digital/components': 1.1.2(@1001-digital/styles@1.0.0)(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.7)(ox@0.12.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@wagmi/vue@0.5.0(7009da5fad0fe757aad7edcb1276effb))(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(vue@3.5.26(typescript@5.9.3))
       '@1001-digital/layers.base': 1.0.3(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.7)(ox@0.12.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)))(@wagmi/vue@0.5.0(7009da5fad0fe757aad7edcb1276effb))(magicast@0.5.1)(viem@2.45.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))(vite@7.3.1(@types/node@22.19.6)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
       '@base-org/account': 2.5.2(@types/react@19.2.7)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@metamask/sdk': 0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
@@ -8276,6 +8332,15 @@ snapshots:
       - utf-8-validate
       - vue
       - zod
+
+  '@1001-digital/ponder-ens@0.1.0(@electric-sql/pglite@0.2.13)(drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(better-sqlite3@12.6.2)(kysely@0.26.3)(pg@8.16.3))(hono@4.11.3)(pg@8.16.3)(viem@2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
+    dependencies:
+      drizzle-orm: 0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(@types/pg@8.16.0)(better-sqlite3@12.6.2)(kysely@0.26.3)(pg@8.16.3)
+      hono: 4.11.3
+      viem: 2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+    optionalDependencies:
+      '@electric-sql/pglite': 0.2.13
+      pg: 8.16.3
 
   '@1001-digital/styles@1.0.0':
     dependencies:
@@ -12297,7 +12362,7 @@ snapshots:
       graphemer: 1.4.0
       ignore: 5.3.2
       natural-compare: 1.4.0
-      semver: 7.7.3
+      semver: 7.7.4
       ts-api-utils: 1.4.3(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
@@ -12344,7 +12409,7 @@ snapshots:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.3
-      semver: 7.7.3
+      semver: 7.7.4
       ts-api-utils: 1.4.3(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
@@ -12360,7 +12425,7 @@ snapshots:
       '@typescript-eslint/types': 6.21.0
       '@typescript-eslint/typescript-estree': 6.21.0(typescript@5.9.3)
       eslint: 8.57.1
-      semver: 7.7.3
+      semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -17321,6 +17386,8 @@ snapshots:
   semver@7.7.2: {}
 
   semver@7.7.3: {}
+
+  semver@7.7.4: {}
 
   send@1.2.1:
     dependencies:
