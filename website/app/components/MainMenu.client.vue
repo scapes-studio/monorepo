@@ -47,6 +47,7 @@
               <Button
                 v-if="address"
                 @click="viewProfile(address)"
+                class="block"
               >
                 <Icon type="home" />
                 <span>View Profile</span>
