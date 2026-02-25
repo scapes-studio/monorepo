@@ -14,8 +14,8 @@
     "kamal:deploy": "set -a && . ./.env.production && set +a && kamal deploy"
   },
   "dependencies": {
-    "@1001-digital/layers.base": "^1.0.3",
-    "@1001-digital/layers.evm": "^1.1.5",
+    "@1001-digital/layers.base": "^1.0.4",
+    "@1001-digital/layers.evm": "^1.1.7",
     "@nuxt/content": "^3.11.2",
     "@ponder/client": "^0.16.1",
     "@regosen/gapless-5": "^1.3.16",
