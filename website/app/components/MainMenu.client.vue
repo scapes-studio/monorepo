@@ -45,6 +45,7 @@
             </template>
             <template #actions>
               <Button
+                v-if="address"
                 @click="viewProfile(address)"
               >
                 <Icon type="home" />
