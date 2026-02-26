@@ -2,6 +2,7 @@ packages:
   - indexer
   - website
   - abis
+  - ipfs
 
 onlyBuiltDependencies:
   - '@parcel/watcher'

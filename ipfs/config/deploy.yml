@@ -1,0 +1,43 @@
+# Scapes IPFS Node - Kamal Deployment Configuration
+service: scapes-ipfs
+
+image: <%= ENV["DOCKER_REGISTRY_USERNAME"] %>/scapes-ipfs
+
+servers:
+  web:
+    hosts:
+      - <%= ENV["DEPLOY_HOST"] %>
+    options:
+      publish:
+        - 4001:4001
+        - 4001:4001/udp
+
+proxy:
+  ssl: true
+  hosts:
+    - <%= ENV["IPFS_HOST"] %>
+  app_port: 8080
+  healthcheck:
+    path: /
+    interval: 5
+    timeout: 30
+
+registry:
+  username: <%= ENV["DOCKER_REGISTRY_USERNAME"] %>
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+  context: ..
+  dockerfile: ../Dockerfile.ipfs
+
+env:
+  clear:
+    IPFS_PROFILE: server
+
+volumes:
+  - ipfs_data:/data/ipfs
+
+ssh:
+  user: root
