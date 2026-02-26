@@ -36,6 +36,7 @@ env:
   clear:
     IPFS_PROFILE: server
     ADMIN_USER: admin
+    IPFS_ADMIN_HOST: <%= ENV["IPFS_ADMIN_HOST"] %>
   secret:
     - ADMIN_PASSWORD_HASH
 
