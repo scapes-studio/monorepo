@@ -1,0 +1,16 @@
+{
+	admin off
+}
+
+:5080 {
+	handle /health {
+		respond "OK" 200
+	}
+
+	handle {
+		basicauth {
+			{env.ADMIN_USER} {env.ADMIN_PASSWORD_HASH}
+		}
+		reverse_proxy localhost:5001
+	}
+}

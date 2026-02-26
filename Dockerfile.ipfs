@@ -1,2 +1,6 @@
+FROM caddy:2-alpine AS caddy
+
 FROM ipfs/kubo:v0.40.0
+COPY --from=caddy /usr/bin/caddy /usr/local/bin/caddy
+COPY ipfs/config/Caddyfile /etc/caddy/Caddyfile
 COPY ipfs/config/container-init.d/ /container-init.d/
