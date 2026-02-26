@@ -7,3 +7,6 @@ ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
 
 # Keep the API bound to localhost only (security)
 ipfs config Addresses.API /ip4/127.0.0.1/tcp/5001
+
+# Only serve content that is already pinned/cached locally
+ipfs config --bool Gateway.NoFetch true
