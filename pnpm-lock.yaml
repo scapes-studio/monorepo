@@ -83,6 +83,8 @@ importers:
         specifier: ^5.3.2
         version: 5.9.3
 
+  ipfs: {}
+
   website:
     dependencies:
       '@1001-digital/layers.base':

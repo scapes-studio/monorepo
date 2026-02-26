@@ -1,2 +1,2 @@
-FROM ipfs/kubo:latest
+FROM ipfs/kubo:v0.40.0
 COPY ipfs/config/container-init.d/ /container-init.d/
