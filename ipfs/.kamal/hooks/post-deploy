@@ -3,7 +3,7 @@
 # Register admin.ipfs.scapes.xyz with kamal-proxy,
 # routing to the Caddy basic auth proxy inside the IPFS container.
 
-CONTAINER=$(ssh root@${DEPLOY_HOST} "docker ps --filter label=service=scapes-ipfs --filter status=running --format '{{.Names}}' | head -1")
+CONTAINER=$(ssh root@${DEPLOY_HOST} "docker ps --filter label=service=scapes-ipfs --filter status=running --format '{{.ID}}' | head -1")
 
 if [ -n "$CONTAINER" ]; then
   ssh root@${DEPLOY_HOST} "docker exec kamal-proxy kamal-proxy deploy scapes-ipfs-admin \
@@ -12,5 +12,5 @@ if [ -n "$CONTAINER" ]; then
     --tls \
     --health-check-path /health \
     --health-check-interval 5s \
-    --deploy-timeout 30s"
+    --deploy-timeout 120s"
 fi
