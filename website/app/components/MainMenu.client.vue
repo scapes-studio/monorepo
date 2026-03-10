@@ -34,7 +34,7 @@
 
     <div class="main-menu__actions">
       <ScapeRadio />
-      <EvmConnect class-name="main-menu__actions-connect">
+      <EvmConnectDialog class-name="main-menu__actions-connect">
         <template #default>
           <AccountAvatar />
         </template>
@@ -55,7 +55,7 @@
             </template>
           </EvmProfile>
         </template>
-      </EvmConnect>
+      </EvmConnectDialog>
     </div>
   </nav>
 </template>
