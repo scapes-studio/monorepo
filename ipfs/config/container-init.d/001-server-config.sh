@@ -9,7 +9,7 @@ ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
 ipfs config Addresses.API /ip4/127.0.0.1/tcp/5001
 
 # Only serve content that is already pinned/cached locally
-ipfs config --bool Gateway.NoFetch true
+ipfs config --bool Gateway.NoFetch false
 
 # Enable directory listings and other deserialized responses
 ipfs config --bool Gateway.DeserializedResponses true
