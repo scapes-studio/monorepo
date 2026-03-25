@@ -34,13 +34,8 @@ COPY --from=build /app/node_modules/.pnpm/detect-libc*/node_modules/detect-libc 
 COPY --from=build /app/node_modules/.pnpm/semver@7*/node_modules/semver ./server/node_modules/semver
 COPY --from=build /app/node_modules/.pnpm/@img+colour*/node_modules/@img/colour ./server/node_modules/@img/colour
 
-RUN apk add --no-cache curl
-
 ENV HOST=0.0.0.0
 
 EXPOSE 3000
-
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:3000/ || exit 1
 
 CMD ["node", "/app/server/index.mjs"]
