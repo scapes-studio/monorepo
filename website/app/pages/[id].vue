@@ -130,6 +130,14 @@ type ScapeHistoryResponse = {
 }
 
 const route = useRoute()
+const rawId = route.params.id as string
+
+// Validate that the id is a numeric token ID — this is a root-level catch-all
+// route, so non-numeric paths like /robots.txt end up here.
+if (!/^\d+$/.test(rawId)) {
+  throw createError({ statusCode: 404, statusMessage: 'Not Found' })
+}
+
 const scapeId = computed(() => route.params.id as string)
 const client = usePonderClient()
 
