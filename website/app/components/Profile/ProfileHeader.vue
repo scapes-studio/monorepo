@@ -18,7 +18,7 @@
         :title="isRefreshing ? 'Refreshing...' : 'Refresh from ENS'"
         @click="handleRefresh"
       >
-        <Icon type="lucide:refresh-cw" />
+        <Icon name="lucide:refresh-cw" />
       </Button>
     </GridArea>
 

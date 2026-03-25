@@ -20,7 +20,7 @@
 
       <Icon
         v-if="selected"
-        type="check"
+        name="check"
       />
     </span>
     <span class="trait-value__count">{{ count }}</span>

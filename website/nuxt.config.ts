@@ -65,7 +65,7 @@ export default defineNuxtConfig({
       },
     ],
   },
-  extends: ['@1001-digital/layers.base', '@1001-digital/layers.evm'],
+  extends: ['@1001-digital/layers.evm'],
   runtimeConfig: {
     public: {
       apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://indexer.scapes.xyz',
@@ -75,7 +75,10 @@ export default defineNuxtConfig({
       evm: {
         walletConnectProjectId: '',
         chains: {
-          mainnet: { rpc1: process.env.NUXT_PUBLIC_RPC_URL },
+          mainnet: { rpcs: '' },
+        },
+        ens: {
+          indexers: 'https://indexer.scapes.xyz/profiles',
         },
       },
     },

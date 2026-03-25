@@ -49,7 +49,7 @@
                 @click="viewProfile(address)"
                 class="block"
               >
-                <Icon type="home" />
+                <Icon name="home" />
                 <span>View Profile</span>
               </Button>
             </template>
