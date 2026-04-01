@@ -7,7 +7,10 @@ servers:
   web:
     hosts:
       - <%= ENV["DEPLOY_HOST"] %>
+    cmd: daemon --migrate=true --agent-version-suffix=docker <%= ENV["ENABLE_GC"] == "false" ? "" : "--enable-gc" %>
     options:
+      cpus: <%= ENV["CONTAINER_CPUS"] || "2" %>
+      memory: <%= ENV["CONTAINER_MEMORY"] || "6G" %>
       publish:
         - 4001:4001
         - 4001:4001/udp
@@ -29,19 +32,29 @@ registry:
 
 builder:
   arch: amd64
-  context: ..
-  dockerfile: ../Dockerfile.ipfs
+  context: ../ipfs/server
+  dockerfile: Dockerfile
 
 env:
   clear:
     IPFS_PROFILE: server
     ADMIN_USER: admin
     IPFS_ADMIN_HOST: <%= ENV["IPFS_ADMIN_HOST"] %>
+    GATEWAY_NO_FETCH: <%= ENV["GATEWAY_NO_FETCH"] || "true" %>
+    GATEWAY_DESERIALIZED_RESPONSES: <%= ENV["GATEWAY_DESERIALIZED_RESPONSES"] || "true" %>
+    IPNS_RECORD_LIFETIME: <%= ENV["IPNS_RECORD_LIFETIME"] || "336h" %>
+    STORAGE_MAX: <%= ENV["STORAGE_MAX"] || "20GB" %>
+    CONN_MGR_HIGH_WATER: <%= ENV["CONN_MGR_HIGH_WATER"] || "96" %>
+    CONN_MGR_LOW_WATER: <%= ENV["CONN_MGR_LOW_WATER"] || "32" %>
+    STORAGE_GC_WATERMARK: <%= ENV["STORAGE_GC_WATERMARK"] || "90" %>
+    GC_PERIOD: <%= ENV["GC_PERIOD"] || "1h" %>
+    RESOURCE_MGR_MAX_MEMORY: <%= ENV["RESOURCE_MGR_MAX_MEMORY"] || "4GB" %>
+    RESOURCE_MGR_MAX_FILE_DESCRIPTORS: <%= ENV["RESOURCE_MGR_MAX_FILE_DESCRIPTORS"] || "4096" %>
   secret:
     - ADMIN_PASSWORD_HASH
 
 volumes:
-  - ipfs_data:/data/ipfs
+  - <%= ENV["IPFS_VOLUME"] || "ipfs_data" %>:/data/ipfs
 
 ssh:
   user: root
