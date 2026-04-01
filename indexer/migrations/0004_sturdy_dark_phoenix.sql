@@ -1,0 +1,1 @@
+ALTER TABLE "offchain"."merge_image" ALTER COLUMN "token_id" SET DATA TYPE bigint;

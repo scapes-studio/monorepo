@@ -6,7 +6,7 @@
  */
 
 const LEONARDO_API = "https://cloud.leonardo.ai/api/rest/v1";
-const SCAPE_CDN = "https://punkscape.nyc3.digitaloceanspaces.com";
+const SCAPE_CDN = process.env.S3_PUBLIC_URL || "https://cdn.scapes.xyz";
 
 // Fixed generation parameters
 const MODEL_ID = "1e60896f-3c26-4296-8ecc-53e2afecc132";
@@ -81,7 +81,7 @@ async function leonardoFetch<T>(
  * Download PunkScape image from CDN
  */
 async function downloadScapeImage(scapeId: number): Promise<Buffer> {
-  const url = `${SCAPE_CDN}/scapes/40h/${scapeId}.png`;
+  const url = `${SCAPE_CDN}/scapes/lg/${scapeId}.png`;
   const response = await fetch(url);
 
   if (!response.ok) {
