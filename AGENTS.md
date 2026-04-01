@@ -14,6 +14,8 @@
 ## Workspace layout
 - `indexer/` Ponder event handlers, API, CLI, migrations.
 - `website/` Nuxt 4 app.
+- `ipfs/` IPFS node deployment config (Kamal).
+- `ipfs/server/` git submodule ([1001-digital/ipfs.server](https://github.com/1001-digital/ipfs.server)) — Dockerfile, Caddyfile, init scripts.
 - `abis/` contract ABIs.
 - `api/` placeholder package.
 
@@ -54,6 +56,13 @@
 - `pnpm preview` — preview production build.
 - `pnpm typecheck` — `nuxt typecheck`.
 - `pnpm generate` — static generation.
+
+### IPFS (`ipfs/`)
+- `git submodule update --init` — required after fresh clone.
+- `pnpm kamal:setup` — initial deploy setup.
+- `pnpm kamal:deploy` — deploy IPFS node.
+- `pnpm kamal:sh` — shell into running container.
+- Update submodule: `cd ipfs/server && git pull`.
 
 ### Docker (root)
 - `docker compose --profile dev up -d` — start PostgreSQL only.
