@@ -164,8 +164,11 @@ export class AiImageService {
       })
       .where(eq(twentySevenYearRequest.id, request.id));
 
-    // Update scape detail initialRenderId if this is the first render
-    if (scapeDetail && !scapeDetail.initialRenderId) {
+    // Update scape detail initialRenderId if this is the first render.
+    // Only pre-generations (no bidder) may become the initial render — a
+    // bid-triggered image must never hijack it.
+    const isPregeneration = request.from === null && request.value === null;
+    if (scapeDetail && !scapeDetail.initialRenderId && isPregeneration) {
       await db
         .update(twentySevenYearScapeDetail)
         .set({ initialRenderId: request.id })

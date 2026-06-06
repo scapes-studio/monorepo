@@ -425,11 +425,14 @@ export async function getGallery27Bids(c: Context) {
 
   // Build bid list with images (hidden for future auctions)
   const bids = onchainBids.map(bid => {
-    // Find matching request by address and message
+    // Match the request to the bid by transaction hash (unique and reliable);
+    // fall back to address + message for legacy rows without a usable hash.
+    const txHash = bid.txHash.toLowerCase();
     const matchingRequest = auctionStarted
-      ? requests.find(
-        r => r.from?.toLowerCase() === bid.bidder.toLowerCase() && r.description === bid.message
-      )
+      ? requests.find(r => r.transactionHash?.toLowerCase() === txHash) ??
+        requests.find(
+          r => r.from?.toLowerCase() === bid.bidder.toLowerCase() && r.description === bid.message
+        )
       : null;
 
     return {

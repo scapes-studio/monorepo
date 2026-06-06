@@ -1,4 +1,5 @@
-import { pgSchema, text, integer, boolean, json, numeric, serial, bigint } from "drizzle-orm/pg-core";
+import { pgSchema, text, integer, boolean, json, numeric, serial, bigint, uniqueIndex } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import type { Price, VolumeStats, EnsProfileData } from "./ponder.types";
 
 // Types for twentySevenYear tables
@@ -103,7 +104,12 @@ export const twentySevenYearRequest = offchainSchema.table("twenty_seven_year_re
   createdAt: bigint("created_at", { mode: "number" }),
   startedProcessingAt: bigint("started_processing_at", { mode: "number" }),
   completedAt: bigint("completed_at", { mode: "number" }),
-});
+}, (table) => [
+  // One request per bid: enforce idempotency for the bid-image reconciler.
+  uniqueIndex("twenty_seven_year_request_transaction_hash_unique")
+    .on(table.transactionHash)
+    .where(sql`${table.transactionHash} IS NOT NULL`),
+]);
 
 // Notification state tracking for bot notifications
 export const notificationState = offchainSchema.table("notification_state", {

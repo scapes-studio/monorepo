@@ -36,6 +36,13 @@
       "when": 1775066558513,
       "tag": "0004_sturdy_dark_phoenix",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1780730818573,
+      "tag": "0005_bid_request_tx_hash_unique",
+      "breakpoints": true
     }
   ]
 }
