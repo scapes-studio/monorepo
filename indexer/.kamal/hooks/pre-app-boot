@@ -1,4 +1,7 @@
 #!/bin/sh
 
 echo "Running Drizzle migrations..."
-kamal app exec -p --version="$KAMAL_VERSION" -- pnpm drizzle-kit migrate
+# Restrict to a single role: web and cron share one host, so without --roles
+# the migration runs once per role concurrently and races on DDL (e.g. a
+# duplicate CREATE INDEX). One role owns migrations; both share the same DB.
+kamal app exec -p --roles=web --version="$KAMAL_VERSION" -- pnpm drizzle-kit migrate
