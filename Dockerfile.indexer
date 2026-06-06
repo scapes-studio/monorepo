@@ -2,7 +2,7 @@ FROM node:24-alpine AS base
 RUN apk add --no-cache curl && \
     curl -fsSL https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-amd64 -o /usr/local/bin/supercronic && \
     chmod +x /usr/local/bin/supercronic && \
-    npm install -g corepack && corepack enable && corepack prepare pnpm@latest --activate
+    npm install -g corepack && corepack enable && corepack prepare pnpm@10.33.0 --activate
 WORKDIR /app
 
 FROM base AS deps
