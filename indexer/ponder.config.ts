@@ -6,7 +6,9 @@ export default createConfig({
     ethereum: {
       id: 1,
       rpc: process.env.PONDER_RPC_URL_1,
-      ws: process.env.PONDER_RPC_URL_1_WS,
+      // Realtime sync polls over HTTP. A websocket (`ws`) was dropped here:
+      // a half-open socket stalled realtime without crashing the process and
+      // Ponder 0.16 never reconnected. HTTP polling recovers from RPC blips.
     },
   },
   contracts: {
