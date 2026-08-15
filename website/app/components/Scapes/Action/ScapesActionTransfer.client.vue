@@ -15,15 +15,12 @@
       <p class="scapes-action__copy">
         Send Scape #{{ scapeId }} to another wallet. This cannot be undone.
       </p>
-      <FormItem>
-        <input
-          v-model="recipientInput"
-          type="text"
-          autocomplete="off"
-          spellcheck="false"
-          placeholder="Recipient wallet address"
-        />
-      </FormItem>
+      <EvmAddressInput
+        v-model="recipientInput"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Recipient wallet address or ENS name"
+      />
       <p
         v-if="recipientError"
         class="scapes-action__error"
@@ -76,16 +73,27 @@ const { transfer } = useScapeTransfer(
 
 const open = ref(false)
 const recipientInput = ref('')
+const recipientIdentifier = computed(() => {
+  const recipient = recipientInput.value.trim()
+  if (!recipient) return undefined
+  return isAddress(recipient) || recipient.includes('.') ? recipient : undefined
+})
+const { data: recipientEns, pending: resolvingRecipient } = useEns(
+  recipientIdentifier,
+)
 
 const recipientAddress = computed<Address | null>(() => {
-  const recipient = recipientInput.value.trim()
-  return isAddress(recipient) ? getAddress(recipient) : null
+  const recipient = recipientEns.value?.address
+  return recipient && isAddress(recipient) ? getAddress(recipient) : null
 })
 
 const recipientError = computed(() => {
   const recipient = recipientInput.value.trim()
   if (!recipient) return null
-  if (!recipientAddress.value) return 'Enter a valid wallet address.'
+  if (resolvingRecipient.value) return 'Resolving recipient…'
+  if (!recipientAddress.value) {
+    return 'Enter a valid wallet address or an ENS name with an address.'
+  }
   if (recipientAddress.value.toLowerCase() === props.owner.toLowerCase()) {
     return 'Choose a wallet other than the current owner.'
   }
