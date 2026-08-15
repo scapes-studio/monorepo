@@ -55,6 +55,7 @@
       :listing="listing"
       class="scape-actions"
       @listing-change="refreshListing"
+      @transfer-complete="refreshScapeAfterTransfer"
     />
 
     <ScapesTransactionHistory
@@ -158,13 +159,22 @@ if (import.meta.client) {
   })
 }
 
-const { data, pending, error } = await useAPI<ScapeHistoryResponse>(
+const {
+  data,
+  pending,
+  error,
+  refresh: refreshHistory,
+} = await useAPI<ScapeHistoryResponse>(
   () => `/scapes/${scapeId.value}/history`,
   { watch: [scapeId] },
 )
 
 const scapeDataKey = computed(() => `scape-data-${scapeId.value ?? 'unknown'}`)
-const { data: scapeData, pending: scapePending } = await useAsyncData(
+const {
+  data: scapeData,
+  pending: scapePending,
+  refresh: refreshScapeData,
+} = await useAsyncData(
   scapeDataKey,
   async () => {
     const tokenIdValue = BigInt(scapeId.value)
@@ -194,6 +204,10 @@ const {
   hasError: listingError,
   refresh: refreshListing,
 } = useScapeListing(scapeId)
+
+const refreshScapeAfterTransfer = async () => {
+  await Promise.all([refreshScapeData(), refreshHistory(), refreshListing()])
+}
 
 const { data: gallery27TokenId } = await useGallery27ByScape(scapeId)
 

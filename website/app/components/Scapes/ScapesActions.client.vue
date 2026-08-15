@@ -72,6 +72,12 @@
               @listing-change="emit('listingChange')"
             />
           </template>
+
+          <ScapesActionTransfer
+            :scape-id="scapeId"
+            :owner="owner"
+            @transfer-complete="emit('transferComplete')"
+          />
         </template>
 
         <!-- Non-owner actions -->
@@ -104,6 +110,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   listingChange: []
+  transferComplete: []
 }>()
 
 const { address, isConnected } = useConnection()
