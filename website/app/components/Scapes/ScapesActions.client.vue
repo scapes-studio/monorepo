@@ -36,7 +36,7 @@
       />
       <template v-else>
         <!-- Owner actions -->
-        <template v-if="isOwner">
+        <template v-if="isOwner && owner">
           <!-- Owner with no listing: show list Button -->
           <template v-if="!listing">
             <ScapesActionList

@@ -73,24 +73,44 @@ const { transfer } = useScapeTransfer(
 
 const open = ref(false)
 const recipientInput = ref('')
-const recipientIdentifier = computed(() => {
-  const recipient = recipientInput.value.trim()
-  if (!recipient) return undefined
-  return isAddress(recipient) || recipient.includes('.') ? recipient : undefined
+const recipientLookupInput = ref('')
+const normalizedRecipient = computed(() => recipientInput.value.trim())
+const recipientEnsIdentifier = computed(() => {
+  const recipient = recipientLookupInput.value
+  return recipient.includes('.') && !isAddress(recipient)
+    ? recipient
+    : undefined
 })
 const { data: recipientEns, pending: resolvingRecipient } = useEns(
-  recipientIdentifier,
+  recipientEnsIdentifier,
 )
 
 const recipientAddress = computed<Address | null>(() => {
-  const recipient = recipientEns.value?.address
-  return recipient && isAddress(recipient) ? getAddress(recipient) : null
+  const recipient = normalizedRecipient.value
+  if (isAddress(recipient)) return getAddress(recipient)
+  if (recipientLookupInput.value !== recipient) return null
+  if (recipientEns.value?.ens?.toLowerCase() !== recipient.toLowerCase()) {
+    return null
+  }
+
+  const resolvedAddress = recipientEns.value.address
+  return isAddress(resolvedAddress) ? getAddress(resolvedAddress) : null
+})
+
+const recipientPending = computed(() => {
+  const recipient = normalizedRecipient.value
+  if (!recipient || isAddress(recipient) || !recipient.includes('.')) {
+    return false
+  }
+  return (
+    recipientLookupInput.value !== recipient || resolvingRecipient.value
+  )
 })
 
 const recipientError = computed(() => {
-  const recipient = recipientInput.value.trim()
+  const recipient = normalizedRecipient.value
   if (!recipient) return null
-  if (resolvingRecipient.value) return 'Resolving recipient…'
+  if (recipientPending.value) return 'Resolving recipient…'
   if (!recipientAddress.value) {
     return 'Enter a valid wallet address or an ENS name with an address.'
   }
@@ -99,6 +119,23 @@ const recipientError = computed(() => {
   }
   return null
 })
+
+let recipientDebounceTimer: ReturnType<typeof setTimeout> | undefined
+
+watch(recipientInput, (value) => {
+  clearTimeout(recipientDebounceTimer)
+  const recipient = value.trim()
+  if (!recipient || isAddress(recipient) || !recipient.includes('.')) {
+    recipientLookupInput.value = recipient
+    return
+  }
+
+  recipientDebounceTimer = setTimeout(() => {
+    recipientLookupInput.value = recipient
+  }, 400)
+})
+
+onScopeDispose(() => clearTimeout(recipientDebounceTimer))
 
 const transactionFlowRef = ref<{
   initializeRequest: (request?: () => Promise<Hash>) => Promise<unknown>
@@ -118,12 +155,18 @@ const handleContinue = async () => {
 
 const handleCancel = () => {
   open.value = false
-  recipientInput.value = ''
+  resetRecipient()
 }
 
 const handleTransferComplete = () => {
-  recipientInput.value = ''
+  resetRecipient()
   emit('transferComplete')
+}
+
+const resetRecipient = () => {
+  clearTimeout(recipientDebounceTimer)
+  recipientInput.value = ''
+  recipientLookupInput.value = ''
 }
 
 const transferText = computed(() => ({
