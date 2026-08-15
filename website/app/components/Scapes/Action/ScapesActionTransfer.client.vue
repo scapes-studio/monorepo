@@ -210,6 +210,12 @@ const transferText = computed(() => ({
   color: var(--muted);
 }
 
+.scapes-action__form :deep(.evm-address-input > small) {
+  min-width: 0;
+  font-size: calc(var(--font-xs) * 0.8);
+  overflow-wrap: anywhere;
+}
+
 .actions {
   margin-top: var(--spacer);
 }
