@@ -4,6 +4,7 @@ export default defineAppConfig({
   },
   evm: {
     title: 'Scapes',
+    appLogoUrl: '/icon.png',
     defaultChain: 'mainnet',
     chains: {
       mainnet: {
